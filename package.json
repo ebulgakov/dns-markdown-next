@@ -1,5 +1,5 @@
 {
-  "name": "dns-markdown-nextjs",
+  "name": "dns-markdown-next",
   "version": "0.1.0",
   "private": true,
   "scripts": {
@@ -9,7 +9,11 @@
     "lint": "eslint"
   },
   "dependencies": {
+    "@clerk/nextjs": "^6.36.5",
+    "mongodb": "^7.0.0",
+    "mongoose": "^9.0.2",
     "next": "16.1.1",
+    "prettier": "^3.7.4",
     "react": "19.2.3",
     "react-dom": "19.2.3"
   },
