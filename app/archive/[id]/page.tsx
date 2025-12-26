@@ -1,8 +1,9 @@
 import { getPriceListById } from "@/db/queries";
+import ErrorMessage from "@/app/components/ErrorMessage";
 
 type ArchiveItemPage = {
-  params: Promise<{ id: string }>
-}
+  params: Promise<{ id: string }>;
+};
 
 export default async function ArchiveItemPage({ params }: ArchiveItemPage) {
   const { id } = await params;
@@ -15,7 +16,7 @@ export default async function ArchiveItemPage({ params }: ArchiveItemPage) {
   }
 
   if (!priceList && error) {
-    return <div className="border border-red-500 bg-red-300 p-10 rounded-sm">{error.message}</div>;
+    return <ErrorMessage>{error.message}</ErrorMessage>;
   }
 
   return (
