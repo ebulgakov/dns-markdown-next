@@ -30,7 +30,7 @@ export default function Navbar() {
   ];
 
   return (
-    <header className="flex h-10 items-center gap-4 bg-blue-400 mt-4">
+    <header className="flex h-10 items-center gap-4 bg-blue-400">
       <nav className="flex">
         <Link href="/" className="bg-white font-bold text-blue-400 h-10 flex items-center px-3">
           DNS Уценка
