@@ -1,4 +1,8 @@
-export default async function ItemPage({ params }: { params: Promise<{ id: string }> }) {
+type CatalogItemPage = {
+  params: Promise<{ id: string }>
+}
+
+export default async function CatalogItemPage({ params }: CatalogItemPage) {
   const { id } = await params;
 
   return (

@@ -1,6 +1,10 @@
 import { getPriceListById } from "@/db/queries";
 
-export default async function ArchiveItemPage({ params }: { params: Promise<{ id: string }> }) {
+type ArchiveItemPage = {
+  params: Promise<{ id: string }>
+}
+
+export default async function ArchiveItemPage({ params }: ArchiveItemPage) {
   const { id } = await params;
   let priceList;
   let error: Error | null = null;
@@ -16,7 +20,10 @@ export default async function ArchiveItemPage({ params }: { params: Promise<{ id
 
   return (
     <div>
-      <h1 className="text-2xl font-bold mb-4">Страница Архива</h1>
+      <h1 className="text-2xl font-bold mb-4">
+        Страница Архива за&nbsp;
+        {new Date(priceList.createdAt).toLocaleDateString()}{" "}
+      </h1>
       <div className="text-lg">{JSON.stringify(priceList, null, 2)}</div>
     </div>
   );
