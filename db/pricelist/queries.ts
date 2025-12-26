@@ -1,17 +1,10 @@
 import { dbConnect } from "@/db/database";
-import { currentUser } from "@clerk/nextjs/server";
-import { User } from "@/db/models/user_model";
+import { getUser } from "@/db/profile/queries";
 import { HourlyPricelist, Pricelist } from "@/db/models/pricelist_model";
 import { History } from "@/db/models/history_model";
 import { RemovedGoods } from "@/db/models/removed_goods_model";
 import { Diff } from "@/db/models/diff_model";
 
-const getUser = async () => {
-  await dbConnect();
-  const clerkUser = await currentUser();
-
-  return User.findOne({ userId: clerkUser?.id });
-};
 
 export const getLastPriceList = async () => {
   await dbConnect();

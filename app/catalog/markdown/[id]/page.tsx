@@ -1,4 +1,4 @@
-import { getProductById } from "@/db/queries";
+import { getProductById } from "@/db/pricelist/queries";
 import ErrorMessage from "@/app/components/ErrorMessage";
 
 type CatalogItemPage = {

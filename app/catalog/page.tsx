@@ -1,4 +1,4 @@
-import { getLastPriceList } from "@/db/queries";
+import { getLastPriceList } from "@/db/pricelist/queries";
 
 export default async function CatalogPage() {
   const priceList = await getLastPriceList();

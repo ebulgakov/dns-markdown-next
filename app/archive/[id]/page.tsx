@@ -1,4 +1,4 @@
-import { getPriceListById } from "@/db/queries";
+import { getPriceListById } from "@/db/pricelist/queries";
 import ErrorMessage from "@/app/components/ErrorMessage";
 
 type ArchiveItemPage = {

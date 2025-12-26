@@ -1,4 +1,4 @@
-import { getArchiveList } from "@/db/queries";
+import { getArchiveList } from "@/db/pricelist/queries";
 import Link from "next/link";
 
 export default async function ArchivePage() {

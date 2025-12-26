@@ -1,4 +1,4 @@
-import { getPriceListsDiff } from "@/db/queries";
+import { getPriceListsDiff } from "@/db/pricelist/queries";
 import ErrorMessage from "@/app/components/ErrorMessage";
 
 export default async function UpdatesPage() {
