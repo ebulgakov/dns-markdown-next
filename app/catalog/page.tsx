@@ -1,7 +1,7 @@
-import { getPriceList } from "@/db/queries";
+import { getLastPriceList } from "@/db/queries";
 
 export default async function CatalogPage() {
-  const priceList = await getPriceList();
+  const priceList = await getLastPriceList();
   return (
     <div>
       <h1 className="text-2xl font-bold mb-4">Catalog Page</h1>
