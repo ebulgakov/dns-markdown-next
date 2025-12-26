@@ -2,8 +2,7 @@ import { Webhook } from "svix";
 import { headers } from "next/headers";
 import { WebhookEvent } from "@clerk/nextjs/server";
 import { NextResponse } from "next/server";
-import { dbConnect } from "@/db/database";
-import { User } from "@/db/models/user_model";
+import { createUser } from "@/db/profile/mutations";
 
 export async function POST(req: Request) {
   const WEBHOOK_SECRET = process.env.CLERK_WEBHOOK_SECRET;
@@ -47,9 +46,8 @@ export async function POST(req: Request) {
   const eventType = evt.type;
 
   if (eventType === "user.created") {
-    await dbConnect();
     try {
-      await User.create({ userId: evt.data.id });
+      await createUser(evt.data.id);
     } catch (err) {
       console.error("Error creation user:", err);
       throw new Error("Error creation user");
