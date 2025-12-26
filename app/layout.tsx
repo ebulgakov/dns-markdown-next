@@ -27,7 +27,7 @@ export default function RootLayout({
 }>) {
   return (
     <ClerkProvider>
-      <html lang="en">
+      <html lang="ru">
         <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
           <div className="grid min-h-screen sm:w-[750px] md:w-[970px] lg:w-[1170px] px-4 mx-auto">
             <div className="mb-10">
