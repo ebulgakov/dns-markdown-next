@@ -35,27 +35,35 @@ export default function Navbar() {
         <Link href="/" className="bg-white font-bold text-blue-400 h-10 flex items-center px-3">
           DNS Уценка
         </Link>
-        {linksList.map(link => (
-          <ActiveLink
-            key={link.name}
-            href={link.url}
-            activeClassName="bg-orange-400 text-shadow-xs"
-            className=" text-white h-10 flex items-center px-3"
-          >
-            {link.name}
-          </ActiveLink>
-        ))}
+        <SignedIn>
+          {linksList.map(link => (
+            <ActiveLink
+              key={link.name}
+              href={link.url}
+              activeClassName="bg-orange-400 text-shadow-xs"
+              className=" text-white h-10 flex items-center px-3"
+            >
+              {link.name}
+            </ActiveLink>
+          ))}
+        </SignedIn>
       </nav>
 
-      <div className="ml-auto mr-2 size-7">
-        <SignedOut>
-          <SignInButton />
-          <SignUpButton />
-        </SignedOut>
-        <SignedIn>
+      <SignedOut>
+        <div className="ml-auto mr-2 divide-x">
+          <SignInButton>
+            <button className="font-bold text-nowrap text-white pr-3">Войти</button>
+          </SignInButton>
+          <SignUpButton>
+            <button className="font-bold text-nowrap text-white pl-3">Зарегистироваться</button>
+          </SignUpButton>
+        </div>
+      </SignedOut>
+      <SignedIn>
+        <div className="ml-auto mr-2 size-7">
           <UserButton />
-        </SignedIn>
-      </div>
+        </div>
+      </SignedIn>
     </header>
   );
 }
