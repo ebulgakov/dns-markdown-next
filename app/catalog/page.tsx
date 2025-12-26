@@ -15,7 +15,7 @@ export default async function CatalogPage() {
   return (
     <div>
       <h1 className="text-2xl font-bold mb-4">Catalog Page</h1>
-      <pre className="text-lg">{JSON.stringify(priceList, null, 2)}</pre>
+      <div className="text-lg">{JSON.stringify(priceList, null, 2)}</div>
     </div>
   );
 }
