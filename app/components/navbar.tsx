@@ -1,5 +1,6 @@
 import { SignedIn, SignedOut, SignInButton, SignUpButton, UserButton } from "@clerk/nextjs";
 import Link from "next/link";
+import ActiveLink from "@/app/components/ActiveLink";
 
 export default function Navbar() {
   return (
@@ -8,21 +9,41 @@ export default function Navbar() {
         <Link href="/" className="bg-white font-bold text-blue-400 h-10 flex items-center px-3">
           DNS Уценка
         </Link>
-        <Link href="/catalog" className="bg-orange-400 text-white h-10 flex items-center px-3">
+        <ActiveLink
+          href="/catalog"
+          activeClassName="bg-orange-400 text-shadow-xs"
+          className=" text-white h-10 flex items-center px-3"
+        >
           Прайслист
-        </Link>
-        <Link href="/archive" className="text-white h-10 flex items-center px-3">
+        </ActiveLink>
+        <ActiveLink
+          href="/archive"
+          activeClassName="bg-orange-400 text-shadow-xs"
+          className="text-white h-10 flex items-center px-3"
+        >
           Архив
-        </Link>
-        <Link href="/" className=" text-white h-10 flex items-center px-3">
+        </ActiveLink>
+        <ActiveLink
+          href="/updates"
+          activeClassName="bg-orange-400 text-shadow-xs"
+          className=" text-white h-10 flex items-center px-3"
+        >
           Обновления
-        </Link>
-        <Link href="/" className="text-white h-10 flex items-center px-3">
+        </ActiveLink>
+        <ActiveLink
+          href="/favorites"
+          activeClassName="bg-orange-400 text-shadow-xs"
+          className="text-white h-10 flex items-center px-3"
+        >
           Избранное
-        </Link>
-        <Link href="/" className=" text-white h-10 flex items-center px-3">
+        </ActiveLink>
+        <ActiveLink
+          href="/profile"
+          activeClassName="bg-orange-400 text-shadow-xs"
+          className=" text-white h-10 flex items-center px-3"
+        >
           Профиль
-        </Link>
+        </ActiveLink>
       </nav>
 
       <div className="ml-auto mr-2 size-7">
