@@ -1,15 +1,25 @@
 import { getArchiveList } from "@/db/pricelist/queries";
 import Link from "next/link";
+import ErrorMessage from "@/app/components/ErrorMessage";
 
 export default async function ArchivePage() {
-  const archiveList = await getArchiveList();
+  let archiveCollection;
+
+  try {
+    archiveCollection = await getArchiveList();
+    if (!archiveCollection) throw new Error("No pricelist collection");
+  } catch (e) {
+    const { message } = e as Error;
+    return <ErrorMessage>{message}</ErrorMessage>;
+  }
+
   return (
     <div>
       <h1 className="text-2xl font-bold mb-4">Архив прайслистов</h1>
       <ul className="space-y-1">
-        {archiveList.map(item => (
-          <li key={item._id}>
-            <Link href={`/archive/${item._id}`}>
+        {archiveCollection.map(item => (
+          <li key={item.id}>
+            <Link href={`/archive/${item.id}`}>
               <span className="text-blue-500 hover:underline">
                 {new Date(item.createdAt).toLocaleDateString()}
               </span>

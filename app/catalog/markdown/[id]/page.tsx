@@ -2,8 +2,8 @@ import { getProductById } from "@/db/pricelist/queries";
 import ErrorMessage from "@/app/components/ErrorMessage";
 
 type CatalogItemPage = {
-  params: Promise<{ id: string }>
-}
+  params: Promise<{ id: string }>;
+};
 
 export default async function CatalogItemPage({ params }: CatalogItemPage) {
   const { id } = await params;
@@ -12,13 +12,14 @@ export default async function CatalogItemPage({ params }: CatalogItemPage) {
 
   try {
     product = await getProductById(`/catalog/markdown/${id}/`);
+
+    if (!product) throw new Error(`No product with id ${id}`);
   } catch (e) {
     error = e as Error;
   }
 
-
-  if (!product && error) {
-    return <ErrorMessage>{error.message}</ErrorMessage>;
+  if (!product) {
+    return <ErrorMessage>{error?.message}</ErrorMessage>;
   }
 
   return (

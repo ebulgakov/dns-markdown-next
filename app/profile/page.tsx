@@ -3,16 +3,12 @@ import ErrorMessage from "@/app/components/ErrorMessage";
 
 export default async function ProfilePage() {
   let profile;
-  let error: Error | null = null;
 
   try {
     profile = await getUser();
   } catch (e) {
-    error = e as Error;
-  }
-
-  if (!profile && error) {
-    return <ErrorMessage>{error.message}</ErrorMessage>;
+    const { message } = e as Error;
+    return <ErrorMessage>{message}</ErrorMessage>;
   }
 
   return (

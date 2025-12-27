@@ -3,16 +3,12 @@ import ErrorMessage from "@/app/components/ErrorMessage";
 
 export default async function UpdatesPage() {
   let diff;
-  let error: Error | null = null;
 
   try {
     diff = await getPriceListsDiff();
   } catch (e) {
-    error = e as Error;
-  }
-
-  if (!diff && error) {
-    return <ErrorMessage>{error.message}</ErrorMessage>;
+    const { message } = e as Error;
+    return <ErrorMessage>{message}</ErrorMessage>;
   }
 
   return (

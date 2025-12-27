@@ -8,15 +8,14 @@ type ArchiveItemPage = {
 export default async function ArchiveItemPage({ params }: ArchiveItemPage) {
   const { id } = await params;
   let priceList;
-  let error: Error | null = null;
+
   try {
     priceList = await getPriceListById(id);
-  } catch (e) {
-    error = e as Error;
-  }
 
-  if (!priceList && error) {
-    return <ErrorMessage>{error.message}</ErrorMessage>;
+    if (!priceList) throw new Error(`No price list with id ${id}`);
+  } catch (e) {
+    const { message } = e as Error;
+    return <ErrorMessage>{message}</ErrorMessage>;
   }
 
   return (
