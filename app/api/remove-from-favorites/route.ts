@@ -1,15 +1,15 @@
 import { NextResponse } from "next/server";
-import { addToFavorites } from "@/db/profile/mutations";
+import { removeFromFavorites } from "@/db/profile/mutations";
 
 export async function POST(req: Request) {
-  const { goods } = await req.json();
+  const { id } = await req.json();
 
-  if (!goods) {
+  if (!id) {
     return NextResponse.json({ success: false }, { status: 400 });
   }
 
   try {
-    await addToFavorites(goods);
+    await removeFromFavorites(id);
   } catch (error) {
     return new Response("Error occured", {
       status: 400

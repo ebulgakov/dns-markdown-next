@@ -21,8 +21,27 @@ export default function PriceListFavoriteToggle({
     favorites.some(fav => fav.item._id === goods._id)
   );
   const [loadingFavoritesList, setLoadingFavoritesList] = useState<boolean>();
-  const removeFromFavorites = () => {
+  const removeFromFavorites = async () => {
     setLoadingFavoritesList(true);
+    try {
+      const { data } = await axios.post(
+        "/api/remove-from-favorites",
+        { id: goods._id },
+        {
+          headers: {
+            "Content-Type": "application/json; charset=UTF-8"
+          }
+        }
+      );
+
+      if (data.success) {
+        setInFavorites(false);
+      }
+    } catch (e) {
+      console.error(e);
+    } finally {
+      setLoadingFavoritesList(false);
+    }
   };
   const addToFavorites = async () => {
     setLoadingFavoritesList(true);
