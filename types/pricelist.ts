@@ -5,12 +5,13 @@ type Reason = {
   text: string;
 };
 
-type Position = {
+export type Position = {
   title: string;
   items: Goods[];
 };
 
 export interface Goods {
+  _id: string;
   title: string;
   link: string;
   description: string;

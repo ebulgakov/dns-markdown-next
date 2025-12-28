@@ -1,17 +1,21 @@
 import { Goods } from "./pricelist";
 
+export type FavoriteStatus = {
+  city: string;
+  updatedAt: string;
+  createdAt: string;
+  deleted: boolean;
+  updates: [];
+}
+
 export interface Favorite {
-  status: {
-    city: string;
-    updatedAt: string;
-    createdAt: string;
-    deleted: boolean;
-    updates: [];
-  };
+  _id: string;
+  status: FavoriteStatus;
   item: Goods;
 }
 
 export interface User {
+  id: string;
   userId: string;
   city: string;
   hiddenSections: string[];

@@ -1,12 +1,13 @@
 import { Goods } from "@/types/pricelist";
 
+export type GoodDiffChanges = {
+  priceOld: string;
+  price: string;
+  profit: string;
+};
 export interface GoodsDiff {
   item: Goods;
-  diff: {
-    priceOld: string;
-    price: string;
-    profit: string;
-  };
+  diff: GoodDiffChanges;
 }
 
 export interface Diff {
