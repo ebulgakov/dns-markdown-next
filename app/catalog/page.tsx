@@ -1,7 +1,7 @@
 import { getLastPriceList } from "@/db/pricelist/queries";
 import ErrorMessage from "@/app/components/ErrorMessage";
-import CatalogSection from "@/app/catalog/components/CatalogSection";
-import { PriceList } from "@/types/pricelist";
+import PriceList from "@/app/catalog/components/PriceList";
+import type { PriceList as PriceListType } from "@/types/pricelist";
 
 export default async function CatalogPage() {
   let priceList;
@@ -13,7 +13,7 @@ export default async function CatalogPage() {
     if (!priceList) throw new Error("No any price lists in the catalog");
 
     // Convert Mongo Response into Object
-    priceList = JSON.parse(JSON.stringify(priceList)) as PriceList;
+    priceList = JSON.parse(JSON.stringify(priceList)) as PriceListType;
   } catch (e) {
     error = e as Error;
   }
@@ -36,7 +36,7 @@ export default async function CatalogPage() {
         </div>
       </div>
 
-      <CatalogSection priceList={priceList} />
+      <PriceList priceList={priceList} />
     </div>
   );
 }

@@ -5,7 +5,7 @@ type Reason = {
   text: string;
 };
 
-type Position = {
+export type Position = {
   title: string;
   items: Goods[];
 };

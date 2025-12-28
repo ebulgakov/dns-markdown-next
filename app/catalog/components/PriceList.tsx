@@ -2,6 +2,7 @@
 
 import { PriceList as PriceListType } from "@/types/pricelist";
 import { useState, useSyncExternalStore } from "react";
+import PriceListSection from "@/app/catalog/components/PriceListSection";
 
 const subscribe = () => () => {};
 
@@ -9,7 +10,7 @@ type CatalogProps = {
   priceList: PriceListType;
 };
 
-export default function CatalogSection({ priceList }: CatalogProps) {
+export default function PriceList({ priceList }: CatalogProps) {
   const [isShowingFavorites, setIsShowingFavorites] = useState<boolean>(false);
   // Fix React Hydration on the client side
   const isClient = useSyncExternalStore(
@@ -22,7 +23,9 @@ export default function CatalogSection({ priceList }: CatalogProps) {
     <div>
       {isClient ? (
         <>
-          {isShowingFavorites} {JSON.stringify(priceList, null, 2)}
+          {priceList.positions.map((position, idx) => (
+            <PriceListSection key={idx} position={position} />
+          ))}
         </>
       ) : null}
     </div>
