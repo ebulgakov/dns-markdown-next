@@ -52,7 +52,7 @@ describe('getUser', () => {
     expect(result).toEqual(dbUser);
   });
 
-  it('should return undefined if no user is found in the database', async () => {
+  it('should return null if no user is found in the database', async () => {
     // Arrange: Set up mock data for a non-existent user
     const clerkUser = { id: 'user_456' };
     mockedCurrentUser.mockResolvedValue(clerkUser);
@@ -65,21 +65,21 @@ describe('getUser', () => {
     expect(mockedDbConnect).toHaveBeenCalledTimes(1);
     expect(mockedCurrentUser).toHaveBeenCalledTimes(1);
     expect(mockedUserFindOne).toHaveBeenCalledWith({ userId: clerkUser.id });
-    expect(result).toBeUndefined();
+    expect(result).toBeNull();
   });
 
-  it('should return undefined if there is no authenticated user', async () => {
+  it('should return null if there is no authenticated user', async () => {
     // Arrange: Mock that there is no authenticated user
     mockedCurrentUser.mockResolvedValue(null);
 
     // Act: Call the function
     const result = await getUser();
 
-    // Assert: Check that findOne is called with undefined and result is undefined
+    // Assert: Check that findOne is called with null and result is null
     expect(mockedDbConnect).toHaveBeenCalledTimes(1);
     expect(mockedCurrentUser).toHaveBeenCalledTimes(1);
     expect(mockedUserFindOne).toHaveBeenCalledWith({ userId: undefined });
-    expect(result).toBeUndefined();
+    expect(result).toBeNull();
   });
 });
 
