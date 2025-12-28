@@ -1,53 +1,16 @@
-import { getLastPriceList } from "@/db/pricelist/queries";
 import ErrorMessage from "@/app/components/ErrorMessage";
 import PriceList from "@/app/components/PriceList/PriceList";
-import type { PriceList as PriceListType, Position as PositionType } from "@/types/pricelist";
-import { getUserFavorites, getUserSections } from "@/db/profile/queries";
-import { Favorite as FavoriteType, UserSections as UserSectionsType } from "@/types/user";
+import { getCatalogData } from "@/app/catalog/getCatalogData";
 
 export default async function CatalogPage() {
-  let priceList;
-  let userFavoritesGoods;
-  let userSections: {
-    favorites: UserSectionsType | undefined;
-    hidden?: UserSectionsType | undefined;
-  };
-  let favoriteSections: PositionType[] | null = null;
-  let nonFavoriteSections: PositionType[] | null = null;
-  let error: Error | null = null;
-
-  try {
-    [userFavoritesGoods, userSections, priceList] = await Promise.all([
-      getUserFavorites(),
-      getUserSections(),
-      getLastPriceList()
-    ]);
-
-    if (!priceList) throw new Error("No any price lists in the catalog");
-
-    // Convert Mongo Response into Object
-    priceList = JSON.parse(JSON.stringify(priceList)) as PriceListType;
-    userFavoritesGoods = JSON.parse(JSON.stringify(userFavoritesGoods)) as FavoriteType[];
-    userSections = JSON.parse(JSON.stringify(userSections)) as {
-      favorites: UserSectionsType | undefined;
-      hidden?: UserSectionsType | undefined;
-    };
-
-    if (userSections.favorites && userSections.favorites.length > 0) {
-      favoriteSections = [];
-      nonFavoriteSections = [];
-
-      priceList.positions.forEach(position => {
-        if (userSections.favorites!.includes(position.title)) {
-          favoriteSections!.push(position);
-        } else {
-          nonFavoriteSections!.push(position);
-        }
-      });
-    }
-  } catch (e) {
-    error = e as Error;
-  }
+  const {
+    priceList,
+    userFavoritesGoods,
+    favoriteSections,
+    hiddenSections,
+    nonFavoriteSections,
+    error
+  } = await getCatalogData();
 
   if (error || !priceList) {
     return <ErrorMessage>{error?.message}</ErrorMessage>;
@@ -77,7 +40,7 @@ export default async function CatalogPage() {
             <PriceList
               positions={favoriteSections}
               favorites={userFavoritesGoods}
-              hiddenSections={userSections!.hidden}
+              hiddenSections={hiddenSections}
             />
             <h2 className="text-3xl mb-5 mt-10">Все категории</h2>
           </>
@@ -91,7 +54,7 @@ export default async function CatalogPage() {
       <PriceList
         positions={nonFavoriteSections || priceList.positions}
         favorites={userFavoritesGoods}
-        hiddenSections={userSections!.hidden}
+        hiddenSections={hiddenSections}
       />
     </div>
   );
