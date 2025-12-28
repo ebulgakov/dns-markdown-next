@@ -12,7 +12,7 @@ export default function PriceListSection({ position }: PriceListProps) {
     <div>
       <h2>{position.title}</h2>
       {position.items.map((item, idx) => (
-        <PriceListGoods key={idx} goods={item} />
+        <PriceListGoods key={idx} item={item} />
       ))}
     </div>
   );
