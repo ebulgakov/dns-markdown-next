@@ -38,6 +38,4 @@ export interface PriceList {
   city: string;
   positions: Position[];
   createdAt: string;
-
-  toObject(): PriceList;
 }

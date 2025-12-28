@@ -22,7 +22,7 @@ export const getProductById = async (id: string) => {
 
   if (!priceList) return null;
 
-  const positions = priceList.toObject().positions.flatMap(positionGroup => positionGroup.items);
+  const positions = priceList.positions.flatMap(positionGroup => positionGroup.items);
   const item = positions.find((position: { link: string }) => position.link === id);
 
   if (!item) return null;
