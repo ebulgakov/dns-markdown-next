@@ -7,12 +7,7 @@ export const getUser = async () => {
   await dbConnect();
   const clerkUser = await currentUser();
 
-  return User.findOne({ userId: clerkUser?.id }) as unknown as UserType | undefined;
-};
+  const user = await User.findOne({ userId: clerkUser?.id });
 
-export const getUserFavorites = async () => {
-  await dbConnect();
-  const user = await getUser();
-
-  return user ? user.favorites.reverse() : [];
+  return user || undefined;
 };
