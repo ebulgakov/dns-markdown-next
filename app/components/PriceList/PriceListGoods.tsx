@@ -77,8 +77,8 @@ export default function PriceListGoods({ item, status, diff, favorites = [] }: P
             value={item.profit}
             displayType="text"
             thousandSeparator=" "
-            suffix=" ₽"
-            renderText={value => <span>({value})</span>}
+            prefix="("
+            suffix=" ₽)"
           />
         </div>
         {status && status.updatedAt ? (

@@ -1,32 +1,18 @@
-import { getLastPriceList } from "@/db/pricelist/queries";
 import ErrorMessage from "@/app/components/ErrorMessage";
 import PriceList from "@/app/components/PriceList/PriceList";
-import type { PriceList as PriceListType } from "@/types/pricelist";
-import { getUserFavorites } from "@/db/profile/queries";
-import type { Favorite } from "@/types/user";
+import { getCatalogData } from "@/app/catalog/getCatalogData";
 
 export default async function CatalogPage() {
-  let priceList;
-  let userFavorites;
-  let error: Error | null = null;
+  const {
+    priceList,
+    userFavoritesGoods,
+    favoriteSections,
+    hiddenSections,
+    nonFavoriteSections,
+    error
+  } = await getCatalogData();
 
-  try {
-    priceList = await getLastPriceList();
-
-    if (!priceList) throw new Error("No any price lists in the catalog");
-    // Convert Mongo Response into Object
-    priceList = JSON.parse(JSON.stringify(priceList)) as PriceListType;
-
-    userFavorites = await getUserFavorites();
-    if (!userFavorites) throw new Error("Not possible to get user favorites");
-
-    // Convert Mongo Response into Object
-    userFavorites = JSON.parse(JSON.stringify(userFavorites)) as Favorite[];
-  } catch (e) {
-    error = e as Error;
-  }
-
-  if (!priceList) {
+  if (error || !priceList) {
     return <ErrorMessage>{error?.message}</ErrorMessage>;
   }
 
@@ -47,7 +33,29 @@ export default async function CatalogPage() {
         </div>
       </div>
 
-      <PriceList priceList={priceList} favorites={userFavorites} />
+      {favoriteSections ? (
+        favoriteSections?.length > 0 && (
+          <>
+            <h2 className="text-3xl mb-5">Избранные категории</h2>
+            <PriceList
+              positions={favoriteSections}
+              favorites={userFavoritesGoods}
+              hiddenSections={hiddenSections}
+            />
+            <h2 className="text-3xl mb-5 mt-10">Все категории</h2>
+          </>
+        )
+      ) : (
+        <div className="border border-green-800 bg-green-50 text-green-800 rounded-lg p-4 mb-10">
+          Добавьте избранные категории в вашем профиле и они всегда будут закреплены вверху списка
+        </div>
+      )}
+
+      <PriceList
+        positions={nonFavoriteSections || priceList.positions}
+        favorites={userFavoritesGoods}
+        hiddenSections={hiddenSections}
+      />
     </div>
   );
 }
