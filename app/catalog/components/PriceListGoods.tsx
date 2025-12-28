@@ -7,27 +7,31 @@ import { faStar as faStarEmpty } from "@fortawesome/free-regular-svg-icons";
 import { NumericFormat } from "react-number-format";
 import type { Goods as GoodsType } from "@/types/pricelist";
 import type { GoodDiffChanges as GoodDiffChangesType } from "@/types/diff";
+import { useState } from "react";
+import type { Favorite, FavoriteStatus } from "@/types/user";
 
 type PriceListGoodsType = {
   item: GoodsType;
   diff?: GoodDiffChangesType;
-  status?: {
-    deleted?: boolean;
-    updatedAt?: string;
-  };
+  favorites?: Favorite[];
+  status?: FavoriteStatus;
 };
-export default function PriceListGoods({ item, status = {}, diff }: PriceListGoodsType) {
+export default function PriceListGoods({ item, status, diff, favorites = [] }: PriceListGoodsType) {
   // Placeholders
   const hideFavorites = false;
-  const inFavorites = link => false;
-  const removeFromFavorites = (link, id) => {};
-  const addToFavorites = (link, id) => {};
-  const loadingFavoritesList: string[] = [];
+  const inFavorites = favorites.some(fav => fav.item._id === item._id);
+  const [loadingFavoritesList, setLoadingFavoritesList] = useState<boolean>();
+  const removeFromFavorites = () => {
+    setLoadingFavoritesList(true);
+  };
+  const addToFavorites = () => {
+    setLoadingFavoritesList(true);
+  };
 
   return (
     <div
       className={cn("pricelist", {
-        " -deleted": status.deleted
+        " -deleted": status?.deleted
       })}
     >
       <div className="pricelist_col -photo">
@@ -113,7 +117,7 @@ export default function PriceListGoods({ item, status = {}, diff }: PriceListGoo
             renderText={value => <span className="pricelist_profit">{value}</span>}
           />
         </div>
-        {status.updatedAt ? (
+        {status && status.updatedAt ? (
           <div className="pricelist_bought">
             Куплен {new Date(status.updatedAt).toLocaleDateString()}
           </div>
@@ -131,14 +135,12 @@ export default function PriceListGoods({ item, status = {}, diff }: PriceListGoo
 
       {!hideFavorites && (
         <div className="pricelist_col -favorites">
-          {inFavorites(item.link) ? (
+          {inFavorites ? (
             <button
               className="pricelist_favorite"
               title="Убрать из избранного"
-              disabled={loadingFavoritesList.indexOf(item._id) >= 0}
-              onClick={() => {
-                removeFromFavorites(item.link, item._id);
-              }}
+              disabled={loadingFavoritesList}
+              onClick={removeFromFavorites}
             >
               <Fa icon={faStar} />
             </button>
@@ -146,10 +148,8 @@ export default function PriceListGoods({ item, status = {}, diff }: PriceListGoo
             <button
               className="pricelist_favorite"
               title="Добавить в избранное"
-              disabled={loadingFavoritesList.indexOf(item._id) >= 0}
-              onClick={() => {
-                addToFavorites(item, item._id);
-              }}
+              disabled={loadingFavoritesList}
+              onClick={addToFavorites}
             >
               <Fa icon={faStarEmpty} />
             </button>
