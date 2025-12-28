@@ -36,7 +36,7 @@ export default async function CatalogPage() {
   return (
     <div>
       <div className="flex justify-between items-end border-b border-solid border-b-neutral-300  mt-10 mb-5 mx-0 pb-5">
-        <h1 className=" text-4xl">
+        <h1 className="text-4xl">
           {date.toLocaleDateString()}{" "}
           <small className="font-normal leading-none text-[#777777] text-[65%]">
             {date.toLocaleTimeString()}

@@ -23,14 +23,16 @@ export default function PriceListSection({ position, favorites }: PriceListProps
         onClick={toggleVisibility}
         className="items-center flex justify-start text-left w-full border-b-neutral-300 cursor-pointer border-b border-solid"
       >
-        <Fa icon={isOpen ? faPlus : faMinus} className="text-xl text-[orange] relative mr-2" />
+        <Fa icon={isOpen ? faMinus : faPlus} className="text-xl text-[orange] relative mr-2" />
         <span className="uppercase font-bold text-xl mr-2.5">{position.title}</span>
         <span className="text-base block font-bold ml-auto">{position.items.length}</span>
       </button>
-      {isOpen &&
-        position.items.map((item, idx) => (
-          <PriceListGoods key={idx} item={item} favorites={favorites} />
-        ))}
+      <div className="divide-y divide-gray-200">
+        {isOpen &&
+          position.items.map((item, idx) => (
+            <PriceListGoods key={idx} item={item} favorites={favorites} />
+          ))}
+      </div>
     </div>
   );
 }

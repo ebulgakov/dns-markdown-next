@@ -1,14 +1,12 @@
 import cn from "classnames";
 import Link from "next/link";
 import Image from "next/image";
-import { FontAwesomeIcon as Fa } from "@fortawesome/react-fontawesome";
-import { faStar } from "@fortawesome/free-solid-svg-icons";
-import { faStar as faStarEmpty } from "@fortawesome/free-regular-svg-icons";
 import { NumericFormat } from "react-number-format";
 import type { Goods as GoodsType } from "@/types/pricelist";
 import type { GoodDiffChanges as GoodDiffChangesType } from "@/types/diff";
-import { useState } from "react";
 import type { Favorite, FavoriteStatus } from "@/types/user";
+import PriceListFavoriteToggle from "@/app/components/PriceList/PriceListFavoriteToggle";
+import PriceListGoodsDiff from "@/app/components/PriceList/PriceListGoodsDiff";
 
 type PriceListGoodsType = {
   item: GoodsType;
@@ -19,102 +17,68 @@ type PriceListGoodsType = {
 export default function PriceListGoods({ item, status, diff, favorites = [] }: PriceListGoodsType) {
   // Placeholders
   const hideFavorites = false;
-  const inFavorites = favorites.some(fav => fav.item._id === item._id);
-  const [loadingFavoritesList, setLoadingFavoritesList] = useState<boolean>();
-  const removeFromFavorites = () => {
-    setLoadingFavoritesList(true);
-  };
-  const addToFavorites = () => {
-    setLoadingFavoritesList(true);
-  };
 
   return (
     <div
-      className={cn("pricelist", {
-        " -deleted": status?.deleted
+      className={cn("flex items-center gap-4 py-1", {
+        "opacity-40": status?.deleted
       })}
     >
-      <div className="pricelist_col -photo">
-        <Image src={item.image} alt="" width={50} height={50} />
+      <div className="flex-none basis-55 h-55 gap-5 flex items-center text-center">
+        <Image src={item.image} alt="" width={200} height={200} />
       </div>
-      <div className="pricelist_col -info">
-        <h4 className="pricelist_title">
-          <a target="_blank" rel="noopener noreferrer" href={`http://dns-shop.ru${item.link}`}>
+      <div className="flex-1">
+        <div className="text-base mb-2.5">
+          <a
+            target="_blank"
+            rel="noopener noreferrer"
+            href={`http://dns-shop.ru${item.link}`}
+            className="text-[#337ab7]"
+          >
             {item.title}
           </a>
           &nbsp;
-          <small>{item.code}</small>
-        </h4>
-        <p className="pricelist_description">{item.description}</p>
+          <small className="text-[75%] font-normal leading-none text-[#777777]">{item.code}</small>
+        </div>
+        <p className="mb-3">{item.description}</p>
         {item.reasons && (
-          <div className="pricelist_reasons">
+          <div>
             {item.reasons.map((reason, idx) => (
-              <dl className="pricelist_reason" key={idx}>
-                <dt>{reason.label}</dt>
-                <dd>{reason.text}</dd>
+              <dl className="inline-block mr-2.5" key={idx}>
+                <dt className="inline opacity-40 font-normal mr-1">{reason.label}</dt>
+                <dd className="inline">{reason.text}</dd>
               </dl>
             ))}
           </div>
         )}
       </div>
 
-      {diff && (
-        <div className="pricelist_col -oldPrices">
-          <NumericFormat
-            value={diff.price}
-            displayType="text"
-            thousandSeparator=" "
-            suffix=" ₽"
-            renderText={value => <div className="pricelist_price">{value}</div>}
-          />
-          <div
-            className={cn("pricelist_prices", {
-              "-fixHeight": item.priceOld || item.profit
-            })}
-          >
-            <NumericFormat
-              value={diff.priceOld}
-              displayType="text"
-              thousandSeparator=" "
-              suffix=" ₽"
-              renderText={value => <span className="pricelist_oldPrice">{value}</span>}
-            />
-            <NumericFormat
-              value={diff.profit}
-              displayType="text"
-              thousandSeparator=" "
-              suffix=" ₽"
-              renderText={value => <span className="pricelist_profit">{value}</span>}
-            />
-          </div>
-        </div>
-      )}
-      <div className="pricelist_col -prices">
+      {diff && <PriceListGoodsDiff diff={diff} goods={item} />}
+
+      <div className="text-center basis-37">
         <NumericFormat
           value={item.price}
           displayType="text"
           thousandSeparator=" "
           suffix=" ₽"
-          renderText={value => <div className="pricelist_price">{value}</div>}
+          renderText={value => (
+            <div className="text-xl font-semibold whitespace-nowrap">{value}</div>
+          )}
         />
-        <div
-          className={cn("pricelist_prices", {
-            "-fixHeight": diff && (diff.priceOld || diff.profit)
-          })}
-        >
+        <div className="flex gap-2 text-sm justify-center">
           <NumericFormat
             value={item.priceOld}
             displayType="text"
             thousandSeparator=" "
             suffix=" ₽"
-            renderText={value => <span className="pricelist_oldPrice">{value}</span>}
+            renderText={value => <span className="line-through">{value}</span>}
           />
           <NumericFormat
             value={item.profit}
             displayType="text"
             thousandSeparator=" "
             suffix=" ₽"
-            renderText={value => <span className="pricelist_profit">{value}</span>}
+            renderText={value => <span>({value})</span>}
           />
         </div>
         {status && status.updatedAt ? (
@@ -124,38 +88,16 @@ export default function PriceListGoods({ item, status, diff, favorites = [] }: P
         ) : (
           <>
             {item.link && (
-              <Link className="pricelist_analysis" href={item.link}>
+              <Link className="text-[#337ab7]" href={item.link}>
                 Анализ цены
               </Link>
             )}
           </>
         )}
       </div>
-      <div className="pricelist_col -address">{item.available}</div>
+      <div className="flex-none">{item.available}</div>
 
-      {!hideFavorites && (
-        <div className="pricelist_col -favorites">
-          {inFavorites ? (
-            <button
-              className="pricelist_favorite"
-              title="Убрать из избранного"
-              disabled={loadingFavoritesList}
-              onClick={removeFromFavorites}
-            >
-              <Fa icon={faStar} />
-            </button>
-          ) : (
-            <button
-              className="pricelist_favorite"
-              title="Добавить в избранное"
-              disabled={loadingFavoritesList}
-              onClick={addToFavorites}
-            >
-              <Fa icon={faStarEmpty} />
-            </button>
-          )}
-        </div>
-      )}
+      {!hideFavorites && <PriceListFavoriteToggle favorites={favorites} goods={item} />}
     </div>
   );
 }
