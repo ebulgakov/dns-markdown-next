@@ -7,7 +7,5 @@ export const getUser = async () => {
   await dbConnect();
   const clerkUser = await currentUser();
 
-  const user = (await User.findOne({ userId: clerkUser?.id })) as unknown as UserType | null;
-
-  return user;
+  return User.findOne({ userId: clerkUser?.id }) as unknown as UserType | null;
 };
