@@ -8,6 +8,8 @@ export type FavoriteStatus = {
   updates: [];
 }
 
+export type UserSections = string[]
+
 export interface Favorite {
   _id: string;
   status: FavoriteStatus;
@@ -18,8 +20,8 @@ export interface User {
   id: string;
   userId: string;
   city: string;
-  hiddenSections: string[];
-  favoriteSections: string[];
+  hiddenSections: UserSections;
+  favoriteSections: UserSections;
   notifications: {
     updates: {
       interval: string;

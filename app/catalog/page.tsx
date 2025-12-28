@@ -2,31 +2,36 @@ import { getLastPriceList } from "@/db/pricelist/queries";
 import ErrorMessage from "@/app/components/ErrorMessage";
 import PriceList from "@/app/components/PriceList/PriceList";
 import type { PriceList as PriceListType } from "@/types/pricelist";
-import { getUserFavorites } from "@/db/profile/queries";
-import type { Favorite } from "@/types/user";
+import { getUserFavorites, getUserSections } from "@/db/profile/queries";
+import { Favorite as FavoriteType, UserSections as UserSectionsType } from "@/types/user";
 
 export default async function CatalogPage() {
   let priceList;
   let userFavorites;
+  let userSections;
   let error: Error | null = null;
 
   try {
-    priceList = await getLastPriceList();
+    [userFavorites, userSections, priceList] = await Promise.all([
+      getUserFavorites(),
+      getUserSections(),
+      getLastPriceList()
+    ]);
 
     if (!priceList) throw new Error("No any price lists in the catalog");
+
     // Convert Mongo Response into Object
     priceList = JSON.parse(JSON.stringify(priceList)) as PriceListType;
-
-    userFavorites = await getUserFavorites();
-    if (!userFavorites) throw new Error("Not possible to get user favorites");
-
-    // Convert Mongo Response into Object
-    userFavorites = JSON.parse(JSON.stringify(userFavorites)) as Favorite[];
+    userFavorites = JSON.parse(JSON.stringify(userFavorites)) as FavoriteType[];
+    userSections = JSON.parse(JSON.stringify(userSections)) as {
+      favorites: UserSectionsType;
+      hidden: UserSectionsType;
+    };
   } catch (e) {
     error = e as Error;
   }
 
-  if (!priceList) {
+  if (error || !priceList) {
     return <ErrorMessage>{error?.message}</ErrorMessage>;
   }
 
@@ -47,7 +52,11 @@ export default async function CatalogPage() {
         </div>
       </div>
 
-      <PriceList priceList={priceList} favorites={userFavorites} />
+      <PriceList
+        priceList={priceList}
+        favorites={userFavorites}
+        hiddenSections={userSections!.hidden}
+      />
     </div>
   );
 }

@@ -10,10 +10,15 @@ import { useState } from "react";
 type PriceListProps = {
   position: PositionType;
   favorites?: Favorite[];
+  isOpen?: boolean;
 };
 
-export default function PriceListSection({ position, favorites }: PriceListProps) {
-  const [isOpen, setIsOpen] = useState(true);
+export default function PriceListSection({
+  position,
+  favorites,
+  isOpen: isOpenDefault
+}: PriceListProps) {
+  const [isOpen, setIsOpen] = useState(isOpenDefault);
   const toggleVisibility = () => {
     setIsOpen(!isOpen);
   };
