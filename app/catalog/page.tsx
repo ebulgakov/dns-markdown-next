@@ -1,6 +1,6 @@
 import { getLastPriceList } from "@/db/pricelist/queries";
 import ErrorMessage from "@/app/components/ErrorMessage";
-import PriceList from "@/app/catalog/components/PriceList";
+import PriceList from "@/app/components/PriceList/PriceList";
 import type { PriceList as PriceListType } from "@/types/pricelist";
 import { getUserFavorites } from "@/db/profile/queries";
 import type { Favorite } from "@/types/user";

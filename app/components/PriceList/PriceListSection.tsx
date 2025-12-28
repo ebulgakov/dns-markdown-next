@@ -1,7 +1,7 @@
 "use client";
 
 import type { Position as PositionType } from "@/types/pricelist";
-import PriceListGoods from "@/app/catalog/components/PriceListGoods";
+import PriceListGoods from "@/app/components/PriceList/PriceListGoods";
 import type { Favorite } from "@/types/user";
 
 type PriceListProps = {

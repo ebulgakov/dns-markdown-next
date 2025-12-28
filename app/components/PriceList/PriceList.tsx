@@ -2,7 +2,7 @@
 
 import type { PriceList as PriceListType } from "@/types/pricelist";
 import { useState, useSyncExternalStore } from "react";
-import PriceListSection from "@/app/catalog/components/PriceListSection";
+import PriceListSection from "@/app/components/PriceList/PriceListSection";
 import type { Favorite } from "@/types/user";
 
 const subscribe = () => () => {};
