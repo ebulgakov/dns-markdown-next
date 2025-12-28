@@ -6,20 +6,23 @@ import { faStar } from "@fortawesome/free-solid-svg-icons";
 import { faStar as faStarEmpty } from "@fortawesome/free-regular-svg-icons";
 import { NumericFormat } from "react-number-format";
 import type { Goods as GoodsType } from "@/types/pricelist";
+import type { GoodDiffChanges as GoodDiffChangesType } from "@/types/diff";
 
 type PriceListGoodsType = {
   item: GoodsType;
+  diff?: GoodDiffChangesType;
+  status?: {
+    deleted?: boolean;
+    updatedAt?: string;
+  };
 };
-export default function PriceListGoods({ item }: PriceListGoodsType) {
-  const diff = item.diff || null;
-  const status = item.status || {};
-
+export default function PriceListGoods({ item, status = {}, diff }: PriceListGoodsType) {
   // Placeholders
   const hideFavorites = false;
   const inFavorites = link => false;
-  const removeFromFavorites = () => {};
-  const addToFavorites = () => {};
-  const loadingFavoritesList = [];
+  const removeFromFavorites = (link, id) => {};
+  const addToFavorites = (link, id) => {};
+  const loadingFavoritesList: string[] = [];
 
   return (
     <div
@@ -39,11 +42,10 @@ export default function PriceListGoods({ item }: PriceListGoodsType) {
           <small>{item.code}</small>
         </h4>
         <p className="pricelist_description">{item.description}</p>
-        {item.problems && <p className="pricelist_reasons">{item.problems}</p>}
         {item.reasons && (
           <div className="pricelist_reasons">
-            {item.reasons.map(reason => (
-              <dl className="pricelist_reason" key={reason._id}>
+            {item.reasons.map((reason, idx) => (
+              <dl className="pricelist_reason" key={idx}>
                 <dt>{reason.label}</dt>
                 <dd>{reason.text}</dd>
               </dl>
@@ -111,7 +113,7 @@ export default function PriceListGoods({ item }: PriceListGoodsType) {
             renderText={value => <span className="pricelist_profit">{value}</span>}
           />
         </div>
-        {status.deleted ? (
+        {status.updatedAt ? (
           <div className="pricelist_bought">
             Куплен {new Date(status.updatedAt).toLocaleDateString()}
           </div>
@@ -133,7 +135,7 @@ export default function PriceListGoods({ item }: PriceListGoodsType) {
             <button
               className="pricelist_favorite"
               title="Убрать из избранного"
-              disabled={loadingFavoritesList[item._id]}
+              disabled={loadingFavoritesList.indexOf(item._id) >= 0}
               onClick={() => {
                 removeFromFavorites(item.link, item._id);
               }}
@@ -144,7 +146,7 @@ export default function PriceListGoods({ item }: PriceListGoodsType) {
             <button
               className="pricelist_favorite"
               title="Добавить в избранное"
-              disabled={loadingFavoritesList[item._id]}
+              disabled={loadingFavoritesList.indexOf(item._id) >= 0}
               onClick={() => {
                 addToFavorites(item, item._id);
               }}

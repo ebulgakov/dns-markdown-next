@@ -11,6 +11,7 @@ export type Position = {
 };
 
 export interface Goods {
+  _id: string;
   title: string;
   link: string;
   description: string;
