@@ -1,18 +1,23 @@
 import { getLastPriceList } from "@/db/pricelist/queries";
 import ErrorMessage from "@/app/components/ErrorMessage";
 import PriceList from "@/app/components/PriceList/PriceList";
-import type { PriceList as PriceListType } from "@/types/pricelist";
+import type { PriceList as PriceListType, Position as PositionType } from "@/types/pricelist";
 import { getUserFavorites, getUserSections } from "@/db/profile/queries";
 import { Favorite as FavoriteType, UserSections as UserSectionsType } from "@/types/user";
 
 export default async function CatalogPage() {
   let priceList;
-  let userFavorites;
-  let userSections;
+  let userFavoritesGoods;
+  let userSections: {
+    favorites: UserSectionsType | undefined;
+    hidden?: UserSectionsType | undefined;
+  };
+  let favoriteSections: PositionType[] | null = null;
+  let nonFavoriteSections: PositionType[] | null = null;
   let error: Error | null = null;
 
   try {
-    [userFavorites, userSections, priceList] = await Promise.all([
+    [userFavoritesGoods, userSections, priceList] = await Promise.all([
       getUserFavorites(),
       getUserSections(),
       getLastPriceList()
@@ -22,11 +27,24 @@ export default async function CatalogPage() {
 
     // Convert Mongo Response into Object
     priceList = JSON.parse(JSON.stringify(priceList)) as PriceListType;
-    userFavorites = JSON.parse(JSON.stringify(userFavorites)) as FavoriteType[];
+    userFavoritesGoods = JSON.parse(JSON.stringify(userFavoritesGoods)) as FavoriteType[];
     userSections = JSON.parse(JSON.stringify(userSections)) as {
-      favorites: UserSectionsType;
-      hidden: UserSectionsType;
+      favorites: UserSectionsType | undefined;
+      hidden?: UserSectionsType | undefined;
     };
+
+    if (userSections.favorites && userSections.favorites.length > 0) {
+      favoriteSections = [];
+      nonFavoriteSections = [];
+
+      priceList.positions.forEach(position => {
+        if (userSections.favorites!.includes(position.title)) {
+          favoriteSections!.push(position);
+        } else {
+          nonFavoriteSections!.push(position);
+        }
+      });
+    }
   } catch (e) {
     error = e as Error;
   }
@@ -52,9 +70,27 @@ export default async function CatalogPage() {
         </div>
       </div>
 
+      {favoriteSections ? (
+        favoriteSections?.length > 0 && (
+          <>
+            <h2 className="text-3xl mb-5">Избранные категории</h2>
+            <PriceList
+              positions={favoriteSections}
+              favorites={userFavoritesGoods}
+              hiddenSections={userSections!.hidden}
+            />
+            <h2 className="text-3xl mb-5 mt-10">Все категории</h2>
+          </>
+        )
+      ) : (
+        <div className="border border-green-800 bg-green-50 text-green-800 rounded-lg p-4 mb-10">
+          Добавьте избранные категории в вашем профиле и они всегда будут закреплены вверху списка
+        </div>
+      )}
+
       <PriceList
-        priceList={priceList}
-        favorites={userFavorites}
+        positions={nonFavoriteSections || priceList.positions}
+        favorites={userFavoritesGoods}
         hiddenSections={userSections!.hidden}
       />
     </div>
