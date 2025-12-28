@@ -1,5 +1,6 @@
 "use client";
-
+import axios from "axios";
+import cn from "classnames";
 import { FontAwesomeIcon as Fa } from "@fortawesome/react-fontawesome";
 import { faStar } from "@fortawesome/free-solid-svg-icons";
 import { faStar as faStarEmpty } from "@fortawesome/free-regular-svg-icons";
@@ -10,25 +11,49 @@ import type { Favorite } from "@/types/user";
 type PriceListFavoriteToggleProps = {
   favorites: Favorite[];
   goods: GoodsType;
-}
+};
 
-export default function PriceListFavoriteToggle({favorites, goods}: PriceListFavoriteToggleProps) {
-
-  const inFavorites = favorites.some(fav => fav.item._id === goods._id);
+export default function PriceListFavoriteToggle({
+  favorites,
+  goods
+}: PriceListFavoriteToggleProps) {
+  const [inFavorites, setInFavorites] = useState<boolean>(
+    favorites.some(fav => fav.item._id === goods._id)
+  );
   const [loadingFavoritesList, setLoadingFavoritesList] = useState<boolean>();
   const removeFromFavorites = () => {
     setLoadingFavoritesList(true);
   };
-  const addToFavorites = () => {
+  const addToFavorites = async () => {
     setLoadingFavoritesList(true);
-  };
+    try {
+      const { data } = await axios.post(
+        "/api/add-to-favorites",
+        { goods },
+        {
+          headers: {
+            "Content-Type": "application/json; charset=UTF-8"
+          }
+        }
+      );
 
+      if (data.success) {
+        setInFavorites(true);
+      }
+    } catch (e) {
+      console.error(e);
+    } finally {
+      setLoadingFavoritesList(false);
+    }
+  };
 
   return (
     <>
       {inFavorites ? (
         <button
-          className="text-xl text-[#ffc529]"
+          className={cn("text-xl text-[#ffc529]", {
+            "opacity-40": loadingFavoritesList
+          })}
           title="Убрать из избранного"
           disabled={loadingFavoritesList}
           onClick={removeFromFavorites}
@@ -37,7 +62,9 @@ export default function PriceListFavoriteToggle({favorites, goods}: PriceListFav
         </button>
       ) : (
         <button
-          className="text-xl text-[#ffc529]"
+          className={cn("text-xl text-[#ffc529]", {
+            "opacity-40": loadingFavoritesList
+          })}
           title="Добавить в избранное"
           disabled={loadingFavoritesList}
           onClick={addToFavorites}

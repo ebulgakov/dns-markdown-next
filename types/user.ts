@@ -15,6 +15,7 @@ export interface Favorite {
 }
 
 export interface User {
+  id: string;
   userId: string;
   city: string;
   hiddenSections: string[];
