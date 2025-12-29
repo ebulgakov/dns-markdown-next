@@ -1,19 +1,19 @@
 import Goods from "@/db/models/goods_schema";
 
 type Reason = {
-  _id: string;
+  id: string;
   label: string;
   text: string;
 };
 
 export type Position = {
-  _id: string;
+  id: string;
   title: string;
   items: Goods[];
 };
 
 export interface Goods {
-  _id: string;
+  id: string;
   title: string;
   link: string;
   description: string;

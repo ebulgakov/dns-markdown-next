@@ -26,7 +26,7 @@ export default function PriceList({ positions, favorites, hiddenSections }: Cata
         <>
           {positions.map(position => (
             <PriceListSection
-              key={position._id}
+              key={position.id}
               position={position}
               favorites={favorites}
               isOpen={!hiddenSections?.includes(position.title)}

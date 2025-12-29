@@ -4,5 +4,5 @@ import type { PriceList as PriceListType } from "@/types/pricelist";
 
 export const getPriceListById = async (id: string) => {
   await dbConnect();
-  return Pricelist.findOne({ _id: id }) as unknown as PriceListType | null;
+  return Pricelist.findOne({ id: id }) as unknown as PriceListType | null;
 };

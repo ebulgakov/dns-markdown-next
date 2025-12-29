@@ -50,7 +50,7 @@ export default function PriceListGoods({ item, status, diff, favorites = [] }: P
         {item.reasons && (
           <div>
             {item.reasons.map(reason => (
-              <dl className="inline-block mr-2.5" key={reason._id}>
+              <dl className="inline-block mr-2.5" key={reason.id}>
                 <dt className="inline opacity-40 font-normal mr-1">{reason.label}</dt>
                 <dd className="inline">{reason.text}</dd>
               </dl>

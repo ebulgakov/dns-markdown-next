@@ -35,7 +35,7 @@ export default function PriceListSection({
       <div className="divide-y divide-gray-200">
         {isOpen &&
           position.items.map(item => (
-            <PriceListGoods key={item._id} item={item} favorites={favorites} />
+            <PriceListGoods key={item.id} item={item} favorites={favorites} />
           ))}
       </div>
     </div>

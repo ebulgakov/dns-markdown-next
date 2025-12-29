@@ -35,7 +35,7 @@ describe('getPriceListById', () => {
     const result = await getPriceListById('60d21b4667d0d8992e610c85');
 
     expect(mockedDbConnect).toHaveBeenCalledTimes(1);
-    expect(mockedPricelistFindOne).toHaveBeenCalledWith({ _id: '60d21b4667d0d8992e610c85' });
+    expect(mockedPricelistFindOne).toHaveBeenCalledWith({ id: '60d21b4667d0d8992e610c85' });
     expect(result).toEqual(mockPriceList);
   });
 
@@ -45,7 +45,7 @@ describe('getPriceListById', () => {
     const result = await getPriceListById('invalid-id');
 
     expect(mockedDbConnect).toHaveBeenCalledTimes(1);
-    expect(mockedPricelistFindOne).toHaveBeenCalledWith({ _id: 'invalid-id' });
+    expect(mockedPricelistFindOne).toHaveBeenCalledWith({ id: 'invalid-id' });
     expect(result).toBeNull();
   });
 

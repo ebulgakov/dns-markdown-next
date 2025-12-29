@@ -19,11 +19,11 @@ const mockedGetUser = getUser as jest.Mock<Promise<Partial<UserType> | null>>;
 
 // Test Data
 const goods1: Goods = {
-  _id: "g1",
+  id: "g1",
   title: "Good 1",
   link: "https://www.google.com/",
   description: "",
-  reasons: [{ label: "some", text: "reason" }],
+  reasons: [{ label: "some", text: "reason", id: "1" }],
   priceOld: "20",
   price: "10",
   profit: "10",
@@ -33,11 +33,11 @@ const goods1: Goods = {
   city: "samara"
 };
 const goods2: Goods = {
-  _id: "g2",
+  id: "g2",
   title: "Good 2",
   link: "https://www.google.com/",
   description: "",
-  reasons: [{ label: "some", text: "reason" }],
+  reasons: [{ label: "some", text: "reason", id: "0" }],
   priceOld: "200",
   price: "100",
   profit: "100",
@@ -61,10 +61,12 @@ describe("getCatalogData", () => {
       city: "samara",
       positions: [
         {
+          id: "0",
           title: "Favorite Section",
           items: [goods1]
         },
         {
+          id: "1",
           title: "Non-Favorite Section",
           items: [goods2]
         }
@@ -74,7 +76,7 @@ describe("getCatalogData", () => {
     const mockUser: Partial<UserType> = {
       favorites: [
         {
-          _id: "g1",
+          id: "g1",
           status: {
             city: "",
             updatedAt: "",
@@ -144,10 +146,12 @@ describe("getCatalogData", () => {
       city: "samara",
       positions: [
         {
+          id: "0",
           title: "Favorite Section",
           items: [goods1]
         },
         {
+          id: "1",
           title: "Non-Favorite Section",
           items: [goods2]
         }

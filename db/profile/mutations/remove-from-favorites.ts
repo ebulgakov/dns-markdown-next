@@ -10,7 +10,7 @@ export const removeFromFavorites = async (id: string) => {
   if (!user) return null;
 
   const update = {
-    favorites: user.favorites.filter(item => String(item.item._id) !== id)
+    favorites: user.favorites.filter(item => String(item.item.id) !== id)
   };
 
   await updateUser(update);

@@ -11,7 +11,7 @@ export type FavoriteStatus = {
 export type UserSections = string[]
 
 export interface Favorite {
-  _id: string;
+  id: string;
   status: FavoriteStatus;
   item: Goods;
 }
