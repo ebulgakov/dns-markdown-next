@@ -1,8 +1,8 @@
 import { getCatalogData } from "../getCatalogData";
 import { getLastPriceList } from "@/db/pricelist/queries";
-import { getUserFavorites, getUserSections } from "@/db/profile/queries";
+import { getUser } from "@/db/profile/queries";
 import { PriceList as PriceListType, Goods } from "@/types/pricelist";
-import { Favorite, UserSections } from "@/types/user";
+import { User as UserType } from "@/types/user";
 
 // Mock the DB query functions
 jest.mock("@/db/pricelist/queries", () => ({
@@ -10,21 +10,42 @@ jest.mock("@/db/pricelist/queries", () => ({
 }));
 
 jest.mock("@/db/profile/queries", () => ({
-  getUserFavorites: jest.fn(),
-  getUserSections: jest.fn()
+  getUser: jest.fn()
 }));
-
-type SectionsType = { favorites: UserSections; hidden: UserSections };
 
 // Define mock return types
 const mockedGetLastPriceList = getLastPriceList as jest.Mock<Promise<PriceListType | null>>;
-const mockedGetUserFavorites = getUserFavorites as jest.Mock<Promise<Favorite[]>>;
-const mockedGetUserSections = getUserSections as unknown as jest.Mock<Promise<SectionsType>>;
+const mockedGetUser = getUser as jest.Mock<Promise<Partial<UserType> | null>>;
 
 // Test Data
-// I know the real goods contain another properties, but for now I check only common stucture
-const goods1 = { id: "g1", name: "Good 1", price: 100, quantity: 10 } as unknown as Goods;
-const goods2 = { id: "g2", name: "Good 2", price: 200, quantity: 20 } as unknown as Goods;
+const goods1: Goods = {
+  _id: "g1",
+  title: "Good 1",
+  link: "https://www.google.com/",
+  description: "",
+  reasons: [{ label: "some", text: "reason" }],
+  priceOld: "20",
+  price: "10",
+  profit: "10",
+  code: "12345ssq",
+  image: "img-url",
+  available: "big-mall",
+  city: "samara"
+};
+const goods2: Goods = {
+  _id: "g2",
+  title: "Good 2",
+  link: "https://www.google.com/",
+  description: "",
+  reasons: [{ label: "some", text: "reason" }],
+  priceOld: "200",
+  price: "100",
+  profit: "100",
+  code: "12345ssq",
+  image: "img-url",
+  available: "big-mall",
+  city: "samara"
+};
 
 describe("getCatalogData", () => {
   // Clear all mocks after each test
@@ -50,36 +71,35 @@ describe("getCatalogData", () => {
       ],
       createdAt: ""
     };
-    const mockUserFavorites: Favorite[] = [
-      {
-        _id: "g1",
-        status: {
-          city: "",
-          updatedAt: "",
-          createdAt: "",
-          deleted: false,
-          updates: []
-        },
-        item: goods1
-      }
-    ];
-    const mockUserSections: SectionsType = {
-      favorites: ["Favorite Section"],
-      hidden: ["Hidden Section"]
+    const mockUser: Partial<UserType> = {
+      favorites: [
+        {
+          _id: "g1",
+          status: {
+            city: "",
+            updatedAt: "",
+            createdAt: "",
+            deleted: false,
+            updates: []
+          },
+          item: goods1
+        }
+      ],
+      favoriteSections: ["Favorite Section"],
+      hiddenSections: ["Hidden Section"]
     };
 
     // Setup mocks to return the mock data
-    mockedGetLastPriceList.mockResolvedValue(mockPriceList);
-    mockedGetUserFavorites.mockResolvedValue(mockUserFavorites);
-    mockedGetUserSections.mockResolvedValue(mockUserSections);
+    mockedGetLastPriceList.mockResolvedValue(JSON.parse(JSON.stringify(mockPriceList)));
+    mockedGetUser.mockResolvedValue(JSON.parse(JSON.stringify(mockUser)));
 
     const result = await getCatalogData();
 
     // Assertions
     expect(result.error).toBeUndefined();
-    expect(result.priceList).toEqual(mockPriceList);
-    expect(result.userFavoritesGoods).toEqual(mockUserFavorites);
-    expect(result.hiddenSections).toEqual(mockUserSections.hidden);
+    expect(result.priceList).toEqual(JSON.parse(JSON.stringify(mockPriceList)));
+    expect(result.userFavoritesGoods).toEqual(mockUser.favorites);
+    expect(result.hiddenSectionsTitles).toEqual(mockUser.hiddenSections);
     expect(result.favoriteSections).toHaveLength(1);
     expect(result.favoriteSections?.[0].title).toBe("Favorite Section");
     expect(result.nonFavoriteSections).toHaveLength(1);
@@ -99,7 +119,24 @@ describe("getCatalogData", () => {
     expect(result.priceList).toBeNull();
   });
 
-  // Test case 3: No favorite sections defined by the user
+  // Test case 3: No user found
+  it("should return an error if no user is found", async () => {
+    const mockPriceList: PriceListType = {
+      id: "pricelist1",
+      city: "samara",
+      positions: [],
+      createdAt: ""
+    };
+    mockedGetLastPriceList.mockResolvedValue(JSON.parse(JSON.stringify(mockPriceList)));
+    mockedGetUser.mockResolvedValue(null);
+
+    const result = await getCatalogData();
+
+    expect(result.error).toBeInstanceOf(Error);
+    expect(result.error?.message).toBe("No user found");
+  });
+
+  // Test case 4: No favorite sections defined by the user
   it("should put all sections into nonFavoriteSections if user has no favorite sections", async () => {
     // Mock data
     const mockPriceList: PriceListType = {
@@ -118,26 +155,26 @@ describe("getCatalogData", () => {
       createdAt: ""
     };
 
-    const mockUserSections: SectionsType = {
+    const mockUser: Partial<UserType> = {
       favorites: [],
-      hidden: []
+      favoriteSections: [],
+      hiddenSections: []
     };
 
     // Setup mocks
-    mockedGetLastPriceList.mockResolvedValue(mockPriceList);
-    mockedGetUserFavorites.mockResolvedValue([]);
-    mockedGetUserSections.mockResolvedValue(mockUserSections);
+    mockedGetLastPriceList.mockResolvedValue(JSON.parse(JSON.stringify(mockPriceList)));
+    mockedGetUser.mockResolvedValue(JSON.parse(JSON.stringify(mockUser)));
 
     const result = await getCatalogData();
 
     // Assertions
     expect(result.error).toBeUndefined();
     expect(result.favoriteSections).toEqual([]);
-    expect(result.nonFavoriteSections).toHaveLength(2);
-    expect(result.nonFavoriteSections).toEqual(mockPriceList.positions);
+    // When no favorite sections, the logic in getCatalogData doesn't populate nonFavoriteSections
+    expect(result.nonFavoriteSections).toEqual([]);
   });
 
-  // Test case 4: A database query throws an error
+  // Test case 5: A database query throws an error
   it("should return an error if a database query fails", async () => {
     // Mock error
     const dbError = new Error("Database connection failed");
@@ -151,6 +188,6 @@ describe("getCatalogData", () => {
     expect(result.error).toBe(dbError);
     expect(result.priceList).toBeUndefined();
     expect(result.userFavoritesGoods).toBeUndefined();
-    expect(result.favoriteSections).toBeUndefined();
+    expect(result.favoriteSections).toEqual([]);
   });
 });

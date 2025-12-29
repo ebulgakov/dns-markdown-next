@@ -1,11 +1,14 @@
 import ErrorMessage from "@/app/components/ErrorMessage";
-import { getUserFavorites } from "@/db/profile/queries";
+import { getUser } from "@/db/profile/queries";
 
 export default async function FavoritesPage() {
   let favorites;
 
   try {
-    favorites = await getUserFavorites();
+    const user = await getUser();
+    if (!user) throw new Error("No user found!");
+
+    favorites = user.favorites.reverse();
   } catch (e) {
     const { message } = e as Error;
     return <ErrorMessage>{message}</ErrorMessage>;

@@ -6,8 +6,8 @@ export default async function CatalogPage() {
   const {
     priceList,
     userFavoritesGoods,
+    hiddenSectionsTitles,
     favoriteSections,
-    hiddenSections,
     nonFavoriteSections,
     error
   } = await getCatalogData();
@@ -33,18 +33,16 @@ export default async function CatalogPage() {
         </div>
       </div>
 
-      {favoriteSections ? (
-        favoriteSections?.length > 0 && (
-          <>
-            <h2 className="text-3xl mb-5">Избранные категории</h2>
-            <PriceList
-              positions={favoriteSections}
-              favorites={userFavoritesGoods}
-              hiddenSections={hiddenSections}
-            />
-            <h2 className="text-3xl mb-5 mt-10">Все категории</h2>
-          </>
-        )
+      {favoriteSections.length > 0 ? (
+        <>
+          <h2 className="text-3xl mb-5">Избранные категории</h2>
+          <PriceList
+            positions={favoriteSections}
+            favorites={userFavoritesGoods}
+            hiddenSections={hiddenSectionsTitles}
+          />
+          <h2 className="text-3xl mb-5 mt-10">Все категории</h2>
+        </>
       ) : (
         <div className="border border-green-800 bg-green-50 text-green-800 rounded-lg p-4 mb-10">
           Добавьте избранные категории в вашем профиле и они всегда будут закреплены вверху списка
@@ -52,9 +50,9 @@ export default async function CatalogPage() {
       )}
 
       <PriceList
-        positions={nonFavoriteSections || priceList.positions}
+        positions={nonFavoriteSections.length > 0 ? nonFavoriteSections : priceList.positions}
         favorites={userFavoritesGoods}
-        hiddenSections={hiddenSections}
+        hiddenSections={hiddenSectionsTitles}
       />
     </div>
   );
