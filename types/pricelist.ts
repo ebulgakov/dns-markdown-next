@@ -1,19 +1,19 @@
 import Goods from "@/db/models/goods_schema";
 
 type Reason = {
-  id: string;
+  _id: string;
   label: string;
   text: string;
 };
 
 export type Position = {
-  id: string;
+  _id: string;
   title: string;
   items: Goods[];
 };
 
 export interface Goods {
-  id: string;
+  _id: string;
   title: string;
   link: string;
   description: string;
@@ -36,7 +36,7 @@ export interface RemovedGoods {
 }
 
 export interface PriceList {
-  id: string;
+  _id: string;
   city: string;
   positions: Position[];
   createdAt: string;

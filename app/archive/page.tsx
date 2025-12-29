@@ -25,8 +25,8 @@ export default async function ArchivePage() {
       <h1 className="text-2xl font-bold mb-4">Архив прайслистов</h1>
       <ul className="space-y-1">
         {archiveCollection.map(item => (
-          <li key={item.id}>
-            <Link href={`/archive/${item.id}`}>
+          <li key={item._id}>
+            <Link href={`/archive/${item._id}`}>
               <span className="text-blue-500 hover:underline">
                 {formatDate(new Date(item.createdAt))}
               </span>

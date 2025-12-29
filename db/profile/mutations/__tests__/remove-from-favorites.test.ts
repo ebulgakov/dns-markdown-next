@@ -26,9 +26,9 @@ describe("removeFromFavorites", () => {
     const itemIdToRemove = "item2";
     const user = {
       favorites: [
-        { item: { id: "item1" } },
-        { item: { id: "item2" } },
-        { item: { id: "item3" } },
+        { item: { link: "item1" } },
+        { item: { link: "item2" } },
+        { item: { link: "item3" } },
       ],
     };
     (getUser as jest.Mock).mockResolvedValue(user);
@@ -40,8 +40,8 @@ describe("removeFromFavorites", () => {
     expect(dbConnect).toHaveBeenCalledTimes(1);
     expect(getUser).toHaveBeenCalledTimes(1);
     const expectedFavorites = [
-      { item: { id: "item1" } },
-      { item: { id: "item3" } },
+      { item: { link: "item1" } },
+      { item: { link: "item3" } },
     ];
     expect(updateUser).toHaveBeenCalledWith({ favorites: expectedFavorites });
   });
@@ -64,8 +64,8 @@ describe("removeFromFavorites", () => {
     const itemIdToRemove = "non-existent-item";
     const user = {
       favorites: [
-        { item: { id: "item1" } },
-        { item: { id: "item2" } },
+        { item: { link: "item1" } },
+        { item: { link: "item2" } },
       ],
     };
     (getUser as jest.Mock).mockResolvedValue(user);
@@ -77,8 +77,8 @@ describe("removeFromFavorites", () => {
     expect(dbConnect).toHaveBeenCalledTimes(1);
     expect(getUser).toHaveBeenCalledTimes(1);
     const expectedFavorites = [
-        { item: { id: "item1" } },
-        { item: { id: "item2" } },
+        { item: { link: "item1" } },
+        { item: { link: "item2" } },
     ];
     expect(updateUser).toHaveBeenCalledWith({ favorites: expectedFavorites });
   });

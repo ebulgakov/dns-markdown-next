@@ -19,11 +19,11 @@ const mockedGetUser = getUser as jest.Mock<Promise<Partial<UserType> | null>>;
 
 // Test Data
 const goods1: Goods = {
-  id: "g1",
+  _id: "g1",
   title: "Good 1",
   link: "https://www.google.com/",
   description: "",
-  reasons: [{ label: "some", text: "reason", id: "1" }],
+  reasons: [{ label: "some", text: "reason", _id: "1" }],
   priceOld: "20",
   price: "10",
   profit: "10",
@@ -33,11 +33,11 @@ const goods1: Goods = {
   city: "samara"
 };
 const goods2: Goods = {
-  id: "g2",
+  _id: "g2",
   title: "Good 2",
   link: "https://www.google.com/",
   description: "",
-  reasons: [{ label: "some", text: "reason", id: "0" }],
+  reasons: [{ label: "some", text: "reason", _id: "0" }],
   priceOld: "200",
   price: "100",
   profit: "100",
@@ -57,16 +57,16 @@ describe("getCatalogData", () => {
   it("should return catalog data and separate sections when user has favorites", async () => {
     // Mock data
     const mockPriceList: PriceListType = {
-      id: "pricelist1",
+      _id: "pricelist1",
       city: "samara",
       positions: [
         {
-          id: "0",
+          _id: "0",
           title: "Favorite Section",
           items: [goods1]
         },
         {
-          id: "1",
+          _id: "1",
           title: "Non-Favorite Section",
           items: [goods2]
         }
@@ -124,7 +124,7 @@ describe("getCatalogData", () => {
   // Test case 3: No user found
   it("should return an error if no user is found", async () => {
     const mockPriceList: PriceListType = {
-      id: "pricelist1",
+      _id: "pricelist1",
       city: "samara",
       positions: [],
       createdAt: ""
@@ -142,16 +142,16 @@ describe("getCatalogData", () => {
   it("should put all sections into nonFavoriteSections if user has no favorite sections", async () => {
     // Mock data
     const mockPriceList: PriceListType = {
-      id: "pricelist1",
+      _id: "pricelist1",
       city: "samara",
       positions: [
         {
-          id: "0",
+          _id: "0",
           title: "Favorite Section",
           items: [goods1]
         },
         {
-          id: "1",
+          _id: "1",
           title: "Non-Favorite Section",
           items: [goods2]
         }

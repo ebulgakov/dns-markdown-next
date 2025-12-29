@@ -2,14 +2,14 @@ import { NextResponse } from "next/server";
 import { removeFromFavorites } from "@/db/profile/mutations";
 
 export async function POST(req: Request) {
-  const { id } = await req.json();
+  const { link } = await req.json();
 
-  if (!id) {
+  if (!link) {
     return NextResponse.json({ success: false }, { status: 400 });
   }
 
   try {
-    await removeFromFavorites(id);
+    await removeFromFavorites(link);
   } catch (error) {
     return new Response("Error occured", {
       status: 400

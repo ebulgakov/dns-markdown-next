@@ -26,7 +26,7 @@ export default function PriceListFavoriteToggle({
     try {
       const { data } = await axios.post(
         "/api/remove-from-favorites",
-        { id: goods.id },
+        { link: goods.link },
         {
           headers: {
             "Content-Type": "application/json; charset=UTF-8"
