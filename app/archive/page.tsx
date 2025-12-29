@@ -1,6 +1,13 @@
 import { getArchiveList } from "@/db/pricelist/queries";
 import Link from "next/link";
 import ErrorMessage from "@/app/components/ErrorMessage";
+import { formatDate } from "@/app/helpers/format";
+
+const dateFormat = new Intl.DateTimeFormat("ru", {
+  year: "numeric",
+  month: "long",
+  day: "numeric"
+});
 
 export default async function ArchivePage() {
   let archiveCollection;
@@ -21,7 +28,7 @@ export default async function ArchivePage() {
           <li key={item.id}>
             <Link href={`/archive/${item.id}`}>
               <span className="text-blue-500 hover:underline">
-                {new Date(item.createdAt).toLocaleDateString()}
+                {formatDate(new Date(item.createdAt))}
               </span>
             </Link>
           </li>

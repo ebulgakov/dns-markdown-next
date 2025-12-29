@@ -14,10 +14,7 @@ type PriceListGoodsType = {
   favorites?: Favorite[];
   status?: FavoriteStatus;
 };
-export default function PriceListGoods({ item, status, diff, favorites = [] }: PriceListGoodsType) {
-  // Placeholders
-  const hideFavorites = false;
-
+export default function PriceListGoods({ item, status, diff, favorites }: PriceListGoodsType) {
   return (
     <div
       className={cn("flex items-center gap-4 py-1", {
@@ -103,7 +100,7 @@ export default function PriceListGoods({ item, status, diff, favorites = [] }: P
       </div>
       <div className="flex-none">{item.available}</div>
 
-      {!hideFavorites && <PriceListFavoriteToggle favorites={favorites} goods={item} />}
+      {favorites && <PriceListFavoriteToggle favorites={favorites} goods={item} />}
     </div>
   );
 }
