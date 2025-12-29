@@ -43,8 +43,8 @@ export default function PriceListGoods({ item, status, diff, favorites = [] }: P
         <p className="mb-3">{item.description}</p>
         {item.reasons && (
           <div>
-            {item.reasons.map((reason, idx) => (
-              <dl className="inline-block mr-2.5" key={idx}>
+            {item.reasons.map(reason => (
+              <dl className="inline-block mr-2.5" key={reason._id}>
                 <dt className="inline opacity-40 font-normal mr-1">{reason.label}</dt>
                 <dd className="inline">{reason.text}</dd>
               </dl>

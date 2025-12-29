@@ -24,9 +24,9 @@ export default function PriceList({ positions, favorites, hiddenSections }: Cata
     <div>
       {isClient ? (
         <>
-          {positions.map((position, idx) => (
+          {positions.map(position => (
             <PriceListSection
-              key={idx}
+              key={position._id}
               position={position}
               favorites={favorites}
               isOpen={!hiddenSections?.includes(position.title)}

@@ -34,8 +34,8 @@ export default function PriceListSection({
       </button>
       <div className="divide-y divide-gray-200">
         {isOpen &&
-          position.items.map((item, idx) => (
-            <PriceListGoods key={idx} item={item} favorites={favorites} />
+          position.items.map(item => (
+            <PriceListGoods key={item._id} item={item} favorites={favorites} />
           ))}
       </div>
     </div>
