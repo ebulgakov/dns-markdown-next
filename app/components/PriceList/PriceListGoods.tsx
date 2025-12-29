@@ -24,8 +24,14 @@ export default function PriceListGoods({ item, status, diff, favorites = [] }: P
         "opacity-40": status?.deleted
       })}
     >
-      <div className="flex-none basis-55 h-55 gap-5 flex items-center text-center">
-        <Image src={item.image} alt="" width={200} height={200} />
+      <div className="flex-none basis-55 h-55 gap-5 flex items-center justify-center">
+        <Image
+          src={item.image}
+          alt={`Превью для ${item.title}`}
+          className="max-w-full max-h-full w-auto h-auto block"
+          width={200}
+          height={200}
+        />
       </div>
       <div className="flex-1">
         <div className="text-base mb-2.5">
