@@ -2,6 +2,18 @@ import ErrorMessage from "@/app/components/ErrorMessage";
 import PriceList from "@/app/components/PriceList/PriceList";
 import { getCatalogData } from "@/app/catalog/getCatalogData";
 
+const dateFormat = new Intl.DateTimeFormat("ru", {
+  year: "numeric",
+  month: "long",
+  day: "numeric"
+});
+
+const timeFormat = new Intl.DateTimeFormat("ru", {
+  hour: "numeric",
+  minute: "numeric",
+  second: "numeric"
+});
+
 export default async function CatalogPage() {
   const {
     priceList,
@@ -23,9 +35,9 @@ export default async function CatalogPage() {
     <div>
       <div className="flex justify-between items-end border-b border-solid border-b-neutral-300  mt-10 mb-5 mx-0 pb-5">
         <h1 className="text-4xl">
-          {date.toLocaleDateString()}{" "}
+          {dateFormat.format(date)}{" "}
           <small className="font-normal leading-none text-[#777777] text-[65%]">
-            {date.toLocaleTimeString()}
+            {timeFormat.format(date)}
           </small>
         </h1>
         <div>
