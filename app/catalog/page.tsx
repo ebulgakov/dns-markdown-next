@@ -6,8 +6,8 @@ export default async function CatalogPage() {
   const {
     priceList,
     userFavoritesGoods,
+    hiddenSectionsTitles,
     favoriteSections,
-    hiddenSections,
     nonFavoriteSections,
     error
   } = await getCatalogData();
@@ -40,7 +40,7 @@ export default async function CatalogPage() {
             <PriceList
               positions={favoriteSections}
               favorites={userFavoritesGoods}
-              hiddenSections={hiddenSections}
+              hiddenSections={hiddenSectionsTitles}
             />
             <h2 className="text-3xl mb-5 mt-10">Все категории</h2>
           </>
@@ -54,7 +54,7 @@ export default async function CatalogPage() {
       <PriceList
         positions={nonFavoriteSections || priceList.positions}
         favorites={userFavoritesGoods}
-        hiddenSections={hiddenSections}
+        hiddenSections={hiddenSectionsTitles}
       />
     </div>
   );

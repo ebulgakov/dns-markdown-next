@@ -18,7 +18,7 @@ export default function PriceListFavoriteToggle({
   goods
 }: PriceListFavoriteToggleProps) {
   const [inFavorites, setInFavorites] = useState<boolean>(
-    favorites.some(fav => fav.item._id === goods._id)
+    favorites.some(fav => fav.item.link === goods.link)
   );
   const [loadingFavoritesList, setLoadingFavoritesList] = useState<boolean>();
   const removeFromFavorites = async () => {
