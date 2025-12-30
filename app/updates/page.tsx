@@ -1,5 +1,6 @@
 import { getPriceListsDiff } from "@/db/pricelist/queries";
 import ErrorMessage from "@/app/components/ErrorMessage";
+import PageTitle from "@/app/components/PageTitle";
 
 export default async function UpdatesPage() {
   let diff;
@@ -13,7 +14,7 @@ export default async function UpdatesPage() {
 
   return (
     <div>
-      <h1 className="text-2xl font-bold mb-4">Обновления с начала дня</h1>
+      <PageTitle title="Обновления с начала дня" />
       <div className="text-lg">{JSON.stringify(diff, null, 2)}</div>
     </div>
   );

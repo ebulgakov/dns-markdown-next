@@ -1,3 +1,4 @@
+"use client";
 import cn from "classnames";
 import Link from "next/link";
 import Image from "next/image";
@@ -7,14 +8,18 @@ import type { GoodDiffChanges as GoodDiffChangesType } from "@/types/diff";
 import type { Favorite, FavoriteStatus } from "@/types/user";
 import PriceListFavoriteToggle from "@/app/components/PriceList/PriceListFavoriteToggle";
 import PriceListGoodsDiff from "@/app/components/PriceList/PriceListGoodsDiff";
+import { useClientRendering } from "@/app/hooks/useClientRendering";
 
-type PriceListGoodsType = {
+type PriceListGoodsProps = {
   item: GoodsType;
   diff?: GoodDiffChangesType;
   favorites?: Favorite[];
   status?: FavoriteStatus;
 };
-export default function PriceListGoods({ item, status, diff, favorites }: PriceListGoodsType) {
+export default function PriceListGoods({ item, status, diff, favorites }: PriceListGoodsProps) {
+  const isClient = useClientRendering();
+  if (!isClient) return null;
+
   return (
     <div
       className={cn("flex items-center gap-4 py-1", {

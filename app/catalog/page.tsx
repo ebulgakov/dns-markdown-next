@@ -2,6 +2,7 @@ import ErrorMessage from "@/app/components/ErrorMessage";
 import PriceList from "@/app/components/PriceList/PriceList";
 import { getCatalogData } from "@/app/catalog/getCatalogData";
 import { formatDate, formatTime } from "@/app/helpers/format";
+import PageTitle from "@/app/components/PageTitle";
 
 export default async function CatalogPage() {
   const {
@@ -22,17 +23,11 @@ export default async function CatalogPage() {
 
   return (
     <div>
-      <div className="flex justify-between items-end border-b border-solid border-b-neutral-300  mt-10 mb-5 mx-0 pb-5">
-        <h1 className="text-4xl">
-          {formatDate(date)}{" "}
-          <small className="font-normal leading-none text-[#777777] text-[65%]">
-            {formatTime(date)}
-          </small>
-        </h1>
+      <PageTitle title={formatDate(date)} subTitle={formatTime(date)}>
         <div>
           Количество: <b>{count}</b>
         </div>
-      </div>
+      </PageTitle>
 
       {favoriteSections.length > 0 ? (
         <>

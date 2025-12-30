@@ -1,5 +1,6 @@
 import { getProductById } from "@/db/pricelist/queries";
 import ErrorMessage from "@/app/components/ErrorMessage";
+import PageTitle from "@/app/components/PageTitle";
 
 type CatalogItemPage = {
   params: Promise<{ id: string }>;
@@ -24,7 +25,9 @@ export default async function CatalogItemPage({ params }: CatalogItemPage) {
 
   return (
     <div>
-      <h1>Страница товара {id}</h1>
+      <PageTitle title="Страница товара" />
+
+      <h2> {id}</h2>
       <p>Здесь будет информация о товаре.</p>
       <div className="text-lg">{JSON.stringify(product, null, 2)}</div>
     </div>

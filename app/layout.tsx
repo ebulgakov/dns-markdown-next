@@ -2,8 +2,8 @@ import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import { ClerkProvider } from "@clerk/nextjs";
 import "./globals.css";
-import Navbar from "@/app/components/navbar";
-import Footer from "@/app/components/footer";
+import Navbar from "@/app/components/Navbar";
+import Footer from "@/app/components/Footer";
 import { StrictMode } from "react";
 
 const geistSans = Geist({
