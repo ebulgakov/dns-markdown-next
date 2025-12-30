@@ -26,7 +26,7 @@ describe('getPriceListById', () => {
 
   it('should return a pricelist if found', async () => {
     const mockPriceList: Partial<PriceListType> = {
-      id: '60d21b4667d0d8992e610c85',
+      _id: '60d21b4667d0d8992e610c85',
       createdAt: `${new Date()}`,
       positions: [],
     };

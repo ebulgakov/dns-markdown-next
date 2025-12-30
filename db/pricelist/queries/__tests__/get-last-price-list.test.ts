@@ -54,7 +54,7 @@ describe("getLastPriceList", () => {
 
     // Mock pricelist data
     const mockPriceList: Partial<PriceListType> = {
-      id: "some-id",
+      _id: "some-id",
       city: "Test City"
     };
 

@@ -21,7 +21,7 @@ jest.mock("@/db/profile/mutations/update-user", () => ({
 describe("addToFavorites", () => {
   // Define mock data for Goods and User
   const mockGoods: Goods = {
-    id: "1",
+    _id: "1",
     city: "Test City",
     link: "http://test.com/product/1",
     title: "",
