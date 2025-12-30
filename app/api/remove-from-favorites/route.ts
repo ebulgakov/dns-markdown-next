@@ -11,6 +11,7 @@ export async function POST(req: Request) {
   try {
     await removeFromFavorites(link);
   } catch (error) {
+    console.error(error);
     return new Response("Error occured", {
       status: 400
     });
