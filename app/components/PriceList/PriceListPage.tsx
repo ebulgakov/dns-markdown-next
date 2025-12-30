@@ -2,17 +2,14 @@
 
 import SearchInput from "@/app/components/SearchInput";
 import PriceList from "@/app/components/PriceList/PriceList";
-import type {
-  Goods as GoodsType,
-  Position as PositionType,
-  PriceList as PriceListType
-} from "@/types/pricelist";
+import type { Position as PositionType, PriceList as PriceListType } from "@/types/pricelist";
 import type { Favorite as FavoriteType, UserSections as UserSectionsType } from "@/types/user";
 import { useSearchStore } from "@/app/stores/searchStore";
 import PriceListGoods from "@/app/components/PriceList/PriceListGoods";
 import { useDebounce } from "@/app/hooks/useDebounce";
 import PriceListFavoritesSection from "@/app/components/PriceList/PriceListFavoritesSection";
 import cn from "classnames";
+import { useFilteredGoods } from "@/app/hooks/useFilteredGoods";
 
 type PriceListPageProps = {
   favoriteSections?: PositionType[];
@@ -31,14 +28,7 @@ export default function PriceListPage({
 }: PriceListPageProps) {
   const searchTerm = useSearchStore(state => state.searchTerm);
   const debouncedSearch = useDebounce(searchTerm, 100);
-  let filteredList: GoodsType[] = [];
-
-  if (searchTerm.length > 1) {
-    const flatCatalog = priceList.positions.flatMap(position => position.items.flat());
-    filteredList = flatCatalog.filter(item =>
-      item.title.toLowerCase().includes(debouncedSearch.toLowerCase())
-    );
-  }
+  const filteredList = useFilteredGoods(debouncedSearch, priceList);
 
   return (
     <>
