@@ -1,9 +1,9 @@
 import { getPriceListById } from "@/db/pricelist/queries";
 import ErrorMessage from "@/app/components/ErrorMessage";
 import { formatDate } from "@/app/helpers/format";
-import PriceList from "@/app/components/PriceList/PriceList";
 import type { PriceList as PriceListType } from "@/types/pricelist";
 import PageTitle from "@/app/components/PageTitle";
+import PriceListPage from "@/app/components/PriceList/PriceListPage";
 
 type ArchiveItemPage = {
   params: Promise<{ id: string }>;
@@ -26,7 +26,7 @@ export default async function ArchiveItemPage({ params }: ArchiveItemPage) {
   return (
     <div>
       <PageTitle title={pageTitle} />
-      <PriceList positions={priceList.positions} />
+      <PriceListPage priceList={priceList} />
     </div>
   );
 }
