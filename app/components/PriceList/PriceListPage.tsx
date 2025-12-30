@@ -27,7 +27,7 @@ export default function PriceListPage({
   priceList
 }: PriceListPageProps) {
   const searchTerm = useSearchStore(state => state.searchTerm);
-  const debouncedSearch = useDebounce(searchTerm, 100);
+  const debouncedSearch = useDebounce<string>(searchTerm, 100);
   const filteredList = useFilteredGoods(debouncedSearch, priceList);
 
   return (
