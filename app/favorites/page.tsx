@@ -1,5 +1,7 @@
 import ErrorMessage from "@/app/components/ErrorMessage";
 import { getUser } from "@/db/profile/queries";
+import PriceListGoods from "@/app/components/PriceList/PriceListGoods";
+import type { Favorite } from "@/types/user";
 
 export default async function FavoritesPage() {
   let favorites;
@@ -7,8 +9,7 @@ export default async function FavoritesPage() {
   try {
     const user = await getUser();
     if (!user) throw new Error("No user found!");
-
-    favorites = user.favorites.reverse();
+    favorites = JSON.parse(JSON.stringify(user.favorites.reverse())) as Favorite[];
   } catch (e) {
     const { message } = e as Error;
     return <ErrorMessage>{message}</ErrorMessage>;
@@ -17,7 +18,11 @@ export default async function FavoritesPage() {
   return (
     <div>
       <h1 className="text-2xl font-bold mb-4">Избранное</h1>
-      <div className="text-lg">{JSON.stringify(favorites, null, 2)}</div>
+      <div className="divide-y divide-gray-200">
+        {favorites.map(favorite => (
+          <PriceListGoods key={favorite.item._id} item={favorite.item} status={favorite.status} />
+        ))}
+      </div>
     </div>
   );
 }
