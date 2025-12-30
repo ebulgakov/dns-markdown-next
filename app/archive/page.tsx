@@ -2,6 +2,7 @@ import { getArchiveList } from "@/db/pricelist/queries";
 import Link from "next/link";
 import ErrorMessage from "@/app/components/ErrorMessage";
 import { formatDate } from "@/app/helpers/format";
+import PageTitle from "@/app/components/PageTitle";
 
 export default async function ArchivePage() {
   let archiveCollection;
@@ -16,7 +17,7 @@ export default async function ArchivePage() {
 
   return (
     <div>
-      <h1 className="text-2xl font-bold mb-4">Архив прайслистов</h1>
+      <PageTitle title="Архив прайслистов" />
       <ul className="space-y-1">
         {archiveCollection.map(item => (
           <li key={item._id}>

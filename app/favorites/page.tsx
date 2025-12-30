@@ -2,6 +2,7 @@ import ErrorMessage from "@/app/components/ErrorMessage";
 import { getUser } from "@/db/profile/queries";
 import PriceListGoods from "@/app/components/PriceList/PriceListGoods";
 import type { Favorite } from "@/types/user";
+import PageTitle from "@/app/components/PageTitle";
 
 export default async function FavoritesPage() {
   let favorites;
@@ -17,7 +18,7 @@ export default async function FavoritesPage() {
 
   return (
     <div>
-      <h1 className="text-2xl font-bold mb-4">Избранное</h1>
+      <PageTitle title="Избранное" />
       <div className="divide-y divide-gray-200">
         {favorites.map(favorite => (
           <PriceListGoods key={favorite.item._id} item={favorite.item} status={favorite.status} />

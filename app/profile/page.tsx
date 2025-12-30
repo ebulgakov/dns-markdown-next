@@ -1,5 +1,6 @@
 import { getUser } from "@/db/profile/queries";
 import ErrorMessage from "@/app/components/ErrorMessage";
+import PageTitle from "@/app/components/PageTitle";
 
 export default async function ProfilePage() {
   let profile;
@@ -13,7 +14,7 @@ export default async function ProfilePage() {
 
   return (
     <div>
-      <h1 className="text-2xl font-bold mb-4">Профиль</h1>
+      <PageTitle title="Профиль" />
       <div className="text-lg">{JSON.stringify(profile, null, 2)}</div>
     </div>
   );
