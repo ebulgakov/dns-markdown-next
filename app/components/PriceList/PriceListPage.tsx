@@ -25,12 +25,13 @@ export default function PriceListPage({
   priceList
 }: PriceListPageProps) {
   const searchTerm = useSearchStore(state => state.searchTerm);
-  const debouncedSearch = useDebounce(searchTerm, 500);
+  const debouncedSearch = useDebounce(searchTerm, 100);
 
-  if (searchTerm.length > 2) {
-    const filteredList = priceList.positions
-      .flatMap(position => position.items.flat())
-      .filter(item => item.title.toLowerCase().includes(debouncedSearch.toLowerCase()));
+  if (searchTerm.length > 1) {
+    const flatCatalog = priceList.positions.flatMap(position => position.items.flat());
+    const filteredList = flatCatalog.filter(item =>
+      item.title.toLowerCase().includes(debouncedSearch.toLowerCase())
+    );
 
     return (
       <>
