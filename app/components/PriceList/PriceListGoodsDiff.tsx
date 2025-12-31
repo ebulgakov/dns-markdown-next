@@ -36,7 +36,8 @@ export default function PriceListGoodsDiff({ diff, goods }: PriceListGoodsDiffPr
           value={diff.profit}
           displayType="text"
           thousandSeparator=" "
-          suffix=" ₽"
+          suffix=" ₽)"
+          prefix="("
           renderText={value => <span className="pricelist_profit">{value}</span>}
         />
       </div>

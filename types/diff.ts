@@ -16,3 +16,5 @@ export interface Diff {
   changesPrice: GoodsDiff[];
   changesProfit: GoodsDiff[];
 }
+
+export type DiffsCollection = { [key: string]: GoodDiffChanges }
