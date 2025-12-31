@@ -3,16 +3,22 @@ import ErrorMessage from "@/app/components/ErrorMessage";
 import PageTitle from "@/app/components/PageTitle";
 import PriceListSection from "@/app/components/PriceList/PriceListSection";
 import { DiffsCollection as DiffsCollectionType } from "@/types/diff";
+import { getUser } from "@/db/profile/queries";
 
 export default async function UpdatesPage() {
   let diffNew;
   let diffRemoved;
   let diffChangesPrice;
   let diffChangesProfit;
+  let userFavoritesGoods;
   const changePriceDiff: DiffsCollectionType = {};
   const changeProfitDiff: DiffsCollectionType = {};
 
   try {
+    const user = await getUser();
+    if (!user) throw new Error("No user found");
+    userFavoritesGoods = JSON.parse(JSON.stringify(user.favorites));
+
     let collection = await getPriceListsDiff();
     collection = JSON.parse(JSON.stringify(collection));
     const collectionDiff = collection?.diff;
@@ -63,15 +69,15 @@ export default async function UpdatesPage() {
   return (
     <div>
       <PageTitle title="Обновления с начала дня" />
-      {diffNew && <PriceListSection isOpen={true} position={diffNew} />}
+      {diffNew && <PriceListSection isOpen={true} position={diffNew} favorites={userFavoritesGoods} />}
       {diffChangesPrice && (
-        <PriceListSection isOpen={true} position={diffChangesPrice} diffs={changePriceDiff} />
+        <PriceListSection isOpen={true} position={diffChangesPrice} favorites={userFavoritesGoods} diffs={changePriceDiff} />
       )}
       {diffRemoved && (
         <PriceListSection isOpen={true} position={diffRemoved} />
       )}
       {diffChangesProfit && (
-        <PriceListSection position={diffChangesProfit} diffs={changeProfitDiff} />
+        <PriceListSection position={diffChangesProfit} diffs={changeProfitDiff} favorites={userFavoritesGoods} />
       )}
     </div>
   );
