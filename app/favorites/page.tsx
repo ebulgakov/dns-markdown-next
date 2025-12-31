@@ -21,7 +21,7 @@ export default async function FavoritesPage() {
       <PageTitle title="Избранное" />
       <div className="divide-y divide-gray-200">
         {favorites.map(favorite => (
-          <PriceListGoods key={favorite.item._id} item={favorite.item} status={favorite.status} />
+          <PriceListGoods key={favorite.item._id} item={favorite.item} status={favorite.status} favorites={favorites} />
         ))}
       </div>
     </div>
