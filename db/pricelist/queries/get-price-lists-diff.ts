@@ -11,8 +11,16 @@ export const getPriceListsDiff = async () => {
 
   if (!user) return null;
 
-  const sold = await RemovedGoods.findOne({ city: user.city }, {}, { sort: { updatedAt: -1 } }) as unknown as RemovedGoodsType | null;
-  const diff = await Diff.findOne({ city: user.city }, {}, { sort: { updatedAt: -1 } }) as unknown as DiffType | null;
+  const sold = (await RemovedGoods.findOne(
+    { city: user.city },
+    {},
+    { sort: { updatedAt: -1 } }
+  )) as unknown as RemovedGoodsType | null;
+  const diff = (await Diff.findOne(
+    { city: user.city },
+    {},
+    { sort: { updatedAt: -1 } }
+  )) as unknown as DiffType | null;
 
   return { diff, sold };
 };

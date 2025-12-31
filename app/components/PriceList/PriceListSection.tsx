@@ -6,16 +6,19 @@ import type { Favorite } from "@/types/user";
 import { FontAwesomeIcon as Fa } from "@fortawesome/react-fontawesome";
 import { faPlus, faMinus } from "@fortawesome/free-solid-svg-icons";
 import { useState } from "react";
+import { DiffsCollection as DiffsCollectionType } from "@/types/diff";
 
 type PriceListProps = {
   position: PositionType;
   favorites?: Favorite[];
+  diffs?: DiffsCollectionType;
   isOpen?: boolean;
 };
 
 export default function PriceListSection({
   position,
   favorites,
+  diffs,
   isOpen: isOpenDefault
 }: PriceListProps) {
   const [isOpen, setIsOpen] = useState(isOpenDefault);
@@ -35,7 +38,12 @@ export default function PriceListSection({
       <div className="divide-y divide-gray-200">
         {isOpen &&
           position.items.map(item => (
-            <PriceListGoods key={item._id} item={item} favorites={favorites} />
+            <PriceListGoods
+              key={item._id}
+              item={item}
+              favorites={favorites}
+              diff={diffs && diffs[item._id]}
+            />
           ))}
       </div>
     </div>

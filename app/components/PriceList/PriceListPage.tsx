@@ -35,7 +35,7 @@ export default function PriceListPage({
       <SearchInput />
 
       {filteredList.map(item => (
-        <PriceListGoods key={item._id} item={item} />
+        <PriceListGoods key={item._id} item={item} favorites={userFavoritesGoods} />
       ))}
 
       <div className={cn({ hidden: searchTerm.length > 1 })}>

@@ -1,43 +1,38 @@
 "use client";
 
 import { NumericFormat } from "react-number-format";
-import cn from "classnames";
 import type { GoodDiffChanges as GoodDiffChangesType } from "@/types/diff";
-import type { Goods as GoodsType } from "@/types/pricelist";
 
 type PriceListGoodsDiffProps = {
   diff: GoodDiffChangesType;
-  goods: GoodsType;
 };
 
-export default function PriceListGoodsDiff({ diff, goods }: PriceListGoodsDiffProps) {
+export default function PriceListGoodsDiff({ diff }: PriceListGoodsDiffProps) {
   return (
-    <div>
+    <div className="text-center basis-37 opacity-40">
       <NumericFormat
         value={diff.price}
         displayType="text"
         thousandSeparator=" "
         suffix=" ₽"
-        renderText={value => <div className="pricelist_price">{value}</div>}
+        renderText={value => <div className="text-xl h-7 font-semibold whitespace-nowrap">{value}</div>}
       />
-      <div
-        className={cn("pricelist_prices", {
-          "-fixHeight": goods.priceOld || goods.profit
-        })}
-      >
-        <NumericFormat
-          value={diff.priceOld}
-          displayType="text"
-          thousandSeparator=" "
-          suffix=" ₽"
-          renderText={value => <span className="pricelist_oldPrice">{value}</span>}
-        />
+      <div className="flex gap-2 text-sm justify-center mb-6">
+        {diff.priceOld && (
+          <NumericFormat
+            value={diff.priceOld}
+            displayType="text"
+            thousandSeparator=" "
+            suffix=" ₽"
+            renderText={value => <span className="line-through">{value}</span>}
+          />
+        )}
         <NumericFormat
           value={diff.profit}
           displayType="text"
           thousandSeparator=" "
-          suffix=" ₽"
-          renderText={value => <span className="pricelist_profit">{value}</span>}
+          prefix="("
+          suffix=" ₽)"
         />
       </div>
     </div>
