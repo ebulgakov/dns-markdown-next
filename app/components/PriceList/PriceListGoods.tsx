@@ -61,7 +61,7 @@ export default function PriceListGoods({ item, status, diff, favorites }: PriceL
         )}
       </div>
 
-      {diff && <PriceListGoodsDiff diff={diff} goods={item} />}
+      {diff && <PriceListGoodsDiff diff={diff} />}
 
       <div className="text-center basis-37">
         <NumericFormat
