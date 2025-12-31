@@ -14,7 +14,10 @@ export default async function CatalogItemPage({ params }: CatalogItemPage) {
   try {
     product = await getProductById(`/catalog/markdown/${id}/`);
 
-    if (!product) throw new Error(`No product with id ${id}`);
+    if (!product)
+      throw new Error(
+        `Нет товара с id: ${id}. Возможно он был удалён. \nПопробуйте вернуться на главную страницу каталога.`
+      );
   } catch (e) {
     error = e as Error;
   }

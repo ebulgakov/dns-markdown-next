@@ -6,6 +6,7 @@ import { DiffsCollection as DiffsCollectionType } from "@/types/diff";
 
 export default async function UpdatesPage() {
   let diffNew;
+  let diffRemoved;
   let diffChangesPrice;
   let diffChangesProfit;
   const changePriceDiff: DiffsCollectionType = {};
@@ -15,6 +16,7 @@ export default async function UpdatesPage() {
     let collection = await getPriceListsDiff();
     collection = JSON.parse(JSON.stringify(collection));
     const collectionDiff = collection?.diff;
+    const collectionSold = collection?.sold;
 
     if (collectionDiff && collectionDiff.new.length > 0) {
       diffNew = {
@@ -45,6 +47,14 @@ export default async function UpdatesPage() {
         })
       };
     }
+
+    if (collectionSold && collectionSold.goods.length > 0) {
+      diffRemoved = {
+        _id: "removed-items",
+        title: "Продано на сегодня",
+        items: collectionSold.goods
+      };
+    }
   } catch (e) {
     const { message } = e as Error;
     return <ErrorMessage>{message}</ErrorMessage>;
@@ -56,6 +66,9 @@ export default async function UpdatesPage() {
       {diffNew && <PriceListSection isOpen={true} position={diffNew} />}
       {diffChangesPrice && (
         <PriceListSection isOpen={true} position={diffChangesPrice} diffs={changePriceDiff} />
+      )}
+      {diffRemoved && (
+        <PriceListSection isOpen={true} position={diffRemoved} />
       )}
       {diffChangesProfit && (
         <PriceListSection position={diffChangesProfit} diffs={changeProfitDiff} />
