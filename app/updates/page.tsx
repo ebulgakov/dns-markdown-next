@@ -7,7 +7,9 @@ import { DiffsCollection as DiffsCollectionType } from "@/types/diff";
 export default async function UpdatesPage() {
   let diffNew;
   let diffChangesPrice;
+  let diffChangesProfit;
   const changePriceDiff: DiffsCollectionType = {};
+  const changeProfitDiff: DiffsCollectionType = {};
 
   try {
     let collection = await getPriceListsDiff();
@@ -19,6 +21,17 @@ export default async function UpdatesPage() {
         _id: "new-items",
         title: "Новые поступления",
         items: collectionDiff.new?.map(item => item.item)
+      };
+    }
+
+    if (collectionDiff && collectionDiff.changesProfit.length > 0) {
+      diffChangesProfit = {
+        _id: "change-profit-items",
+        title: "Изменения Выгоды",
+        items: collectionDiff.changesProfit?.map(item => {
+          changeProfitDiff[`${item.item._id}`] = item.diff;
+          return item.item;
+        })
       };
     }
 
@@ -43,6 +56,9 @@ export default async function UpdatesPage() {
       {diffNew && <PriceListSection isOpen={true} position={diffNew} />}
       {diffChangesPrice && (
         <PriceListSection isOpen={true} position={diffChangesPrice} diffs={changePriceDiff} />
+      )}
+      {diffChangesProfit && (
+        <PriceListSection position={diffChangesProfit} diffs={changeProfitDiff} />
       )}
     </div>
   );

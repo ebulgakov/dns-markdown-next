@@ -70,7 +70,7 @@ export default function PriceListGoods({ item, status, diff, favorites }: PriceL
           thousandSeparator=" "
           suffix=" ₽"
           renderText={value => (
-            <div className="text-xl font-semibold whitespace-nowrap">{value}</div>
+            <div className="text-xl font-semibold whitespace-nowrap h-7">{value}</div>
           )}
         />
         <div className="flex gap-2 text-sm justify-center">
