@@ -7,7 +7,7 @@ export const removeFromFavorites = async (link: string) => {
 
   const user = await getUser();
 
-  if (!user) return null;
+  if (!user) throw new Error("User not found");
 
   const update = {
     favorites: user.favorites.filter(item => String(item.item.link) !== link)

@@ -5,15 +5,15 @@ import { removeFromFavorites } from "../remove-from-favorites";
 
 // Mock the dependencies
 jest.mock("@/db/database", () => ({
-  dbConnect: jest.fn(),
+  dbConnect: jest.fn()
 }));
 
 jest.mock("@/db/profile/queries", () => ({
-  getUser: jest.fn(),
+  getUser: jest.fn()
 }));
 
 jest.mock("@/db/profile/mutations/update-user", () => ({
-  updateUser: jest.fn(),
+  updateUser: jest.fn()
 }));
 
 describe("removeFromFavorites", () => {
@@ -28,8 +28,8 @@ describe("removeFromFavorites", () => {
       favorites: [
         { item: { link: "item1" } },
         { item: { link: "item2" } },
-        { item: { link: "item3" } },
-      ],
+        { item: { link: "item3" } }
+      ]
     };
     (getUser as jest.Mock).mockResolvedValue(user);
 
@@ -39,10 +39,7 @@ describe("removeFromFavorites", () => {
     // Assert
     expect(dbConnect).toHaveBeenCalledTimes(1);
     expect(getUser).toHaveBeenCalledTimes(1);
-    const expectedFavorites = [
-      { item: { link: "item1" } },
-      { item: { link: "item3" } },
-    ];
+    const expectedFavorites = [{ item: { link: "item1" } }, { item: { link: "item3" } }];
     expect(updateUser).toHaveBeenCalledWith({ favorites: expectedFavorites });
   });
 
@@ -51,7 +48,7 @@ describe("removeFromFavorites", () => {
     (getUser as jest.Mock).mockResolvedValue(null);
 
     // Act
-    await removeFromFavorites("some-id");
+    await expect(removeFromFavorites("some-id")).rejects.toThrow("User not found");
 
     // Assert
     expect(dbConnect).toHaveBeenCalledTimes(1);
@@ -63,10 +60,7 @@ describe("removeFromFavorites", () => {
     // Arrange
     const itemIdToRemove = "non-existent-item";
     const user = {
-      favorites: [
-        { item: { link: "item1" } },
-        { item: { link: "item2" } },
-      ],
+      favorites: [{ item: { link: "item1" } }, { item: { link: "item2" } }]
     };
     (getUser as jest.Mock).mockResolvedValue(user);
 
@@ -76,11 +70,7 @@ describe("removeFromFavorites", () => {
     // Assert
     expect(dbConnect).toHaveBeenCalledTimes(1);
     expect(getUser).toHaveBeenCalledTimes(1);
-    const expectedFavorites = [
-        { item: { link: "item1" } },
-        { item: { link: "item2" } },
-    ];
+    const expectedFavorites = [{ item: { link: "item1" } }, { item: { link: "item2" } }];
     expect(updateUser).toHaveBeenCalledWith({ favorites: expectedFavorites });
   });
 });
-

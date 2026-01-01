@@ -15,13 +15,13 @@ export const updateUserSection = async (
   await dbConnect();
 
   const user = await getUser();
-  if (!user) return null;
+  if (!user) throw new Error("User not found");
 
   const update = { [`${sectionName}`]: sections };
   await updateUser(update);
 
   const updatedUser = await getUser();
-  if (!updatedUser) return null;
+  if (!updatedUser) throw new Error("User not found after update");
 
   return updatedUser[sectionName];
 };
