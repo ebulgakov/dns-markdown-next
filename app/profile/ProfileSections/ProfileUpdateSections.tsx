@@ -5,6 +5,7 @@ import { useState, type ChangeEvent } from "react";
 import Button from "@/app/components/Button";
 import ErrorMessage from "@/app/components/ErrorMessage";
 import { useUserSectionUpdate } from "@/app/hooks/useUserSectionUpdate";
+import { uniqAbcSort } from "@/app/helpers/sort";
 
 type ProfileUpdateSectionsProps = {
   sectionName: AvailableUpdateSectionNames;
@@ -28,12 +29,8 @@ export default function ProfileUpdateSections({
   const { updateUserSections } = useUserSectionUpdate(sectionName);
 
   //
-  const outputAllSections = Array.from(new Set(allSections))
-    .filter(str => !activeSections.includes(str))
-    .sort((a, b) => a.localeCompare(b));
-  const outputActiveSections = Array.from(new Set(activeSections)).sort((a, b) =>
-    a.localeCompare(b)
-  );
+  const outputAllSections = uniqAbcSort(allSections).filter(str => !activeSections.includes(str));
+  const outputActiveSections = uniqAbcSort(activeSections);
 
   const updateSections = async (sections: UserSectionsType) => {
     try {
