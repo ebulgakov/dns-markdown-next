@@ -1,6 +1,9 @@
 import { getProductById } from "@/db/pricelist/queries";
 import ErrorMessage from "@/app/components/ErrorMessage";
 import PageTitle from "@/app/components/PageTitle";
+import PriceListGoods from "@/app/components/PriceList/PriceListGoods";
+import ProductPricesChart from "@/app/components/ProductPricesChart";
+import PageSubTitle from "@/app/components/PageSubTitle";
 
 type CatalogItemPage = {
   params: Promise<{ id: string }>;
@@ -18,6 +21,8 @@ export default async function CatalogItemPage({ params }: CatalogItemPage) {
       throw new Error(
         `Нет товара с id: ${id}. Возможно он был удалён. \nПопробуйте вернуться на главную страницу каталога.`
       );
+
+    product = JSON.parse(JSON.stringify(product));
   } catch (e) {
     error = e as Error;
   }
@@ -28,11 +33,38 @@ export default async function CatalogItemPage({ params }: CatalogItemPage) {
 
   return (
     <div>
-      <PageTitle title="Страница товара" />
+      <PageTitle title={product.item.title} />
 
-      <h2> {id}</h2>
-      <p>Здесь будет информация о товаре.</p>
-      <div className="text-lg">{JSON.stringify(product, null, 2)}</div>
+      <PriceListGoods item={product.item} />
+
+      <PageSubTitle title="Сравнение цен" />
+
+      <ul className="list-disc ml-5">
+        <li>
+          <a
+            className="font-bold"
+            rel="noopener noreferrer"
+            target="_blank"
+            href={`https://market.yandex.ru/search?text=${encodeURI(product.item.title)}`}
+          >
+            <span className="text-[#ff0400]">Я.</span>Маркет
+          </a>
+        </li>
+        <li>
+          <a
+            className="text-[#f37f00] font-bold"
+            rel="noopener noreferrer"
+            target="_blank"
+            href={`https://www.citilink.ru/search/?text=${encodeURI(product.item.title)}`}
+          >
+            Ситилинк
+          </a>
+        </li>
+      </ul>
+
+      <PageSubTitle title="График цены" />
+
+      {product.history && <ProductPricesChart chartData={product.history} />}
     </div>
   );
 }

@@ -36,7 +36,7 @@ export default function ProfileSections({
   hiddenSections,
   allSections
 }: ProfileSectionsProps) {
-  const [activeTab, setActiveTab] = useState<AvailableTabs>("hiddenSections");
+  const [activeTab, setActiveTab] = useState<AvailableTabs>("favoriteSections");
 
   return (
     <div>
