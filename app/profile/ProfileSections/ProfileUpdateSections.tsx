@@ -1,7 +1,7 @@
 import type { AvailableUpdateSectionNames, UserSections as UserSectionsType } from "@/types/user";
 import { FontAwesomeIcon as Fa } from "@fortawesome/react-fontawesome";
 import { faTimes } from "@fortawesome/free-solid-svg-icons";
-import { useState } from "react";
+import { useState, type ChangeEvent } from "react";
 import Button from "@/app/components/Button";
 import ErrorMessage from "@/app/components/ErrorMessage";
 import { useUserSectionUpdate } from "@/app/hooks/useUserSectionUpdate";
@@ -59,7 +59,7 @@ export default function ProfileUpdateSections({
     await updateSections(sections);
   };
 
-  const handleCheckboxChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+  const handleCheckboxChange = (event: ChangeEvent<HTMLInputElement>) => {
     const { value, checked } = event.target;
     if (checked) {
       setSelectedSections(prev => [...prev, value]);
