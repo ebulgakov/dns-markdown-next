@@ -2,7 +2,9 @@ import axios, { type AxiosError } from "axios";
 import { Goods } from "@/types/pricelist";
 
 export const useFavoriteActions = (goods: Goods) => {
-  const removeFromFavorites = async () => {
+  const removeFromFavorites = async (): Promise<boolean> => {
+    let removed = false;
+
     try {
       const { data } = await axios.delete("/api/favorites", {
         data: { link: goods.link },
@@ -11,22 +13,25 @@ export const useFavoriteActions = (goods: Goods) => {
         }
       });
 
-      if (!data.success) {
-        window.alert(data.error);
-        throw new Error("Failed to delete");
+      if (data.success) {
+        removed = true;
       }
     } catch (e) {
       const error = e as AxiosError;
       if (error.response) {
         const { error: err } = error.response.data as { error: string };
-        window.alert(err);
+        throw new Error(err);
       } else {
-        window.alert("An unexpected error occurred");
+        throw new Error("An unexpected error occurred", { cause: e });
       }
     }
+
+    return removed;
   };
 
-  const addToFavorites = async () => {
+  const addToFavorites = async (): Promise<boolean> => {
+    let added = false;
+
     try {
       const { data } = await axios.post(
         "/api/favorites",
@@ -38,19 +43,20 @@ export const useFavoriteActions = (goods: Goods) => {
         }
       );
 
-      if (!data.success) {
-        window.alert(data.error);
-        throw new Error("Failed to add");
+      if (data.success) {
+        added = true;
       }
     } catch (e) {
       const error = e as AxiosError;
       if (error.response) {
         const { error: err } = error.response.data as { error: string };
-        window.alert(err);
+        throw new Error(err);
       } else {
-        window.alert("An unexpected error occurred");
+        throw new Error("An unexpected error occurred", { cause: e });
       }
     }
+
+    return added;
   };
 
   return { addToFavorites, removeFromFavorites };

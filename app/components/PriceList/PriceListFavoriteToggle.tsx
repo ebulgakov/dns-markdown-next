@@ -26,8 +26,10 @@ export default function PriceListFavoriteToggle({
   const handleRemoveFromFavorites = async () => {
     try {
       setLoadingFavoritesList(true);
-      await removeFromFavorites();
-      setInFavorites(false);
+      const removed = await removeFromFavorites();
+      if (removed) setInFavorites(false);
+    } catch (error) {
+      window.alert(error);
     } finally {
       setLoadingFavoritesList(false);
     }
@@ -35,8 +37,10 @@ export default function PriceListFavoriteToggle({
   const handleAddToFavorites = async () => {
     try {
       setLoadingFavoritesList(true);
-      await addToFavorites();
-      setInFavorites(true);
+      const added = await addToFavorites();
+      if (added) setInFavorites(true);
+    } catch (error) {
+      window.alert(error);
     } finally {
       setLoadingFavoritesList(false);
     }

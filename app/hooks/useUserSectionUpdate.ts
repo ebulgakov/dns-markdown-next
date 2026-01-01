@@ -17,16 +17,14 @@ export const useUserSectionUpdate = (sectionName: string) => {
 
         if (data.success) {
           updatedSections = data.updatedSections;
-        } else {
-          throw new Error(data.error.toString() || "An unexpected error occurred");
         }
       } catch (e) {
         const error = e as AxiosError;
         if (error.response) {
           const { error: err } = error.response.data as { error: string };
-          throw new Error(err.toString());
+          throw new Error(err);
         } else {
-          throw new Error("An unexpected error occurred");
+          throw new Error("An unexpected error occurred", { cause: e });
         }
       }
     }
