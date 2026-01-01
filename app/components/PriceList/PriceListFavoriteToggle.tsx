@@ -24,15 +24,12 @@ export default function PriceListFavoriteToggle({
   const removeFromFavorites = async () => {
     setLoadingFavoritesList(true);
     try {
-      const { data } = await axios.post(
-        "/api/remove-from-favorites",
-        { link: goods.link },
-        {
-          headers: {
-            "Content-Type": "application/json; charset=UTF-8"
-          }
+      const { data } = await axios.delete("/api/favorites", {
+        data: { link: goods.link },
+        headers: {
+          "Content-Type": "application/json; charset=UTF-8"
         }
-      );
+      });
 
       if (data.success) {
         setInFavorites(false);
@@ -47,7 +44,7 @@ export default function PriceListFavoriteToggle({
     setLoadingFavoritesList(true);
     try {
       const { data } = await axios.post(
-        "/api/add-to-favorites",
+        "/api/favorites",
         { goods },
         {
           headers: {
