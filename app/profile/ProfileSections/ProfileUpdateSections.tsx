@@ -4,6 +4,8 @@ import { faTimes } from "@fortawesome/free-solid-svg-icons";
 import { useState } from "react";
 import Button from "@/app/components/Button";
 import axios from "axios";
+import type { AxiosError } from "axios";
+import ErrorMessage from "@/app/components/ErrorMessage";
 
 type ProfileUpdateSectionsProps = {
   sectionName: AvailableUpdateSectionNames;
@@ -20,6 +22,7 @@ export default function ProfileUpdateSections({
   buttonLabel,
   placeholder
 }: ProfileUpdateSectionsProps) {
+  const [errorMessage, setErrorMessage] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
   const [selectedSections, setSelectedSections] = useState<UserSectionsType>([]);
   const [activeSections, setActiveSections] = useState<UserSectionsType>(userSections);
@@ -44,7 +47,13 @@ export default function ProfileUpdateSections({
         setActiveSections(data.updatedSections);
       }
     } catch (e) {
-      console.error(e);
+      const error = e as AxiosError;
+      if (error.response) {
+        const { error: err } = error.response.data as { error: string };
+        setErrorMessage(err);
+      } else {
+        setErrorMessage("An unexpected error occurred");
+      }
     } finally {
       setLoading(false);
     }
@@ -80,6 +89,7 @@ export default function ProfileUpdateSections({
 
   return (
     <div>
+      {errorMessage && <ErrorMessage className="mb-4">{errorMessage}</ErrorMessage>}
       <div className="flex gap-4">
         <div className="flex-1">
           <div className="overflow-auto h-100 border border-neutral-300 px-2.5 py-1 border-solid flex flex-col items-start mb-2">

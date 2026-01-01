@@ -26,7 +26,7 @@ export async function DELETE(req: Request) {
   try {
     await removeFromFavorites(link);
   } catch (error) {
-    return NextResponse.json({ success: false, error }, { status: 400 });
+    return NextResponse.json({ success: false, error: error?.toString() }, { status: 400 });
   }
   return NextResponse.json({ success: true }, { status: 200 });
 }

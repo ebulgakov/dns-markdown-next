@@ -11,7 +11,7 @@ export async function POST(req: Request) {
     sectionName: AvailableUpdateSectionNames;
   } = await req.json();
 
-  if (!sections || !sections) {
+  if (!sections || !sectionName) {
     return NextResponse.json({ success: false, error: "No sections provided" }, { status: 400 });
   }
 
@@ -19,7 +19,7 @@ export async function POST(req: Request) {
   try {
     updatedSections = await updateUserSection(sections, sectionName);
   } catch (error) {
-    return NextResponse.json({ success: false, error }, { status: 400 });
+    return NextResponse.json({ success: false, error: error?.toString() }, { status: 400 });
   }
 
   return NextResponse.json({ success: true, updatedSections }, { status: 200 });
