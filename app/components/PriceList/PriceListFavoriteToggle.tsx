@@ -21,18 +21,15 @@ export default function PriceListFavoriteToggle({
     favorites.some(fav => fav.item.link === goods.link)
   );
   const [loadingFavoritesList, setLoadingFavoritesList] = useState<boolean>();
-  const removeFromFavorites = async () => {
+  const handleRemoveFromFavorites = async () => {
     setLoadingFavoritesList(true);
     try {
-      const { data } = await axios.post(
-        "/api/remove-from-favorites",
-        { link: goods.link },
-        {
-          headers: {
-            "Content-Type": "application/json; charset=UTF-8"
-          }
+      const { data } = await axios.delete("/api/favorites", {
+        data: { link: goods.link },
+        headers: {
+          "Content-Type": "application/json; charset=UTF-8"
         }
-      );
+      });
 
       if (data.success) {
         setInFavorites(false);
@@ -43,11 +40,11 @@ export default function PriceListFavoriteToggle({
       setLoadingFavoritesList(false);
     }
   };
-  const addToFavorites = async () => {
+  const handleAddToFavorites = async () => {
     setLoadingFavoritesList(true);
     try {
       const { data } = await axios.post(
-        "/api/add-to-favorites",
+        "/api/favorites",
         { goods },
         {
           headers: {
@@ -75,7 +72,7 @@ export default function PriceListFavoriteToggle({
           })}
           title="Убрать из избранного"
           disabled={loadingFavoritesList}
-          onClick={removeFromFavorites}
+          onClick={handleRemoveFromFavorites}
         >
           <Fa icon={faStar} />
         </button>
@@ -86,7 +83,7 @@ export default function PriceListFavoriteToggle({
           })}
           title="Добавить в избранное"
           disabled={loadingFavoritesList}
-          onClick={addToFavorites}
+          onClick={handleAddToFavorites}
         >
           <Fa icon={faStarEmpty} />
         </button>

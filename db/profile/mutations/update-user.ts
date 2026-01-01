@@ -7,7 +7,7 @@ export const updateUser = async (update: object) => {
 
   const user = await getUser();
 
-  if (!user) return null;
+  if (!user) throw new Error("User not found");
 
   await User.findByIdAndUpdate(user.id, update, { new: true });
 };

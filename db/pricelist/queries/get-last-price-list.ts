@@ -7,7 +7,7 @@ export const getLastPriceList = async () => {
   await dbConnect();
   const user = await getUser();
 
-  if (!user) return null;
+  if (!user) throw new Error("User not found");
 
   return HourlyPricelist.findOne(
     { city: user.city },

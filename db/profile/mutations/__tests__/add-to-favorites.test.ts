@@ -95,7 +95,7 @@ describe("addToFavorites", () => {
     (getUser as jest.Mock).mockResolvedValue(null);
 
     // Act: Call the function to test
-    await addToFavorites(mockGoods);
+    await expect(addToFavorites(mockGoods)).rejects.toThrow("User not found");
 
     // Assert: Check that updateUser was not called
     expect(dbConnect).toHaveBeenCalledTimes(1);

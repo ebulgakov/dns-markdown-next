@@ -15,7 +15,7 @@ jest.mock("@/db/models/user_model", () => ({
 }));
 
 jest.mock("@/db/profile/queries", () => ({
-  getUser: jest.fn(),
+  getUser: jest.fn()
 }));
 
 describe("updateUser", () => {
@@ -28,7 +28,7 @@ describe("updateUser", () => {
     (getUser as jest.Mock).mockResolvedValue(null);
 
     // Act
-    await updateUser({});
+    await expect(updateUser({})).rejects.toThrow("User not found");
 
     // Assert
     expect(dbConnect).toHaveBeenCalledTimes(1);
@@ -40,7 +40,7 @@ describe("updateUser", () => {
     const update = { name: "New Name" };
 
     // Act
-    await updateUser(update);
+    await expect(updateUser(update)).rejects.toThrow("User not found");
 
     // Assert
     expect(User.findByIdAndUpdate).not.toHaveBeenCalled();
@@ -60,4 +60,3 @@ describe("updateUser", () => {
     expect(User.findByIdAndUpdate).toHaveBeenCalledTimes(1);
   });
 });
-

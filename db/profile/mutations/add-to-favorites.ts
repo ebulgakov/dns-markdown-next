@@ -8,7 +8,7 @@ export const addToFavorites = async (goods: Goods) => {
 
   const user = await getUser();
 
-  if (!user) return null;
+  if (!user) throw new Error("User not found");
 
   const update = {
     favorites: [
