@@ -35,15 +35,13 @@ describe("getProductById", () => {
   });
 
   // Test case: History not found
-  test("should return null if history is not found", async () => {
+  test("should return error if history is not found", async () => {
     // Arrange: Mock History.findOne to return null
     mockedHistoryFindOne.mockResolvedValue(null);
 
     // Act: Call the function
-    const result = await getProductById(productId);
+    await expect(getProductById(productId)).rejects.toThrow("History not found");
 
-    // Assert: Check the result and that functions were called correctly
-    expect(result).toBeNull();
     expect(mockedDbConnect).toHaveBeenCalledTimes(1);
     expect(mockedHistoryFindOne).toHaveBeenCalledWith(
       { link: productId },
@@ -54,17 +52,15 @@ describe("getProductById", () => {
   });
 
   // Test case: Pricelist not found
-  test("should return null if pricelist is not found", async () => {
+  test("should return error if pricelist is not found", async () => {
     // Arrange: Mock History.findOne to return a value, but HourlyPricelist.findOne to return null
     const mockHistory: Partial<HistoryType> = { city: "TestCity" };
     mockedHistoryFindOne.mockResolvedValue(mockHistory);
     mockedHourlyPricelistFindOne.mockResolvedValue(null);
 
     // Act: Call the function
-    const result = await getProductById(productId);
+    await expect(getProductById(productId)).rejects.toThrow("Price list not found");
 
-    // Assert: Check the result and that functions were called correctly
-    expect(result).toBeNull();
     expect(mockedDbConnect).toHaveBeenCalledTimes(1);
     expect(mockedHistoryFindOne).toHaveBeenCalledWith(
       { link: productId },
@@ -79,7 +75,7 @@ describe("getProductById", () => {
   });
 
   // Test case: Item not found in pricelist
-  test("should return null if item is not found in pricelist", async () => {
+  test("should return error if item is not found in pricelist", async () => {
     // Arrange: Mock models to return values, but the item is not in the pricelist
     const mockHistory: Partial<HistoryType> = { city: "TestCity" };
     const mockPriceList = {
@@ -89,10 +85,7 @@ describe("getProductById", () => {
     mockedHourlyPricelistFindOne.mockResolvedValue(mockPriceList);
 
     // Act: Call the function
-    const result = await getProductById(productId);
-
-    // Assert: Check the result
-    expect(result).toBeNull();
+    await expect(getProductById(productId)).rejects.toThrow("Product Item not found");
   });
 
   // Test case: Successfully found product

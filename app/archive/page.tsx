@@ -10,6 +10,8 @@ export default async function ArchivePage() {
   try {
     archiveCollection = await getArchiveList();
     if (!archiveCollection) throw new Error("No pricelist collection");
+
+    console.log("archiveCollection", archiveCollection);
   } catch (e) {
     const { message } = e as Error;
     return <ErrorMessage>{message}</ErrorMessage>;

@@ -7,9 +7,9 @@ export const getArchiveList = async () => {
   await dbConnect();
   const user = await getUser();
 
-  if (!user) return null;
+  if (!user) throw new Error("User not found");
 
   return Pricelist.find({ city: user.city }, {}, { sort: { updatedAt: 1 } }).select(
     "createdAt"
-  ) as unknown as PriceListType[] | null;
+  ) as unknown as PriceListType[];
 };

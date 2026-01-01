@@ -30,11 +30,11 @@ describe("getLastPriceList", () => {
     jest.clearAllMocks();
   });
 
-  it("should return null if user is not found", async () => {
+  it("should return error if user is not found", async () => {
     // Mock getUser to return null
     mockedGetUser.mockResolvedValue(null);
 
-    const result = await getLastPriceList();
+    await expect(getLastPriceList()).rejects.toThrow("User not found");
 
     // Expect dbConnect to have been called
     expect(mockedDbConnect).toHaveBeenCalledTimes(1);
@@ -42,8 +42,6 @@ describe("getLastPriceList", () => {
     expect(mockedGetUser).toHaveBeenCalledTimes(1);
     // Expect findOne not to have been called
     expect(mockedFindOne).not.toHaveBeenCalled();
-    // Expect result to be null
-    expect(result).toBeNull();
   });
 
   it("should return the last price list for the user's city", async () => {
