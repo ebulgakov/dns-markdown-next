@@ -1,8 +1,8 @@
-import type { User as UserType } from "@/types/user";
+import type { UserNotifications } from "@/types/user";
 import PageSubTitle from "@/app/components/PageSubTitle";
 
 type ProfileNotificationsProps = {
-  notifications: UserType["notifications"];
+  notifications: UserNotifications;
 };
 
 export default function ProfileNotifications({ notifications }: ProfileNotificationsProps) {
