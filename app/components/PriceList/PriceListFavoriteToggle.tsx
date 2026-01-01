@@ -1,5 +1,5 @@
 "use client";
-import axios from "axios";
+import axios, { type AxiosError } from "axios";
 import cn from "classnames";
 import { FontAwesomeIcon as Fa } from "@fortawesome/react-fontawesome";
 import { faStar } from "@fortawesome/free-solid-svg-icons";
@@ -33,9 +33,17 @@ export default function PriceListFavoriteToggle({
 
       if (data.success) {
         setInFavorites(false);
+      } else {
+        window.alert(data.error);
       }
     } catch (e) {
-      console.error(e);
+      const error = e as AxiosError;
+      if (error.response) {
+        const { error: err } = error.response.data as { error: string };
+        window.alert(err);
+      } else {
+        window.alert("An unexpected error occurred");
+      }
     } finally {
       setLoadingFavoritesList(false);
     }
@@ -55,9 +63,17 @@ export default function PriceListFavoriteToggle({
 
       if (data.success) {
         setInFavorites(true);
+      } else {
+        window.alert(data.error);
       }
     } catch (e) {
-      console.error(e);
+      const error = e as AxiosError;
+      if (error.response) {
+        const { error: err } = error.response.data as { error: string };
+        window.alert(err);
+      } else {
+        window.alert("An unexpected error occurred");
+      }
     } finally {
       setLoadingFavoritesList(false);
     }

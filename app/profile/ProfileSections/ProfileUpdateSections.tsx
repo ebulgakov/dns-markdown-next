@@ -3,8 +3,7 @@ import { FontAwesomeIcon as Fa } from "@fortawesome/react-fontawesome";
 import { faTimes } from "@fortawesome/free-solid-svg-icons";
 import { useState } from "react";
 import Button from "@/app/components/Button";
-import axios from "axios";
-import type { AxiosError } from "axios";
+import axios, { type AxiosError } from "axios";
 import ErrorMessage from "@/app/components/ErrorMessage";
 
 type ProfileUpdateSectionsProps = {
@@ -45,6 +44,8 @@ export default function ProfileUpdateSections({
 
       if (data.success) {
         setActiveSections(data.updatedSections);
+      } else {
+        setErrorMessage(data.error || "An unexpected error occurred");
       }
     } catch (e) {
       const error = e as AxiosError;
