@@ -52,7 +52,7 @@ export default function ProfileUpdateSections({
   };
 
   const handleSaveSelectedSections = async () => {
-    const sections = Array.from(new Set([...activeSections, ...selectedSections]));
+    const sections = [...activeSections, ...selectedSections];
     await updateSections(sections);
   };
 
