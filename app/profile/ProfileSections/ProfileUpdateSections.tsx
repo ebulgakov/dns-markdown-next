@@ -3,8 +3,8 @@ import { FontAwesomeIcon as Fa } from "@fortawesome/react-fontawesome";
 import { faTimes } from "@fortawesome/free-solid-svg-icons";
 import { useState } from "react";
 import Button from "@/app/components/Button";
-import axios, { type AxiosError } from "axios";
 import ErrorMessage from "@/app/components/ErrorMessage";
+import { useUserSectionUpdate } from "@/app/hooks/useUserSectionUpdate";
 
 type ProfileUpdateSectionsProps = {
   sectionName: AvailableUpdateSectionNames;
@@ -21,44 +21,11 @@ export default function ProfileUpdateSections({
   buttonLabel,
   placeholder
 }: ProfileUpdateSectionsProps) {
-  const [errorMessage, setErrorMessage] = useState<string | null>(null);
+  const [errorMessage, setErrorMessage] = useState<Error | null>(null);
   const [loading, setLoading] = useState(false);
   const [selectedSections, setSelectedSections] = useState<UserSectionsType>([]);
   const [activeSections, setActiveSections] = useState<UserSectionsType>(userSections);
-
-  const sendRequest = async (
-    sections: UserSectionsType,
-    sectionName: AvailableUpdateSectionNames
-  ) => {
-    try {
-      setLoading(true);
-      const { data } = await axios.post(
-        "/api/user-sections",
-        { sections, sectionName },
-        {
-          headers: {
-            "Content-Type": "application/json; charset=UTF-8"
-          }
-        }
-      );
-
-      if (data.success) {
-        setActiveSections(data.updatedSections);
-      } else {
-        setErrorMessage(data.error || "An unexpected error occurred");
-      }
-    } catch (e) {
-      const error = e as AxiosError;
-      if (error.response) {
-        const { error: err } = error.response.data as { error: string };
-        setErrorMessage(err);
-      } else {
-        setErrorMessage("An unexpected error occurred");
-      }
-    } finally {
-      setLoading(false);
-    }
-  };
+  const { updateUserSections } = useUserSectionUpdate(sectionName);
 
   //
   const outputAllSections = Array.from(new Set(allSections))
@@ -68,10 +35,28 @@ export default function ProfileUpdateSections({
     a.localeCompare(b)
   );
 
+  const updateSections = async (sections: UserSectionsType) => {
+    try {
+      setLoading(true);
+      const newSections = await updateUserSections(sections);
+      setActiveSections(newSections);
+      setErrorMessage(null);
+    } catch (error) {
+      setErrorMessage(error as Error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
   //
-  const handleRemove = async (section: string) => {
+  const handleRemoveActiveSection = async (section: string) => {
     const sections = activeSections.filter(sec => sec !== section);
-    await sendRequest(sections, sectionName);
+    await updateSections(sections);
+  };
+
+  const handleSaveSelectedSections = async () => {
+    const sections = Array.from(new Set([...activeSections, ...selectedSections]));
+    await updateSections(sections);
   };
 
   const handleCheckboxChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -83,14 +68,9 @@ export default function ProfileUpdateSections({
     }
   };
 
-  const handleSaveSelection = async () => {
-    const sections = Array.from(new Set([...activeSections, ...selectedSections]));
-    await sendRequest(sections, sectionName);
-  };
-
   return (
     <div>
-      {errorMessage && <ErrorMessage className="mb-4">{errorMessage}</ErrorMessage>}
+      {errorMessage && <ErrorMessage className="mb-4">{errorMessage.message}</ErrorMessage>}
       <div className="flex gap-4">
         <div className="flex-1">
           <div className="overflow-auto h-100 border border-neutral-300 px-2.5 py-1 border-solid flex flex-col items-start mb-2">
@@ -106,7 +86,7 @@ export default function ProfileUpdateSections({
               </label>
             ))}
           </div>
-          <Button disabled={loading} type="button" onClick={handleSaveSelection}>
+          <Button disabled={loading} type="button" onClick={handleSaveSelectedSections}>
             {buttonLabel}
           </Button>
         </div>
@@ -114,7 +94,11 @@ export default function ProfileUpdateSections({
           <div className="overflow-auto h-100 border border-neutral-300 px-2.5 py-1 border-solid flex flex-col items-start">
             {outputActiveSections.length > 0 ? (
               outputActiveSections.map(section => (
-                <button disabled={loading} key={section} onClick={() => handleRemove(section)}>
+                <button
+                  disabled={loading}
+                  key={section}
+                  onClick={() => handleRemoveActiveSection(section)}
+                >
                   <Fa icon={faTimes} />
                   {section}
                 </button>
