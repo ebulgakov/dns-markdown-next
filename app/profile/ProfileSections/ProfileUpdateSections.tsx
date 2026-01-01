@@ -1,20 +1,52 @@
-import type { User as UserType } from "@/types/user";
+import type { AvailableUpdateSectionNames, UserSections as UserSectionsType } from "@/types/user";
 import { FontAwesomeIcon as Fa } from "@fortawesome/react-fontawesome";
 import { faTimes } from "@fortawesome/free-solid-svg-icons";
 import { useState } from "react";
 import Button from "@/app/components/Button";
+import axios from "axios";
 
-type ProfileHiddenSectionsProps = {
-  hiddenSections: UserType["hiddenSections"];
+type ProfileUpdateSectionsProps = {
+  sectionName: AvailableUpdateSectionNames;
+  userSections: UserSectionsType;
   allSections: string[];
+  buttonLabel: string;
 };
 
-export default function ProfileHiddenSections({
-  hiddenSections,
-  allSections
-}: ProfileHiddenSectionsProps) {
-  const [selectedSections, setSelectedSections] = useState<UserType["hiddenSections"]>([]);
-  const [activeSections, setActiveSections] = useState<UserType["hiddenSections"]>(hiddenSections);
+export default function ProfileUpdateSections({
+  userSections,
+  allSections,
+  sectionName,
+  buttonLabel
+}: ProfileUpdateSectionsProps) {
+  const [loading, setLoading] = useState(false);
+  const [selectedSections, setSelectedSections] = useState<UserSectionsType>([]);
+  const [activeSections, setActiveSections] = useState<UserSectionsType>(userSections);
+
+  const sendRequest = async (
+    sections: UserSectionsType,
+    sectionName: AvailableUpdateSectionNames
+  ) => {
+    try {
+      setLoading(true);
+      const { data } = await axios.post(
+        "/api/user-sections",
+        { sections, sectionName },
+        {
+          headers: {
+            "Content-Type": "application/json; charset=UTF-8"
+          }
+        }
+      );
+
+      if (data.success) {
+        setActiveSections(data.updatedSections);
+      }
+    } catch (e) {
+      console.error(e);
+    } finally {
+      setLoading(false);
+    }
+  };
 
   //
   const outputAllSections = Array.from(new Set(allSections))
@@ -25,8 +57,9 @@ export default function ProfileHiddenSections({
   );
 
   //
-  const handleRemove = (section: string) => {
-    setActiveSections(prev => prev.filter(sec => sec !== section));
+  const handleRemove = async (section: string) => {
+    const sections = activeSections.filter(sec => sec !== section);
+    await sendRequest(sections, sectionName);
   };
 
   const handleCheckboxChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -38,8 +71,9 @@ export default function ProfileHiddenSections({
     }
   };
 
-  const handleSaveSelection = () => {
-    setActiveSections(Array.from(new Set([...activeSections, ...selectedSections])));
+  const handleSaveSelection = async () => {
+    const sections = Array.from(new Set([...activeSections, ...selectedSections]));
+    await sendRequest(sections, sectionName);
   };
 
   return (
@@ -59,14 +93,14 @@ export default function ProfileHiddenSections({
               </label>
             ))}
           </div>
-          <Button type="button" onClick={handleSaveSelection}>
-            Скрывать эти секции
+          <Button disabled={loading} type="button" onClick={handleSaveSelection}>
+            {buttonLabel}
           </Button>
         </div>
         <div className="flex-1">
           <div className="overflow-auto h-100 border border-neutral-300 px-2.5 py-1 border-solid flex flex-col items-start">
             {outputActiveSections.map(section => (
-              <button key={section} onClick={() => handleRemove(section)}>
+              <button disabled={loading} key={section} onClick={() => handleRemove(section)}>
                 <Fa icon={faTimes} />
                 {section}
               </button>

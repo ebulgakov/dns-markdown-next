@@ -6,9 +6,11 @@ export type FavoriteStatus = {
   createdAt: string;
   deleted: boolean;
   updates: [];
-}
+};
 
-export type UserSections = string[]
+export type AvailableUpdateSectionNames = "hiddenSections" | "favoriteSections";
+
+export type UserSections = string[];
 
 export interface Favorite {
   id: string;

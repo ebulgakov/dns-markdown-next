@@ -1,8 +1,7 @@
 "use client";
 import type { User as UserType } from "@/types/user";
 import { useState } from "react";
-import ProfileHiddenSections from "@/app/profile/ProfileSections/ProfileHiddenSections";
-import ProfileFavoriteSections from "@/app/profile/ProfileSections/ProfileFavoriteSections";
+import ProfileUpdateSections from "@/app/profile/ProfileSections/ProfileUpdateSections";
 import ProfileNotifications from "@/app/profile/ProfileSections/ProfileNotifications";
 import PageTitle from "@/app/components/PageTitle";
 import Button from "@/app/components/Button";
@@ -51,11 +50,21 @@ export default function ProfileSections({
       </div>
 
       {activeTab === "hiddenSections" && (
-        <ProfileHiddenSections allSections={allSections} hiddenSections={hiddenSections} />
+        <ProfileUpdateSections
+          allSections={allSections}
+          userSections={hiddenSections}
+          sectionName="hiddenSections"
+          buttonLabel="Скрывать эти секции"
+        />
       )}
 
       {activeTab === "favoriteSections" && (
-        <ProfileFavoriteSections allSections={allSections} favoriteSections={favoriteSections} />
+        <ProfileUpdateSections
+          allSections={allSections}
+          userSections={favoriteSections}
+          sectionName="favoriteSections"
+          buttonLabel="Добавить в избранные"
+        />
       )}
 
       {activeTab === "notifications" && <ProfileNotifications notifications={notifications} />}
