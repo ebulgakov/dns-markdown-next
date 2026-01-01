@@ -1,5 +1,4 @@
 "use client";
-import axios, { type AxiosError } from "axios";
 import cn from "classnames";
 import { FontAwesomeIcon as Fa } from "@fortawesome/react-fontawesome";
 import { faStar } from "@fortawesome/free-solid-svg-icons";
@@ -7,6 +6,7 @@ import { faStar as faStarEmpty } from "@fortawesome/free-regular-svg-icons";
 import { useState } from "react";
 import type { Goods as GoodsType } from "@/types/pricelist";
 import type { Favorite } from "@/types/user";
+import { useFavoriteActions } from "@/app/hooks/useFavoriteActions";
 
 type PriceListFavoriteToggleProps = {
   favorites: Favorite[];
@@ -17,63 +17,26 @@ export default function PriceListFavoriteToggle({
   favorites,
   goods
 }: PriceListFavoriteToggleProps) {
+  const { addToFavorites, removeFromFavorites } = useFavoriteActions(goods);
   const [inFavorites, setInFavorites] = useState<boolean>(
     favorites.some(fav => fav.item.link === goods.link)
   );
   const [loadingFavoritesList, setLoadingFavoritesList] = useState<boolean>();
-  const handleRemoveFromFavorites = async () => {
-    setLoadingFavoritesList(true);
-    try {
-      const { data } = await axios.delete("/api/favorites", {
-        data: { link: goods.link },
-        headers: {
-          "Content-Type": "application/json; charset=UTF-8"
-        }
-      });
 
-      if (data.success) {
-        setInFavorites(false);
-      } else {
-        window.alert(data.error);
-      }
-    } catch (e) {
-      const error = e as AxiosError;
-      if (error.response) {
-        const { error: err } = error.response.data as { error: string };
-        window.alert(err);
-      } else {
-        window.alert("An unexpected error occurred");
-      }
+  const handleRemoveFromFavorites = async () => {
+    try {
+      setLoadingFavoritesList(true);
+      await removeFromFavorites();
+      setInFavorites(false);
     } finally {
       setLoadingFavoritesList(false);
     }
   };
   const handleAddToFavorites = async () => {
-    setLoadingFavoritesList(true);
     try {
-      const { data } = await axios.post(
-        "/api/favorites",
-        { goods },
-        {
-          headers: {
-            "Content-Type": "application/json; charset=UTF-8"
-          }
-        }
-      );
-
-      if (data.success) {
-        setInFavorites(true);
-      } else {
-        window.alert(data.error);
-      }
-    } catch (e) {
-      const error = e as AxiosError;
-      if (error.response) {
-        const { error: err } = error.response.data as { error: string };
-        window.alert(err);
-      } else {
-        window.alert("An unexpected error occurred");
-      }
+      setLoadingFavoritesList(true);
+      await addToFavorites();
+      setInFavorites(true);
     } finally {
       setLoadingFavoritesList(false);
     }
