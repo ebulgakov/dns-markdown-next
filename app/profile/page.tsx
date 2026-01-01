@@ -24,14 +24,11 @@ export default async function ProfilePage() {
   }
 
   return (
-    <div>
-      <PageTitle title="Профиль" />
-      <ProfileSections
-        notifications={profile.notifications}
-        hiddenSections={profile.hiddenSections}
-        favoriteSections={profile.favoriteSections}
-        allSections={allSections}
-      />
-    </div>
+    <ProfileSections
+      notifications={profile.notifications}
+      hiddenSections={profile.hiddenSections}
+      favoriteSections={profile.favoriteSections}
+      allSections={allSections}
+    />
   );
 }

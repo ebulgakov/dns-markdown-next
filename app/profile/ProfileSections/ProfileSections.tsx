@@ -4,6 +4,8 @@ import { useState } from "react";
 import ProfileHiddenSections from "@/app/profile/ProfileSections/ProfileHiddenSections";
 import ProfileFavoriteSections from "@/app/profile/ProfileSections/ProfileFavoriteSections";
 import ProfileNotifications from "@/app/profile/ProfileSections/ProfileNotifications";
+import PageTitle from "@/app/components/PageTitle";
+import Button from "@/app/components/Button";
 
 type ProfileSectionsProps = {
   notifications: UserType["notifications"];
@@ -14,21 +16,39 @@ type ProfileSectionsProps = {
 
 type AvailableTabs = "notifications" | "favoriteSections" | "hiddenSections";
 
+const tabs: { id: AvailableTabs; label: string }[] = [
+  {
+    id: "favoriteSections",
+    label: "Избранные категории"
+  },
+  {
+    id: "hiddenSections",
+    label: "Скрытые категории"
+  },
+  {
+    id: "notifications",
+    label: "Уведомления"
+  }
+];
+
 export default function ProfileSections({
   notifications,
   favoriteSections,
   hiddenSections,
   allSections
 }: ProfileSectionsProps) {
-  const [activeTab, setActiveTab] = useState<AvailableTabs>("favoriteSections");
-  const tabs: AvailableTabs[] = ["favoriteSections", "hiddenSections", "notifications"];
+  const [activeTab, setActiveTab] = useState<AvailableTabs>("hiddenSections");
+
   return (
     <div>
-      {tabs.map(tab => (
-        <button key={tab} onClick={() => setActiveTab(tab)}>
-          {tab}
-        </button>
-      ))}
+      <PageTitle title="Профиль" />
+      <div className="flex gap-2 mb-2">
+        {tabs.map(({ id, label }) => (
+          <Button disabled={id === activeTab} key={id} onClick={() => setActiveTab(id)}>
+            {label}
+          </Button>
+        ))}
+      </div>
 
       {activeTab === "hiddenSections" && (
         <ProfileHiddenSections allSections={allSections} hiddenSections={hiddenSections} />

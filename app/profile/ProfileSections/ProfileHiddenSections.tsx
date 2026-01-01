@@ -1,8 +1,8 @@
 import type { User as UserType } from "@/types/user";
-import PageSubTitle from "@/app/components/PageSubTitle";
 import { FontAwesomeIcon as Fa } from "@fortawesome/react-fontawesome";
 import { faTimes } from "@fortawesome/free-solid-svg-icons";
 import { useState } from "react";
+import Button from "@/app/components/Button";
 
 type ProfileHiddenSectionsProps = {
   hiddenSections: UserType["hiddenSections"];
@@ -44,20 +44,24 @@ export default function ProfileHiddenSections({
 
   return (
     <div>
-      <PageSubTitle title="Скрытые категории" />
       <div className="flex gap-4">
         <div className="flex-1">
-          <div className="overflow-auto h-100 border border-neutral-300 px-2.5 py-1 border-solid flex flex-col items-start">
+          <div className="overflow-auto h-100 border border-neutral-300 px-2.5 py-1 border-solid flex flex-col items-start mb-2">
             {outputAllSections.map(section => (
               <label key={section}>
-                <input type="checkbox" value={section} onChange={handleCheckboxChange} />
+                <input
+                  type="checkbox"
+                  className="mr-1"
+                  value={section}
+                  onChange={handleCheckboxChange}
+                />
                 {section}
               </label>
             ))}
           </div>
-          <button type="button" onClick={handleSaveSelection}>
+          <Button type="button" onClick={handleSaveSelection}>
             Скрывать эти секции
-          </button>
+          </Button>
         </div>
         <div className="flex-1">
           <div className="overflow-auto h-100 border border-neutral-300 px-2.5 py-1 border-solid flex flex-col items-start">
