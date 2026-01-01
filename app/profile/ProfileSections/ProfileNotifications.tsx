@@ -9,9 +9,12 @@ export default function ProfileNotifications({ notifications }: ProfileNotificat
   return (
     <div>
       <PageSubTitle title="Уведомления" />
-      <p>Раздел пока в разработке</p>
-
-      <pre>{JSON.stringify(notifications, null, 2)}</pre>
+      <details>
+        <summary>
+          <p>Раздел пока в разработке</p>
+        </summary>
+        <pre>{JSON.stringify(notifications, null, 2)}</pre>
+      </details>
     </div>
   );
 }
