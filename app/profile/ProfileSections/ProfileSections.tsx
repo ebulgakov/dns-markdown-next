@@ -9,7 +9,7 @@ type ProfileSectionsProps = {
   notifications: UserType["notifications"];
   favoriteSections: UserType["favoriteSections"];
   hiddenSections: UserType["hiddenSections"];
-  allSections?: string[];
+  allSections: string[];
 };
 
 type AvailableTabs = "notifications" | "favoriteSections" | "hiddenSections";

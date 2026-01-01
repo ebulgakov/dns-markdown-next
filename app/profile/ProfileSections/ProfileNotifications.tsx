@@ -5,11 +5,13 @@ type ProfileNotificationsProps = {
   notifications: UserType["notifications"];
 };
 
-export default function ProfileNotifications({}: ProfileNotificationsProps) {
+export default function ProfileNotifications({ notifications }: ProfileNotificationsProps) {
   return (
     <div>
       <PageSubTitle title="Уведомления" />
-      Profile Notifications
+      <p>Раздел пока в разработке</p>
+
+      <pre>{JSON.stringify(notifications, null, 2)}</pre>
     </div>
   );
 }
