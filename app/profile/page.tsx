@@ -1,6 +1,5 @@
 import { getUser } from "@/db/profile/queries";
 import ErrorMessage from "@/app/components/ErrorMessage";
-import PageTitle from "@/app/components/PageTitle";
 import ProfileSections from "@/app/profile/ProfileSections/ProfileSections";
 import { getLastPriceList } from "@/db/pricelist/queries";
 
