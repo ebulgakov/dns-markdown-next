@@ -10,13 +10,15 @@ type ProfileUpdateSectionsProps = {
   userSections: UserSectionsType;
   allSections: string[];
   buttonLabel: string;
+  placeholder: string;
 };
 
 export default function ProfileUpdateSections({
   userSections,
   allSections,
   sectionName,
-  buttonLabel
+  buttonLabel,
+  placeholder
 }: ProfileUpdateSectionsProps) {
   const [loading, setLoading] = useState(false);
   const [selectedSections, setSelectedSections] = useState<UserSectionsType>([]);
@@ -99,12 +101,16 @@ export default function ProfileUpdateSections({
         </div>
         <div className="flex-1">
           <div className="overflow-auto h-100 border border-neutral-300 px-2.5 py-1 border-solid flex flex-col items-start">
-            {outputActiveSections.map(section => (
-              <button disabled={loading} key={section} onClick={() => handleRemove(section)}>
-                <Fa icon={faTimes} />
-                {section}
-              </button>
-            ))}
+            {outputActiveSections.length > 0 ? (
+              outputActiveSections.map(section => (
+                <button disabled={loading} key={section} onClick={() => handleRemove(section)}>
+                  <Fa icon={faTimes} />
+                  {section}
+                </button>
+              ))
+            ) : (
+              <p className="text-neutral-500">{placeholder}</p>
+            )}
           </div>
         </div>
       </div>
