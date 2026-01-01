@@ -62,7 +62,7 @@ export default function ProfileUpdateSections({
   const handleCheckboxChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const { value, checked } = event.target;
     if (checked) {
-      setSelectedSections(prev => (prev ? [...prev, value] : [value]));
+      setSelectedSections(prev => [...prev, value]);
     } else {
       setSelectedSections(prev => prev?.filter(section => section !== value));
     }
