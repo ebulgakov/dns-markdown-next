@@ -11,18 +11,15 @@ export async function POST(req: Request) {
     sectionName: AvailableUpdateSectionNames;
   } = await req.json();
 
-  if (!sections) {
-    return NextResponse.json({ success: false }, { status: 400 });
+  if (!sections || !sections) {
+    return NextResponse.json({ success: false, error: "No sections provided" }, { status: 400 });
   }
 
   let updatedSections;
   try {
     updatedSections = await updateUserSection(sections, sectionName);
   } catch (error) {
-    console.error(error);
-    return new Response("Error occurred", {
-      status: 400
-    });
+    return NextResponse.json({ success: false, error }, { status: 400 });
   }
 
   return NextResponse.json({ success: true, updatedSections }, { status: 200 });
