@@ -1,5 +1,4 @@
 "use client";
-
 import SearchInput from "@/app/components/SearchInput";
 import PriceList from "@/app/components/PriceList/PriceList";
 import type { Position as PositionType, PriceList as PriceListType } from "@/types/pricelist";
