@@ -6,7 +6,8 @@ import { faStar as faStarEmpty } from "@fortawesome/free-regular-svg-icons";
 import { useState } from "react";
 import type { Goods as GoodsType } from "@/types/pricelist";
 import type { Favorite } from "@/types/user";
-import { useFavoriteActions } from "@/app/hooks/useFavoriteActions";
+import { addToFavorites } from "@/db/profile/mutations/add-to-favorites";
+import { removeFromFavorites } from "@/db/profile/mutations/remove-from-favorites";
 
 type PriceListFavoriteToggleProps = {
   favorites: Favorite[];
@@ -17,7 +18,6 @@ export default function PriceListFavoriteToggle({
   favorites,
   goods
 }: PriceListFavoriteToggleProps) {
-  const { addToFavorites, removeFromFavorites } = useFavoriteActions(goods);
   const [inFavorites, setInFavorites] = useState<boolean>(
     favorites.some(fav => fav.item.link === goods.link)
   );
@@ -26,7 +26,7 @@ export default function PriceListFavoriteToggle({
   const handleRemoveFromFavorites = async () => {
     try {
       setLoadingFavoritesList(true);
-      const removed = await removeFromFavorites();
+      const removed = await removeFromFavorites(goods.link);
       if (removed) setInFavorites(false);
     } catch (error) {
       window.alert(error);
@@ -37,7 +37,7 @@ export default function PriceListFavoriteToggle({
   const handleAddToFavorites = async () => {
     try {
       setLoadingFavoritesList(true);
-      const added = await addToFavorites();
+      const added = await addToFavorites(goods);
       if (added) setInFavorites(true);
     } catch (error) {
       window.alert(error);

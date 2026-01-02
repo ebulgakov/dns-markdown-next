@@ -1,3 +1,4 @@
+"use server";
 import { dbConnect } from "@/db/database";
 import { getUser } from "@/db/profile/queries";
 import { Goods } from "@/types/pricelist";
@@ -25,4 +26,6 @@ export const addToFavorites = async (goods: Goods) => {
   };
 
   await updateUser(update);
+
+  return true;
 };

@@ -1,3 +1,4 @@
+"use server";
 import { dbConnect } from "@/db/database";
 import { getUser } from "@/db/profile/queries";
 import { updateUser } from "@/db/profile/mutations/update-user";
