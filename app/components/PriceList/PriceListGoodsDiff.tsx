@@ -1,5 +1,4 @@
 "use client";
-
 import { NumericFormat } from "react-number-format";
 import type { GoodDiffChanges as GoodDiffChangesType } from "@/types/diff";
 
@@ -15,7 +14,9 @@ export default function PriceListGoodsDiff({ diff }: PriceListGoodsDiffProps) {
         displayType="text"
         thousandSeparator=" "
         suffix=" ₽"
-        renderText={value => <div className="text-xl h-7 font-semibold whitespace-nowrap">{value}</div>}
+        renderText={value => (
+          <div className="text-xl h-7 font-semibold whitespace-nowrap">{value}</div>
+        )}
       />
       <div className="flex gap-2 text-sm justify-center mb-6">
         {diff.priceOld && (
