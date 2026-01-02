@@ -1,5 +1,4 @@
 "use client";
-import axios from "axios";
 import cn from "classnames";
 import { FontAwesomeIcon as Fa } from "@fortawesome/react-fontawesome";
 import { faStar } from "@fortawesome/free-solid-svg-icons";
@@ -7,6 +6,7 @@ import { faStar as faStarEmpty } from "@fortawesome/free-regular-svg-icons";
 import { useState } from "react";
 import type { Goods as GoodsType } from "@/types/pricelist";
 import type { Favorite } from "@/types/user";
+import { useFavoriteActions } from "@/app/hooks/useFavoriteActions";
 
 type PriceListFavoriteToggleProps = {
   favorites: Favorite[];
@@ -17,47 +17,30 @@ export default function PriceListFavoriteToggle({
   favorites,
   goods
 }: PriceListFavoriteToggleProps) {
+  const { addToFavorites, removeFromFavorites } = useFavoriteActions(goods);
   const [inFavorites, setInFavorites] = useState<boolean>(
     favorites.some(fav => fav.item.link === goods.link)
   );
   const [loadingFavoritesList, setLoadingFavoritesList] = useState<boolean>();
-  const handleRemoveFromFavorites = async () => {
-    setLoadingFavoritesList(true);
-    try {
-      const { data } = await axios.delete("/api/favorites", {
-        data: { link: goods.link },
-        headers: {
-          "Content-Type": "application/json; charset=UTF-8"
-        }
-      });
 
-      if (data.success) {
-        setInFavorites(false);
-      }
-    } catch (e) {
-      console.error(e);
+  const handleRemoveFromFavorites = async () => {
+    try {
+      setLoadingFavoritesList(true);
+      const removed = await removeFromFavorites();
+      if (removed) setInFavorites(false);
+    } catch (error) {
+      window.alert(error);
     } finally {
       setLoadingFavoritesList(false);
     }
   };
   const handleAddToFavorites = async () => {
-    setLoadingFavoritesList(true);
     try {
-      const { data } = await axios.post(
-        "/api/favorites",
-        { goods },
-        {
-          headers: {
-            "Content-Type": "application/json; charset=UTF-8"
-          }
-        }
-      );
-
-      if (data.success) {
-        setInFavorites(true);
-      }
-    } catch (e) {
-      console.error(e);
+      setLoadingFavoritesList(true);
+      const added = await addToFavorites();
+      if (added) setInFavorites(true);
+    } catch (error) {
+      window.alert(error);
     } finally {
       setLoadingFavoritesList(false);
     }

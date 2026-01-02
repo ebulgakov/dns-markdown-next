@@ -1,5 +1,5 @@
 "use client";
-import type { User as UserType } from "@/types/user";
+import type { UserNotifications, UserSections } from "@/types/user";
 import { useState } from "react";
 import ProfileUpdateSections from "@/app/profile/ProfileSections/ProfileUpdateSections";
 import ProfileNotifications from "@/app/profile/ProfileSections/ProfileNotifications";
@@ -7,9 +7,9 @@ import PageTitle from "@/app/components/PageTitle";
 import Button from "@/app/components/Button";
 
 type ProfileSectionsProps = {
-  notifications: UserType["notifications"];
-  favoriteSections: UserType["favoriteSections"];
-  hiddenSections: UserType["hiddenSections"];
+  notifications: UserNotifications;
+  favoriteSections: UserSections;
+  hiddenSections: UserSections;
   allSections: string[];
 };
 

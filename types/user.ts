@@ -12,6 +12,23 @@ export type AvailableUpdateSectionNames = "hiddenSections" | "favoriteSections";
 
 export type UserSections = string[];
 
+export type UserNotifications = {
+  updates: {
+    interval: string;
+    fields: {
+      new: boolean;
+      prices: boolean;
+      profit: boolean;
+    };
+  };
+  favorites: {
+    interval: string;
+  };
+  favoriteSections: {
+    interval: string;
+  };
+};
+
 export interface Favorite {
   id: string;
   status: FavoriteStatus;
@@ -24,21 +41,6 @@ export interface User {
   city: string;
   hiddenSections: UserSections;
   favoriteSections: UserSections;
-  notifications: {
-    updates: {
-      interval: string;
-      fields: {
-        new: boolean;
-        prices: boolean;
-        profit: boolean;
-      };
-    };
-    favorites: {
-      interval: string;
-    };
-    favoriteSections: {
-      interval: string;
-    };
-  };
+  notifications: UserNotifications;
   favorites: Favorite[];
 }
