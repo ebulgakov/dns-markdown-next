@@ -75,7 +75,6 @@ export default function ProfileUpdateSections({
                   type="checkbox"
                   className="mr-1"
                   value={section}
-                  checked={selectedSections.includes(section)}
                   onChange={handleCheckboxChange}
                 />
                 {section}
