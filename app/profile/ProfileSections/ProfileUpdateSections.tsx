@@ -4,7 +4,7 @@ import { faTimes } from "@fortawesome/free-solid-svg-icons";
 import { useState, type ChangeEvent } from "react";
 import Button from "@/app/components/Button";
 import ErrorMessage from "@/app/components/ErrorMessage";
-import { useUserSectionUpdate } from "@/app/hooks/useUserSectionUpdate";
+import { updateUserSection } from "@/db/profile/mutations/update-user-section";
 import { uniqAbcSort } from "@/app/helpers/sort";
 
 type ProfileUpdateSectionsProps = {
@@ -26,7 +26,6 @@ export default function ProfileUpdateSections({
   const [loading, setLoading] = useState(false);
   const [selectedSections, setSelectedSections] = useState<UserSectionsType>([]);
   const [activeSections, setActiveSections] = useState<UserSectionsType>(userSections);
-  const { updateUserSections } = useUserSectionUpdate(sectionName);
 
   const outputAllSections = uniqAbcSort(allSections).filter(str => !activeSections.includes(str));
   const outputActiveSections = uniqAbcSort(activeSections);
@@ -34,7 +33,7 @@ export default function ProfileUpdateSections({
   const updateSections = async (sections: UserSectionsType) => {
     try {
       setLoading(true);
-      const newSections = await updateUserSections(sections);
+      const newSections = await updateUserSection(sections, sectionName);
       setActiveSections(newSections);
       setSelectedSections([]);
       setErrorMessage(null);
