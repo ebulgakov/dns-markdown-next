@@ -28,7 +28,6 @@ export default function ProfileUpdateSections({
   const [activeSections, setActiveSections] = useState<UserSectionsType>(userSections);
   const { updateUserSections } = useUserSectionUpdate(sectionName);
 
-  //
   const outputAllSections = uniqAbcSort(allSections).filter(str => !activeSections.includes(str));
   const outputActiveSections = uniqAbcSort(activeSections);
 
@@ -37,6 +36,7 @@ export default function ProfileUpdateSections({
       setLoading(true);
       const newSections = await updateUserSections(sections);
       setActiveSections(newSections);
+      setSelectedSections([]);
       setErrorMessage(null);
     } catch (error) {
       setErrorMessage(error as Error);
@@ -45,24 +45,22 @@ export default function ProfileUpdateSections({
     }
   };
 
-  //
   const handleRemoveActiveSection = async (section: string) => {
     const sections = activeSections.filter(sec => sec !== section);
     await updateSections(sections);
   };
 
   const handleSaveSelectedSections = async () => {
+    if (selectedSections.length === 0) return;
     const sections = [...activeSections, ...selectedSections];
     await updateSections(sections);
   };
 
   const handleCheckboxChange = (event: ChangeEvent<HTMLInputElement>) => {
     const { value, checked } = event.target;
-    if (checked) {
-      setSelectedSections(prev => [...prev, value]);
-    } else {
-      setSelectedSections(prev => prev?.filter(section => section !== value));
-    }
+    setSelectedSections(prev =>
+      checked ? [...prev, value] : prev.filter(section => section !== value)
+    );
   };
 
   return (
@@ -77,13 +75,18 @@ export default function ProfileUpdateSections({
                   type="checkbox"
                   className="mr-1"
                   value={section}
+                  checked={selectedSections.includes(section)}
                   onChange={handleCheckboxChange}
                 />
                 {section}
               </label>
             ))}
           </div>
-          <Button disabled={loading} type="button" onClick={handleSaveSelectedSections}>
+          <Button
+            disabled={loading || selectedSections.length === 0}
+            type="button"
+            onClick={handleSaveSelectedSections}
+          >
             {buttonLabel}
           </Button>
         </div>
