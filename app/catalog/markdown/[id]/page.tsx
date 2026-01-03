@@ -3,7 +3,7 @@ import ErrorMessage from "@/app/components/ErrorMessage";
 import PageTitle from "@/app/components/PageTitle";
 import PriceListGoods from "@/app/components/PriceList/PriceListGoods";
 import ProductPricesChart from "@/app/components/ProductPricesChart";
-import PageSubTitle from "@/app/components/PageSubTitle";
+import Title from "@/app/components/Title";
 
 type CatalogItemPage = {
   params: Promise<{ id: string }>;
@@ -37,7 +37,7 @@ export default async function CatalogItemPage({ params }: CatalogItemPage) {
 
       <PriceListGoods item={product.item} />
 
-      <PageSubTitle title="Сравнение цен" />
+      <Title variant="h2">Сравнение цен</Title>
 
       <ul className="list-disc ml-5">
         <li>
@@ -62,7 +62,7 @@ export default async function CatalogItemPage({ params }: CatalogItemPage) {
         </li>
       </ul>
 
-      <PageSubTitle title="График цены" />
+      <Title variant="h2">График цены</Title>
 
       {product.history && <ProductPricesChart chartData={product.history} />}
     </div>

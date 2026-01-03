@@ -1,5 +1,5 @@
 import type { UserNotifications } from "@/types/user";
-import PageSubTitle from "@/app/components/PageSubTitle";
+import Title from "@/app/components/Title";
 
 type ProfileNotificationsProps = {
   notifications: UserNotifications;
@@ -8,7 +8,7 @@ type ProfileNotificationsProps = {
 export default function ProfileNotifications({ notifications }: ProfileNotificationsProps) {
   return (
     <div>
-      <PageSubTitle title="Уведомления" />
+      <Title variant="h2">Уведомления</Title>
       <details>
         <summary>
           <p>Раздел пока в разработке</p>

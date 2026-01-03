@@ -1,6 +1,7 @@
 import PriceList from "@/app/components/PriceList/PriceList";
 import type { Position as PositionType } from "@/types/pricelist";
 import type { Favorite as FavoriteType, UserSections as UserSectionsType } from "@/types/user";
+import Title from "@/app/components/Title";
 
 type PriceListFavoritesSectionProps = {
   favoriteSections: PositionType[];
@@ -15,13 +16,13 @@ export default function PriceListFavoritesSection({
 }: PriceListFavoritesSectionProps) {
   return favoriteSections.length > 0 ? (
     <>
-      <h2 className="text-3xl mb-5">Избранные категории</h2>
+      <Title variant="h2">Избранные категории</Title>
       <PriceList
         positions={favoriteSections}
         favorites={userFavoritesGoods}
         hiddenSections={hiddenSectionsTitles}
       />
-      <h2 className="text-3xl mb-5 mt-10">Все категории</h2>
+      <Title variant="h2">Все категории</Title>
     </>
   ) : (
     <div className="border border-green-800 bg-green-50 text-green-800 rounded-lg p-4 mb-10">
