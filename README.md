@@ -21,6 +21,18 @@ bun dev
 
 Open [http://localhost:3000](http://localhost:3000) with your browser to see the local site.
 
+## .env file
+```env
+NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY=pk_test_... # Your Clerk publishable key
+CLERK_SECRET_KEY=sk_test_... # Your Clerk secret key
+MONGODB_URI="mongodb+srv:" # Your MongoDB connection string
+
+NEXT_PUBLIC_CLERK_SIGN_IN_URL=/sign-in
+NEXT_PUBLIC_CLERK_SIGN_UP_URL=/sign-up
+NEXT_PUBLIC_CLERK_SIGN_IN_FALLBACK_REDIRECT_URL=/catalog
+NEXT_PUBLIC_CLERK_SIGN_UP_FALLBACK_REDIRECT_URL=/profile
+```
+
 ## Technologies
 
 * Next.js 16
