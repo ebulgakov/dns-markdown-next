@@ -1,9 +1,9 @@
 import { getPriceListsDiff } from "@/db/pricelist/queries";
-import ErrorMessage from "@/app/components/ErrorMessage";
 import PageTitle from "@/app/components/PageTitle";
 import PriceListSection from "@/app/components/PriceList/PriceListSection";
 import { DiffsCollection as DiffsCollectionType } from "@/types/diff";
 import { getUser } from "@/db/profile/queries";
+import Alert from "@/app/components/Alert";
 
 export default async function UpdatesPage() {
   let diffNew;
@@ -63,21 +63,30 @@ export default async function UpdatesPage() {
     }
   } catch (e) {
     const { message } = e as Error;
-    return <ErrorMessage>{message}</ErrorMessage>;
+    return <Alert variant="error">{message}</Alert>;
   }
 
   return (
     <div>
       <PageTitle title="Обновления с начала дня" />
-      {diffNew && <PriceListSection isOpen={true} position={diffNew} favorites={userFavoritesGoods} />}
+      {diffNew && (
+        <PriceListSection isOpen={true} position={diffNew} favorites={userFavoritesGoods} />
+      )}
       {diffChangesPrice && (
-        <PriceListSection isOpen={true} position={diffChangesPrice} favorites={userFavoritesGoods} diffs={changePriceDiff} />
+        <PriceListSection
+          isOpen={true}
+          position={diffChangesPrice}
+          favorites={userFavoritesGoods}
+          diffs={changePriceDiff}
+        />
       )}
-      {diffRemoved && (
-        <PriceListSection isOpen={true} position={diffRemoved} />
-      )}
+      {diffRemoved && <PriceListSection isOpen={true} position={diffRemoved} />}
       {diffChangesProfit && (
-        <PriceListSection position={diffChangesProfit} diffs={changeProfitDiff} favorites={userFavoritesGoods} />
+        <PriceListSection
+          position={diffChangesProfit}
+          diffs={changeProfitDiff}
+          favorites={userFavoritesGoods}
+        />
       )}
     </div>
   );

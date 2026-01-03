@@ -1,7 +1,7 @@
 import { getUser } from "@/db/profile/queries";
-import ErrorMessage from "@/app/components/ErrorMessage";
 import ProfileSections from "@/app/profile/ProfileSections/ProfileSections";
 import { getLastPriceList } from "@/db/pricelist/queries";
+import Alert from "@/app/components/Alert";
 
 export default async function ProfilePage() {
   let profile;
@@ -19,7 +19,7 @@ export default async function ProfilePage() {
     allSections = lastPriceList.positions.map(position => position.title);
   } catch (e) {
     const { message } = e as Error;
-    return <ErrorMessage>{message}</ErrorMessage>;
+    return <Alert variant="error">{message}</Alert>;
   }
 
   return (

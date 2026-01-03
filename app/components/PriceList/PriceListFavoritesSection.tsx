@@ -2,6 +2,7 @@ import PriceList from "@/app/components/PriceList/PriceList";
 import type { Position as PositionType } from "@/types/pricelist";
 import type { Favorite as FavoriteType, UserSections as UserSectionsType } from "@/types/user";
 import Title from "@/app/components/Title";
+import Alert from "@/app/components/Alert";
 
 type PriceListFavoritesSectionProps = {
   favoriteSections: PositionType[];
@@ -25,8 +26,10 @@ export default function PriceListFavoritesSection({
       <Title variant="h2">Все категории</Title>
     </>
   ) : (
-    <div className="border border-green-800 bg-green-50 text-green-800 rounded-lg p-4 mb-10">
-      Добавьте избранные категории в вашем профиле и они всегда будут закреплены вверху списка
+    <div className="mb-10">
+      <Alert variant="success">
+        Добавьте избранные категории в вашем профиле и они всегда будут закреплены вверху списка
+      </Alert>
     </div>
   );
 }

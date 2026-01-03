@@ -3,9 +3,9 @@ import { FontAwesomeIcon as Fa } from "@fortawesome/react-fontawesome";
 import { faTimes } from "@fortawesome/free-solid-svg-icons";
 import { useState, type ChangeEvent, useTransition, useOptimistic } from "react";
 import Button from "@/app/components/Button";
-import ErrorMessage from "@/app/components/ErrorMessage";
 import { updateUserSection } from "@/db/profile/mutations/update-user-section";
 import { uniqAbcSort } from "@/app/helpers/sort";
+import Alert from "@/app/components/Alert";
 
 type ProfileUpdateSectionsProps = {
   sectionName: AvailableUpdateSectionNames;
@@ -68,7 +68,11 @@ export default function ProfileUpdateSections({
 
   return (
     <div>
-      {errorMessage && <ErrorMessage className="mb-4">{errorMessage.message}</ErrorMessage>}
+      {errorMessage && (
+        <div className="mb-4">
+          <Alert variant="error">{errorMessage.message}</Alert>
+        </div>
+      )}
       <div className="flex gap-4">
         <div className="flex-1">
           <div className="overflow-auto h-100 border border-neutral-300 px-2.5 py-1 border-solid flex flex-col items-start mb-2">

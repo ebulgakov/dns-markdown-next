@@ -1,9 +1,9 @@
 import { getProductById } from "@/db/pricelist/queries";
-import ErrorMessage from "@/app/components/ErrorMessage";
 import PageTitle from "@/app/components/PageTitle";
 import PriceListGoods from "@/app/components/PriceList/PriceListGoods";
 import ProductPricesChart from "@/app/components/ProductPricesChart";
 import Title from "@/app/components/Title";
+import Alert from "@/app/components/Alert";
 
 type CatalogItemPage = {
   params: Promise<{ id: string }>;
@@ -28,7 +28,7 @@ export default async function CatalogItemPage({ params }: CatalogItemPage) {
   }
 
   if (!product) {
-    return <ErrorMessage>{error?.message}</ErrorMessage>;
+    return <Alert variant="error">{error?.message}</Alert>;
   }
 
   return (
