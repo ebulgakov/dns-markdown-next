@@ -5,6 +5,8 @@ import { Goods } from "@/types/pricelist";
 import { updateUser } from "@/db/profile/mutations/update-user";
 
 export const addToFavorites = async (goods: Goods) => {
+  if (!goods) throw new Error("No goods provided");
+
   await dbConnect();
 
   const user = await getUser();

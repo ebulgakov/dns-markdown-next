@@ -102,4 +102,14 @@ describe("addToFavorites", () => {
     expect(getUser).toHaveBeenCalledTimes(1);
     expect(updateUser).not.toHaveBeenCalled();
   });
+
+  it("should throw an error if no goods are provided", async () => {
+    // Act & Assert
+    await expect(addToFavorites(null as never)).rejects.toThrow("No goods provided");
+
+    // Assert that other functions were not called
+    expect(dbConnect).not.toHaveBeenCalled();
+    expect(getUser).not.toHaveBeenCalled();
+    expect(updateUser).not.toHaveBeenCalled();
+  });
 });
