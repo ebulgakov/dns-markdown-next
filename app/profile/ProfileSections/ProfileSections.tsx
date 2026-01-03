@@ -43,7 +43,11 @@ export default function ProfileSections({
       <PageTitle title="Профиль" />
       <div className="flex gap-2 mb-2">
         {tabs.map(({ id, label }) => (
-          <Button isActive={id === activeTab} key={id} onClick={() => setActiveTab(id)}>
+          <Button
+            variant={id === activeTab ? "primary" : "default"}
+            key={id}
+            onClick={() => setActiveTab(id)}
+          >
             {label}
           </Button>
         ))}

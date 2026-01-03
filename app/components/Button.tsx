@@ -2,15 +2,16 @@ import type { ButtonHTMLAttributes } from "react";
 import cn from "classnames";
 
 type ButtonProps = ButtonHTMLAttributes<HTMLButtonElement> & {
-  isActive?: boolean;
+  variant?: "primary" | "default";
 };
-export default function Button({ children, isActive, ...props }: ButtonProps) {
+export default function Button({ children, variant = "default", ...props }: ButtonProps) {
   return (
     <button
       className={cn(
-        "transition rounded cursor-pointer bg-blue-400 px-2 py-1 text-white hover:bg-blue-400 disabled:opacity-40",
+        "transition rounded cursor-pointer  px-2 py-1 text-white  disabled:opacity-40",
         {
-          "bg-orange-400": isActive
+          "bg-orange-400 hover:bg-orange-500": variant === "primary",
+          "bg-blue-400 hover:bg-blue-400": variant === "default"
         }
       )}
       {...props}

@@ -17,16 +17,24 @@ export const Default: Story = {
   }
 };
 
-export const IsActive: Story = {
+export const DisabledDefault: Story = {
   args: {
-    children: "Active",
-    isActive: true
+    children: "Disabled",
+    disabled: true
   }
 };
 
-export const Disabled: Story = {
+export const Primary: Story = {
   args: {
-    children: "Disabled",
+    children: "Primary button",
+    variant: "primary"
+  }
+};
+
+export const DisabledPrimary: Story = {
+  args: {
+    children: "Disabled Primary button",
+    variant: "primary",
     disabled: true
   }
 };
