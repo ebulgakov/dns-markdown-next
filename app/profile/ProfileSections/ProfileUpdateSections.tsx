@@ -1,7 +1,7 @@
 import type { AvailableUpdateSectionNames, UserSections as UserSectionsType } from "@/types/user";
 import { FontAwesomeIcon as Fa } from "@fortawesome/react-fontawesome";
 import { faTimes } from "@fortawesome/free-solid-svg-icons";
-import { useState, type ChangeEvent, useTransition } from "react";
+import { useState, type ChangeEvent, useTransition, useOptimistic } from "react";
 import Button from "@/app/components/Button";
 import ErrorMessage from "@/app/components/ErrorMessage";
 import { updateUserSection } from "@/db/profile/mutations/update-user-section";
@@ -25,17 +25,22 @@ export default function ProfileUpdateSections({
   const [errorMessage, setErrorMessage] = useState<Error | null>(null);
   const [isPending, startTransition] = useTransition();
   const [selectedSections, setSelectedSections] = useState<UserSectionsType>([]);
-  const [activeSections, setActiveSections] = useState<UserSectionsType>(userSections);
+  const [realActiveSections, setRealActiveSections] = useState<UserSectionsType>(userSections);
+  const [activeSections, setActiveSections] = useOptimistic<UserSectionsType, UserSectionsType>(
+    realActiveSections,
+    (_, newSections) => newSections
+  );
 
   const outputAllSections = uniqAbcSort(allSections).filter(str => !activeSections.includes(str));
   const outputActiveSections = uniqAbcSort(activeSections);
 
   const updateSections = async (sections: UserSectionsType) => {
     startTransition(async () => {
+      setActiveSections(sections);
+      setSelectedSections([]);
       try {
         const newSections = await updateUserSection(sections, sectionName);
-        setActiveSections(newSections);
-        setSelectedSections([]);
+        setRealActiveSections(newSections);
         setErrorMessage(null);
       } catch (error) {
         setErrorMessage(error as Error);
@@ -79,23 +84,22 @@ export default function ProfileUpdateSections({
               </label>
             ))}
           </div>
-          <Button
-            disabled={isPending || selectedSections.length === 0}
-            type="button"
-            onClick={handleSaveSelectedSections}
-          >
-            {buttonLabel}
-          </Button>
+          <div className="flex items-center gap-2">
+            <Button
+              disabled={selectedSections.length === 0}
+              type="button"
+              onClick={handleSaveSelectedSections}
+            >
+              {buttonLabel}
+            </Button>
+            {isPending && <span className="text-neutral-500">Сохранение...</span>}
+          </div>
         </div>
         <div className="flex-1">
           <div className="overflow-auto h-100 border border-neutral-300 px-2.5 py-1 border-solid flex flex-col items-start">
             {outputActiveSections.length > 0 ? (
               outputActiveSections.map(section => (
-                <button
-                  disabled={isPending}
-                  key={section}
-                  onClick={() => handleRemoveActiveSection(section)}
-                >
+                <button key={section} onClick={() => handleRemoveActiveSection(section)}>
                   <Fa icon={faTimes} />
                   {section}
                 </button>
