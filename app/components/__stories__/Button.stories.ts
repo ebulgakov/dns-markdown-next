@@ -14,13 +14,9 @@ type Story = StoryObj<typeof Button>;
 export const Default: Story = {
   args: {
     children: "Click me"
-  }
-};
-
-export const DisabledDefault: Story = {
-  args: {
-    children: "Disabled",
-    disabled: true
+  },
+  argTypes: {
+    disabled: { control: "boolean" }
   }
 };
 
@@ -28,13 +24,8 @@ export const Primary: Story = {
   args: {
     children: "Primary button",
     variant: "primary"
-  }
-};
-
-export const DisabledPrimary: Story = {
-  args: {
-    children: "Disabled Primary button",
-    variant: "primary",
-    disabled: true
+  },
+  argTypes: {
+    disabled: { control: "boolean" }
   }
 };
