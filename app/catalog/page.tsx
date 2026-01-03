@@ -1,8 +1,8 @@
-import ErrorMessage from "@/app/components/ErrorMessage";
 import { getCatalogData } from "@/app/catalog/getCatalogData";
 import { formatDate, formatTime } from "@/app/helpers/format";
 import PageTitle from "@/app/components/PageTitle";
 import PriceListPage from "@/app/components/PriceList/PriceListPage";
+import Alert from "@/app/components/Alert";
 
 export default async function CatalogPage() {
   const {
@@ -15,7 +15,7 @@ export default async function CatalogPage() {
   } = await getCatalogData();
 
   if (error || !priceList) {
-    return <ErrorMessage>{error?.message}</ErrorMessage>;
+    return <Alert variant="error">{error?.message}</Alert>;
   }
 
   const date = new Date(priceList.createdAt);

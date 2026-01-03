@@ -11,7 +11,7 @@ export default function PageTitle({ title, subTitle, children }: PageTitleProps)
       <h1 className="text-4xl">
         {title}{" "}
         {subTitle && (
-          <small className="font-normal leading-none text-[#777777] text-[65%]">{subTitle}</small>
+          <small className="font-normal leading-none text-gray-500 text-[65%]">{subTitle}</small>
         )}
       </h1>
       {children}

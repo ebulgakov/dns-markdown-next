@@ -1,8 +1,8 @@
 import { getArchiveList } from "@/db/pricelist/queries";
 import Link from "next/link";
-import ErrorMessage from "@/app/components/ErrorMessage";
 import { formatDate } from "@/app/helpers/format";
 import PageTitle from "@/app/components/PageTitle";
+import Alert from "@/app/components/Alert";
 
 export default async function ArchivePage() {
   let archiveCollection;
@@ -12,7 +12,7 @@ export default async function ArchivePage() {
     if (!archiveCollection) throw new Error("No pricelist collection");
   } catch (e) {
     const { message } = e as Error;
-    return <ErrorMessage>{message}</ErrorMessage>;
+    return <Alert variant="error">{message}</Alert>;
   }
 
   return (

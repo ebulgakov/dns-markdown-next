@@ -33,10 +33,14 @@ NEXT_PUBLIC_CLERK_SIGN_IN_FALLBACK_REDIRECT_URL=/catalog
 NEXT_PUBLIC_CLERK_SIGN_UP_FALLBACK_REDIRECT_URL=/profile
 ```
 
+## Storybook
+Chromatic Storybook is set up for this project: https://www.chromatic.com/library?appId=695938b24c4c7f59436c970b
+
 ## Technologies
 
 * Next.js 16
 * MongoDB
 * Typescript
 * Tailwind CSS
+* Storybook
 * Jest

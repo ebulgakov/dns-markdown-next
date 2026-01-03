@@ -1,8 +1,8 @@
-import ErrorMessage from "@/app/components/ErrorMessage";
 import { getUser } from "@/db/profile/queries";
 import PriceListGoods from "@/app/components/PriceList/PriceListGoods";
 import type { Favorite } from "@/types/user";
 import PageTitle from "@/app/components/PageTitle";
+import Alert from "@/app/components/Alert";
 
 export default async function FavoritesPage() {
   let favorites;
@@ -13,7 +13,7 @@ export default async function FavoritesPage() {
     favorites = JSON.parse(JSON.stringify(user.favorites.reverse())) as Favorite[];
   } catch (e) {
     const { message } = e as Error;
-    return <ErrorMessage>{message}</ErrorMessage>;
+    return <Alert variant="error">{message}</Alert>;
   }
 
   return (
@@ -21,7 +21,12 @@ export default async function FavoritesPage() {
       <PageTitle title="Избранное" />
       <div className="divide-y divide-gray-200">
         {favorites.map(favorite => (
-          <PriceListGoods key={favorite.item._id} item={favorite.item} status={favorite.status} favorites={favorites} />
+          <PriceListGoods
+            key={favorite.item._id}
+            item={favorite.item}
+            status={favorite.status}
+            favorites={favorites}
+          />
         ))}
       </div>
     </div>
