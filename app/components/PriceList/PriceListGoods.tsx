@@ -1,5 +1,5 @@
 "use client";
-import cn from "classnames";
+import clsx from "clsx";
 import Link from "next/link";
 import Image from "next/image";
 import { NumericFormat } from "react-number-format";
@@ -22,7 +22,7 @@ export default function PriceListGoods({ item, status, diff, favorites }: PriceL
 
   return (
     <div
-      className={cn("flex items-center gap-4 py-1", {
+      className={clsx("flex items-center gap-4 py-1", {
         "opacity-40": status?.deleted
       })}
     >

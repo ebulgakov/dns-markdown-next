@@ -7,7 +7,7 @@ import { useSearchStore } from "@/app/stores/searchStore";
 import PriceListGoods from "@/app/components/PriceList/PriceListGoods";
 import { useDebounce } from "@/app/hooks/useDebounce";
 import PriceListFavoritesSection from "@/app/components/PriceList/PriceListFavoritesSection";
-import cn from "classnames";
+import clsx from "clsx";
 import { useFilteredGoods } from "@/app/hooks/useFilteredGoods";
 
 type PriceListPageProps = {
@@ -37,7 +37,7 @@ export default function PriceListPage({
         <PriceListGoods key={item._id} item={item} favorites={userFavoritesGoods} />
       ))}
 
-      <div className={cn({ hidden: searchTerm.length > 1 })}>
+      <div className={clsx({ hidden: searchTerm.length > 1 })}>
         {favoriteSections && (
           <PriceListFavoritesSection
             favoriteSections={favoriteSections}

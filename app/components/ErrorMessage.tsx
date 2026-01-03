@@ -1,5 +1,5 @@
 import { ReactNode } from "react";
-import cn from "classnames";
+import clsx from "clsx";
 
 type ErrorMessageProps = {
   className?: string;
@@ -9,7 +9,7 @@ type ErrorMessageProps = {
 export default function ErrorMessage({ children, className }: ErrorMessageProps): ReactNode {
   return (
     <div
-      className={cn(
+      className={clsx(
         "border border-red-500 bg-red-300 p-10 rounded-sm whitespace-pre-wrap",
         className
       )}

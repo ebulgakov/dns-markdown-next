@@ -1,5 +1,5 @@
 import type { ComponentProps } from "react";
-import cn from "classnames";
+import clsx from "clsx";
 
 type ButtonProps = ComponentProps<"button"> & {
   variant?: "primary" | "default";
@@ -7,7 +7,7 @@ type ButtonProps = ComponentProps<"button"> & {
 export default function Button({ children, variant = "default", ...props }: ButtonProps) {
   return (
     <button
-      className={cn(
+      className={clsx(
         "transition rounded cursor-pointer  px-2 py-1 text-white  disabled:opacity-40",
         {
           "bg-orange-400 hover:bg-orange-500": variant === "primary",

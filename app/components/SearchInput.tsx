@@ -1,7 +1,7 @@
 "use client";
 import { useSearchStore } from "@/app/stores/searchStore";
 import { useState } from "react";
-import cn from "classnames";
+import clsx from "clsx";
 import { FontAwesomeIcon as Fa } from "@fortawesome/react-fontawesome";
 import { faSearch, faTimes } from "@fortawesome/free-solid-svg-icons";
 
@@ -14,7 +14,7 @@ export default function SearchInput() {
     <>
       {!hidden && (
         <div
-          className={cn(
+          className={clsx(
             "fixed left-0 right-0 bottom-0 z-10 bg-white p-5 border-t border-gray-200",
             {
               hidden: hidden
