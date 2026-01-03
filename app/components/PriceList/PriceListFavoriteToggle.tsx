@@ -1,9 +1,8 @@
 "use client";
-import cn from "classnames";
 import { FontAwesomeIcon as Fa } from "@fortawesome/react-fontawesome";
 import { faStar } from "@fortawesome/free-solid-svg-icons";
 import { faStar as faStarEmpty } from "@fortawesome/free-regular-svg-icons";
-import { useState } from "react";
+import { useState, useTransition, useOptimistic } from "react";
 import type { Goods as GoodsType } from "@/types/pricelist";
 import type { Favorite } from "@/types/user";
 import { addToFavorites } from "@/db/profile/mutations/add-to-favorites";
@@ -21,51 +20,49 @@ export default function PriceListFavoriteToggle({
   const [inFavorites, setInFavorites] = useState<boolean>(
     favorites.some(fav => fav.item.link === goods.link)
   );
-  const [loadingFavoritesList, setLoadingFavoritesList] = useState<boolean>();
+  const [inFavoritesOptimistic, setInFavoritesOptimistic] = useOptimistic<boolean, boolean>(
+    inFavorites,
+    (_, newInFavorites) => newInFavorites
+  );
+  const [, startTransition] = useTransition();
 
-  const handleRemoveFromFavorites = async () => {
-    try {
-      setLoadingFavoritesList(true);
-      const removed = await removeFromFavorites(goods.link);
-      if (removed) setInFavorites(false);
-    } catch (error) {
-      window.alert(error);
-    } finally {
-      setLoadingFavoritesList(false);
-    }
+  const handleRemoveFromFavorites = () => {
+    startTransition(async () => {
+      setInFavoritesOptimistic(false);
+      try {
+        const removed = await removeFromFavorites(goods.link);
+        if (removed) setInFavorites(false);
+      } catch (error) {
+        window.alert(error);
+      }
+    });
   };
-  const handleAddToFavorites = async () => {
-    try {
-      setLoadingFavoritesList(true);
-      const added = await addToFavorites(goods);
-      if (added) setInFavorites(true);
-    } catch (error) {
-      window.alert(error);
-    } finally {
-      setLoadingFavoritesList(false);
-    }
+  const handleAddToFavorites = () => {
+    startTransition(async () => {
+      setInFavoritesOptimistic(true);
+      try {
+        const added = await addToFavorites(goods);
+        if (added) setInFavorites(true);
+      } catch (error) {
+        window.alert(error);
+      }
+    });
   };
 
   return (
     <>
-      {inFavorites ? (
+      {inFavoritesOptimistic ? (
         <button
-          className={cn("text-xl text-[#ffc529]", {
-            "opacity-40": loadingFavoritesList
-          })}
+          className="text-xl text-[#ffc529]"
           title="Убрать из избранного"
-          disabled={loadingFavoritesList}
           onClick={handleRemoveFromFavorites}
         >
           <Fa icon={faStar} />
         </button>
       ) : (
         <button
-          className={cn("text-xl text-[#ffc529]", {
-            "opacity-40": loadingFavoritesList
-          })}
+          className="text-xl text-[#ffc529]"
           title="Добавить в избранное"
-          disabled={loadingFavoritesList}
           onClick={handleAddToFavorites}
         >
           <Fa icon={faStarEmpty} />

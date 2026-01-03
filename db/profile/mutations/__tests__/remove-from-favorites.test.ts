@@ -73,4 +73,14 @@ describe("removeFromFavorites", () => {
     const expectedFavorites = [{ item: { link: "item1" } }, { item: { link: "item2" } }];
     expect(updateUser).toHaveBeenCalledWith({ favorites: expectedFavorites });
   });
+
+  it("should throw an error if no link is provided", async () => {
+    // Act & Assert
+    await expect(removeFromFavorites(null as never)).rejects.toThrow("No link provided");
+
+    // Assert that other functions were not called
+    expect(dbConnect).not.toHaveBeenCalled();
+    expect(getUser).not.toHaveBeenCalled();
+    expect(updateUser).not.toHaveBeenCalled();
+  });
 });
