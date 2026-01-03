@@ -1,7 +1,7 @@
 import type { AvailableUpdateSectionNames, UserSections as UserSectionsType } from "@/types/user";
 import { FontAwesomeIcon as Fa } from "@fortawesome/react-fontawesome";
 import { faTimes } from "@fortawesome/free-solid-svg-icons";
-import { useState, type ChangeEvent } from "react";
+import { useState, type ChangeEvent, useTransition } from "react";
 import Button from "@/app/components/Button";
 import ErrorMessage from "@/app/components/ErrorMessage";
 import { updateUserSection } from "@/db/profile/mutations/update-user-section";
@@ -23,7 +23,7 @@ export default function ProfileUpdateSections({
   placeholder
 }: ProfileUpdateSectionsProps) {
   const [errorMessage, setErrorMessage] = useState<Error | null>(null);
-  const [loading, setLoading] = useState(false);
+  const [isPending, startTransition] = useTransition();
   const [selectedSections, setSelectedSections] = useState<UserSectionsType>([]);
   const [activeSections, setActiveSections] = useState<UserSectionsType>(userSections);
 
@@ -31,17 +31,16 @@ export default function ProfileUpdateSections({
   const outputActiveSections = uniqAbcSort(activeSections);
 
   const updateSections = async (sections: UserSectionsType) => {
-    try {
-      setLoading(true);
-      const newSections = await updateUserSection(sections, sectionName);
-      setActiveSections(newSections);
-      setSelectedSections([]);
-      setErrorMessage(null);
-    } catch (error) {
-      setErrorMessage(error as Error);
-    } finally {
-      setLoading(false);
-    }
+    startTransition(async () => {
+      try {
+        const newSections = await updateUserSection(sections, sectionName);
+        setActiveSections(newSections);
+        setSelectedSections([]);
+        setErrorMessage(null);
+      } catch (error) {
+        setErrorMessage(error as Error);
+      }
+    });
   };
 
   const handleRemoveActiveSection = async (section: string) => {
@@ -81,7 +80,7 @@ export default function ProfileUpdateSections({
             ))}
           </div>
           <Button
-            disabled={loading || selectedSections.length === 0}
+            disabled={isPending || selectedSections.length === 0}
             type="button"
             onClick={handleSaveSelectedSections}
           >
@@ -93,7 +92,7 @@ export default function ProfileUpdateSections({
             {outputActiveSections.length > 0 ? (
               outputActiveSections.map(section => (
                 <button
-                  disabled={loading}
+                  disabled={isPending}
                   key={section}
                   onClick={() => handleRemoveActiveSection(section)}
                 >

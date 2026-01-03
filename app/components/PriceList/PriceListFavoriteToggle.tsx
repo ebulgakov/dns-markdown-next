@@ -3,7 +3,7 @@ import cn from "classnames";
 import { FontAwesomeIcon as Fa } from "@fortawesome/react-fontawesome";
 import { faStar } from "@fortawesome/free-solid-svg-icons";
 import { faStar as faStarEmpty } from "@fortawesome/free-regular-svg-icons";
-import { useState } from "react";
+import { useState, useTransition } from "react";
 import type { Goods as GoodsType } from "@/types/pricelist";
 import type { Favorite } from "@/types/user";
 import { addToFavorites } from "@/db/profile/mutations/add-to-favorites";
@@ -21,29 +21,27 @@ export default function PriceListFavoriteToggle({
   const [inFavorites, setInFavorites] = useState<boolean>(
     favorites.some(fav => fav.item.link === goods.link)
   );
-  const [loadingFavoritesList, setLoadingFavoritesList] = useState<boolean>();
+  const [isPending, startTransition] = useTransition();
 
-  const handleRemoveFromFavorites = async () => {
-    try {
-      setLoadingFavoritesList(true);
-      const removed = await removeFromFavorites(goods.link);
-      if (removed) setInFavorites(false);
-    } catch (error) {
-      window.alert(error);
-    } finally {
-      setLoadingFavoritesList(false);
-    }
+  const handleRemoveFromFavorites = () => {
+    startTransition(async () => {
+      try {
+        const removed = await removeFromFavorites(goods.link);
+        if (removed) setInFavorites(false);
+      } catch (error) {
+        window.alert(error);
+      }
+    });
   };
-  const handleAddToFavorites = async () => {
-    try {
-      setLoadingFavoritesList(true);
-      const added = await addToFavorites(goods);
-      if (added) setInFavorites(true);
-    } catch (error) {
-      window.alert(error);
-    } finally {
-      setLoadingFavoritesList(false);
-    }
+  const handleAddToFavorites = () => {
+    startTransition(async () => {
+      try {
+        const added = await addToFavorites(goods);
+        if (added) setInFavorites(true);
+      } catch (error) {
+        window.alert(error);
+      }
+    });
   };
 
   return (
@@ -51,10 +49,10 @@ export default function PriceListFavoriteToggle({
       {inFavorites ? (
         <button
           className={cn("text-xl text-[#ffc529]", {
-            "opacity-40": loadingFavoritesList
+            "opacity-40": isPending
           })}
           title="Убрать из избранного"
-          disabled={loadingFavoritesList}
+          disabled={isPending}
           onClick={handleRemoveFromFavorites}
         >
           <Fa icon={faStar} />
@@ -62,10 +60,10 @@ export default function PriceListFavoriteToggle({
       ) : (
         <button
           className={cn("text-xl text-[#ffc529]", {
-            "opacity-40": loadingFavoritesList
+            "opacity-40": isPending
           })}
           title="Добавить в избранное"
-          disabled={loadingFavoritesList}
+          disabled={isPending}
           onClick={handleAddToFavorites}
         >
           <Fa icon={faStarEmpty} />
