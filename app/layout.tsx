@@ -1,4 +1,7 @@
 import type { Metadata } from "next";
+import { getLocale } from "next-intl/server";
+import { getTranslations } from "next-intl/server";
+import { NextIntlClientProvider } from "next-intl";
 import { Geist, Geist_Mono } from "next/font/google";
 import { ClerkProvider } from "@clerk/nextjs";
 import "./globals.css";
@@ -16,33 +19,46 @@ const geistMono = Geist_Mono({
   subsets: ["latin"]
 });
 
-export const metadata: Metadata = {
-  title: "DNS-Markdown",
-  description: "Get markdown prices from the dns shop"
-};
+export async function generateMetadata({
+  params
+}: {
+  params: Promise<{ locale: string }>;
+}): Promise<Metadata> {
+  const { locale } = await params;
+  const t = await getTranslations({ locale, namespace: "metadata" });
 
-export default function RootLayout({
+  return {
+    title: t("title"),
+    description: t("description"),
+    keywords: t("keywords")
+  };
+}
+
+export default async function RootLayout({
   children
 }: Readonly<{
   children: ReactNode;
 }>) {
+  const locale = await getLocale();
   return (
     <StrictMode>
-      <ClerkProvider>
-        <html lang="ru">
-          <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
-            <div className="grid min-h-screen md:container mx-auto">
-              <div className="mb-10">
-                <div className="mt-4 mb-5">
-                  <Navbar />
+      <NextIntlClientProvider>
+        <ClerkProvider>
+          <html lang={locale}>
+            <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
+              <div className="grid min-h-screen md:container mx-auto">
+                <div className="mb-10">
+                  <div className="mt-4 mb-5">
+                    <Navbar />
+                  </div>
+                  {children}
                 </div>
-                {children}
+                <Footer locate={locale} />
               </div>
-              <Footer />
-            </div>
-          </body>
-        </html>
-      </ClerkProvider>
+            </body>
+          </html>
+        </ClerkProvider>
+      </NextIntlClientProvider>
     </StrictMode>
   );
 }

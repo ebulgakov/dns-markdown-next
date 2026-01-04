@@ -1,14 +1,21 @@
 import Link from "next/link";
+import ChangeLocationSelector from "@/app/components/ChangeLocationSelector";
+import { useTranslations } from "next-intl";
 
-export default function Footer() {
+type FooterProps = {
+  locate?: string;
+};
+export default function Footer({ locate }: FooterProps) {
+  const t = useTranslations("Footer");
   return (
     <footer className="mt-auto border-t border-neutral-300 h-13 flex items-center justify-between">
-      <p className="text-sm text-gray-500">© 2018&ndash;2026 DNS-Markdown. Версия 2.0.0.</p>
-      <p className="text-sm text-gray-500">
+      <div className="text-sm text-gray-500">{t("copyright")}</div>
+      <div className="text-sm text-gray-500 flex gap-4">
+        <ChangeLocationSelector locate={locate} />
         <Link href="/disclaimer">
-          <span className="text-blue-500 hover:underline">Отказ от ответственности</span>
+          <span className="text-blue-500 hover:underline">{t("disclaimer")}</span>
         </Link>
-      </p>
+      </div>
     </footer>
   );
 }
