@@ -31,7 +31,7 @@ export default function RootLayout({
       <ClerkProvider>
         <html lang="ru">
           <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
-            <div className="grid min-h-screen sm:w-[750px] md:w-[970px] lg:w-[1170px] px-4 mx-auto">
+            <div className="grid min-h-screen md:container mx-auto">
               <div className="mb-10">
                 <div className="mt-4 mb-5">
                   <Navbar />
