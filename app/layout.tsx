@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { NextIntlClientProvider } from "next-intl";
 import { Geist, Geist_Mono } from "next/font/google";
 import { ClerkProvider } from "@clerk/nextjs";
 import "./globals.css";
@@ -28,21 +29,23 @@ export default function RootLayout({
 }>) {
   return (
     <StrictMode>
-      <ClerkProvider>
-        <html lang="ru">
-          <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
-            <div className="grid min-h-screen md:container mx-auto">
-              <div className="mb-10">
-                <div className="mt-4 mb-5">
-                  <Navbar />
+      <NextIntlClientProvider>
+        <ClerkProvider>
+          <html lang="ru">
+            <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
+              <div className="grid min-h-screen md:container mx-auto">
+                <div className="mb-10">
+                  <div className="mt-4 mb-5">
+                    <Navbar />
+                  </div>
+                  {children}
                 </div>
-                {children}
+                <Footer />
               </div>
-              <Footer />
-            </div>
-          </body>
-        </html>
-      </ClerkProvider>
+            </body>
+          </html>
+        </ClerkProvider>
+      </NextIntlClientProvider>
     </StrictMode>
   );
 }
