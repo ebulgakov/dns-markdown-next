@@ -1,30 +1,32 @@
 import { SignedIn, SignedOut, SignInButton, SignUpButton, UserButton } from "@clerk/nextjs";
 import Link from "next/link";
 import ActiveLink from "@/app/components/ActiveLink";
+import { useTranslations } from "next-intl";
 
 export default function Navbar() {
+  const t = useTranslations("Navbar");
   const linksList: {
     name: string;
     url: string;
   }[] = [
     {
-      name: "Прайслист",
+      name: t("catalog"),
       url: "/catalog"
     },
     {
-      name: "Архив",
+      name: t("archive"),
       url: "/archive"
     },
     {
-      name: "Обновления",
+      name: t("updates"),
       url: "/updates"
     },
     {
-      name: "Избранное",
+      name: t("favorites"),
       url: "/favorites"
     },
     {
-      name: "Профиль",
+      name: t("profile"),
       url: "/profile"
     }
   ];
@@ -33,7 +35,7 @@ export default function Navbar() {
     <header className="flex h-10 items-center gap-4 bg-blue-400">
       <nav className="flex">
         <Link href="/" className="bg-white font-bold text-blue-400 h-10 flex items-center px-3">
-          DNS Уценка
+          {t("logo")}
         </Link>
         <SignedIn>
           {linksList.map(link => (
@@ -52,10 +54,10 @@ export default function Navbar() {
       <SignedOut>
         <div className="ml-auto mr-2 divide-x">
           <SignInButton>
-            <button className="font-bold text-nowrap text-white pr-3">Войти</button>
+            <button className="font-bold text-nowrap text-white pr-3">{t("signin")}</button>
           </SignInButton>
           <SignUpButton>
-            <button className="font-bold text-nowrap text-white pl-3">Зарегистироваться</button>
+            <button className="font-bold text-nowrap text-white pl-3">{t("signup")}</button>
           </SignUpButton>
         </div>
       </SignedOut>
