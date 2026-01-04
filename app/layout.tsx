@@ -28,11 +28,12 @@ export default async function RootLayout({
 }: Readonly<{
   children: ReactNode;
 }>) {
+  const locale = await getLocale();
   return (
     <StrictMode>
       <NextIntlClientProvider>
         <ClerkProvider>
-          <html lang="ru">
+          <html lang={locale}>
             <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
               <div className="grid min-h-screen md:container mx-auto">
                 <div className="mb-10">
@@ -41,7 +42,7 @@ export default async function RootLayout({
                   </div>
                   {children}
                 </div>
-                <Footer locate={await getLocale()} />
+                <Footer locate={locale} />
               </div>
             </body>
           </html>
