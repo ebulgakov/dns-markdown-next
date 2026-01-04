@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { getLocale } from "next-intl/server";
 import { NextIntlClientProvider } from "next-intl";
 import { Geist, Geist_Mono } from "next/font/google";
 import { ClerkProvider } from "@clerk/nextjs";
@@ -22,7 +23,7 @@ export const metadata: Metadata = {
   description: "Get markdown prices from the dns shop"
 };
 
-export default function RootLayout({
+export default async function RootLayout({
   children
 }: Readonly<{
   children: ReactNode;
@@ -40,7 +41,7 @@ export default function RootLayout({
                   </div>
                   {children}
                 </div>
-                <Footer />
+                <Footer locate={await getLocale()} />
               </div>
             </body>
           </html>
