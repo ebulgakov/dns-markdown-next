@@ -1,4 +1,4 @@
-export const colors = {
+const colors = {
   sky: {
     100: "#e0fbfc", // path-3
     200: "#98c1d9", // path-2
@@ -77,3 +77,5 @@ export const colors = {
     500: "#323031" // path-55
   }
 };
+
+module.exports = { colors };
