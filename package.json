@@ -20,7 +20,8 @@
     "add:mutated": "ts-node --swc ./add_mutated_items",
     "add:diff": "ts-node --swc ./add_diff",
     "add:history": "ts-node --swc ./add_history",
-    "start": "npm run downloader && npm run add:list && npm run add:mutated && npm run add:diff && npm run add:history",
+    "check:favorites": "ts-node --swc ./check_favorites",
+    "start": "npm run downloader && npm run add:list && npm run add:mutated && npm run add:diff && npm run add:history && check:favorites",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "dependencies": {

@@ -1,11 +1,11 @@
-import { Goods } from "./pricelist.ts";
+import { type Goods } from "./pricelist.ts";
 
 export type FavoriteStatus = {
   city: string;
   updatedAt: string;
   createdAt: string;
   deleted: boolean;
-  updates: [];
+  updates: string[];
 };
 
 export type AvailableUpdateSectionNames = "hiddenSections" | "favoriteSections";
@@ -36,6 +36,7 @@ export interface Favorite {
 }
 
 export interface User {
+  _id: string;
   id: string;
   userId: string;
   city: string;
