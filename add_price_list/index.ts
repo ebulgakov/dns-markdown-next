@@ -9,13 +9,11 @@ async function addPriceList() {
   const path = joinPath("../pages", import.meta.url);
   const html = getFile("body.html", path);
   const { data } = JSON.parse(getFile("prices.html", path));
+  const json = createData(html, data);
+  const city = process.env.CITY;
 
   await dbConnect();
-
-  const city = process.env.CITY;
-  const json = createData(html, data);
   await savePriceList(city, json);
-
   await dbDisconnect();
 }
 
