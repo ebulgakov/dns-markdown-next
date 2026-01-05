@@ -1,4 +1,4 @@
-import { getUser } from "@/db/profile/queries";
+import { getUser } from "@/db/user/queries";
 import PriceListGoods from "@/app/components/PriceList/PriceListGoods";
 import type { Favorite } from "@/types/user";
 import PageTitle from "@/app/components/PageTitle";

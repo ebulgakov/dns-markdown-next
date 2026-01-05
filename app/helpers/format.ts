@@ -4,7 +4,8 @@ export const formatDate = (date: Date | number): string => {
     month: "long",
     day: "numeric"
   });
-  return dateFormat.format(date);
+
+  return dateFormat.format(new Date(date)); // Fix for timestamp input - new Date for date number
 };
 
 export const formatTime = (date: Date | number): string => {
@@ -14,5 +15,5 @@ export const formatTime = (date: Date | number): string => {
     second: "numeric"
   });
 
-  return timeFormat.format(date);
+  return timeFormat.format(new Date(date)); // Fix for timestamp input - new Date for date number
 };

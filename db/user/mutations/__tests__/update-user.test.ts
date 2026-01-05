@@ -1,6 +1,6 @@
 import { dbConnect } from "@/db/database";
 import { User } from "@/db/models/user_model";
-import { getUser } from "@/db/profile/queries";
+import { getUser } from "@/db/user/queries";
 import { updateUser } from "../update-user";
 
 // Mock the database connection and User model
@@ -14,7 +14,7 @@ jest.mock("@/db/models/user_model", () => ({
   }
 }));
 
-jest.mock("@/db/profile/queries", () => ({
+jest.mock("@/db/user/queries", () => ({
   getUser: jest.fn()
 }));
 

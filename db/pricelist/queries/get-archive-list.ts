@@ -1,5 +1,5 @@
 import { dbConnect } from "@/db/database";
-import { getUser } from "@/db/profile/queries";
+import { getUser } from "@/db/user/queries";
 import { Pricelist } from "@/db/models/pricelist_model";
 import type { PriceList as PriceListType } from "@/types/pricelist";
 

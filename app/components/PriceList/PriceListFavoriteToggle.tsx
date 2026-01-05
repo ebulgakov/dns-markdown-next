@@ -5,8 +5,8 @@ import { faStar as faStarEmpty } from "@fortawesome/free-regular-svg-icons";
 import { useState, useTransition, useOptimistic } from "react";
 import type { Goods as GoodsType } from "@/types/pricelist";
 import type { Favorite } from "@/types/user";
-import { addToFavorites } from "@/db/profile/mutations/add-to-favorites";
-import { removeFromFavorites } from "@/db/profile/mutations/remove-from-favorites";
+import { addToFavorites } from "@/db/user/mutations/add-to-favorites";
+import { removeFromFavorites } from "@/db/user/mutations/remove-from-favorites";
 
 type PriceListFavoriteToggleProps = {
   favorites: Favorite[];

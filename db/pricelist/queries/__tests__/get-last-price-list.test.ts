@@ -1,6 +1,6 @@
 import { getLastPriceList } from "../get-last-price-list";
 import { dbConnect } from "@/db/database";
-import { getUser } from "@/db/profile/queries";
+import { getUser } from "@/db/user/queries";
 import { Pricelist } from "@/db/models/pricelist_model";
 import type { PriceList as PriceListType } from "@/types/pricelist";
 import type { User } from "@/types/user";
@@ -10,7 +10,7 @@ jest.mock("@/db/database", () => ({
   dbConnect: jest.fn()
 }));
 
-jest.mock("@/db/profile/queries", () => ({
+jest.mock("@/db/user/queries", () => ({
   getUser: jest.fn()
 }));
 

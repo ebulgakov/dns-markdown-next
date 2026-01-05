@@ -16,6 +16,14 @@ describe("Formatting Functions", () => {
       const date = new Date("2025-03-28T00:00:00");
       expect(formatDate(date)).toBe("28 марта 2025 г.");
     });
+
+    // Another test case with a different format
+    it("should not throw a RangeError", async () => {
+      expect(() => formatDate("2026-01-06T01:00:00+09:00" as unknown as number)).not.toThrow(
+        "Invalid time value"
+      );
+      expect(formatDate("2026-01-06T01:00:00+09:00" as unknown as number)).toBe("5 января 2026 г.");
+    });
   });
 
   // Test suite for the formatTime function
@@ -34,6 +42,14 @@ describe("Formatting Functions", () => {
       // Intl.DateTimeFormat is context-dependent, so we check for one of the valid options.
       const possibleTimes = ["0:00:00", "24:00:00", "00:00:00"];
       expect(possibleTimes).toContain(formatTime(date));
+    });
+
+    // Another test case with a different format
+    it("should not throw a RangeError", async () => {
+      expect(() => formatTime("2026-01-06T01:00:00+09:00" as unknown as number)).not.toThrow(
+        "Invalid time value"
+      );
+      expect(formatTime("2026-01-06T01:00:00+09:00" as unknown as number)).toBe("16:00:00");
     });
   });
 });

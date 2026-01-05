@@ -3,7 +3,7 @@ import { FontAwesomeIcon as Fa } from "@fortawesome/react-fontawesome";
 import { faTimes } from "@fortawesome/free-solid-svg-icons";
 import { useState, type ChangeEvent, useTransition, useOptimistic } from "react";
 import Button from "@/app/components/Button";
-import { updateUserSection } from "@/db/profile/mutations/update-user-section";
+import { updateUserSection } from "@/db/user/mutations/update-user-section";
 import { uniqAbcSort } from "@/app/helpers/sort";
 import Alert from "@/app/components/Alert";
 

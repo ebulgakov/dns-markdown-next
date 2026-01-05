@@ -1,6 +1,6 @@
 import { Favorite as FavoriteType, UserSections as UserSectionsType } from "@/types/user";
 import type { Position as PositionType, PriceList as PriceListType } from "@/types/pricelist";
-import { getUser } from "@/db/profile/queries";
+import { getUser } from "@/db/user/queries";
 import { getLastPriceList } from "@/db/pricelist/queries";
 
 export async function getCatalogData() {

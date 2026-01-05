@@ -2,7 +2,7 @@ import { getPriceListsDiff } from "@/db/pricelist/queries";
 import PageTitle from "@/app/components/PageTitle";
 import PriceListSection from "@/app/components/PriceList/PriceListSection";
 import { DiffsCollection as DiffsCollectionType } from "@/types/diff";
-import { getUser } from "@/db/profile/queries";
+import { getUser } from "@/db/user/queries";
 import Alert from "@/app/components/Alert";
 
 export default async function UpdatesPage() {

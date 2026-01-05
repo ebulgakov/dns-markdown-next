@@ -1,6 +1,6 @@
 import { dbConnect } from "@/db/database";
-import { getUser } from "@/db/profile/queries";
-import { updateUser } from "@/db/profile/mutations/update-user";
+import { getUser } from "@/db/user/queries";
+import { updateUser } from "@/db/user/mutations/update-user";
 import { removeFromFavorites } from "../remove-from-favorites";
 
 // Mock the dependencies
@@ -8,11 +8,11 @@ jest.mock("@/db/database", () => ({
   dbConnect: jest.fn()
 }));
 
-jest.mock("@/db/profile/queries", () => ({
+jest.mock("@/db/user/queries", () => ({
   getUser: jest.fn()
 }));
 
-jest.mock("@/db/profile/mutations/update-user", () => ({
+jest.mock("@/db/user/mutations/update-user", () => ({
   updateUser: jest.fn()
 }));
 
