@@ -17,9 +17,12 @@
   "scripts": {
     "crawler": "ts-node --swc ./parser/crawler.ts",
     "downloader": "sh parser/dns_shop_downloader.sh && npm run crawler && sh parser/dns_shop_downloader_prices.sh",
+    "add:list": "ts-node --swc ./add_price_list",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "dependencies": {
+    "cheerio": "^1.1.2",
+    "dotenv": "^17.2.3",
     "mongodb": "^7.0.0",
     "mongoose": "^9.1.1",
     "typescript": "^5.9.3"

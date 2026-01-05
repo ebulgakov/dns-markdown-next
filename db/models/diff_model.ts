@@ -1,0 +1,27 @@
+import mongoose from "mongoose";
+import Goods from "./goods_schema";
+
+const goodsDiffSchema = new mongoose.Schema({
+  item: Goods,
+  diff: {
+    priceOld: String,
+    price: String,
+    profit: String
+  }
+});
+const diffSchema = new mongoose.Schema(
+  {
+    city: {
+      type: String,
+      required: true
+    },
+    new: [goodsDiffSchema],
+    changesPrice: [goodsDiffSchema],
+    changesProfit: [goodsDiffSchema]
+  },
+  {
+    timestamps: true
+  }
+);
+
+export const Diff = mongoose.models.Diff || mongoose.model("Diff", diffSchema);
