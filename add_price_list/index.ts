@@ -8,6 +8,7 @@ import { savePriceList } from "../db/pricelist/mutations/save_price_list.ts";
 import { deleteLastPriceList } from "../db/pricelist/mutations/delete_last_price_list.ts";
 import { getLastPriceList } from "../db/pricelist/queries/get_last_price_list.ts";
 import isSameDay from "./helpers/is_same_day.ts";
+import getPerformance from "../helpers/get_performance.ts";
 
 async function addPriceList() {
   const path = joinPath("../pages", import.meta.url);
@@ -29,6 +30,6 @@ async function addPriceList() {
   await dbDisconnect();
 }
 
-addPriceList().then(() => {
+getPerformance(addPriceList).then(() => {
   console.log("/************** PRICE LIST ADDED ****************/");
 });

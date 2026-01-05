@@ -4,6 +4,7 @@ import { getAllPriceLists } from "../db/pricelist/queries/get_all_price_lists.ts
 import { removeRemovedGoods, removeNewGoods } from "../db/mutated_goods/mutations/remove_goods.ts";
 import { addRemovedGoods, addNewGoods } from "../db/mutated_goods/mutations/add_goods.ts";
 import getMutatedGoods from "./helpers/get_mutated_goods.ts";
+import getPerformance from "../helpers/get_performance.ts";
 
 async function addMutatedItems() {
   const city = process.env.CITY;
@@ -21,6 +22,6 @@ async function addMutatedItems() {
   await dbDisconnect();
 }
 
-addMutatedItems().then(() => {
+getPerformance(addMutatedItems).then(() => {
   console.log("/************** MUTATED ITEMS ADDED ****************/");
 });
