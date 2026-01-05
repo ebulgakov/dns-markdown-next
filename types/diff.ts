@@ -12,9 +12,8 @@ export interface GoodsDiff {
 
 export interface Diff {
   city: string;
-  new: GoodsDiff[];
   changesPrice: GoodsDiff[];
   changesProfit: GoodsDiff[];
 }
 
-export type DiffsCollection = { [key: string]: GoodDiffChanges }
+export type DiffsCollection = { [key: string]: GoodDiffChanges };
