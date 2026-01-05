@@ -17,6 +17,7 @@
     "crawler": "ts-node --swc ./parser/crawler.ts",
     "downloader": "sh parser/dns_shop_downloader.sh && npm run crawler && sh parser/dns_shop_downloader_prices.sh",
     "add:list": "ts-node --swc ./add_price_list",
+    "add:removed": "ts-node --swc ./add_removed_items",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "dependencies": {
