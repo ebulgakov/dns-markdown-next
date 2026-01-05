@@ -23,12 +23,13 @@ export default async function UpdatesPage() {
     collection = JSON.parse(JSON.stringify(collection));
     const collectionDiff = collection?.diff;
     const collectionSold = collection?.sold;
+    const collectionNew = collection?.new;
 
-    if (collectionDiff && collectionDiff.new.length > 0) {
+    if (collectionNew && collectionNew.goods.length > 0) {
       diffNew = {
         _id: "new-items",
         title: "Новые поступления",
-        items: collectionDiff.new?.map(item => item.item)
+        items: collectionNew.goods
       };
     }
 

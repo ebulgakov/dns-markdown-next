@@ -15,3 +15,5 @@ const schema = new mongoose.Schema(
 );
 
 export const RemovedGoods = mongoose.models.RemovedGoods || mongoose.model("RemovedGoods", schema);
+
+export const NewGoods = mongoose.models.NewGoods || mongoose.model("NewGoods", schema);

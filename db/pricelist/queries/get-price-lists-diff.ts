@@ -1,6 +1,6 @@
 import { dbConnect } from "@/db/database";
 import { getUser } from "@/db/profile/queries";
-import { RemovedGoods } from "@/db/models/removed_goods_model";
+import { RemovedGoods, NewGoods } from "@/db/models/mutated_goods_model";
 import type { RemovedGoods as RemovedGoodsType } from "@/types/pricelist";
 import { Diff } from "@/db/models/diff_model";
 import type { Diff as DiffType } from "@/types/diff";
@@ -16,11 +16,17 @@ export const getPriceListsDiff = async () => {
     {},
     { sort: { updatedAt: -1 } }
   )) as unknown as RemovedGoodsType | null;
+
+  const newGoods = (await NewGoods.findOne(
+    { city: user.city },
+    {},
+    { sort: { updatedAt: -1 } }
+  )) as unknown as RemovedGoodsType | null;
   const diff = (await Diff.findOne(
     { city: user.city },
     {},
     { sort: { updatedAt: -1 } }
   )) as unknown as DiffType | null;
 
-  return { diff, sold };
+  return { diff, sold, new: newGoods };
 };

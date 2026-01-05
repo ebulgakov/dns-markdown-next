@@ -1,7 +1,7 @@
 import { getProductById } from "../get-product-by-id";
 import { dbConnect } from "@/db/database";
 import { History } from "@/db/models/history_model";
-import { HourlyPricelist } from "@/db/models/pricelist_model";
+import { Pricelist } from "@/db/models/pricelist_model";
 import type { History as HistoryType } from "@/types/history";
 
 // Mock dependencies
@@ -16,7 +16,7 @@ jest.mock("@/db/models/history_model", () => ({
 }));
 
 jest.mock("@/db/models/pricelist_model", () => ({
-  HourlyPricelist: {
+  Pricelist: {
     findOne: jest.fn()
   }
 }));
@@ -24,7 +24,7 @@ jest.mock("@/db/models/pricelist_model", () => ({
 // Create typed mocks
 const mockedDbConnect = dbConnect as jest.Mock;
 const mockedHistoryFindOne = History.findOne as jest.Mock;
-const mockedHourlyPricelistFindOne = HourlyPricelist.findOne as jest.Mock;
+const mockedPricelistFindOne = Pricelist.findOne as jest.Mock;
 
 describe("getProductById", () => {
   const productId = "test-product-id";
@@ -48,15 +48,15 @@ describe("getProductById", () => {
       {},
       { sort: { updatedAt: -1 } }
     );
-    expect(mockedHourlyPricelistFindOne).not.toHaveBeenCalled();
+    expect(mockedPricelistFindOne).not.toHaveBeenCalled();
   });
 
   // Test case: Pricelist not found
   test("should return error if pricelist is not found", async () => {
-    // Arrange: Mock History.findOne to return a value, but HourlyPricelist.findOne to return null
+    // Arrange: Mock History.findOne to return a value, but Pricelist.findOne to return null
     const mockHistory: Partial<HistoryType> = { city: "TestCity" };
     mockedHistoryFindOne.mockResolvedValue(mockHistory);
-    mockedHourlyPricelistFindOne.mockResolvedValue(null);
+    mockedPricelistFindOne.mockResolvedValue(null);
 
     // Act: Call the function
     await expect(getProductById(productId)).rejects.toThrow("Price list not found");
@@ -67,7 +67,7 @@ describe("getProductById", () => {
       {},
       { sort: { updatedAt: -1 } }
     );
-    expect(mockedHourlyPricelistFindOne).toHaveBeenCalledWith(
+    expect(mockedPricelistFindOne).toHaveBeenCalledWith(
       { city: mockHistory.city },
       {},
       { sort: { updatedAt: -1 } }
@@ -82,7 +82,7 @@ describe("getProductById", () => {
       positions: [{ items: [{ link: "other-id" }] }]
     };
     mockedHistoryFindOne.mockResolvedValue(mockHistory);
-    mockedHourlyPricelistFindOne.mockResolvedValue(mockPriceList);
+    mockedPricelistFindOne.mockResolvedValue(mockPriceList);
 
     // Act: Call the function
     await expect(getProductById(productId)).rejects.toThrow("Product Item not found");
@@ -97,7 +97,7 @@ describe("getProductById", () => {
       positions: [{ items: [mockItem] }]
     };
     mockedHistoryFindOne.mockResolvedValue(mockHistory);
-    mockedHourlyPricelistFindOne.mockResolvedValue(mockPriceList);
+    mockedPricelistFindOne.mockResolvedValue(mockPriceList);
 
     // Act: Call the function
     const result = await getProductById(productId);
