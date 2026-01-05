@@ -4,6 +4,7 @@ import { getAllPriceLists } from "../db/pricelist/queries/get_all_price_lists.ts
 import { removeDiff } from "../db/diff/mutations/remove_diff.ts";
 import makeDiff from "./helpers/make_diff.ts";
 import { addDiff } from "../db/diff/mutations/add_diff.ts";
+import getPerformance from "../helpers/get_performance.ts";
 
 async function addDiffCollection() {
   const city = process.env.CITY;
@@ -18,6 +19,6 @@ async function addDiffCollection() {
   await dbDisconnect();
 }
 
-addDiffCollection().then(() => {
+getPerformance(addDiffCollection).then(() => {
   console.log("/************** DIFF ADDED ****************/");
 });
