@@ -36,6 +36,7 @@ export interface Favorite {
 }
 
 export interface User {
+  _id: string;
   id: string;
   userId: string;
   city: string;
