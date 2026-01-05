@@ -19,6 +19,7 @@
     "add:list": "ts-node --swc ./add_price_list",
     "add:mutated": "ts-node --swc ./add_mutated_items",
     "add:diff": "ts-node --swc ./add_diff",
+    "add:history": "ts-node --swc ./add_history",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "dependencies": {

@@ -1,4 +1,5 @@
 import mongoose from "mongoose";
+import type { History as HistoryType } from "../../types/history.js";
 
 const schema = new mongoose.Schema({
   link: {
@@ -12,4 +13,4 @@ const schema = new mongoose.Schema({
   profit: [String]
 });
 
-export const History = mongoose.models.History || mongoose.model("History", schema);
+export const History = mongoose.models.History || mongoose.model<HistoryType>("History", schema);
