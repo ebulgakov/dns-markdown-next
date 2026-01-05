@@ -1,9 +1,9 @@
-import * as cheerio from "cheerio";
+import "dotenv/config";
 import { dbConnect, dbDisconnect } from "../db/database.ts";
 import getFile from "../helpers/get_file.ts";
 import { joinPath } from "../helpers/get_dirname.ts";
-import { type Goods } from "../types/pricelist.ts";
 import createData from "./create_data.ts";
+import { savePriceList } from "../db/pricelist/mutations/save_price_list.ts";
 
 async function addPriceList() {
   const path = joinPath("../pages", import.meta.url);
@@ -12,8 +12,13 @@ async function addPriceList() {
 
   await dbConnect();
 
-  const list = createData(html, data);
+  const city = process.env.CITY;
+  const json = createData(html, data);
+  await savePriceList(city, json);
+
   await dbDisconnect();
 }
 
-addPriceList();
+addPriceList().then(() => {
+  console.log("/************** PRICE LIST ADDED ****************/");
+});

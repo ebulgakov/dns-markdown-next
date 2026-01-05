@@ -1,4 +1,5 @@
 import * as cheerio from "cheerio";
+import { ObjectId } from "mongodb";
 import type { Goods } from "../types/pricelist.js";
 
 type PricesSet = {
@@ -29,7 +30,7 @@ export default function createData(html: string, pricesSet: PricesSet): Goods[] 
     $products.each((_, $product) => {
       const $$product = $($product);
       const productObj: Goods = {
-        _id: "",
+        _id: new ObjectId().toHexString(),
         title: "",
         link: "",
         description: "",
@@ -60,7 +61,7 @@ export default function createData(html: string, pricesSet: PricesSet): Goods[] 
       $$reasons.map((_, $reason) => {
         const $$reason = $($reason);
         const [label, text] = $$reason.text().split(": ");
-        productObj.reasons.push({ _id: "", label, text });
+        productObj.reasons.push({ _id: new ObjectId().toHexString(), label, text });
       });
 
       // Prices
