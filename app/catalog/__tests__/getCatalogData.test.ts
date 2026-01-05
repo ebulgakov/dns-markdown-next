@@ -71,7 +71,7 @@ describe("getCatalogData", () => {
           items: [goods2]
         }
       ],
-      createdAt: ""
+      createdAt: new Date()
     };
     const mockUser: Partial<UserType> = {
       favorites: [
@@ -79,8 +79,8 @@ describe("getCatalogData", () => {
           id: "g1",
           status: {
             city: "",
-            updatedAt: "",
-            createdAt: "",
+            updatedAt: new Date(),
+            createdAt: new Date(),
             deleted: false,
             updates: []
           },
@@ -100,7 +100,7 @@ describe("getCatalogData", () => {
     // Assertions
     expect(result.error).toBeUndefined();
     expect(result.priceList).toEqual(JSON.parse(JSON.stringify(mockPriceList)));
-    expect(result.userFavoritesGoods).toEqual(mockUser.favorites);
+    expect(result.userFavoritesGoods).toEqual(JSON.parse(JSON.stringify(mockUser.favorites)));
     expect(result.hiddenSectionsTitles).toEqual(mockUser.hiddenSections);
     expect(result.favoriteSections).toHaveLength(1);
     expect(result.favoriteSections?.[0].title).toBe("Favorite Section");
@@ -127,7 +127,7 @@ describe("getCatalogData", () => {
       _id: "pricelist1",
       city: "samara",
       positions: [],
-      createdAt: ""
+      createdAt: new Date()
     };
     mockedGetLastPriceList.mockResolvedValue(JSON.parse(JSON.stringify(mockPriceList)));
     mockedGetUser.mockResolvedValue(null);
@@ -156,7 +156,7 @@ describe("getCatalogData", () => {
           items: [goods2]
         }
       ],
-      createdAt: ""
+      createdAt: new Date()
     };
 
     const mockUser: Partial<UserType> = {

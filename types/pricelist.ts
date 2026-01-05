@@ -39,5 +39,5 @@ export interface PriceList {
   _id: string;
   city: string;
   positions: Position[];
-  createdAt: string;
+  createdAt: Date;
 }

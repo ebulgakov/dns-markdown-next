@@ -22,7 +22,7 @@ export default async function ArchiveItemPage({ params }: ArchiveItemPage) {
     return <Alert variant="error">{message}</Alert>;
   }
 
-  const pageTitle = `Страница Архива за ${formatDate(new Date(priceList.createdAt))}`;
+  const pageTitle = `Страница Архива за ${formatDate(priceList.createdAt)}`;
   return (
     <div>
       <PageTitle title={pageTitle} />

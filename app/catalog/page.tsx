@@ -18,12 +18,11 @@ export default async function CatalogPage() {
     return <Alert variant="error">{error?.message}</Alert>;
   }
 
-  const date = new Date(priceList.createdAt);
   const count = priceList.positions.reduce((acc, cur) => acc + cur.items.length, 0);
 
   return (
     <div>
-      <PageTitle title={formatDate(date)} subTitle={formatTime(date)}>
+      <PageTitle title={formatDate(priceList.createdAt)} subTitle={formatTime(priceList.createdAt)}>
         <div>
           Количество: <b>{count}</b>
         </div>
