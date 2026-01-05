@@ -1,0 +1,8 @@
+# Binary files with parser code
+/parser
+
+# env files (can opt-in for committing if needed)
+.env
+
+# dependencies
+/node_modules

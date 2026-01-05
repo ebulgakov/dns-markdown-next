@@ -1,0 +1,34 @@
+{
+  "name": "dns-markdown-parser-next",
+  "version": "1.0.0",
+  "description": "",
+  "homepage": "https://github.com/ebulgakov/dns-markdown-parser-next#readme",
+  "bugs": {
+    "url": "https://github.com/ebulgakov/dns-markdown-parser-next/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ebulgakov/dns-markdown-parser-next.git"
+  },
+  "license": "ISC",
+  "author": "ebulgakov",
+  "type": "module",
+  "main": "index.js",
+  "scripts": {
+    "crawler": "ts-node --swc ./crawler/index.ts",
+    "downloader": "sh parser/dns_shop_downloader.sh && npm run crawler && sh parser/dns_shop_downloader_prices.sh",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "dependencies": {
+    "mongodb": "^7.0.0",
+    "mongoose": "^9.1.1",
+    "typescript": "^5.9.3"
+  },
+  "devDependencies": {
+    "@swc/core": "^1.15.8",
+    "@swc/helpers": "^0.5.18",
+    "prettier": "^3.7.4",
+    "regenerator-runtime": "^0.14.1",
+    "ts-node": "^10.9.2"
+  }
+}
