@@ -1,5 +1,6 @@
-import mongoose from "mongoose";
+import mongoose, { Model } from "mongoose";
 import Goods from "./goods_schema.ts";
+import { type PriceList as PriceListType } from "../../types/pricelist.ts";
 
 const schema = new mongoose.Schema(
   {
@@ -19,4 +20,5 @@ const schema = new mongoose.Schema(
   }
 );
 
-export const Pricelist = mongoose.models.Pricelist || mongoose.model("Pricelist", schema);
+export const Pricelist: Model<PriceListType> =
+  mongoose.models.Pricelist || mongoose.model<PriceListType>("Pricelist", schema);
