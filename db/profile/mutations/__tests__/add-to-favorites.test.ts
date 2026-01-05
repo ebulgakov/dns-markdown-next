@@ -36,6 +36,7 @@ describe("addToFavorites", () => {
   };
 
   const mockUser: User = {
+    _id: "user1",
     id: "user1",
     city: "Test City",
     favorites: [],
