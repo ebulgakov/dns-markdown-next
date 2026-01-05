@@ -1,4 +1,4 @@
-import { Goods } from "./pricelist.ts";
+import type { Goods } from "./pricelist.ts";
 
 export type GoodDiffChanges = {
   priceOld: string;
@@ -12,9 +12,8 @@ export interface GoodsDiff {
 
 export interface Diff {
   city: string;
-  new: GoodsDiff[];
   changesPrice: GoodsDiff[];
   changesProfit: GoodsDiff[];
 }
 
-export type DiffsCollection = { [key: string]: GoodDiffChanges }
+export type DiffsCollection = { [key: string]: GoodDiffChanges };

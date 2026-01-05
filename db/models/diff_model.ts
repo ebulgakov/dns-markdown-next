@@ -15,7 +15,6 @@ const diffSchema = new mongoose.Schema(
       type: String,
       required: true
     },
-    new: [goodsDiffSchema],
     changesPrice: [goodsDiffSchema],
     changesProfit: [goodsDiffSchema]
   },
