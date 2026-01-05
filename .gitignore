@@ -1,5 +1,7 @@
 # Binary files with parser code
 /parser
+/pages
+/request.sh
 
 # env files (can opt-in for committing if needed)
 .env
