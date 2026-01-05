@@ -1,7 +1,7 @@
 "use server";
 import { dbConnect } from "@/db/database";
 import { User } from "@/db/models/user_model";
-import { getUser } from "@/db/profile/queries";
+import { getUser } from "@/db/user/queries";
 
 export const updateUser = async (update: object) => {
   await dbConnect();

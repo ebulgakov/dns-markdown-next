@@ -1,4 +1,4 @@
-import { getUser } from "@/db/profile/queries";
+import { getUser } from "@/db/user/queries";
 import ProfileSections from "@/app/profile/ProfileSections/ProfileSections";
 import { getLastPriceList } from "@/db/pricelist/queries";
 import Alert from "@/app/components/Alert";

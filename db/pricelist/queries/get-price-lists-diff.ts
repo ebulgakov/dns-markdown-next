@@ -1,5 +1,5 @@
 import { dbConnect } from "@/db/database";
-import { getUser } from "@/db/profile/queries";
+import { getUser } from "@/db/user/queries";
 import { RemovedGoods, NewGoods } from "@/db/models/mutated_goods_model";
 import type { RemovedGoods as RemovedGoodsType } from "@/types/pricelist";
 import { Diff } from "@/db/models/diff_model";

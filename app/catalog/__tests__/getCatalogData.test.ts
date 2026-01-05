@@ -1,6 +1,6 @@
 import { getCatalogData } from "../getCatalogData";
 import { getLastPriceList } from "@/db/pricelist/queries";
-import { getUser } from "@/db/profile/queries";
+import { getUser } from "@/db/user/queries";
 import { PriceList as PriceListType, Goods } from "@/types/pricelist";
 import { User as UserType } from "@/types/user";
 
@@ -9,7 +9,7 @@ jest.mock("@/db/pricelist/queries", () => ({
   getLastPriceList: jest.fn()
 }));
 
-jest.mock("@/db/profile/queries", () => ({
+jest.mock("@/db/user/queries", () => ({
   getUser: jest.fn()
 }));
 
