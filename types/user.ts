@@ -2,8 +2,8 @@ import { Goods } from "./pricelist";
 
 export type FavoriteStatus = {
   city: string;
-  updatedAt: string;
-  createdAt: string;
+  updatedAt: Date;
+  createdAt: Date;
   deleted: boolean;
   updates: [];
 };
