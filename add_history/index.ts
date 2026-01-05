@@ -3,6 +3,7 @@ import { removeAllHistory } from "../db/history/mutations/remove_all_history.ts"
 import { getAllPriceLists } from "../db/pricelist/queries/get_all_price_lists.ts";
 import makeHistory from "./helpers/make_history.ts";
 import { addManyHistory } from "../db/history/mutations/add_many_history.ts";
+import getPerformance from "../helpers/get_performance.ts";
 
 async function addHistory() {
   const city = process.env.CITY;
@@ -16,6 +17,6 @@ async function addHistory() {
   await dbDisconnect();
 }
 
-addHistory().then(() => {
+getPerformance(addHistory).then(() => {
   console.log("/************** HISTORY ADDED ****************/");
 });
