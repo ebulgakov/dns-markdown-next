@@ -1,7 +1,7 @@
 import { getPriceListsDiff } from "../get-price-lists-diff";
 import { dbConnect } from "@/db/database";
 import { getUser } from "@/db/profile/queries";
-import { RemovedGoods } from "@/db/models/removed_goods_model";
+import { RemovedGoods, NewGoods } from "@/db/models/mutated_goods_model";
 import { Diff } from "@/db/models/diff_model";
 import type { User } from "@/types/user";
 import type { Diff as DiffType } from "@/types/diff";
@@ -16,8 +16,11 @@ jest.mock("@/db/profile/queries", () => ({
   getUser: jest.fn()
 }));
 
-jest.mock("@/db/models/removed_goods_model", () => ({
+jest.mock("@/db/models/mutated_goods_model", () => ({
   RemovedGoods: {
+    findOne: jest.fn()
+  },
+  NewGoods: {
     findOne: jest.fn()
   }
 }));
