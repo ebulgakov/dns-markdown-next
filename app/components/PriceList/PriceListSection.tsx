@@ -29,7 +29,7 @@ export default function PriceListSection({
     <div className="mb-3">
       <button
         onClick={toggleVisibility}
-        className="items-center flex justify-start text-left w-full border-b-neutral-300 cursor-pointer border-b border-solid"
+        className="sticky top-0 bg-white z-10 items-center flex justify-start text-left w-full border-b-neutral-300 cursor-pointer border-b border-solid"
       >
         <Fa icon={isOpen ? faMinus : faPlus} className="text-xl text-[orange] relative mr-2" />
         <span className="uppercase font-bold text-xl mr-2.5">{position.title}</span>
