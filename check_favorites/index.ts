@@ -5,7 +5,7 @@ import { getAllUsers } from "../db/user/queries/get_all_users.ts";
 import updateFavorites from "./helpers/update_favorites.ts";
 import { updateUsers } from "../db/user/mutations/update_users.ts";
 
-export default async function checkFavorites() {
+async function checkFavorites() {
   const city = process.env.CITY;
 
   await dbConnect();
@@ -14,6 +14,7 @@ export default async function checkFavorites() {
   const users = await getAllUsers(city).select("favorites").exec();
   const updatedUsers = updateFavorites(users, history);
   await updateUsers(updatedUsers);
+
   await dbDisconnect();
 }
 
