@@ -1,6 +1,6 @@
 import { dbConnect } from "@/db/database";
 import { getUser } from "@/db/profile/queries";
-import { HourlyPricelist } from "@/db/models/pricelist_model";
+import { Pricelist } from "@/db/models/pricelist_model";
 import type { PriceList as PriceListType } from "@/types/pricelist";
 
 export const getLastPriceList = async () => {
@@ -9,7 +9,7 @@ export const getLastPriceList = async () => {
 
   if (!user) throw new Error("User not found");
 
-  return HourlyPricelist.findOne(
+  return Pricelist.findOne(
     { city: user.city },
     {},
     { sort: { updatedAt: -1 } }

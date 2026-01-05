@@ -1,7 +1,7 @@
 import { getLastPriceList } from "../get-last-price-list";
 import { dbConnect } from "@/db/database";
 import { getUser } from "@/db/profile/queries";
-import { HourlyPricelist } from "@/db/models/pricelist_model";
+import { Pricelist } from "@/db/models/pricelist_model";
 import type { PriceList as PriceListType } from "@/types/pricelist";
 import type { User } from "@/types/user";
 
@@ -15,14 +15,14 @@ jest.mock("@/db/profile/queries", () => ({
 }));
 
 jest.mock("@/db/models/pricelist_model", () => ({
-  HourlyPricelist: {
+  Pricelist: {
     findOne: jest.fn()
   }
 }));
 
 const mockedDbConnect = dbConnect as jest.Mock;
 const mockedGetUser = getUser as jest.Mock;
-const mockedFindOne = HourlyPricelist.findOne as jest.Mock;
+const mockedFindOne = Pricelist.findOne as jest.Mock;
 
 describe("getLastPriceList", () => {
   beforeEach(() => {

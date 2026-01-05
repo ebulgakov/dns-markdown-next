@@ -19,7 +19,4 @@ const schema = new mongoose.Schema(
   }
 );
 
-export const HourlyPricelist =
-  mongoose.models.Hourly_pricelist || mongoose.model("Hourly_pricelist", schema);
-
 export const Pricelist = mongoose.models.Pricelist || mongoose.model("Pricelist", schema);
