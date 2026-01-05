@@ -9,6 +9,7 @@ async function addHistory() {
   const city = process.env.CITY;
 
   await dbConnect();
+
   await removeAllHistory(city);
   const priceLists = await getAllPriceLists(city);
   const history = makeHistory(priceLists);

@@ -10,8 +10,8 @@ async function addDiffCollection() {
   const city = process.env.CITY;
 
   await dbConnect();
-  await removeDiff(city);
 
+  await removeDiff(city);
   const [last, prev] = await getAllPriceLists(city);
   const diff = makeDiff(last, prev);
   await addDiff(city, diff.changesPrice, diff.changesProfit);

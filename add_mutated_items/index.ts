@@ -10,6 +10,7 @@ async function addMutatedItems() {
   const city = process.env.CITY;
 
   await dbConnect();
+
   await removeRemovedGoods(city);
   await removeNewGoods(city);
   const [last, prev] = await getAllPriceLists(city);
