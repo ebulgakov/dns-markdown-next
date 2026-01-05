@@ -13,7 +13,6 @@
   "license": "ISC",
   "author": "ebulgakov",
   "type": "module",
-  "main": "index.js",
   "scripts": {
     "crawler": "ts-node --swc ./parser/crawler.ts",
     "downloader": "sh parser/dns_shop_downloader.sh && npm run crawler && sh parser/dns_shop_downloader_prices.sh",

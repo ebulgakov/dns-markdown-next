@@ -1,6 +1,6 @@
 import * as cheerio from "cheerio";
 import { ObjectId } from "mongodb";
-import type { Goods } from "../types/pricelist.js";
+import type { Goods } from "../../types/pricelist.js";
 
 type PricesSet = {
   states: {

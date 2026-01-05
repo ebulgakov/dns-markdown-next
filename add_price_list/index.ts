@@ -1,8 +1,8 @@
 import "dotenv/config";
 import { dbConnect, dbDisconnect } from "../db/database.ts";
-import getFile from "../helpers/get_file.ts";
-import { joinPath } from "../helpers/get_dirname.ts";
-import createData from "./create_data.ts";
+import getFile from "./helpers/get_file.ts";
+import { joinPath } from "./helpers/get_dirname.ts";
+import createData from "./helpers/create_data.ts";
 import { savePriceList } from "../db/pricelist/mutations/save_price_list.ts";
 
 async function addPriceList() {
