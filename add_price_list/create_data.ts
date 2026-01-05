@@ -58,7 +58,7 @@ export default function createData(html: string, pricesSet: PricesSet): Goods[] 
       const $$reasons = $$product
         .find(".catalog-product__reasons")
         .children(".catalog-product__reasons-new-item");
-      $$reasons.map((_, $reason) => {
+      $$reasons.each((_, $reason) => {
         const $$reason = $($reason);
         const [label, text] = $$reason.text().split(": ");
         productObj.reasons.push({ _id: new ObjectId().toHexString(), label, text });
