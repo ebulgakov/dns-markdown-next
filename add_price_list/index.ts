@@ -12,22 +12,30 @@ import getPerformance from "../helpers/get_performance.ts";
 
 async function addPriceList() {
   const path = joinPath("../pages", import.meta.url);
-  const html = getFile("body.html", path);
-  const { data } = JSON.parse(getFile("prices.html", path));
-  const json = createData(html, data);
+  const html = getFile("body.html", path) || "";
+  const { data } = JSON.parse(getFile("prices.html", path)) || {};
+  const goods = createData(html, data);
   const city = process.env.CITY;
 
-  await dbConnect();
+  if (goods.length > 0) {
+    await dbConnect();
 
-  // Check if there's already a price list for today and delete it.
-  // I want only one price list per day.
-  const lastPriceList = await getLastPriceList(city);
-  if (lastPriceList && isSameDay(new Date(lastPriceList.createdAt), new ObjectId().getTimestamp())) {
-    await deleteLastPriceList(city);
+    // Check if there's already a price list for today and delete it.
+    // I want only one price list per day.
+    const lastPriceList = await getLastPriceList(city);
+    if (
+      lastPriceList &&
+      isSameDay(new Date(lastPriceList.createdAt), new ObjectId().getTimestamp())
+    ) {
+      await deleteLastPriceList(city);
+    }
+
+    await savePriceList(city, goods);
+
+    await dbDisconnect();
+  } else {
+    throw new Error("No price list data to add.");
   }
-
-  await savePriceList(city, json);
-  await dbDisconnect();
 }
 
 getPerformance(addPriceList).then(() => {
