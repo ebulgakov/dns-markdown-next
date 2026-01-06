@@ -1,4 +1,4 @@
-import { History } from "../../models/history_model.ts";
+import { History } from "#db/models/history_model.js";
 
 export const removeAllHistory = (city: string) => {
   return History.deleteMany({ city });

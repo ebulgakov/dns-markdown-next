@@ -1,0 +1,29 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Log</title>
+  </head>
+  <body>
+    <pre><%- log %></pre>
+
+    <% if (stopped) { %>
+
+    <a href="/update-request">Back to review request</a>
+
+    <% } else { %>
+
+    <a href="/log/stop">Stop parsing</a>
+    <script>
+      setTimeout(() => {
+        window.scrollTo(0, document.body.scrollHeight);
+      }, 100);
+      setTimeout(() => {
+        window.location.reload();
+      }, 5000);
+    </script>
+
+    <% } %>
+  </body>
+</html>

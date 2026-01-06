@@ -1,4 +1,4 @@
-import { History } from "../../models/history_model.ts";
+import { History } from "#db/models/history_model.js";
 export const updateHistoryByLink = async (
   link: string,
   updateData: Partial<typeof History.schema>
