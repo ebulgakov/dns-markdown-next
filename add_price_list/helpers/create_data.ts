@@ -1,18 +1,8 @@
 import * as cheerio from "cheerio";
 import { ObjectId } from "mongodb";
 import type { Goods, Position } from "#types/pricelist.js";
+import type { PricesSet } from "#types/prices.js";
 
-type PricesSet = {
-  states: {
-    data: {
-      id: string;
-      price: {
-        previous: number;
-        current: number;
-      };
-    };
-  }[];
-};
 export default function createData(html: string, pricesSet: PricesSet) {
   const $ = cheerio.load(html);
 
@@ -69,13 +59,13 @@ export default function createData(html: string, pricesSet: PricesSet) {
 
       // Prices
       const productId = $$product.data("entity") as string;
-      const prices = pricesSet.states.find(state => state.data.id === productId) || {
-        data: { id: "", price: { previous: 0, current: 0 } }
-      };
-      productObj.priceOld = String(prices.data.price.previous);
-      productObj.price = String(prices.data.price.current);
-      if (productObj.priceOld && productObj.price) {
-        productObj.profit = String(Number(productObj.priceOld) - Number(productObj.price));
+      const prices = pricesSet.states.find(state => state.data.id === productId);
+      if (prices) {
+        productObj.priceOld = String(prices.data.price.previous);
+        productObj.price = String(prices.data.price.current);
+        if (productObj.priceOld && productObj.price) {
+          productObj.profit = String(Number(productObj.priceOld) - Number(productObj.price));
+        }
       }
 
       // Add product if it has required fields
