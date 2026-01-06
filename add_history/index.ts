@@ -1,12 +1,12 @@
-import { dbConnect, dbDisconnect } from "#db/database.js";
-import { removeAllHistory } from "#db/history/mutations/remove_all_history.js";
-import { getAllPriceLists } from "#db/pricelist/queries/get_all_price_lists.js";
-import makeHistory from "./helpers/make_history.js";
-import { addManyHistory } from "#db/history/mutations/add_many_history.js";
-import getPerformance from "#helpers/get_performance.js";
+import { dbConnect, dbDisconnect } from "../db/database.ts";
+import { removeAllHistory } from "../db/history/mutations/remove_all_history.ts";
+import { getAllPriceLists } from "../db/pricelist/queries/get_all_price_lists.ts";
+import makeHistory from "./helpers/make_history.ts";
+import { addManyHistory } from "../db/history/mutations/add_many_history.ts";
+import getPerformance from "../helpers/get_performance.ts";
 
 async function addHistory() {
-  const city = process.env.CITY || "samara";
+  const city = process.env.CITY;
 
   await dbConnect();
 

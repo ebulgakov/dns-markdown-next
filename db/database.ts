@@ -2,21 +2,14 @@ import "dotenv/config";
 
 import mongoose from "mongoose";
 
-const globalWithMongoose = global as typeof global & {
-  mongoose?: {
-    conn: typeof mongoose | null;
-    promise: Promise<typeof mongoose> | null;
-  };
-};
-
-globalWithMongoose.mongoose = globalWithMongoose.mongoose || {
+global.mongoose = global.mongoose || {
   conn: null,
   promise: null
 };
 
 export async function dbConnect() {
-  if (globalWithMongoose.mongoose?.conn) {
-    return globalWithMongoose.mongoose.conn;
+  if (global.mongoose && global.mongoose.conn) {
+    return global.mongoose.conn;
   }
 
   const dbUri = process.env.MONGODB_URI!;
@@ -25,7 +18,7 @@ export async function dbConnect() {
     autoIndex: true // Auto-indexing for development
   });
 
-  globalWithMongoose.mongoose = {
+  global.mongoose = {
     conn: await promise,
     promise: promise
   };
@@ -34,8 +27,8 @@ export async function dbConnect() {
 }
 
 export async function dbDisconnect() {
-  if (globalWithMongoose.mongoose?.conn) {
+  if (global.mongoose && global.mongoose.conn) {
     await mongoose.disconnect();
-    globalWithMongoose.mongoose.conn = null;
+    global.mongoose.conn = null;
   }
 }

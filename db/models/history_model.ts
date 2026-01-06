@@ -1,5 +1,5 @@
 import mongoose from "mongoose";
-import type { History as HistoryType } from "#types/history.js";
+import type { History as HistoryType } from "../../types/history.js";
 
 const schema = new mongoose.Schema({
   link: {

@@ -1,4 +1,4 @@
-import type { Goods, PriceList } from "#types/pricelist.js";
+import type { Goods, PriceList } from "../../types/pricelist.ts";
 
 export default function getRemovedGoods(
   last: PriceList,
