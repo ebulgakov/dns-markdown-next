@@ -1,11 +1,11 @@
 import express from "express";
 import ejs from "ejs";
-import { home } from "#src/home/index.js";
-import updateRouter from "#src/update-request/index.js";
-import setGlobalMiddleware from "#src/middleware.js";
+import { home } from "./home/index.js";
+import updateRouter from "./update-request/index.js";
+import setGlobalMiddleware from "./middleware.js";
 import { join } from "path";
-import getPath from "#helpers/get_path.js";
-import logRequest from "#src/log/index.js";
+import getPath from "./helpers/get_path.js";
+import logRequest from "./log/index.js";
 
 const app = express();
 

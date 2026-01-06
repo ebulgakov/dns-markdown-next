@@ -1,4 +1,4 @@
-import server from "#src/server.js";
+import server from "./server.js";
 
 // Start the server
 const port = process.env.PORT ?? "9001";
