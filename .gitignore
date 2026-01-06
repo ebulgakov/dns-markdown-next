@@ -10,14 +10,3 @@
 /node_modules
 .vercel
 
-# TypeScript build output
-/dist
-
-# OS generated files
-.DS_Store
-
-# Test coverage
-/coverage
-
-# Log files
-parselog.txt

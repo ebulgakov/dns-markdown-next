@@ -1,13 +1,13 @@
 import "dotenv/config";
-import { dbConnect, dbDisconnect } from "#db/database.js";
-import { getAllPriceLists } from "#db/pricelist/queries/get_all_price_lists.js";
-import { removeRemovedGoods, removeNewGoods } from "#db/mutated_goods/mutations/remove_goods.js";
-import { addRemovedGoods, addNewGoods } from "#db/mutated_goods/mutations/add_goods.js";
-import getMutatedGoods from "./helpers/get_mutated_goods.js";
-import getPerformance from "#helpers/get_performance.js";
+import { dbConnect, dbDisconnect } from "../db/database.ts";
+import { getAllPriceLists } from "../db/pricelist/queries/get_all_price_lists.ts";
+import { removeRemovedGoods, removeNewGoods } from "../db/mutated_goods/mutations/remove_goods.ts";
+import { addRemovedGoods, addNewGoods } from "../db/mutated_goods/mutations/add_goods.ts";
+import getMutatedGoods from "./helpers/get_mutated_goods.ts";
+import getPerformance from "../helpers/get_performance.ts";
 
 async function addMutatedItems() {
-  const city = process.env.CITY || "samara";
+  const city = process.env.CITY;
 
   await dbConnect();
 

@@ -1,5 +1,5 @@
-import { User } from "#db/models/user_model.js";
-import type { User as UserType } from "#types/user.js";
+import { User } from "../../models/user_model.ts";
+import { type User as UserType } from "../../../types/user.ts";
 
 export const updateUsers = async (users: UserType[]) => {
   // TODO: optimize with bulkWrite

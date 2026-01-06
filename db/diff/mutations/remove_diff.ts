@@ -1,4 +1,4 @@
-import { Diff } from "#db/models/diff_model.js";
+import { Diff } from "../../models/diff_model.ts";
 
 export const removeDiff = (city: string) => {
   return Diff.deleteOne({ city });

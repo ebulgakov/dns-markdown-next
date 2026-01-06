@@ -1,5 +1,5 @@
-import { History } from "#db/models/history_model.js";
-import type { History as HistoryType } from "#types/history.js";
+import { History } from "../../models/history_model.ts";
+import { type History as HistoryType } from "../../../types/history.ts";
 
 export const addManyHistory = async (history: HistoryType[]) => {
   return History.insertMany(history);

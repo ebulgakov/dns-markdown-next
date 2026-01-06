@@ -1,4 +1,4 @@
-import Goods from "#db/models/goods_schema.js";
+import Goods from "../db/models/goods_schema.ts";
 
 type Reason = {
   _id: string;

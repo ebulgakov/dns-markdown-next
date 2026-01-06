@@ -1,6 +1,6 @@
 import mongoose from "mongoose";
-import Goods from "./goods_schema.js";
-import type { User as UserType } from "#types/user.js";
+import Goods from "./goods_schema.ts";
+import type { User as UserType } from "../../types/user.js";
 
 const schema = new mongoose.Schema(
   {

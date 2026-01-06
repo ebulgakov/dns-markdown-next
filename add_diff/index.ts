@@ -1,13 +1,13 @@
 import "dotenv/config";
-import { dbConnect, dbDisconnect } from "#db/database.js";
-import { getAllPriceLists } from "#db/pricelist/queries/get_all_price_lists.js";
-import { removeDiff } from "#db/diff/mutations/remove_diff.js";
-import makeDiff from "./helpers/make_diff.js";
-import { addDiff } from "#db/diff/mutations/add_diff.js";
-import getPerformance from "#helpers/get_performance.js";
+import { dbConnect, dbDisconnect } from "../db/database.ts";
+import { getAllPriceLists } from "../db/pricelist/queries/get_all_price_lists.ts";
+import { removeDiff } from "../db/diff/mutations/remove_diff.ts";
+import makeDiff from "./helpers/make_diff.ts";
+import { addDiff } from "../db/diff/mutations/add_diff.ts";
+import getPerformance from "../helpers/get_performance.ts";
 
 async function addDiffCollection() {
-  const city = process.env.CITY || "samara";
+  const city = process.env.CITY;
 
   await dbConnect();
 

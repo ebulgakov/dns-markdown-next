@@ -1,5 +1,5 @@
-import type { PriceList } from "#types/pricelist.js";
-import type { History } from "#types/history.js";
+import { type PriceList } from "../../types/pricelist.ts";
+import { type History } from "../../types/history.ts";
 
 export default function makeHistory(priceLists: PriceList[]): History[] {
   const history: History[] = [];
