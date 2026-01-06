@@ -1,6 +1,6 @@
 import * as cheerio from "cheerio";
 import { ObjectId } from "mongodb";
-import type { Goods } from "../../types/pricelist.js";
+import type { Goods, Position } from "#types/pricelist.js";
 
 type PricesSet = {
   states: {
@@ -13,17 +13,18 @@ type PricesSet = {
     };
   }[];
 };
-export default function createData(html: string, pricesSet: PricesSet): Goods[] {
+export default function createData(html: string, pricesSet: PricesSet) {
   const $ = cheerio.load(html);
 
-  const list = [];
+  const list: Position[] = [];
 
   $(".markdown-page__group-title").each((_, $title) => {
     const $$title = $($title);
     const obj = {
+      _id: new ObjectId().toHexString(),
       title: $$title.text().trim(),
       items: []
-    };
+    } as Position;
 
     const $products = $$title.next().find(".catalog-products .catalog-product");
 
@@ -45,12 +46,14 @@ export default function createData(html: string, pricesSet: PricesSet): Goods[] 
 
       // Metadata
       const $$title = $$product.find(".catalog-product__name").first();
-      const titleWithDescription = $$title.find("span").html().split("<br>");
+      const titleWithDescriptionString = $$title.find("span").html();
+      const titleWithDescription = titleWithDescriptionString?.split("<br>") || ["", ""];
       productObj.title = titleWithDescription[0];
       productObj.description = titleWithDescription[1];
-      productObj.link = $$title.attr("href");
+      productObj.link = $$title.attr("href") || "";
       productObj.code = `${$$product.data("code")}`;
-      productObj.image = $$product.find("picture").first().find("img").first().attr("data-src");
+      productObj.image =
+        $$product.find("picture").first().find("img").first().attr("data-src") || "";
       productObj.available = $$product.find(".available").next().text();
 
       // Reasons
@@ -66,7 +69,9 @@ export default function createData(html: string, pricesSet: PricesSet): Goods[] 
 
       // Prices
       const productId = $$product.data("entity") as string;
-      const prices = pricesSet.states.find(state => state.data.id === productId);
+      const prices = pricesSet.states.find(state => state.data.id === productId) || {
+        data: { id: "", price: { previous: 0, current: 0 } }
+      };
       productObj.priceOld = String(prices.data.price.previous);
       productObj.price = String(prices.data.price.current);
       if (productObj.priceOld && productObj.price) {

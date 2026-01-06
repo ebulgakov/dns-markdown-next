@@ -1,5 +1,5 @@
 import mongoose from "mongoose";
-import Goods from "./goods_schema.ts";
+import Goods from "./goods_schema.js";
 
 const schema = new mongoose.Schema(
   {

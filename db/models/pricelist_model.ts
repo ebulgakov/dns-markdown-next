@@ -1,6 +1,6 @@
 import mongoose, { Model } from "mongoose";
-import Goods from "./goods_schema.ts";
-import { type PriceList as PriceListType } from "../../types/pricelist.ts";
+import Goods from "./goods_schema.js";
+import type {  PriceList as PriceListType } from "#types/pricelist.js";
 
 const schema = new mongoose.Schema(
   {

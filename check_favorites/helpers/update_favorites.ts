@@ -1,5 +1,5 @@
-import { type User } from "../../types/user.ts";
-import { type History } from "../../types/history.ts";
+import { type User } from "#types/user.js";
+import { type History } from "#types/history.js";
 import { ObjectId } from "mongodb";
 
 export default function updateFavorites(users: User[], history: History[]) {
@@ -14,9 +14,9 @@ export default function updateFavorites(users: User[], history: History[]) {
       }
 
       if (historyItem) {
-        const priceOld = historyItem.priceOld.pop();
-        const price = historyItem.price.pop();
-        const profit = historyItem.profit.pop();
+        const priceOld = historyItem.priceOld.pop() || "0";
+        const price = historyItem.price.pop() || "0";
+        const profit = historyItem.profit.pop() || "0";
 
         if (price !== favorite.item.price) {
           favorite.status.updatedAt = `${new ObjectId().getTimestamp()}`;

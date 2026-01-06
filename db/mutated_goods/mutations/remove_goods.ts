@@ -1,4 +1,4 @@
-import { RemovedGoods, NewGoods } from "../../models/mutated_goods_model.ts";
+import { RemovedGoods, NewGoods } from "#db/models/mutated_goods_model.js";
 
 export const removeRemovedGoods = (city: string) => {
   return RemovedGoods.deleteOne({ city });
