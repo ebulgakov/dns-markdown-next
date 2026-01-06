@@ -8,7 +8,7 @@
   </head>
   <body>
     <div class="md:container mx-auto p-4">
-      <form action="/log">
+      <form action="/log" method="POST" >
         <input type="hidden" name="confirm" value="true" />
         <pre class="break-words whitespace-pre-wrap"><%- request %></pre>
         <button type="submit" class="bg-blue-500 text-white px-4 py-2 rounded mt-4">Confirm request and start parse</button>
