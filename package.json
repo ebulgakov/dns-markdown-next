@@ -32,12 +32,14 @@
     "body-parser": "^2.2.1",
     "cheerio": "^1.1.2",
     "dotenv": "^17.2.3",
+    "ejs": "^3.1.10",
     "express": "^5.2.1",
     "mongodb": "^7.0.0",
     "mongoose": "^9.1.1"
   },
   "devDependencies": {
     "@tsconfig/node24": "^24.0.3",
+    "@types/ejs": "^3.1.5",
     "@types/express": "^5.0.6",
     "prettier": "^3.7.4",
     "regenerator-runtime": "^0.14.1",
