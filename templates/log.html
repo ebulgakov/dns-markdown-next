@@ -8,6 +8,12 @@
   <body>
     <pre><%- log %></pre>
 
+    <% if (stopped) { %>
+
+    <a href="/update-request">Back to review request</a>
+
+    <% } else { %>
+
     <a href="/log/stop">Stop parsing</a>
     <script>
       setTimeout(() => {
@@ -17,5 +23,7 @@
         window.location.reload();
       }, 5000);
     </script>
+
+    <% } %>
   </body>
 </html>

@@ -81,7 +81,7 @@ logRequest.route("/").get((req, res) => {
     log = readFileSync(file, "utf-8");
   }
 
-  res.render("log.html", { log });
+  res.render("log.html", { log, stopped: !global.npmProcess });
 });
 
 export default logRequest;
