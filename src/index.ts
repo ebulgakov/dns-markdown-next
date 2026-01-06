@@ -1,12 +1,7 @@
+import server from "#src/server.js";
 
-import { middleware } from "#src/middlewares/middlewares.js";
-import express from "express";
-
-const app = express();
+// Start the server
 const port = process.env.PORT ?? "9001";
-
-app.get("/", middleware);
-
-app.listen(port, () => {
-  console.log(`Example app listening on port ${port}`);
+server.listen(port, () => {
+  console.log(`Server is running on port ${port}`);
 });
