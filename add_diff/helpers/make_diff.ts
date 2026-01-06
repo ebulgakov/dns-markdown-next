@@ -1,5 +1,5 @@
-import type { PriceList } from "../../types/pricelist.ts";
-import { type GoodsDiff } from "../../types/diff.ts";
+import type { PriceList } from "#types/pricelist.js";
+import type { GoodsDiff } from "#types/diff.js";
 
 export default function makeDiff(
   last: PriceList,
@@ -27,7 +27,7 @@ export default function makeDiff(
           price: prevItem.price,
           profit: prevItem.profit
         }
-      };
+      } as never;
 
       if (lastItem.price !== prevItem.price) {
         result.changesPrice.push(payload);

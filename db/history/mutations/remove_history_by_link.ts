@@ -1,4 +1,4 @@
-import { History } from "../../models/history_model.ts";
+import { History } from "#db/models/history_model.js";
 
 export const removeHistoryByLink = async (link: string) => {
   return History.findOneAndDelete({ link }, { sort: { updatedAt: -1 } });
