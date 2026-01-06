@@ -10,6 +10,8 @@
     <div class="md:container mx-auto p-4">
       <h1>hello!</h1>
       <form action="/update-request" method="POST">
+        <input type="hidden" name="confirm" value="true" />
+
         <label for="request-textfield">Request</label>
         <textarea
           class="w-full border border-gray-300 rounded p-2 mb-4"
@@ -17,7 +19,9 @@
           id="request-textfield"
           cols="30"
           rows="10"
-        ></textarea>
+        >
+<%- request %>
+        </textarea>
 
         <button type="submit" class="bg-blue-500 text-white px-4 py-2 rounded">Submit</button>
       </form>

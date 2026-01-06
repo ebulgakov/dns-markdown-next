@@ -2,12 +2,12 @@ import express from "express";
 import { spawn } from "child_process";
 import { existsSync, unlinkSync, appendFileSync, readFileSync } from "node:fs";
 import { join } from "node:path";
-import getPath from "../helpers/get_path.js";
+import joinPath from "#helpers/get_path.js";
 
 global.npmProcess = null;
 
 export const logRequest = express.Router();
-
+const path = joinPath("../../", import.meta.url);
 logRequest.route("/").post((req, res) => {
   if (!req.body || req.body.confirm !== "true") {
     res.status(400).send("You did not confirm the update.");
@@ -23,7 +23,7 @@ logRequest.route("/").post((req, res) => {
   const npmProcess = spawn("npm", ["run", "parse"], { detached: true });
   global.npmProcess = npmProcess;
 
-  const file = join(getPath("../../", import.meta.url), "parselog.txt");
+  const file = join(path, "parselog.txt");
   if (existsSync(file)) {
     unlinkSync(file);
   }
@@ -58,7 +58,7 @@ logRequest.route("/").post((req, res) => {
 });
 
 logRequest.route("/stop").get((req, res) => {
-  const file = join(getPath("../../", import.meta.url), "parselog.txt");
+  const file = join(path, "parselog.txt");
 
   if (global.npmProcess && global.npmProcess.pid) {
     appendFileSync(file, "Parsing process was manually stopped by the user.\n");
@@ -75,7 +75,7 @@ logRequest.route("/stop").get((req, res) => {
 });
 
 logRequest.route("/").get((req, res) => {
-  const file = join(getPath("../../", import.meta.url), "parselog.txt");
+  const file = join(path, "parselog.txt");
   let log = "No logs available.";
   if (existsSync(file)) {
     log = readFileSync(file, "utf-8");
