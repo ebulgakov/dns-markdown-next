@@ -14,8 +14,8 @@
   "author": "ebulgakov",
   "type": "module",
   "scripts": {
-    "dev": "tsx --watch --env-file .env src/index.ts",
-    "start": "node --env-file .env dist/src/index.js",
+    "dev": "tsx --watch src/index.ts",
+    "start": "node dist/src/index.js",
     "build": "tsc -p tsconfig.build.json",
     "type-check": "tsc --noEmit",
     "crawler": "tsx ./parser/crawler.ts",
