@@ -1,9 +1,7 @@
 {
+  "extends": "@tsconfig/node24/tsconfig.json",
   "compilerOptions": {
-    "allowImportingTsExtensions": true,
-    "target": "ESNext",
-    "module": "NodeNext",
-    "moduleResolution": "NodeNext",
-    "esModuleInterop": true
+    "outDir": "./dist",
+    "rootDir": "./"
   }
 }

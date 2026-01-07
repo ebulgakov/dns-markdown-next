@@ -1,5 +1,5 @@
-import { Pricelist } from "../../models/pricelist_model.ts";
-import type { PriceList as PriceListType } from "../../../types/pricelist.ts";
+import { Pricelist } from "#db/models/pricelist_model.js";
+import type { PriceList as PriceListType } from "#types/pricelist.js";
 
 export const getAllPriceLists = async (city: string): Promise<PriceListType[] | []> => {
   return Pricelist.find({ city }, {}, { sort: { updatedAt: -1 } });

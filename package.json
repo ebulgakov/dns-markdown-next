@@ -14,28 +14,38 @@
   "author": "ebulgakov",
   "type": "module",
   "scripts": {
-    "crawler": "ts-node --swc ./parser/crawler.ts",
-    "downloader": "sh parser/dns_shop_downloader.sh && npm run crawler && sh parser/dns_shop_downloader_prices.sh",
-    "add:list": "ts-node --swc ./add_price_list",
-    "add:mutated": "ts-node --swc ./add_mutated_items",
-    "add:diff": "ts-node --swc ./add_diff",
-    "add:history": "ts-node --swc ./add_history",
-    "check:favorites": "ts-node --swc ./check_favorites",
-    "start": "npm run downloader && npm run add:list && npm run add:mutated && npm run add:diff && npm run add:history && npm run check:favorites",
+    "start": "tsx --watch src/index.ts",
+    "build": "tsc -p tsconfig.build.json",
+    "type-check": "tsc --noEmit",
+    "crawler": "tsx ./parser/crawler.ts",
+    "downloader": "bash parser/dns_shop_downloader.sh && npm run crawler && bash parser/dns_shop_downloader_prices.sh",
+    "add:list": "tsx ./add_price_list",
+    "add:mutated": "tsx ./add_mutated_items",
+    "add:diff": "tsx ./add_diff",
+    "add:history": "tsx ./add_history",
+    "check:favorites": "tsx ./check_favorites",
+    "parse": "npm run downloader && npm run add:list && npm run add:mutated && npm run add:diff && npm run add:history && npm run check:favorites",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "dependencies": {
+    "body-parser": "^2.2.1",
     "cheerio": "^1.1.2",
     "dotenv": "^17.2.3",
+    "ejs": "^3.1.10",
+    "express": "^5.2.1",
     "mongodb": "^7.0.0",
-    "mongoose": "^9.1.1",
-    "typescript": "^5.9.3"
+    "mongoose": "^9.1.1"
   },
   "devDependencies": {
-    "@swc/core": "^1.15.8",
-    "@swc/helpers": "^0.5.18",
+    "@tsconfig/node24": "^24.0.3",
+    "@types/ejs": "^3.1.5",
+    "@types/express": "^5.0.6",
     "prettier": "^3.7.4",
     "regenerator-runtime": "^0.14.1",
-    "ts-node": "^10.9.2"
+    "tsx": "^4.21.0",
+    "typescript": "^5.9.3"
+  },
+  "imports": {
+    "#*": "./*"
   }
 }

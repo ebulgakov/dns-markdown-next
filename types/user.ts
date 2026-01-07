@@ -1,4 +1,4 @@
-import { type Goods } from "./pricelist.ts";
+import type { Goods } from "./pricelist.js";
 
 export type FavoriteStatus = {
   city: string;

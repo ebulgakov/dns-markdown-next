@@ -1,6 +1,6 @@
-import type { PriceList } from "../../types/pricelist.ts";
-import type { History } from "../../types/history.ts";
-import isSameDay from "../../add_price_list/helpers/is_same_day.ts";
+import type { PriceList } from "#types/pricelist.ts";
+import type { History } from "#types/history.ts";
+import isSameDay from "#add_price_list/helpers/is_same_day.js";
 
 export default function makeHistoryAndGetResult(
   priceList: PriceList,
