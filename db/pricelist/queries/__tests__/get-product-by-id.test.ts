@@ -1,7 +1,7 @@
 import { getProductById } from "../get-product-by-id";
 import { dbConnect } from "@/db/database";
-import { History } from "@/db/models/history_model";
-import { Pricelist } from "@/db/models/pricelist_model";
+import { History } from "@/db/models/history-model";
+import { Pricelist } from "@/db/models/pricelist-model";
 import type { History as HistoryType } from "@/types/history";
 
 // Mock dependencies
@@ -9,13 +9,13 @@ jest.mock("@/db/database", () => ({
   dbConnect: jest.fn()
 }));
 
-jest.mock("@/db/models/history_model", () => ({
+jest.mock("@/db/models/history-model", () => ({
   History: {
     findOne: jest.fn()
   }
 }));
 
-jest.mock("@/db/models/pricelist_model", () => ({
+jest.mock("@/db/models/pricelist-model", () => ({
   Pricelist: {
     findOne: jest.fn()
   }

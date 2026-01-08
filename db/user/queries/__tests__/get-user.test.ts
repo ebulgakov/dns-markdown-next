@@ -1,21 +1,21 @@
-import { getUser } from '../get-user';
-import { dbConnect } from '@/db/database';
-import { currentUser } from '@clerk/nextjs/server';
-import { User } from '@/db/models/user_model';
+import { getUser } from "../get-user";
+import { dbConnect } from "@/db/database";
+import { currentUser } from "@clerk/nextjs/server";
+import { User } from "@/db/models/user-model";
 
 // Mock dependencies
-jest.mock('@/db/database', () => ({
-  dbConnect: jest.fn(),
+jest.mock("@/db/database", () => ({
+  dbConnect: jest.fn()
 }));
 
-jest.mock('@clerk/nextjs/server', () => ({
-  currentUser: jest.fn(),
+jest.mock("@clerk/nextjs/server", () => ({
+  currentUser: jest.fn()
 }));
 
-jest.mock('@/db/models/user_model', () => ({
+jest.mock("@/db/models/user-model", () => ({
   User: {
-    findOne: jest.fn(),
-  },
+    findOne: jest.fn()
+  }
 }));
 
 // Type assertion for mocked functions
@@ -23,20 +23,20 @@ const mockedDbConnect = dbConnect as jest.Mock;
 const mockedCurrentUser = currentUser as jest.Mock;
 const mockedUserFindOne = User.findOne as jest.Mock;
 
-describe('getUser', () => {
+describe("getUser", () => {
   beforeEach(() => {
     // Clear all mocks before each test
     jest.clearAllMocks();
   });
 
-  it('should return user data if a user is found in the database', async () => {
+  it("should return user data if a user is found in the database", async () => {
     // Arrange: Set up mock data and return values
-    const clerkUser = { id: 'user_123' };
+    const clerkUser = { id: "user_123" };
     const dbUser = {
-      userId: 'user_123',
-      firstName: 'John',
-      lastName: 'Doe',
-      favorites: [],
+      userId: "user_123",
+      firstName: "John",
+      lastName: "Doe",
+      favorites: []
     };
 
     mockedCurrentUser.mockResolvedValue(clerkUser);
@@ -52,9 +52,9 @@ describe('getUser', () => {
     expect(result).toEqual(dbUser);
   });
 
-  it('should return null if no user is found in the database', async () => {
+  it("should return null if no user is found in the database", async () => {
     // Arrange: Set up mock data for a non-existent user
-    const clerkUser = { id: 'user_456' };
+    const clerkUser = { id: "user_456" };
     mockedCurrentUser.mockResolvedValue(clerkUser);
     mockedUserFindOne.mockResolvedValue(null);
 
@@ -68,7 +68,7 @@ describe('getUser', () => {
     expect(result).toBeNull();
   });
 
-  it('should return null if there is no authenticated user', async () => {
+  it("should return null if there is no authenticated user", async () => {
     // Arrange: Mock that there is no authenticated user
     mockedCurrentUser.mockResolvedValue(null);
 
@@ -82,4 +82,3 @@ describe('getUser', () => {
     expect(result).toBeNull();
   });
 });
-

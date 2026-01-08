@@ -1,6 +1,6 @@
 import { dbConnect } from "@/db/database";
 import { getUser } from "@/db/user/queries";
-import { Pricelist } from "@/db/models/pricelist_model";
+import { Pricelist } from "@/db/models/pricelist-model";
 import type { PriceList as PriceListType } from "@/types/pricelist";
 
 export const getLastPriceList = async () => {

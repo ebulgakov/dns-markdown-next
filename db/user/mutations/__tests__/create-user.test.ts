@@ -1,13 +1,13 @@
 import { createUser } from "../create-user";
 import { dbConnect } from "@/db/database";
-import { User } from "@/db/models/user_model";
+import { User } from "@/db/models/user-model";
 
 // Mock the database connection and User model
 jest.mock("@/db/database", () => ({
   dbConnect: jest.fn()
 }));
 
-jest.mock("@/db/models/user_model", () => ({
+jest.mock("@/db/models/user-model", () => ({
   User: {
     create: jest.fn()
   }
