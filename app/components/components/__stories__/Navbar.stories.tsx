@@ -6,7 +6,7 @@ import { NextIntlClientProvider } from "next-intl";
 import messages from "@/i18n/locates/ru.json";
 
 const meta: Meta<typeof Navbar> = {
-  title: "UI/Navbar",
+  title: "Components/Navbar",
   component: Navbar,
   decorators: [
     Story => (

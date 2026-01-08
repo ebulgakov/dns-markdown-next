@@ -5,8 +5,8 @@ import { NextIntlClientProvider } from "next-intl";
 import { Roboto, Roboto_Mono } from "next/font/google";
 import { ClerkProvider } from "@clerk/nextjs";
 import "./globals.css";
-import Navbar from "@/app/components/Navbar";
-import Footer from "@/app/components/Footer";
+import Navbar from "@/app/components/components/Navbar";
+import Footer from "@/app/components/components/Footer";
 import { StrictMode, type ReactNode } from "react";
 
 const robotoSans = Roboto({

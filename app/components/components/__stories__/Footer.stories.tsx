@@ -5,7 +5,7 @@ import messages from "@/i18n/locates/ru.json";
 import React from "react";
 
 const meta: Meta<typeof Footer> = {
-  title: "UI/Footer",
+  title: "Components/Footer",
   component: Footer,
   parameters: {
     layout: "fullscreen"
