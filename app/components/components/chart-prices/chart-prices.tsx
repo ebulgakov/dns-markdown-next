@@ -38,7 +38,7 @@ type ProductPricesChartProps = {
   } | null;
 };
 
-export default function ProductPricesChart({ chartData }: ProductPricesChartProps) {
+function ChartPrices({ chartData }: ProductPricesChartProps) {
   const isClient = useClientRendering();
   if (!isClient || !chartData) return null;
 
@@ -74,3 +74,5 @@ export default function ProductPricesChart({ chartData }: ProductPricesChartProp
     />
   );
 }
+
+export { ChartPrices };

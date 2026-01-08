@@ -1,9 +1,9 @@
 import type { Meta, StoryObj } from "@storybook/react";
-import ProductPricesChart from "../ProductPricesChart";
+import { ChartPrices } from "../chart-prices";
 
-const meta: Meta<typeof ProductPricesChart> = {
-  title: "Components/ProductPricesChart",
-  component: ProductPricesChart,
+const meta: Meta<typeof ChartPrices> = {
+  title: "Components/ChartPrices",
+  component: ChartPrices,
   tags: ["autodocs"],
   argTypes: {
     chartData: {
@@ -14,7 +14,7 @@ const meta: Meta<typeof ProductPricesChart> = {
 };
 
 export default meta;
-type Story = StoryObj<typeof ProductPricesChart>;
+type Story = StoryObj<typeof ChartPrices>;
 
 const sampleChartData = {
   labels: [

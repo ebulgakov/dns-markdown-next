@@ -1,7 +1,7 @@
 import { getProductById } from "@/db/pricelist/queries";
 import { PageTitle } from "@/app/components/ui/page-title";
 import PriceListGoods from "@/app/components/PriceList/PriceListGoods";
-import ProductPricesChart from "@/app/components/ProductPricesChart";
+import { ChartPrices } from "@/app/components/components/chart-prices";
 import { Title } from "@/app/components/ui/title";
 import { Alert, AlertDescription, AlertTitle } from "@/app/components/ui/alert";
 
@@ -69,7 +69,7 @@ export default async function CatalogItemPage({ params }: CatalogItemPage) {
 
       <Title variant="h2">График цены</Title>
 
-      {product.history && <ProductPricesChart chartData={product.history} />}
+      {product.history && <ChartPrices chartData={product.history} />}
     </div>
   );
 }
