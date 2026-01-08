@@ -7,6 +7,7 @@ import { Button } from "@/app/components/ui/button";
 import { updateUserSection } from "@/db/user/mutations/update-user-section";
 import { uniqAbcSort } from "@/app/helpers/sort";
 import { Alert, AlertDescription, AlertTitle } from "@/app/components/ui/alert";
+import { Card, CardContent } from "@/app/components/ui/card";
 
 type ProfileUpdateSectionsProps = {
   sectionName: AvailableUpdateSectionNames;
@@ -79,20 +80,22 @@ function ProfileUpdateSections({
       )}
       <div className="flex gap-4">
         <div className="flex-1">
-          <div className="overflow-auto h-100 border border-neutral-300 px-2.5 py-1 border-solid flex flex-col items-start mb-2">
-            {outputAllSections.map(section => (
-              <label key={section}>
-                <input
-                  type="checkbox"
-                  className="mr-1"
-                  value={section}
-                  onChange={handleCheckboxChange}
-                />
-                {section}
-              </label>
-            ))}
-          </div>
-          <div className="flex items-center gap-2">
+          <Card className="overflow-auto h-100 py-2">
+            <CardContent className="flex flex-col items-start">
+              {outputAllSections.map(section => (
+                <label key={section}>
+                  <input
+                    type="checkbox"
+                    className="mr-1"
+                    value={section}
+                    onChange={handleCheckboxChange}
+                  />
+                  {section}
+                </label>
+              ))}
+            </CardContent>
+          </Card>
+          <div className="flex items-center gap-2 mt-2">
             <Button
               disabled={selectedSections.length === 0}
               type="button"
@@ -104,22 +107,24 @@ function ProfileUpdateSections({
           </div>
         </div>
         <div className="flex-1">
-          <div className="overflow-auto h-100 border border-neutral-300 px-2.5 py-1 border-solid flex flex-col items-start">
-            {outputActiveSections.length > 0 ? (
-              outputActiveSections.map(section => (
-                <button
-                  key={section}
-                  className="flex"
-                  onClick={() => handleRemoveActiveSection(section)}
-                >
-                  <X />
-                  {section}
-                </button>
-              ))
-            ) : (
-              <p className="text-neutral-500">{placeholder}</p>
-            )}
-          </div>
+          <Card className="overflow-auto h-100 py-2">
+            <CardContent className="flex flex-col items-start">
+              {outputActiveSections.length > 0 ? (
+                outputActiveSections.map(section => (
+                  <button
+                    key={section}
+                    className="flex"
+                    onClick={() => handleRemoveActiveSection(section)}
+                  >
+                    <X />
+                    {section}
+                  </button>
+                ))
+              ) : (
+                <p className="text-neutral-500">{placeholder}</p>
+              )}
+            </CardContent>
+          </Card>
         </div>
       </div>
     </div>
