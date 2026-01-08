@@ -38,8 +38,6 @@ function PriceListPage({
 
   return (
     <>
-      <SearchInput />
-
       {filteredList.map(item => (
         <PriceListGoods key={item._id} item={item} favorites={userFavoritesGoods} />
       ))}
@@ -59,6 +57,8 @@ function PriceListPage({
           hiddenSections={hiddenSectionsTitles}
         />
       </div>
+
+      <SearchInput />
     </>
   );
 }
