@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from "@storybook/react";
-import { Footer } from "../footer";
+import { Footer } from "./footer";
 import { NextIntlClientProvider } from "next-intl";
 import messages from "@/i18n/locates/ru.json";
 import React from "react";

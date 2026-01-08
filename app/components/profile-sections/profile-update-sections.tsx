@@ -2,11 +2,16 @@
 
 import type { AvailableUpdateSectionNames, UserSections as UserSectionsType } from "@/types/user";
 import { X } from "lucide-react";
-import { useState, type ChangeEvent, useTransition, useOptimistic } from "react";
+import { useState, useTransition, useOptimistic, Fragment } from "react";
 import { Button } from "@/app/components/ui/button";
 import { updateUserSection } from "@/db/user/mutations/update-user-section";
 import { uniqAbcSort } from "@/app/helpers/sort";
 import { Alert, AlertDescription, AlertTitle } from "@/app/components/ui/alert";
+import { Card } from "@/app/components/ui/card";
+import { ScrollArea } from "@/app/components/ui/scroll-area";
+import { Separator } from "@/app/components/ui/separator";
+import { Checkbox } from "@/app/components/ui/checkbox";
+import { Label } from "@/app/components/ui/label";
 
 type ProfileUpdateSectionsProps = {
   sectionName: AvailableUpdateSectionNames;
@@ -60,10 +65,9 @@ function ProfileUpdateSections({
     await updateSections(sections);
   };
 
-  const handleCheckboxChange = (event: ChangeEvent<HTMLInputElement>) => {
-    const { value, checked } = event.target;
+  const handleCheckboxChange = ({ section, checked }: { section: string; checked: boolean }) => {
     setSelectedSections(prev =>
-      checked ? [...prev, value] : prev.filter(section => section !== value)
+      checked ? [...prev, section] : prev.filter(pSection => pSection !== section)
     );
   };
 
@@ -79,20 +83,28 @@ function ProfileUpdateSections({
       )}
       <div className="flex gap-4">
         <div className="flex-1">
-          <div className="overflow-auto h-100 border border-neutral-300 px-2.5 py-1 border-solid flex flex-col items-start mb-2">
-            {outputAllSections.map(section => (
-              <label key={section}>
-                <input
-                  type="checkbox"
-                  className="mr-1"
-                  value={section}
-                  onChange={handleCheckboxChange}
-                />
-                {section}
-              </label>
-            ))}
-          </div>
-          <div className="flex items-center gap-2">
+          <Card className="p-2">
+            <ScrollArea className="h-100">
+              <div className="flex flex-col items-start ">
+                {outputAllSections.map((section, idx) => (
+                  <Fragment key={section}>
+                    {idx > 0 && <Separator className="my-2" />}
+                    <div className="flex items-center gap-3">
+                      <Checkbox
+                        id={`checkbox-option-${idx}`}
+                        value={section}
+                        onCheckedChange={checked =>
+                          handleCheckboxChange({ section, checked: Boolean(checked) })
+                        }
+                      />
+                      <Label htmlFor={`checkbox-option-${idx}`}>{section}</Label>
+                    </div>
+                  </Fragment>
+                ))}
+              </div>
+            </ScrollArea>
+          </Card>
+          <div className="flex items-center gap-2 mt-2">
             <Button
               disabled={selectedSections.length === 0}
               type="button"
@@ -104,22 +116,28 @@ function ProfileUpdateSections({
           </div>
         </div>
         <div className="flex-1">
-          <div className="overflow-auto h-100 border border-neutral-300 px-2.5 py-1 border-solid flex flex-col items-start">
-            {outputActiveSections.length > 0 ? (
-              outputActiveSections.map(section => (
-                <button
-                  key={section}
-                  className="flex"
-                  onClick={() => handleRemoveActiveSection(section)}
-                >
-                  <X />
-                  {section}
-                </button>
-              ))
-            ) : (
-              <p className="text-neutral-500">{placeholder}</p>
-            )}
-          </div>
+          <Card className="p-2">
+            <ScrollArea className="h-100">
+              <div className="flex flex-col items-start ">
+                {outputActiveSections.length > 0 ? (
+                  outputActiveSections.map((section, idx) => (
+                    <Fragment key={section}>
+                      {idx > 0 && <Separator className="my-2" />}
+                      <button
+                        className="flex gap-1"
+                        onClick={() => handleRemoveActiveSection(section)}
+                      >
+                        <X className="size-6" />
+                        <Label>{section}</Label>
+                      </button>
+                    </Fragment>
+                  ))
+                ) : (
+                  <p className="text-neutral-500">{placeholder}</p>
+                )}
+              </div>
+            </ScrollArea>
+          </Card>
         </div>
       </div>
     </div>
