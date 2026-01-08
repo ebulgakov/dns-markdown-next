@@ -1,15 +1,13 @@
 import type { Goods as GoodsType, PriceList as priceListType } from "@/types/pricelist";
 import { useSortGoodsStore } from "@/app/stores/sort-goods-store";
-import { useSearchStore } from "@/app/stores/search-store";
 
-export const useFilteredGoods = (priceList: priceListType): GoodsType[] => {
+export const useFilteredGoods = (term: string, priceList: priceListType): GoodsType[] => {
   const sortGoods = useSortGoodsStore(state => state.sortGoods);
-  const searchTerm = useSearchStore(state => state.searchTerm);
 
-  if (searchTerm.length > 1 || sortGoods !== "default") {
+  if (term.length > 1 || sortGoods !== "default") {
     const flatCatalog = priceList.positions.flatMap(position => position.items.flat());
     const filteredArray = flatCatalog.filter(item =>
-      item.title.toLowerCase().includes(searchTerm.toLowerCase())
+      item.title.toLowerCase().includes(term.toLowerCase())
     );
 
     if (sortGoods === "price") {

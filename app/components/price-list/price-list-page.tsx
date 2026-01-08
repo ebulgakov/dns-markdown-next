@@ -7,7 +7,8 @@ import { useSearchStore } from "@/app/stores/search-store";
 import { PriceListGoods } from "./price-list-goods";
 import { PriceListFavoritesSection } from "./price-list-favorites-section";
 import clsx from "clsx";
-import { useFilteredGoods } from "@/app/hooks/useFilteredGoods";
+import { useFilteredGoods } from "@/app/hooks/use-filtered-goods";
+import { useDebounce } from "@/app/hooks/use-debounce";
 import { useSortGoodsStore } from "@/app/stores/sort-goods-store";
 
 type PriceListPageProps = {
@@ -27,8 +28,9 @@ function PriceListPage({
 }: PriceListPageProps) {
   const sortGoods = useSortGoodsStore(state => state.sortGoods);
   const searchTerm = useSearchStore(state => state.searchTerm);
-  const filteredList = useFilteredGoods(priceList);
-  const isHiddenDefaultList = searchTerm.length > 1 || sortGoods !== "default";
+  const debouncedSearch = useDebounce<string>(searchTerm, 100);
+  const filteredList = useFilteredGoods(debouncedSearch, priceList);
+  const isHiddenDefaultList = debouncedSearch.length > 1 || sortGoods !== "default";
   const priceListPositions =
     nonFavoriteSections && nonFavoriteSections.length > 0
       ? nonFavoriteSections
