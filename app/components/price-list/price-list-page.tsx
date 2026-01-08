@@ -1,5 +1,5 @@
 "use client";
-import { SearchInput } from "@/app/components/components/search-input";
+import { SearchInput } from "@/app/components/search-input";
 import { PriceList } from "./price-list";
 import type { Position as PositionType, PriceList as PriceListType } from "@/types/pricelist";
 import type { Favorite as FavoriteType, UserSections as UserSectionsType } from "@/types/user";

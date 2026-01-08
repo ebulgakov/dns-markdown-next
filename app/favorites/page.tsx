@@ -1,5 +1,5 @@
 import { getUser } from "@/db/user/queries";
-import { PriceListGoods } from "@/app/components/components/price-list";
+import { PriceListGoods } from "@/app/components/price-list";
 import type { Favorite } from "@/types/user";
 import { PageTitle } from "@/app/components/ui/page-title";
 import { Alert, AlertTitle, AlertDescription } from "@/app/components/ui/alert";

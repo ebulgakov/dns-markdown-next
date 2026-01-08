@@ -1,7 +1,7 @@
 import { getProductById } from "@/db/pricelist/queries";
 import { PageTitle } from "@/app/components/ui/page-title";
-import { PriceListGoods } from "@/app/components/components/price-list";
-import { ChartPrices } from "@/app/components/components/chart-prices";
+import { PriceListGoods } from "@/app/components/price-list";
+import { ChartPrices } from "@/app/components/chart-prices";
 import { Title } from "@/app/components/ui/title";
 import { Alert, AlertDescription, AlertTitle } from "@/app/components/ui/alert";
 

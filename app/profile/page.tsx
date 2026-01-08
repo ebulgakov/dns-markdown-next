@@ -1,5 +1,5 @@
 import { getUser } from "@/db/user/queries";
-import { ProfileSections } from "@/app/components/components/profile-sections";
+import { ProfileSections } from "@/app/components/profile-sections";
 import { getLastPriceList } from "@/db/pricelist/queries";
 import { Alert, AlertDescription, AlertTitle } from "@/app/components/ui/alert";
 
