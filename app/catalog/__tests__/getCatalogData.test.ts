@@ -1,4 +1,4 @@
-import { getCatalogData } from "../getCatalogData";
+import { getCatalogData } from "../get-catalog-data";
 import { getLastPriceList } from "@/db/pricelist/queries";
 import { getUser } from "@/db/user/queries";
 import { PriceList as PriceListType, Goods } from "@/types/pricelist";

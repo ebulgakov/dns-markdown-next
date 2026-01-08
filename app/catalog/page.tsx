@@ -1,4 +1,4 @@
-import { getCatalogData } from "@/app/catalog/getCatalogData";
+import { getCatalogData } from "@/app/catalog/get-catalog-data";
 import { formatDate, formatTime } from "@/app/helpers/format";
 import { PageTitle } from "@/app/components/ui/page-title";
 import { PriceListPage } from "@/app/components/price-list";
