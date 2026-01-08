@@ -9,6 +9,7 @@ import { useDebounce } from "@/app/hooks/useDebounce";
 import { PriceListFavoritesSection } from "./price-list-favorites-section";
 import clsx from "clsx";
 import { useFilteredGoods } from "@/app/hooks/useFilteredGoods";
+import { useSortGoodsStore } from "@/app/stores/sort-goods-store";
 
 type PriceListPageProps = {
   favoriteSections?: PositionType[];
@@ -25,9 +26,10 @@ function PriceListPage({
   nonFavoriteSections,
   priceList
 }: PriceListPageProps) {
+  const sortGoods = useSortGoodsStore(state => state.sortGoods);
   const searchTerm = useSearchStore(state => state.searchTerm);
   const debouncedSearch = useDebounce<string>(searchTerm, 100);
-  const filteredList = useFilteredGoods(debouncedSearch, priceList);
+  const filteredList = useFilteredGoods(debouncedSearch, priceList, sortGoods);
 
   return (
     <>
@@ -37,7 +39,7 @@ function PriceListPage({
         <PriceListGoods key={item._id} item={item} favorites={userFavoritesGoods} />
       ))}
 
-      <div className={clsx({ hidden: searchTerm.length > 1 })}>
+      <div className={clsx({ hidden: searchTerm.length > 1 || sortGoods !== "default" })}>
         {favoriteSections && (
           <PriceListFavoritesSection
             favoriteSections={favoriteSections}
