@@ -1,9 +1,9 @@
 "use client";
+
 import { useSearchStore } from "@/app/stores/search-store";
 import { useState } from "react";
 import clsx from "clsx";
-import { FontAwesomeIcon as Fa } from "@fortawesome/react-fontawesome";
-import { faSearch, faTimes } from "@fortawesome/free-solid-svg-icons";
+import { Search, X } from "lucide-react";
 
 function SearchInput() {
   const [hidden, setHidden] = useState<boolean>(true);
@@ -41,7 +41,7 @@ function SearchInput() {
         name="toggle-visibility"
         className="fixed right-3 bottom-3 size-14 z-20 p-4 bg-orange-400 text-white rounded-full cursor-pointer hover:bg-orange-500 "
       >
-        <Fa icon={hidden ? faSearch : faTimes} className="size-full!" />
+        {hidden ? <Search /> : <X />}
       </button>
     </>
   );
