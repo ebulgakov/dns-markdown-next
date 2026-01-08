@@ -1,5 +1,5 @@
 import { Meta, StoryObj } from "@storybook/react";
-import ChangeLocationSelector from "../ChangeLocationSelector";
+import { ChangeLocationSelector } from "../change-location-selector";
 
 const meta: Meta<typeof ChangeLocationSelector> = {
   title: "Components/ChangeLocationSelector",

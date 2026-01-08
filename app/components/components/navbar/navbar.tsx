@@ -9,7 +9,7 @@ import {
 } from "@/app/components/ui/navigation-menu";
 import { Button } from "@/app/components/ui/button";
 
-export default function Navbar() {
+function Navbar() {
   const t = useTranslations("Navbar");
   const linksList: {
     name: string;
@@ -76,3 +76,5 @@ export default function Navbar() {
     </header>
   );
 }
+
+export { Navbar };

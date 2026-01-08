@@ -1,11 +1,11 @@
 import Link from "next/link";
-import ChangeLocationSelector from "@/app/components/ChangeLocationSelector";
+import { ChangeLocationSelector } from "@/app/components/components/change-location-selector";
 import { useTranslations } from "next-intl";
 
 type FooterProps = {
   locate?: string;
 };
-export default function Footer({ locate }: FooterProps) {
+function Footer({ locate }: FooterProps) {
   const t = useTranslations("Footer");
   return (
     <footer className="mt-auto border-t border-neutral-300 h-13 flex items-center justify-between">
@@ -19,3 +19,5 @@ export default function Footer({ locate }: FooterProps) {
     </footer>
   );
 }
+
+export { Footer };

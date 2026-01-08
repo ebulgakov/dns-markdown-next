@@ -5,7 +5,7 @@ type ChangeLocationSelectorProps = {
   locate?: string;
 };
 
-export default function ChangeLocationSelector({ locate = "ru" }: ChangeLocationSelectorProps) {
+function ChangeLocationSelector({ locate = "ru" }: ChangeLocationSelectorProps) {
   const handleChangeLanguage = (event: ChangeEvent<HTMLSelectElement>) => {
     document.cookie = `locale=${event.target.value}; path=/; max-age=31536000`;
     window.location.reload();
@@ -24,3 +24,5 @@ export default function ChangeLocationSelector({ locate = "ru" }: ChangeLocation
     </select>
   );
 }
+
+export { ChangeLocationSelector };
