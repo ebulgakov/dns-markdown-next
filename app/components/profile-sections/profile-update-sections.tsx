@@ -2,7 +2,7 @@
 
 import type { AvailableUpdateSectionNames, UserSections as UserSectionsType } from "@/types/user";
 import { X } from "lucide-react";
-import { useState, type ChangeEvent, useTransition, useOptimistic, Fragment } from "react";
+import { useState, useTransition, useOptimistic, Fragment } from "react";
 import { Button } from "@/app/components/ui/button";
 import { updateUserSection } from "@/db/user/mutations/update-user-section";
 import { uniqAbcSort } from "@/app/helpers/sort";
@@ -10,6 +10,8 @@ import { Alert, AlertDescription, AlertTitle } from "@/app/components/ui/alert";
 import { Card } from "@/app/components/ui/card";
 import { ScrollArea } from "@/app/components/ui/scroll-area";
 import { Separator } from "@/app/components/ui/separator";
+import { Checkbox } from "@/app/components/ui/checkbox";
+import { Label } from "@/app/components/ui/label";
 
 type ProfileUpdateSectionsProps = {
   sectionName: AvailableUpdateSectionNames;
@@ -63,10 +65,9 @@ function ProfileUpdateSections({
     await updateSections(sections);
   };
 
-  const handleCheckboxChange = (event: ChangeEvent<HTMLInputElement>) => {
-    const { value, checked } = event.target;
+  const handleCheckboxChange = ({ section, checked }: { section: string; checked: boolean }) => {
     setSelectedSections(prev =>
-      checked ? [...prev, value] : prev.filter(section => section !== value)
+      checked ? [...prev, section] : prev.filter(pSection => pSection !== section)
     );
   };
 
@@ -88,15 +89,16 @@ function ProfileUpdateSections({
                 {outputAllSections.map((section, idx) => (
                   <Fragment key={section}>
                     {idx > 0 && <Separator className="my-2" />}
-                    <label>
-                      <input
-                        type="checkbox"
-                        className="mr-1"
+                    <div className="flex items-center gap-3">
+                      <Checkbox
+                        id={`checkbox-option-${idx}`}
                         value={section}
-                        onChange={handleCheckboxChange}
+                        onCheckedChange={checked =>
+                          handleCheckboxChange({ section, checked: Boolean(checked) })
+                        }
                       />
-                      {section}
-                    </label>
+                      <Label htmlFor={`checkbox-option-${idx}`}>{section}</Label>
+                    </div>
                   </Fragment>
                 ))}
               </div>
@@ -121,9 +123,12 @@ function ProfileUpdateSections({
                   outputActiveSections.map((section, idx) => (
                     <Fragment key={section}>
                       {idx > 0 && <Separator className="my-2" />}
-                      <button className="flex" onClick={() => handleRemoveActiveSection(section)}>
-                        <X />
-                        {section}
+                      <button
+                        className="flex gap-1"
+                        onClick={() => handleRemoveActiveSection(section)}
+                      >
+                        <X className="size-6" />
+                        <Label>{section}</Label>
                       </button>
                     </Fragment>
                   ))
