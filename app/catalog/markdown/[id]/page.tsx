@@ -2,7 +2,7 @@ import { getProductById } from "@/db/pricelist/queries";
 import PageTitle from "@/app/components/PageTitle";
 import PriceListGoods from "@/app/components/PriceList/PriceListGoods";
 import ProductPricesChart from "@/app/components/ProductPricesChart";
-import Title from "@/app/components/Title";
+import { Title } from "@/app/components/ui/title";
 import { Alert, AlertDescription, AlertTitle } from "@/app/components/ui/alert";
 
 type CatalogItemPage = {

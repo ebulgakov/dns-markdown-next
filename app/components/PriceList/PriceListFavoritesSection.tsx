@@ -1,7 +1,7 @@
 import PriceList from "@/app/components/PriceList/PriceList";
 import type { Position as PositionType } from "@/types/pricelist";
 import type { Favorite as FavoriteType, UserSections as UserSectionsType } from "@/types/user";
-import Title from "@/app/components/Title";
+import { Title } from "@/app/components/ui/title";
 import { Alert, AlertDescription, AlertTitle } from "@/app/components/ui/alert";
 
 type PriceListFavoritesSectionProps = {

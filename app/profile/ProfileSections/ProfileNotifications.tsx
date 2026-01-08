@@ -1,5 +1,5 @@
 import type { UserNotifications } from "@/types/user";
-import Title from "@/app/components/Title";
+import { Title } from "@/app/components/ui/title";
 
 type ProfileNotificationsProps = {
   notifications: UserNotifications;
