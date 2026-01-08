@@ -4,6 +4,7 @@ import { useSearchStore } from "@/app/stores/search-store";
 import { useState } from "react";
 import clsx from "clsx";
 import { Search, X } from "lucide-react";
+import { Input } from "@/app/components/ui/input";
 
 function SearchInput() {
   const [hidden, setHidden] = useState<boolean>(true);
@@ -22,12 +23,12 @@ function SearchInput() {
           )}
         >
           <div className="md:container mx-auto">
-            <input
+            <Input
               autoFocus={true}
+              inputSize="lg"
               role="search"
               type="search"
               value={searchTerm}
-              className="block w-full rounded-md border-2 border-blue-400 p-2 focus:border-blue-500 disabled:border-blue-300 disabled:bg-blue-50"
               onChange={e => onChange(e.target.value)}
               placeholder="Поиск по названию товара..."
             />
