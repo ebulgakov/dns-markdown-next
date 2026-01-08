@@ -42,5 +42,7 @@ Chromatic Storybook is set up for this project: https://www.chromatic.com/librar
 * MongoDB
 * Typescript
 * Tailwind CSS
+* Shadcn/UI
+* I18n
 * Storybook
 * Jest
