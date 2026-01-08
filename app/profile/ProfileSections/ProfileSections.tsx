@@ -3,7 +3,7 @@ import type { UserNotifications, UserSections } from "@/types/user";
 import { useState } from "react";
 import ProfileUpdateSections from "@/app/profile/ProfileSections/ProfileUpdateSections";
 import ProfileNotifications from "@/app/profile/ProfileSections/ProfileNotifications";
-import PageTitle from "@/app/components/PageTitle";
+import { PageTitle } from "@/app/components/ui/page-title";
 import { Button } from "@/app/components/ui/button";
 
 type ProfileSectionsProps = {

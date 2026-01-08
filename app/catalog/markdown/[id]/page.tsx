@@ -1,5 +1,5 @@
 import { getProductById } from "@/db/pricelist/queries";
-import PageTitle from "@/app/components/PageTitle";
+import { PageTitle } from "@/app/components/ui/page-title";
 import PriceListGoods from "@/app/components/PriceList/PriceListGoods";
 import ProductPricesChart from "@/app/components/ProductPricesChart";
 import { Title } from "@/app/components/ui/title";

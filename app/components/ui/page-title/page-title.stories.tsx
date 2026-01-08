@@ -1,9 +1,9 @@
 import type { Meta, StoryObj } from "@storybook/react";
-import PageTitle from "../PageTitle";
+import { PageTitle } from "../page-title";
 import { Button } from "@/app/components/ui/button";
 
 const meta: Meta<typeof PageTitle> = {
-  title: "Components/PageTitle",
+  title: "UI/PageTitle",
   component: PageTitle,
   parameters: {
     layout: "fullscreen"

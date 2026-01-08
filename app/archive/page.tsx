@@ -1,7 +1,7 @@
 import { getArchiveList } from "@/db/pricelist/queries";
 import Link from "next/link";
 import { formatDate } from "@/app/helpers/format";
-import PageTitle from "@/app/components/PageTitle";
+import { PageTitle } from "@/app/components/ui/page-title";
 import { Alert, AlertDescription, AlertTitle } from "@/app/components/ui/alert";
 
 export default async function ArchivePage() {

@@ -1,5 +1,5 @@
 import { getPriceListsDiff } from "@/db/pricelist/queries";
-import PageTitle from "@/app/components/PageTitle";
+import { PageTitle } from "@/app/components/ui/page-title";
 import PriceListSection from "@/app/components/PriceList/PriceListSection";
 import { DiffsCollection as DiffsCollectionType } from "@/types/diff";
 import { getUser } from "@/db/user/queries";

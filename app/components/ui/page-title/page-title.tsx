@@ -5,7 +5,7 @@ type PageTitleProps = {
   subTitle?: string;
   children?: ReactNode;
 };
-export default function PageTitle({ title, subTitle, children }: PageTitleProps) {
+function PageTitle({ title, subTitle, children }: PageTitleProps) {
   return (
     <div className="flex justify-between items-end border-b border-solid border-b-neutral-300  my-5 py-5 bg-white ">
       <h1 className="text-4xl">
@@ -18,3 +18,5 @@ export default function PageTitle({ title, subTitle, children }: PageTitleProps)
     </div>
   );
 }
+
+export { PageTitle };
