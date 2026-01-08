@@ -2,21 +2,21 @@ import type { Metadata } from "next";
 import { getLocale } from "next-intl/server";
 import { getTranslations } from "next-intl/server";
 import { NextIntlClientProvider } from "next-intl";
-import { Geist, Geist_Mono } from "next/font/google";
+import { Roboto, Roboto_Mono } from "next/font/google";
 import { ClerkProvider } from "@clerk/nextjs";
 import "./globals.css";
-import Navbar from "@/app/components/Navbar";
-import Footer from "@/app/components/Footer";
+import { Navbar } from "@/app/components/navbar";
+import { Footer } from "@/app/components/footer";
 import { StrictMode, type ReactNode } from "react";
 
-const geistSans = Geist({
-  variable: "--font-geist-sans",
-  subsets: ["latin"]
+const robotoSans = Roboto({
+  variable: "--font-roboto-sans",
+  subsets: ["cyrillic", "latin"]
 });
 
-const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
-  subsets: ["latin"]
+const robotoMono = Roboto_Mono({
+  variable: "--font-roboto-mono",
+  subsets: ["cyrillic", "latin"]
 });
 
 export async function generateMetadata({
@@ -45,7 +45,7 @@ export default async function RootLayout({
       <NextIntlClientProvider>
         <ClerkProvider>
           <html lang={locale}>
-            <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
+            <body className={`${robotoSans.variable} ${robotoMono.variable} antialiased font-sans`}>
               <div className="grid min-h-screen md:container mx-auto">
                 <div className="mb-10">
                   <div className="mt-4 mb-5">

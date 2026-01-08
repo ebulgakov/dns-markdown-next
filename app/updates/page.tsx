@@ -1,9 +1,9 @@
 import { getPriceListsDiff } from "@/db/pricelist/queries";
-import PageTitle from "@/app/components/PageTitle";
-import PriceListSection from "@/app/components/PriceList/PriceListSection";
+import { PageTitle } from "@/app/components/ui/page-title";
+import { PriceListSection } from "@/app/components/price-list";
 import { DiffsCollection as DiffsCollectionType } from "@/types/diff";
 import { getUser } from "@/db/user/queries";
-import Alert from "@/app/components/Alert";
+import { Alert, AlertDescription, AlertTitle } from "@/app/components/ui/alert";
 
 export default async function UpdatesPage() {
   let diffNew;
@@ -64,7 +64,12 @@ export default async function UpdatesPage() {
     }
   } catch (e) {
     const { message } = e as Error;
-    return <Alert variant="error">{message}</Alert>;
+    return (
+      <Alert variant="destructive">
+        <AlertTitle>Ошибка загрузки обновлений</AlertTitle>
+        <AlertDescription>{message}</AlertDescription>
+      </Alert>
+    );
   }
 
   return (

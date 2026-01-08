@@ -1,8 +1,8 @@
 import { getCatalogData } from "@/app/catalog/getCatalogData";
 import { formatDate, formatTime } from "@/app/helpers/format";
-import PageTitle from "@/app/components/PageTitle";
-import PriceListPage from "@/app/components/PriceList/PriceListPage";
-import Alert from "@/app/components/Alert";
+import { PageTitle } from "@/app/components/ui/page-title";
+import { PriceListPage } from "@/app/components/price-list";
+import { Alert, AlertDescription, AlertTitle } from "@/app/components/ui/alert";
 
 export default async function CatalogPage() {
   const {
@@ -15,7 +15,12 @@ export default async function CatalogPage() {
   } = await getCatalogData();
 
   if (error || !priceList) {
-    return <Alert variant="error">{error?.message}</Alert>;
+    return (
+      <Alert variant="destructive">
+        <AlertTitle>Ошибка загрузки каталога</AlertTitle>
+        <AlertDescription>{error?.message}</AlertDescription>
+      </Alert>
+    );
   }
 
   const count = priceList.positions.reduce((acc, cur) => acc + cur.items.length, 0);
