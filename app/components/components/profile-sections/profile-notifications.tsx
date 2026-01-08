@@ -5,7 +5,7 @@ type ProfileNotificationsProps = {
   notifications: UserNotifications;
 };
 
-export default function ProfileNotifications({ notifications }: ProfileNotificationsProps) {
+function ProfileNotifications({ notifications }: ProfileNotificationsProps) {
   return (
     <div>
       <Title variant="h2">Уведомления</Title>
@@ -18,3 +18,5 @@ export default function ProfileNotifications({ notifications }: ProfileNotificat
     </div>
   );
 }
+
+export { ProfileNotifications };

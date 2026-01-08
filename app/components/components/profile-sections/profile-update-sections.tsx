@@ -15,7 +15,7 @@ type ProfileUpdateSectionsProps = {
   placeholder: string;
 };
 
-export default function ProfileUpdateSections({
+function ProfileUpdateSections({
   userSections,
   allSections,
   sectionName,
@@ -120,3 +120,5 @@ export default function ProfileUpdateSections({
     </div>
   );
 }
+
+export { ProfileUpdateSections };

@@ -1,8 +1,8 @@
 "use client";
 import type { UserNotifications, UserSections } from "@/types/user";
 import { useState } from "react";
-import ProfileUpdateSections from "@/app/profile/ProfileSections/ProfileUpdateSections";
-import ProfileNotifications from "@/app/profile/ProfileSections/ProfileNotifications";
+import { ProfileUpdateSections } from "./profile-update-sections";
+import { ProfileNotifications } from "./profile-notifications";
 import { PageTitle } from "@/app/components/ui/page-title";
 import { Button } from "@/app/components/ui/button";
 
@@ -30,7 +30,7 @@ const tabs: { id: AvailableTabs; label: string }[] = [
   }
 ];
 
-export default function ProfileSections({
+function ProfileSections({
   notifications,
   favoriteSections,
   hiddenSections,
@@ -77,3 +77,5 @@ export default function ProfileSections({
     </div>
   );
 }
+
+export { ProfileSections };
