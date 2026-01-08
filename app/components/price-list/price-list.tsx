@@ -2,7 +2,6 @@
 import { PriceListSection } from "./price-list-section";
 import type { Favorite, UserSections } from "@/types/user";
 import { Position as PositionType } from "@/types/pricelist";
-import { useClientRendering } from "@/app/hooks/useClientRendering";
 
 type CatalogProps = {
   positions: PositionType[];
@@ -11,9 +10,6 @@ type CatalogProps = {
 };
 
 function PriceList({ positions, favorites, hiddenSections }: CatalogProps) {
-  const isClient = useClientRendering();
-  if (!isClient) return null;
-
   return positions.map(position => (
     <PriceListSection
       key={position._id}
