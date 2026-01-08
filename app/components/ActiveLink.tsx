@@ -3,11 +3,7 @@
 import { usePathname } from "next/navigation";
 import Link from "next/link";
 import { type ReactNode } from "react";
-import {
-  NavigationMenuLink,
-  navigationMenuTriggerStyle
-} from "@/app/components/ui/navigation-menu";
-import { cn } from "@/app/lib/utils";
+import { NavigationMenuLink } from "@/app/components/ui/navigation-menu";
 
 type ActiveLinkProps = {
   children: ReactNode;
@@ -24,13 +20,7 @@ export default function ActiveLink({ link, children }: ActiveLinkProps): ReactNo
   };
 
   return (
-    <NavigationMenuLink
-      asChild
-      className={cn([
-        navigationMenuTriggerStyle(),
-        isActive(link.url) && "bg-primary text-primary-foreground"
-      ])}
-    >
+    <NavigationMenuLink asChild data-active={isActive(link.url) ? "true" : "false"}>
       <Link href={link.url}>{children}</Link>
     </NavigationMenuLink>
   );
