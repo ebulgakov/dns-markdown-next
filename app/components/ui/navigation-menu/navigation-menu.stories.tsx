@@ -11,6 +11,7 @@ import {
   NavigationMenuList,
   NavigationMenuTrigger
 } from "./navigation-menu";
+import Link from "next/link";
 
 const meta = {
   title: "UI/NavigationMenu",
@@ -94,7 +95,7 @@ export const Default: Story = {
             <ul className="grid gap-3 p-6 md:w-[400px] lg:w-[500px] lg:grid-cols-[.75fr_1fr]">
               <li className="row-span-3">
                 <NavigationMenuLink asChild>
-                  <a
+                  <Link
                     className="from-muted/50 to-muted flex size-full select-none flex-col justify-end rounded-md bg-gradient-to-b p-6 no-underline outline-none focus:shadow-md"
                     href="/"
                   >
@@ -103,7 +104,7 @@ export const Default: Story = {
                       Beautifully designed components that you can copy and paste into your apps.
                       Accessible. Customizable. Open Source.
                     </p>
-                  </a>
+                  </Link>
                 </NavigationMenuLink>
               </li>
               <ListItem href="/docs" title="Introduction">
@@ -131,7 +132,9 @@ export const Default: Story = {
           </NavigationMenuContent>
         </NavigationMenuItem>
         <NavigationMenuItem>
-          <NavigationMenuLink href="/docs">Documentation</NavigationMenuLink>
+          <NavigationMenuLink href="/docs" className="font-medium">
+            Documentation
+          </NavigationMenuLink>
         </NavigationMenuItem>
       </NavigationMenuList>
     </NavigationMenu>
