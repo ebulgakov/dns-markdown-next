@@ -4,7 +4,7 @@ import { Button } from "./button";
 import { PlusIcon } from "lucide-react";
 
 const meta = {
-  title: "Components/Button",
+  title: "UI/Button",
   component: Button,
   parameters: {
     layout: "centered"

@@ -2,7 +2,7 @@ import { getArchiveList } from "@/db/pricelist/queries";
 import Link from "next/link";
 import { formatDate } from "@/app/helpers/format";
 import PageTitle from "@/app/components/PageTitle";
-import Alert from "@/app/components/Alert";
+import { Alert, AlertDescription, AlertTitle } from "@/app/components/ui/alert";
 
 export default async function ArchivePage() {
   let archiveCollection;
@@ -12,7 +12,12 @@ export default async function ArchivePage() {
     if (!archiveCollection) throw new Error("No pricelist collection");
   } catch (e) {
     const { message } = e as Error;
-    return <Alert variant="error">{message}</Alert>;
+    return (
+      <Alert variant="destructive">
+        <AlertTitle>Ошибка загрузки архива прайслистов</AlertTitle>
+        <AlertDescription>{message}</AlertDescription>
+      </Alert>
+    );
   }
 
   return (

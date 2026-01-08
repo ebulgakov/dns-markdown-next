@@ -2,7 +2,7 @@ import { getUser } from "@/db/user/queries";
 import PriceListGoods from "@/app/components/PriceList/PriceListGoods";
 import type { Favorite } from "@/types/user";
 import PageTitle from "@/app/components/PageTitle";
-import Alert from "@/app/components/Alert";
+import { Alert, AlertTitle, AlertDescription } from "@/app/components/ui/alert";
 
 export default async function FavoritesPage() {
   let favorites;
@@ -13,7 +13,12 @@ export default async function FavoritesPage() {
     favorites = JSON.parse(JSON.stringify(user.favorites.reverse())) as Favorite[];
   } catch (e) {
     const { message } = e as Error;
-    return <Alert variant="error">{message}</Alert>;
+    return (
+      <Alert variant="destructive">
+        <AlertTitle>Ошибка загрузки избранного</AlertTitle>
+        <AlertDescription>{message}</AlertDescription>
+      </Alert>
+    );
   }
 
   return (

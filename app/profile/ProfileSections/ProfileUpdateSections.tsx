@@ -5,7 +5,7 @@ import { useState, type ChangeEvent, useTransition, useOptimistic } from "react"
 import { Button } from "@/app/components/ui/button";
 import { updateUserSection } from "@/db/user/mutations/update-user-section";
 import { uniqAbcSort } from "@/app/helpers/sort";
-import Alert from "@/app/components/Alert";
+import { Alert, AlertDescription, AlertTitle } from "@/app/components/ui/alert";
 
 type ProfileUpdateSectionsProps = {
   sectionName: AvailableUpdateSectionNames;
@@ -70,7 +70,10 @@ export default function ProfileUpdateSections({
     <div>
       {errorMessage && (
         <div className="mb-4">
-          <Alert variant="error">{errorMessage.message}</Alert>
+          <Alert variant="destructive">
+            <AlertTitle>Ошибка обновления разделов</AlertTitle>
+            <AlertDescription>{errorMessage.message}</AlertDescription>
+          </Alert>
         </div>
       )}
       <div className="flex gap-4">

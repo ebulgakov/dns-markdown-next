@@ -1,7 +1,7 @@
 import { getUser } from "@/db/user/queries";
 import ProfileSections from "@/app/profile/ProfileSections/ProfileSections";
 import { getLastPriceList } from "@/db/pricelist/queries";
-import Alert from "@/app/components/Alert";
+import { Alert, AlertDescription, AlertTitle } from "@/app/components/ui/alert";
 
 export default async function ProfilePage() {
   let profile;
@@ -19,7 +19,12 @@ export default async function ProfilePage() {
     allSections = lastPriceList.positions.map(position => position.title);
   } catch (e) {
     const { message } = e as Error;
-    return <Alert variant="error">{message}</Alert>;
+    return (
+      <Alert variant="destructive">
+        <AlertTitle>Ошибка загрузки профиля</AlertTitle>
+        <AlertDescription>{message}</AlertDescription>
+      </Alert>
+    );
   }
 
   return (

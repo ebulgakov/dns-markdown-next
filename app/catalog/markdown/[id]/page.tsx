@@ -3,7 +3,7 @@ import PageTitle from "@/app/components/PageTitle";
 import PriceListGoods from "@/app/components/PriceList/PriceListGoods";
 import ProductPricesChart from "@/app/components/ProductPricesChart";
 import Title from "@/app/components/Title";
-import Alert from "@/app/components/Alert";
+import { Alert, AlertDescription, AlertTitle } from "@/app/components/ui/alert";
 
 type CatalogItemPage = {
   params: Promise<{ id: string }>;
@@ -28,7 +28,12 @@ export default async function CatalogItemPage({ params }: CatalogItemPage) {
   }
 
   if (!product) {
-    return <Alert variant="error">{error?.message}</Alert>;
+    return (
+      <Alert variant="destructive">
+        <AlertTitle>Ошибка загрузки товара</AlertTitle>
+        <AlertDescription>{error?.message}</AlertDescription>
+      </Alert>
+    );
   }
 
   return (
