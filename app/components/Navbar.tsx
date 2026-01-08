@@ -2,6 +2,12 @@ import { SignedIn, SignedOut, SignInButton, SignUpButton, UserButton } from "@cl
 import Link from "next/link";
 import ActiveLink from "@/app/components/ActiveLink";
 import { useTranslations } from "next-intl";
+import {
+  NavigationMenu,
+  NavigationMenuList,
+  NavigationMenuItem
+} from "@/app/components/ui/navigation-menu";
+import { Button } from "@/app/components/ui/button";
 
 export default function Navbar() {
   const t = useTranslations("Navbar");
@@ -32,40 +38,41 @@ export default function Navbar() {
   ];
 
   return (
-    <header className="flex h-10 items-center gap-4 bg-blue-400">
-      <nav className="flex">
-        <Link href="/" className="bg-white font-bold text-blue-400 h-10 flex items-center px-3">
-          {t("logo")}
-        </Link>
-        <SignedIn>
-          {linksList.map(link => (
-            <ActiveLink
-              key={link.name}
-              href={link.url}
-              activeClassName="bg-orange-400 text-shadow-xs"
-              className=" text-white h-10 flex items-center px-3"
-            >
-              {link.name}
-            </ActiveLink>
-          ))}
-        </SignedIn>
-      </nav>
+    <header className="flex items-center gap-4 border-2 border-primary py-2 rounded">
+      <NavigationMenu>
+        <Button asChild variant="link" className="font-bold">
+          <Link href="/">{t("logo")}</Link>
+        </Button>
 
-      <SignedOut>
-        <div className="ml-auto mr-2 divide-x">
-          <SignInButton>
-            <button className="font-bold text-nowrap text-white pr-3">{t("signin")}</button>
-          </SignInButton>
-          <SignUpButton>
-            <button className="font-bold text-nowrap text-white pl-3">{t("signup")}</button>
-          </SignUpButton>
-        </div>
-      </SignedOut>
-      <SignedIn>
-        <div className="ml-auto mr-2 size-7">
-          <UserButton />
-        </div>
-      </SignedIn>
+        <SignedIn>
+          <NavigationMenuList>
+            {linksList.map(link => (
+              <NavigationMenuItem key={link.name}>
+                <ActiveLink link={link}>{link.name}</ActiveLink>
+              </NavigationMenuItem>
+            ))}
+          </NavigationMenuList>
+        </SignedIn>
+      </NavigationMenu>
+
+      <NavigationMenu className="ml-auto mr-2">
+        <SignedOut>
+          <div className="flex items-center gap-2">
+            <SignInButton>
+              <Button variant="link">{t("signin")}</Button>
+            </SignInButton>
+            <div className="border-l-2 border-primary h-6"></div>
+            <SignUpButton>
+              <Button variant="link">{t("signup")}</Button>
+            </SignUpButton>
+          </div>
+        </SignedOut>
+        <SignedIn>
+          <div className="size-7">
+            <UserButton />
+          </div>
+        </SignedIn>
+      </NavigationMenu>
     </header>
   );
 }
