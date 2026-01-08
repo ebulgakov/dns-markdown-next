@@ -30,6 +30,11 @@ function PriceListPage({
   const searchTerm = useSearchStore(state => state.searchTerm);
   const debouncedSearch = useDebounce<string>(searchTerm, 100);
   const filteredList = useFilteredGoods(debouncedSearch, priceList, sortGoods);
+  const isHiddenDefaultList = searchTerm.length > 1 || sortGoods !== "default";
+  const priceListPositions =
+    nonFavoriteSections && nonFavoriteSections.length > 0
+      ? nonFavoriteSections
+      : priceList.positions;
 
   return (
     <>
@@ -39,7 +44,7 @@ function PriceListPage({
         <PriceListGoods key={item._id} item={item} favorites={userFavoritesGoods} />
       ))}
 
-      <div className={clsx({ hidden: searchTerm.length > 1 || sortGoods !== "default" })}>
+      <div className={clsx({ hidden: isHiddenDefaultList })}>
         {favoriteSections && (
           <PriceListFavoritesSection
             favoriteSections={favoriteSections}
@@ -49,11 +54,7 @@ function PriceListPage({
         )}
 
         <PriceList
-          positions={
-            nonFavoriteSections && nonFavoriteSections.length > 0
-              ? nonFavoriteSections
-              : priceList.positions
-          }
+          positions={priceListPositions}
           favorites={userFavoritesGoods}
           hiddenSections={hiddenSectionsTitles}
         />
