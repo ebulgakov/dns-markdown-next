@@ -1,35 +1,32 @@
 "use client";
 
-import { useClientRendering } from "@/app/hooks/useClientRendering";
-import { Chart } from "react-chartjs-2";
+import { Area, AreaChart, CartesianGrid, XAxis, YAxis } from "recharts";
+import { Card, CardContent } from "@/app/components/ui/card";
 import {
-  Chart as ChartJS,
-  CategoryScale,
-  LineElement,
-  PointElement,
-  LinearScale,
-  Title,
-  Tooltip,
-  LineController,
-  Legend
-} from "chart.js";
+  ChartContainer,
+  ChartTooltip,
+  ChartTooltipContent,
+  type ChartConfig,
+  ChartLegend,
+  ChartLegendContent
+} from "@/app/components/ui/chart";
 
-ChartJS.register(
-  CategoryScale,
-  LinearScale,
-  PointElement,
-  LineElement,
-  Title,
-  Tooltip,
-  Legend,
-  LineController
-);
+const chartConfig = {
+  price: {
+    label: "Цена",
+    color: "var(--accent)"
+  },
+  old: {
+    label: "Обычная цена",
+    color: "var(--secondary)"
+  },
+  profit: {
+    label: "Ваша выгода",
+    color: "var(--primary)"
+  }
+} satisfies ChartConfig;
 
-const options = {
-  responsive: true
-};
-
-type ProductPricesChartProps = {
+type ChartPricesProps = {
   chartData: {
     labels: string[];
     price: string[];
@@ -38,40 +35,72 @@ type ProductPricesChartProps = {
   } | null;
 };
 
-function ChartPrices({ chartData }: ProductPricesChartProps) {
-  const isClient = useClientRendering();
-  if (!isClient || !chartData) return null;
+function ChartPrices({ chartData }: ChartPricesProps) {
+  const data = Array.from({ length: chartData?.labels.length || 0 }, (_, index) => ({
+    date: chartData?.labels[index] || "-",
+    price: chartData?.price[index] || "0",
+    old: chartData?.priceOld[index] || "0",
+    profit: chartData?.profit[index] || "0"
+  }));
 
   return (
-    <Chart
-      type="line"
-      options={options}
-      data={{
-        labels: chartData.labels.map(label =>
-          label !== "-" ? new Date(label).toLocaleDateString() : "-"
-        ),
-        datasets: [
-          {
-            label: "Цена",
-            backgroundColor: "rgba(75, 192, 192, 0.2)",
-            data: chartData.price.map(price => parseInt(price, 10))
-          },
-          {
-            label: "Обычная цена",
-            backgroundColor: "rgba(255, 99, 132, 0.2)",
-            data: chartData.priceOld.map(price => parseInt(price, 10))
-          },
-          {
-            label: "Ваша выгода",
-            backgroundColor: "rgba(54, 162, 235, 0.2)",
-            data: chartData.profit.map(price => parseInt(price, 10)),
-            hidden: true
-          }
-        ]
-      }}
-      width={600}
-      height={250}
-    />
+    <Card className="@container/card">
+      <CardContent className="px-2 pt-4 sm:px-6 sm:pt-6">
+        <ChartContainer config={chartConfig} className="aspect-auto h-[250px] w-full">
+          <AreaChart
+            accessibilityLayer
+            data={data}
+            margin={{
+              left: 12,
+              right: 12
+            }}
+          >
+            <CartesianGrid vertical={false} />
+            <XAxis
+              dataKey="date"
+              tickLine={false}
+              axisLine={false}
+              tickMargin={8}
+              minTickGap={32}
+              tickFormatter={value => {
+                const date = new Date(value);
+                return date.toLocaleDateString("ru", {
+                  month: "short",
+                  day: "numeric"
+                });
+              }}
+            />
+            <YAxis tickLine={false} axisLine={false} tickMargin={8} tickCount={3} />
+            <ChartTooltip cursor={false} content={<ChartTooltipContent indicator="line" />} />
+            <Area
+              dataKey="price"
+              type="natural"
+              fill="var(--color-price)"
+              fillOpacity={0.4}
+              stroke="var(--color-price)"
+              stackId="a"
+            />
+            <Area
+              dataKey="profit"
+              type="natural"
+              fill="var(--color-profit)"
+              fillOpacity={0.4}
+              stroke="var(--color-profit)"
+              stackId="a"
+            />
+            <Area
+              dataKey="old"
+              type="natural"
+              fill="var(--color-old)"
+              fillOpacity={0.4}
+              stroke="var(--color-old)"
+              stackId="c"
+            />
+            <ChartLegend content={<ChartLegendContent />} />
+          </AreaChart>
+        </ChartContainer>
+      </CardContent>
+    </Card>
   );
 }
 
