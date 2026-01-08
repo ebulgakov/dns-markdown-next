@@ -1,3 +1,5 @@
+"use client";
+
 import type { AvailableUpdateSectionNames, UserSections as UserSectionsType } from "@/types/user";
 import { FontAwesomeIcon as Fa } from "@fortawesome/react-fontawesome";
 import { faTimes } from "@fortawesome/free-solid-svg-icons";
