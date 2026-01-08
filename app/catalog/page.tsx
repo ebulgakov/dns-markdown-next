@@ -1,7 +1,7 @@
 import { getCatalogData } from "@/app/catalog/getCatalogData";
 import { formatDate, formatTime } from "@/app/helpers/format";
 import { PageTitle } from "@/app/components/ui/page-title";
-import PriceListPage from "@/app/components/PriceList/PriceListPage";
+import { PriceListPage } from "@/app/components/components/price-list";
 import { Alert, AlertDescription, AlertTitle } from "@/app/components/ui/alert";
 
 export default async function CatalogPage() {

@@ -1,12 +1,12 @@
 "use client";
 import { SearchInput } from "@/app/components/components/search-input";
-import PriceList from "@/app/components/PriceList/PriceList";
+import { PriceList } from "./price-list";
 import type { Position as PositionType, PriceList as PriceListType } from "@/types/pricelist";
 import type { Favorite as FavoriteType, UserSections as UserSectionsType } from "@/types/user";
 import { useSearchStore } from "@/app/stores/searchStore";
-import PriceListGoods from "@/app/components/PriceList/PriceListGoods";
+import { PriceListGoods } from "./price-list-goods";
 import { useDebounce } from "@/app/hooks/useDebounce";
-import PriceListFavoritesSection from "@/app/components/PriceList/PriceListFavoritesSection";
+import { PriceListFavoritesSection } from "./price-list-favorites-section";
 import clsx from "clsx";
 import { useFilteredGoods } from "@/app/hooks/useFilteredGoods";
 
@@ -18,7 +18,7 @@ type PriceListPageProps = {
   priceList: PriceListType;
 };
 
-export default function PriceListPage({
+function PriceListPage({
   favoriteSections,
   userFavoritesGoods,
   hiddenSectionsTitles,
@@ -59,3 +59,5 @@ export default function PriceListPage({
     </>
   );
 }
+
+export { PriceListPage };

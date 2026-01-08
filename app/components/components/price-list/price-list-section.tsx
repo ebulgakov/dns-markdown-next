@@ -1,7 +1,7 @@
 "use client";
 
 import type { Position as PositionType } from "@/types/pricelist";
-import PriceListGoods from "@/app/components/PriceList/PriceListGoods";
+import { PriceListGoods } from "./price-list-goods";
 import type { Favorite } from "@/types/user";
 import { FontAwesomeIcon as Fa } from "@fortawesome/react-fontawesome";
 import { faPlus, faMinus } from "@fortawesome/free-solid-svg-icons";
@@ -15,12 +15,7 @@ type PriceListProps = {
   isOpen?: boolean;
 };
 
-export default function PriceListSection({
-  position,
-  favorites,
-  diffs,
-  isOpen: isOpenDefault
-}: PriceListProps) {
+function PriceListSection({ position, favorites, diffs, isOpen: isOpenDefault }: PriceListProps) {
   const [isOpen, setIsOpen] = useState(isOpenDefault);
   const toggleVisibility = () => {
     setIsOpen(!isOpen);
@@ -49,3 +44,5 @@ export default function PriceListSection({
     </div>
   );
 }
+
+export { PriceListSection };

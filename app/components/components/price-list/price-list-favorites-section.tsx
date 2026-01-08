@@ -1,4 +1,4 @@
-import PriceList from "@/app/components/PriceList/PriceList";
+import { PriceList } from "./price-list";
 import type { Position as PositionType } from "@/types/pricelist";
 import type { Favorite as FavoriteType, UserSections as UserSectionsType } from "@/types/user";
 import { Title } from "@/app/components/ui/title";
@@ -10,7 +10,7 @@ type PriceListFavoritesSectionProps = {
   hiddenSectionsTitles?: UserSectionsType;
 };
 
-export default function PriceListFavoritesSection({
+function PriceListFavoritesSection({
   favoriteSections,
   userFavoritesGoods,
   hiddenSectionsTitles
@@ -36,3 +36,4 @@ export default function PriceListFavoritesSection({
     </div>
   );
 }
+export { PriceListFavoritesSection };

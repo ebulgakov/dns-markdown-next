@@ -13,10 +13,7 @@ type PriceListFavoriteToggleProps = {
   goods: GoodsType;
 };
 
-export default function PriceListFavoriteToggle({
-  favorites,
-  goods
-}: PriceListFavoriteToggleProps) {
+function PriceListFavoriteToggle({ favorites, goods }: PriceListFavoriteToggleProps) {
   const [inFavorites, setInFavorites] = useState<boolean>(
     favorites.some(fav => fav.item.link === goods.link)
   );
@@ -71,3 +68,5 @@ export default function PriceListFavoriteToggle({
     </>
   );
 }
+
+export { PriceListFavoriteToggle };

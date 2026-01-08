@@ -1,6 +1,6 @@
 import { getPriceListsDiff } from "@/db/pricelist/queries";
 import { PageTitle } from "@/app/components/ui/page-title";
-import PriceListSection from "@/app/components/PriceList/PriceListSection";
+import { PriceListSection } from "@/app/components/components/price-list";
 import { DiffsCollection as DiffsCollectionType } from "@/types/diff";
 import { getUser } from "@/db/user/queries";
 import { Alert, AlertDescription, AlertTitle } from "@/app/components/ui/alert";

@@ -2,7 +2,7 @@ import { getPriceListById } from "@/db/pricelist/queries";
 import { formatDate } from "@/app/helpers/format";
 import type { PriceList as PriceListType } from "@/types/pricelist";
 import { PageTitle } from "@/app/components/ui/page-title";
-import PriceListPage from "@/app/components/PriceList/PriceListPage";
+import { PriceListPage } from "@/app/components/components/price-list";
 import { Alert, AlertDescription, AlertTitle } from "@/app/components/ui/alert";
 
 type ArchiveItemPage = {

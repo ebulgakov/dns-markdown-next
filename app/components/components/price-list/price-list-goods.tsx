@@ -6,8 +6,8 @@ import { NumericFormat } from "react-number-format";
 import type { Goods as GoodsType } from "@/types/pricelist";
 import type { GoodDiffChanges as GoodDiffChangesType } from "@/types/diff";
 import type { Favorite, FavoriteStatus } from "@/types/user";
-import PriceListFavoriteToggle from "@/app/components/PriceList/PriceListFavoriteToggle";
-import PriceListGoodsDiff from "@/app/components/PriceList/PriceListGoodsDiff";
+import { PriceListFavoriteToggle } from "./price-list-favorite-toggle";
+import { PriceListGoodsDiff } from "./price-list-goods-diff";
 import { useClientRendering } from "@/app/hooks/useClientRendering";
 
 type PriceListGoodsProps = {
@@ -16,7 +16,7 @@ type PriceListGoodsProps = {
   favorites?: Favorite[];
   status?: FavoriteStatus;
 };
-export default function PriceListGoods({ item, status, diff, favorites }: PriceListGoodsProps) {
+function PriceListGoods({ item, status, diff, favorites }: PriceListGoodsProps) {
   const isClient = useClientRendering();
   if (!isClient) return null;
 
@@ -109,3 +109,5 @@ export default function PriceListGoods({ item, status, diff, favorites }: PriceL
     </div>
   );
 }
+
+export { PriceListGoods };
