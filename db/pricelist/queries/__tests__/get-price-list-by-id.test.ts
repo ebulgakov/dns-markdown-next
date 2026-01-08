@@ -1,6 +1,6 @@
 import { getPriceListById } from "../get-price-list-by-id";
 import { dbConnect } from "@/db/database";
-import { Pricelist } from "@/db/models/pricelist_model";
+import { Pricelist } from "@/db/models/pricelist-model";
 import type { PriceList as PriceListType } from "@/types/pricelist";
 
 // Mock dependencies
@@ -8,7 +8,7 @@ jest.mock("@/db/database", () => ({
   dbConnect: jest.fn()
 }));
 
-jest.mock("@/db/models/pricelist_model", () => ({
+jest.mock("@/db/models/pricelist-model", () => ({
   Pricelist: {
     findOne: jest.fn()
   }

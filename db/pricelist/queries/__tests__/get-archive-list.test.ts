@@ -1,7 +1,7 @@
 import { getArchiveList } from "../get-archive-list";
 import { dbConnect } from "@/db/database";
 import { getUser } from "@/db/user/queries";
-import { Pricelist } from "@/db/models/pricelist_model";
+import { Pricelist } from "@/db/models/pricelist-model";
 import type { User } from "@/types/user";
 
 // Mock dependencies
@@ -13,7 +13,7 @@ jest.mock("@/db/user/queries", () => ({
   getUser: jest.fn()
 }));
 
-jest.mock("@/db/models/pricelist_model", () => ({
+jest.mock("@/db/models/pricelist-model", () => ({
   Pricelist: {
     find: jest.fn()
   }

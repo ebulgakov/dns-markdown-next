@@ -1,5 +1,5 @@
 "use client";
-import { useSearchStore } from "@/app/stores/searchStore";
+import { useSearchStore } from "@/app/stores/search-store";
 import { useState } from "react";
 import clsx from "clsx";
 import { FontAwesomeIcon as Fa } from "@fortawesome/react-fontawesome";

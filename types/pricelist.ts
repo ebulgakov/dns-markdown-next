@@ -1,4 +1,4 @@
-import Goods from "@/db/models/goods_schema";
+import Goods from "@/db/models/goods-schema";
 
 type Reason = {
   _id: string;

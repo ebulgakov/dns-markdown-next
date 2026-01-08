@@ -8,7 +8,6 @@ import type { GoodDiffChanges as GoodDiffChangesType } from "@/types/diff";
 import type { Favorite, FavoriteStatus } from "@/types/user";
 import { PriceListFavoriteToggle } from "./price-list-favorite-toggle";
 import { PriceListGoodsDiff } from "./price-list-goods-diff";
-import { useClientRendering } from "@/app/hooks/useClientRendering";
 
 type PriceListGoodsProps = {
   item: GoodsType;
@@ -17,9 +16,6 @@ type PriceListGoodsProps = {
   status?: FavoriteStatus;
 };
 function PriceListGoods({ item, status, diff, favorites }: PriceListGoodsProps) {
-  const isClient = useClientRendering();
-  if (!isClient) return null;
-
   return (
     <div
       className={clsx("flex items-center gap-4 py-1", {

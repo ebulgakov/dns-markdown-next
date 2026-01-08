@@ -1,5 +1,5 @@
 import { dbConnect } from "@/db/database";
-import { User } from "@/db/models/user_model";
+import { User } from "@/db/models/user-model";
 import { getUser } from "@/db/user/queries";
 import { updateUser } from "../update-user";
 
@@ -8,7 +8,7 @@ jest.mock("@/db/database", () => ({
   dbConnect: jest.fn()
 }));
 
-jest.mock("@/db/models/user_model", () => ({
+jest.mock("@/db/models/user-model", () => ({
   User: {
     findByIdAndUpdate: jest.fn()
   }
