@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from "@storybook/react";
-import SearchInput from "../SearchInput";
+import { SearchInput } from "./search-input";
 import { expect } from "storybook/test";
 import { useSearchStore } from "@/app/stores/searchStore";
 

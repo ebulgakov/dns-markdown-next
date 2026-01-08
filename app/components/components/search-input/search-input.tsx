@@ -5,7 +5,7 @@ import clsx from "clsx";
 import { FontAwesomeIcon as Fa } from "@fortawesome/react-fontawesome";
 import { faSearch, faTimes } from "@fortawesome/free-solid-svg-icons";
 
-export default function SearchInput() {
+function SearchInput() {
   const [hidden, setHidden] = useState<boolean>(true);
   const onChange = useSearchStore(state => state.updateSearchTerm);
   const searchTerm = useSearchStore(state => state.searchTerm);
@@ -46,3 +46,5 @@ export default function SearchInput() {
     </>
   );
 }
+
+export { SearchInput };
