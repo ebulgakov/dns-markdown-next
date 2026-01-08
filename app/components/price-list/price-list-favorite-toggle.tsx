@@ -1,7 +1,6 @@
 "use client";
-import { FontAwesomeIcon as Fa } from "@fortawesome/react-fontawesome";
-import { faStar } from "@fortawesome/free-solid-svg-icons";
-import { faStar as faStarEmpty } from "@fortawesome/free-regular-svg-icons";
+
+import { Star } from "lucide-react";
 import { useState, useTransition, useOptimistic } from "react";
 import type { Goods as GoodsType } from "@/types/pricelist";
 import type { Favorite } from "@/types/user";
@@ -54,7 +53,7 @@ function PriceListFavoriteToggle({ favorites, goods }: PriceListFavoriteTogglePr
           title="Убрать из избранного"
           onClick={handleRemoveFromFavorites}
         >
-          <Fa icon={faStar} />
+          <Star fill="#ffc529" />
         </button>
       ) : (
         <button
@@ -62,7 +61,7 @@ function PriceListFavoriteToggle({ favorites, goods }: PriceListFavoriteTogglePr
           title="Добавить в избранное"
           onClick={handleAddToFavorites}
         >
-          <Fa icon={faStarEmpty} />
+          <Star />
         </button>
       )}
     </>

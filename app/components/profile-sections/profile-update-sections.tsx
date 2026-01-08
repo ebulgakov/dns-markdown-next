@@ -1,8 +1,7 @@
 "use client";
 
 import type { AvailableUpdateSectionNames, UserSections as UserSectionsType } from "@/types/user";
-import { FontAwesomeIcon as Fa } from "@fortawesome/react-fontawesome";
-import { faTimes } from "@fortawesome/free-solid-svg-icons";
+import { X } from "lucide-react";
 import { useState, type ChangeEvent, useTransition, useOptimistic } from "react";
 import { Button } from "@/app/components/ui/button";
 import { updateUserSection } from "@/db/user/mutations/update-user-section";
@@ -108,8 +107,12 @@ function ProfileUpdateSections({
           <div className="overflow-auto h-100 border border-neutral-300 px-2.5 py-1 border-solid flex flex-col items-start">
             {outputActiveSections.length > 0 ? (
               outputActiveSections.map(section => (
-                <button key={section} onClick={() => handleRemoveActiveSection(section)}>
-                  <Fa icon={faTimes} />
+                <button
+                  key={section}
+                  className="flex"
+                  onClick={() => handleRemoveActiveSection(section)}
+                >
+                  <X />
                   {section}
                 </button>
               ))
