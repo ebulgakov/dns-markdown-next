@@ -4,7 +4,7 @@ import { useState } from "react";
 import ProfileUpdateSections from "@/app/profile/ProfileSections/ProfileUpdateSections";
 import ProfileNotifications from "@/app/profile/ProfileSections/ProfileNotifications";
 import PageTitle from "@/app/components/PageTitle";
-import Button from "@/app/components/Button";
+import { Button } from "@/app/components/ui/button";
 
 type ProfileSectionsProps = {
   notifications: UserNotifications;
@@ -44,7 +44,7 @@ export default function ProfileSections({
       <div className="flex gap-2 mb-2">
         {tabs.map(({ id, label }) => (
           <Button
-            variant={id === activeTab ? "primary" : "default"}
+            variant={id === activeTab ? "default" : "outline"}
             key={id}
             onClick={() => setActiveTab(id)}
           >
