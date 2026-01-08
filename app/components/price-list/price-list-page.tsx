@@ -3,7 +3,7 @@ import { SearchInput } from "@/app/components/search-input";
 import { PriceList } from "./price-list";
 import type { Position as PositionType, PriceList as PriceListType } from "@/types/pricelist";
 import type { Favorite as FavoriteType, UserSections as UserSectionsType } from "@/types/user";
-import { useSearchStore } from "@/app/stores/searchStore";
+import { useSearchStore } from "@/app/stores/search-store";
 import { PriceListGoods } from "./price-list-goods";
 import { useDebounce } from "@/app/hooks/useDebounce";
 import { PriceListFavoritesSection } from "./price-list-favorites-section";
