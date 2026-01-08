@@ -1,10 +1,10 @@
 import { SignedIn, SignedOut, SignInButton, SignUpButton, UserButton } from "@clerk/nextjs";
 import Link from "next/link";
-import ActiveLink from "@/app/components/ActiveLink";
 import { useTranslations } from "next-intl";
 import {
   NavigationMenu,
   NavigationMenuList,
+  NavigationActiveLink,
   NavigationMenuItem
 } from "@/app/components/ui/navigation-menu";
 import { Button } from "@/app/components/ui/button";
@@ -48,7 +48,7 @@ export default function Navbar() {
           <NavigationMenuList>
             {linksList.map(link => (
               <NavigationMenuItem key={link.name}>
-                <ActiveLink link={link}>{link.name}</ActiveLink>
+                <NavigationActiveLink link={link}>{link.name}</NavigationActiveLink>
               </NavigationMenuItem>
             ))}
           </NavigationMenuList>

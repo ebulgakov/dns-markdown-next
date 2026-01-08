@@ -13,7 +13,7 @@ type ActiveLinkProps = {
   };
 };
 
-export default function ActiveLink({ link, children }: ActiveLinkProps): ReactNode {
+function NavigationActiveLink({ link, children }: ActiveLinkProps): ReactNode {
   const pathname = usePathname();
   const isActive = (url: string) => {
     return pathname === url;
@@ -25,3 +25,5 @@ export default function ActiveLink({ link, children }: ActiveLinkProps): ReactNo
     </NavigationMenuLink>
   );
 }
+
+export { NavigationActiveLink };

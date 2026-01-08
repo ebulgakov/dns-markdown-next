@@ -9,3 +9,5 @@ export {
   NavigationMenuViewport,
   navigationMenuTriggerStyle
 } from "./navigation-menu";
+
+export { NavigationActiveLink } from "./navigation-active-link";
