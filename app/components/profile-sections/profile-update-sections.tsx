@@ -2,12 +2,14 @@
 
 import type { AvailableUpdateSectionNames, UserSections as UserSectionsType } from "@/types/user";
 import { X } from "lucide-react";
-import { useState, type ChangeEvent, useTransition, useOptimistic } from "react";
+import { useState, type ChangeEvent, useTransition, useOptimistic, Fragment } from "react";
 import { Button } from "@/app/components/ui/button";
 import { updateUserSection } from "@/db/user/mutations/update-user-section";
 import { uniqAbcSort } from "@/app/helpers/sort";
 import { Alert, AlertDescription, AlertTitle } from "@/app/components/ui/alert";
-import { Card, CardContent } from "@/app/components/ui/card";
+import { Card } from "@/app/components/ui/card";
+import { ScrollArea } from "@/app/components/ui/scroll-area";
+import { Separator } from "@/app/components/ui/separator";
 
 type ProfileUpdateSectionsProps = {
   sectionName: AvailableUpdateSectionNames;
@@ -80,20 +82,25 @@ function ProfileUpdateSections({
       )}
       <div className="flex gap-4">
         <div className="flex-1">
-          <Card className="overflow-auto h-100 py-2">
-            <CardContent className="flex flex-col items-start">
-              {outputAllSections.map(section => (
-                <label key={section}>
-                  <input
-                    type="checkbox"
-                    className="mr-1"
-                    value={section}
-                    onChange={handleCheckboxChange}
-                  />
-                  {section}
-                </label>
-              ))}
-            </CardContent>
+          <Card className="p-2">
+            <ScrollArea className="h-100">
+              <div className="flex flex-col items-start ">
+                {outputAllSections.map((section, idx) => (
+                  <Fragment key={section}>
+                    {idx > 0 && <Separator className="my-2" />}
+                    <label>
+                      <input
+                        type="checkbox"
+                        className="mr-1"
+                        value={section}
+                        onChange={handleCheckboxChange}
+                      />
+                      {section}
+                    </label>
+                  </Fragment>
+                ))}
+              </div>
+            </ScrollArea>
           </Card>
           <div className="flex items-center gap-2 mt-2">
             <Button
@@ -107,23 +114,24 @@ function ProfileUpdateSections({
           </div>
         </div>
         <div className="flex-1">
-          <Card className="overflow-auto h-100 py-2">
-            <CardContent className="flex flex-col items-start">
-              {outputActiveSections.length > 0 ? (
-                outputActiveSections.map(section => (
-                  <button
-                    key={section}
-                    className="flex"
-                    onClick={() => handleRemoveActiveSection(section)}
-                  >
-                    <X />
-                    {section}
-                  </button>
-                ))
-              ) : (
-                <p className="text-neutral-500">{placeholder}</p>
-              )}
-            </CardContent>
+          <Card className="p-2">
+            <ScrollArea className="h-100">
+              <div className="flex flex-col items-start ">
+                {outputActiveSections.length > 0 ? (
+                  outputActiveSections.map((section, idx) => (
+                    <Fragment key={section}>
+                      {idx > 0 && <Separator className="my-2" />}
+                      <button className="flex" onClick={() => handleRemoveActiveSection(section)}>
+                        <X />
+                        {section}
+                      </button>
+                    </Fragment>
+                  ))
+                ) : (
+                  <p className="text-neutral-500">{placeholder}</p>
+                )}
+              </div>
+            </ScrollArea>
           </Card>
         </div>
       </div>
