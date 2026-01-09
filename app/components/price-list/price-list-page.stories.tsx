@@ -2,7 +2,7 @@ import type { Meta, StoryObj } from "@storybook/react";
 import { PriceListPage } from "./price-list-page";
 import type { Position } from "@/types/pricelist";
 import type { Favorite, UserSections } from "@/types/user";
-import { mockPriceList } from "./__mocks__/goods";
+import { mockPriceList, mockPositions } from "./__mocks__/goods";
 
 const meta: Meta<typeof PriceListPage> = {
   title: "Components/PriceList/PriceListPage",
@@ -13,13 +13,13 @@ const meta: Meta<typeof PriceListPage> = {
 export default meta;
 type Story = StoryObj<typeof PriceListPage>;
 
-const mockFavoriteSections: Position[] = [];
+const mockFavoriteSections: Position[] = [mockPositions[0]];
 
 const mockUserFavoritesGoods: Favorite[] = [];
 
-const mockHiddenSectionsTitles: UserSections = ["Section 2"];
+const mockHiddenSectionsTitles: UserSections = [mockPriceList.positions[1].title];
 
-const nonFavoriteSections = mockPriceList.positions.filter(p => p.title !== "Section 2");
+const nonFavoriteSections = mockPriceList.positions.filter(p => p.title !== mockPositions[0].title);
 
 export const Default: Story = {
   args: {
