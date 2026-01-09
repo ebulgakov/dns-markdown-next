@@ -21,5 +21,9 @@
   "Footer": {
     "copyright": "© 2018–2026 DNS-Markdown. Версия 2.0.0.",
     "disclaimer": "Отказ от ответственности"
+  },
+  "ChangeThemeSelector": {
+    "light": "Светлая тема",
+    "dark": "Тёмная тема"
   }
 }
