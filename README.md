@@ -46,3 +46,4 @@ Chromatic Storybook is set up for this project: https://www.chromatic.com/librar
 * I18n
 * Storybook
 * Jest
+* Sentry
