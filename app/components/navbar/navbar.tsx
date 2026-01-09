@@ -55,7 +55,7 @@ function Navbar() {
         </SignedIn>
       </NavigationMenu>
 
-      <NavigationMenu className="ml-auto mr-2">
+      <NavigationMenu className="ml-auto mr-3">
         <SignedOut>
           <div className="flex items-center gap-2">
             <SignInButton>
