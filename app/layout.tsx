@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { getLocale } from "next-intl/server";
 import { getTranslations } from "next-intl/server";
+import { ThemeProvider } from "@/app/providers/theme-provider";
 import { NextIntlClientProvider } from "next-intl";
 import { Roboto, Roboto_Mono } from "next/font/google";
 import { ClerkProvider } from "@clerk/nextjs";
@@ -8,6 +9,7 @@ import "./globals.css";
 import { Navbar } from "@/app/components/navbar";
 import { Footer } from "@/app/components/footer";
 import { StrictMode, type ReactNode } from "react";
+import { cn } from "@/app/lib/utils";
 
 const robotoSans = Roboto({
   variable: "--font-roboto-sans",
@@ -44,17 +46,21 @@ export default async function RootLayout({
     <StrictMode>
       <NextIntlClientProvider>
         <ClerkProvider>
-          <html lang={locale}>
-            <body className={`${robotoSans.variable} ${robotoMono.variable} antialiased font-sans`}>
-              <div className="grid min-h-screen md:container mx-auto">
-                <div className="mb-10">
-                  <div className="mt-4 mb-5">
-                    <Navbar />
+          <html lang={locale} suppressHydrationWarning>
+            <body
+              className={cn(["antialiased font-sans", robotoSans.variable, robotoMono.variable])}
+            >
+              <ThemeProvider attribute="class" defaultTheme="light" enableSystem>
+                <div className="grid min-h-screen md:container mx-auto">
+                  <div className="mb-10">
+                    <div className="mt-4 mb-5">
+                      <Navbar />
+                    </div>
+                    {children}
                   </div>
-                  {children}
+                  <Footer locate={locale} />
                 </div>
-                <Footer locate={locale} />
-              </div>
+              </ThemeProvider>
             </body>
           </html>
         </ClerkProvider>
