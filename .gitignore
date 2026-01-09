@@ -48,3 +48,6 @@ storybook-static
 
 # Database files
 /dump
+
+# Sentry Config File
+.env.sentry-build-plugin
