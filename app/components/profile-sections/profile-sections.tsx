@@ -32,20 +32,20 @@ function ProfileSections({
         <TabsContent value="favoriteSections">
           <ProfileUpdateSections
             allSections={allSections}
-            userSections={hiddenSections}
-            sectionName="hiddenSections"
-            placeholder="Добавьте из левой колонки неинтересующие вас секции и они будут показываться в свёрнутом виде в прайслисте"
-            buttonLabel="Скрывать эти секции"
+            userSections={favoriteSections}
+            sectionName="favoriteSections"
+            placeholder="Добавьте из левой колонки интересующие вас секции и они всегда будут показываться в верху списка"
+            buttonLabel="Добавить в избранные"
           />
         </TabsContent>
 
         <TabsContent value="hiddenSections">
           <ProfileUpdateSections
             allSections={allSections}
-            userSections={favoriteSections}
-            sectionName="favoriteSections"
-            placeholder="Добавьте из левой колонки интересующие вас секции и они всегда будут показываться в верху списка"
-            buttonLabel="Добавить в избранные"
+            userSections={hiddenSections}
+            sectionName="hiddenSections"
+            placeholder="Добавьте из левой колонки неинтересующие вас секции и они будут показываться в свёрнутом виде в прайслисте"
+            buttonLabel="Скрывать эти секции"
           />
         </TabsContent>
 
