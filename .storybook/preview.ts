@@ -1,4 +1,5 @@
 import type { Preview } from "@storybook/nextjs-vite";
+import { withThemeByClassName } from "@storybook/addon-themes";
 import "../app/globals.css";
 
 const preview: Preview = {
@@ -16,7 +17,17 @@ const preview: Preview = {
       // 'off' - skip a11y checks entirely
       test: "todo"
     }
-  }
+  },
+  decorators: [
+    withThemeByClassName({
+      defaultTheme: "light",
+      themes: {
+        light: "light",
+        dark: "dark"
+      },
+      parentSelector: "html"
+    })
+  ]
 };
 
 export default preview;
