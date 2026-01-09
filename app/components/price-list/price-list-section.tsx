@@ -23,7 +23,7 @@ function PriceListSection({ position, favorites, diffs, isOpen: isOpenDefault }:
     <div className="mb-3">
       <button
         onClick={toggleVisibility}
-        className="sticky top-0 bg-white z-10 items-center flex justify-start text-left w-full border-b-neutral-300 cursor-pointer border-b border-solid"
+        className="sticky top-0 bg-background z-10 items-center flex justify-start text-left w-full border-b-neutral-300 cursor-pointer border-b border-solid"
       >
         {isOpen ? <Minus className="text-accent" /> : <Plus className="text-accent" />}
         <span className="uppercase font-bold text-xl ml-2 mr-2.5">{position.title}</span>

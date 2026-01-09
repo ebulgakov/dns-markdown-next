@@ -7,7 +7,7 @@ type PageTitleProps = {
 };
 function PageTitle({ title, subTitle, children }: PageTitleProps) {
   return (
-    <div className="flex justify-between items-end border-b border-solid border-b-neutral-300  my-5 py-5 bg-white ">
+    <div className="flex justify-between items-end border-b border-solid border-b-neutral-300  my-5 py-5">
       <h1 className="text-4xl">
         {title}{" "}
         {subTitle && (

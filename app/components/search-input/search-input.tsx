@@ -16,7 +16,7 @@ function SearchInput() {
       {!hidden && (
         <div
           className={clsx(
-            "fixed left-0 right-0 py-5 px-22 bottom-0 z-10 bg-white border-t border-gray-200",
+            "fixed left-0 right-0 py-5 px-22 bottom-0 z-10 bg-white dark:bg-background border-t border-gray-200",
             {
               hidden: hidden
             }

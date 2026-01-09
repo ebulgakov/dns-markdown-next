@@ -22,7 +22,7 @@ function PriceListGoods({ item, status, diff, favorites }: PriceListGoodsProps) 
         "opacity-40": status?.deleted
       })}
     >
-      <div className="flex-none basis-55 h-55 gap-5 flex items-center justify-center">
+      <div className="flex-none basis-55 h-55 gap-5 flex items-center justify-center isolate dark:opacity-70 bg-white rounded">
         <Image
           src={item.image}
           alt={`Превью для ${item.title}`}
