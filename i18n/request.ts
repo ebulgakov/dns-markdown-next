@@ -5,7 +5,6 @@ import ruJson from "./locates/ru.json";
 
 import type { LocaleList } from "@/types/i18n";
 
-
 const defaultLocateList: LocaleList = ruJson;
 
 export default getRequestConfig(async () => {

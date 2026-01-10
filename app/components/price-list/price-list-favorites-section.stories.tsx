@@ -6,7 +6,6 @@ import type { Position } from "@/types/pricelist";
 import type { Favorite, UserSections } from "@/types/user";
 import type { Meta, StoryObj } from "@storybook/react";
 
-
 const meta: Meta<typeof PriceListFavoritesSection> = {
   title: "Components/PriceList/PriceListFavoritesSection",
   component: PriceListFavoritesSection,

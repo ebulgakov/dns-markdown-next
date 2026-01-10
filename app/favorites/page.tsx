@@ -5,7 +5,6 @@ import { getUser } from "@/db/user/queries";
 
 import type { Favorite } from "@/types/user";
 
-
 export default async function FavoritesPage() {
   let favorites;
 

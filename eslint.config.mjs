@@ -21,6 +21,7 @@ const eslintConfig = defineConfig([
       import: importPlugin
     },
     rules: {
+      "no-multiple-empty-lines": ["error", { max: 1 }],
       // Ensures all imports are at the top of the file
       "import/first": "error",
       // Enforce a convention in the order of imports

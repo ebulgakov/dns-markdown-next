@@ -5,7 +5,6 @@ import { PriceListSection } from "./price-list-section";
 import type { Position } from "@/types/pricelist";
 import type { Meta, StoryObj } from "@storybook/react";
 
-
 const meta: Meta<typeof PriceListSection> = {
   title: "Components/PriceList/PriceListSection",
   component: PriceListSection,
