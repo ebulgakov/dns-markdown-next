@@ -47,7 +47,7 @@ export const Bought: Story = {
     status: {
       updatedAt: new Date().toISOString(),
       city: "",
-      createdAt: "",
+      createdAt: new Date().toISOString(),
       deleted: true,
       updates: []
     },
