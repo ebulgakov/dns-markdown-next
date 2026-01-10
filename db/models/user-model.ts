@@ -23,6 +23,10 @@ const schema = new mongoose.Schema(
       required: false,
       default: ""
     },
+    shownBoughtFavorites: {
+      type: Boolean,
+      default: false
+    },
     hiddenSections: [String],
     favoriteSections: [String],
     notifications: {

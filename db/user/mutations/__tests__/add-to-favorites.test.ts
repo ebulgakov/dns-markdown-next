@@ -1,11 +1,11 @@
 import { dbConnect } from "@/db/database";
+import { mockUser } from "@/db/user/__mocks__/user";
 import { updateUser } from "@/db/user/mutations/update-user";
 import { getUser } from "@/db/user/queries";
 
 import { addToFavorites } from "../add-to-favorites";
 
 import type { Goods } from "@/types/pricelist";
-import type { User } from "@/types/user";
 
 // Mock the modules
 jest.mock("@/db/database", () => ({
@@ -35,32 +35,6 @@ describe("addToFavorites", () => {
     code: "",
     image: "",
     available: ""
-  };
-
-  const mockUser: User = {
-    _id: "user1",
-    id: "user1",
-    city: "Test City",
-    favorites: [],
-    userId: "",
-    hiddenSections: [],
-    favoriteSections: [],
-    notifications: {
-      updates: {
-        interval: "",
-        fields: {
-          new: false,
-          prices: false,
-          profit: false
-        }
-      },
-      favorites: {
-        interval: ""
-      },
-      favoriteSections: {
-        interval: ""
-      }
-    }
   };
 
   // Clear all mocks before each test to ensure test isolation

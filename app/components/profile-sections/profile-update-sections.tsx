@@ -6,7 +6,7 @@ import { useState, useTransition, useOptimistic, Fragment } from "react";
 import { Alert, AlertDescription, AlertTitle } from "@/app/components/ui/alert";
 import { Button } from "@/app/components/ui/button";
 import { Card } from "@/app/components/ui/card";
-import { Checkbox } from "@/app/components/ui/checkbox";
+import { CheckboxWithLabel } from "@/app/components/ui/control-with-label";
 import { Label } from "@/app/components/ui/label";
 import { ScrollArea } from "@/app/components/ui/scroll-area";
 import { Separator } from "@/app/components/ui/separator";
@@ -87,26 +87,23 @@ function ProfileUpdateSections({
         <div className="flex-1">
           <Card className="p-2">
             <ScrollArea className="h-100">
-              <div className="flex flex-col items-start ">
+              <div className="flex flex-col items-start">
                 {outputAllSections.map((section, idx) => (
                   <Fragment key={section}>
                     {idx > 0 && <Separator className="my-2" />}
-                    <div className="flex items-center gap-3">
-                      <Checkbox
-                        id={`checkbox-option-${idx}`}
-                        value={section}
-                        onCheckedChange={checked =>
-                          handleCheckboxChange({ section, checked: Boolean(checked) })
-                        }
-                      />
-                      <Label htmlFor={`checkbox-option-${idx}`}>{section}</Label>
-                    </div>
+                    <CheckboxWithLabel
+                      label={section}
+                      value={section}
+                      onCheckedChange={checked =>
+                        handleCheckboxChange({ section, checked: Boolean(checked) })
+                      }
+                    />
                   </Fragment>
                 ))}
               </div>
             </ScrollArea>
           </Card>
-          <div className="flex items-center gap-2 mt-2">
+          <div className="mt-2 flex items-center gap-2">
             <Button
               disabled={selectedSections.length === 0}
               type="button"
@@ -120,7 +117,7 @@ function ProfileUpdateSections({
         <div className="flex-1">
           <Card className="p-2">
             <ScrollArea className="h-100">
-              <div className="flex flex-col items-start ">
+              <div className="flex flex-col items-start">
                 {outputActiveSections.length > 0 ? (
                   outputActiveSections.map((section, idx) => (
                     <Fragment key={section}>
