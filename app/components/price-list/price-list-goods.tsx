@@ -87,7 +87,7 @@ function PriceListGoods({ item, status, diff, favorites }: PriceListGoodsProps) 
             suffix=" ₽)"
           />
         </div>
-        {status && status.updatedAt ? (
+        {status && status.deleted && status.updatedAt ? (
           <div className="pricelist_bought">
             Куплен {new Date(status.updatedAt).toLocaleDateString()}
           </div>

@@ -23,7 +23,7 @@ type Story = StoryObj<typeof PriceListGoods>;
 const mockDiff: GoodDiffChangesType = {
   price: "19999",
   priceOld: "21999",
-  profit: "-2000"
+  profit: "2000"
 };
 
 export const Default: Story = {
@@ -41,20 +41,6 @@ export const WithDiff: Story = {
   }
 };
 
-export const Deleted: Story = {
-  args: {
-    item: mockGoodsList[0],
-    status: {
-      deleted: true,
-      city: "",
-      updatedAt: "",
-      createdAt: "",
-      updates: []
-    },
-    favorites: mockFavorites
-  }
-};
-
 export const Bought: Story = {
   args: {
     item: mockGoodsList[0],
@@ -62,7 +48,7 @@ export const Bought: Story = {
       updatedAt: new Date().toISOString(),
       city: "",
       createdAt: "",
-      deleted: false,
+      deleted: true,
       updates: []
     },
     favorites: mockFavorites
