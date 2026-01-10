@@ -24,17 +24,17 @@ function PriceListGoods({ item, status, diff, favorites }: PriceListGoodsProps) 
         "opacity-40": status?.deleted
       })}
     >
-      <div className="flex-none basis-55 h-55 gap-5 flex items-center justify-center isolate dark:opacity-70 bg-white rounded">
+      <div className="isolate flex h-55 flex-none basis-55 items-center justify-center gap-5 rounded bg-white dark:opacity-70">
         <Image
           src={item.image}
           alt={`Превью для ${item.title}`}
-          className="max-w-full max-h-full w-auto h-auto block"
+          className="block h-auto max-h-full w-auto max-w-full"
           width={200}
           height={200}
         />
       </div>
       <div className="flex-1">
-        <div className="text-base mb-2.5">
+        <div className="mb-2.5 text-base">
           <a
             target="_blank"
             rel="noopener noreferrer"
@@ -44,14 +44,14 @@ function PriceListGoods({ item, status, diff, favorites }: PriceListGoodsProps) 
             {item.title}
           </a>
           &nbsp;
-          <small className="text-[75%] font-normal leading-none text-[#777777]">{item.code}</small>
+          <small className="text-[75%] leading-none font-normal text-[#777777]">{item.code}</small>
         </div>
         <p className="mb-3">{item.description}</p>
         {item.reasons && (
           <div>
             {item.reasons.map(reason => (
-              <dl className="inline-block mr-2.5" key={reason._id}>
-                <dt className="inline opacity-40 font-normal mr-1">{reason.label}</dt>
+              <dl className="mr-2.5 inline-block" key={reason._id}>
+                <dt className="mr-1 inline font-normal opacity-40">{reason.label}</dt>
                 <dd className="inline">{reason.text}</dd>
               </dl>
             ))}
@@ -61,17 +61,17 @@ function PriceListGoods({ item, status, diff, favorites }: PriceListGoodsProps) 
 
       {diff && <PriceListGoodsDiff diff={diff} />}
 
-      <div className="text-center basis-37">
+      <div className="basis-37 text-center">
         <NumericFormat
           value={item.price}
           displayType="text"
           thousandSeparator=" "
           suffix=" ₽"
           renderText={value => (
-            <div className="text-xl font-semibold whitespace-nowrap h-7">{value}</div>
+            <div className="h-7 text-xl font-semibold whitespace-nowrap">{value}</div>
           )}
         />
-        <div className="flex gap-2 text-sm justify-center">
+        <div className="flex justify-center gap-2 text-sm">
           <NumericFormat
             value={item.priceOld}
             displayType="text"

@@ -25,11 +25,11 @@ function PriceListSection({ position, favorites, diffs, isOpen: isOpenDefault }:
     <div className="mb-3">
       <button
         onClick={toggleVisibility}
-        className="sticky top-0 bg-background z-10 items-center flex justify-start text-left w-full border-b-neutral-300 cursor-pointer border-b border-solid"
+        className="bg-background sticky top-0 z-10 flex w-full cursor-pointer items-center justify-start border-b border-solid border-b-neutral-300 text-left"
       >
         {isOpen ? <Minus className="text-accent" /> : <Plus className="text-accent" />}
-        <span className="uppercase font-bold text-xl ml-2 mr-2.5">{position.title}</span>
-        <span className="text-base block font-bold ml-auto">{position.items.length}</span>
+        <span className="mr-2.5 ml-2 text-xl font-bold uppercase">{position.title}</span>
+        <span className="ml-auto block text-base font-bold">{position.items.length}</span>
       </button>
       <div className="divide-y divide-gray-200">
         {isOpen &&

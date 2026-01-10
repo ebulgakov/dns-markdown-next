@@ -9,17 +9,17 @@ type PriceListGoodsDiffProps = {
 
 function PriceListGoodsDiff({ diff }: PriceListGoodsDiffProps) {
   return (
-    <div className="text-center basis-37 opacity-40">
+    <div className="basis-37 text-center opacity-40">
       <NumericFormat
         value={diff.price}
         displayType="text"
         thousandSeparator=" "
         suffix=" ₽"
         renderText={value => (
-          <div className="text-xl h-7 font-semibold whitespace-nowrap">{value}</div>
+          <div className="h-7 text-xl font-semibold whitespace-nowrap">{value}</div>
         )}
       />
-      <div className="flex gap-2 text-sm justify-center mb-6">
+      <div className="mb-6 flex justify-center gap-2 text-sm">
         {diff.priceOld && (
           <NumericFormat
             value={diff.priceOld}
