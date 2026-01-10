@@ -1,8 +1,9 @@
-import type { Meta, StoryObj } from "@storybook/react";
 import { NextIntlClientProvider } from "next-intl";
 import { ThemeProvider } from "next-themes";
 
 import { ChangeThemeSelector } from "./change-theme-selector";
+
+import type { Meta, StoryObj } from "@storybook/react";
 
 const meta = {
   title: "components/ChangeThemeSelector",

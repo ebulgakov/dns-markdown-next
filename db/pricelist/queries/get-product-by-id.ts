@@ -1,7 +1,8 @@
 import { dbConnect } from "@/db/database";
 import { History } from "@/db/models/history-model";
-import type { History as HistoryType } from "@/types/history";
 import { Pricelist } from "@/db/models/pricelist-model";
+
+import type { History as HistoryType } from "@/types/history";
 import type { PriceList as PriceListType } from "@/types/pricelist";
 
 export const getProductById = async (id: string) => {

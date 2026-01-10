@@ -1,15 +1,18 @@
-import type { Metadata } from "next";
-import { getLocale } from "next-intl/server";
-import { getTranslations } from "next-intl/server";
-import { ThemeProvider } from "@/app/providers/theme-provider";
-import { NextIntlClientProvider } from "next-intl";
-import { Roboto, Roboto_Mono } from "next/font/google";
 import { ClerkProvider } from "@clerk/nextjs";
-import "./globals.css";
-import { Navbar } from "@/app/components/navbar";
-import { Footer } from "@/app/components/footer";
+import { Roboto, Roboto_Mono } from "next/font/google";
+import { NextIntlClientProvider } from "next-intl";
+import { getTranslations } from "next-intl/server";
+import { getLocale } from "next-intl/server";
 import { StrictMode, type ReactNode } from "react";
+
+import "./globals.css";
+
+import { Footer } from "@/app/components/footer";
+import { Navbar } from "@/app/components/navbar";
 import { cn } from "@/app/lib/utils";
+import { ThemeProvider } from "@/app/providers/theme-provider";
+
+import type { Metadata } from "next";
 
 const robotoSans = Roboto({
   variable: "--font-roboto-sans",

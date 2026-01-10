@@ -1,10 +1,11 @@
 "use client";
 
-import { useSearchStore } from "@/app/stores/search-store";
-import { useState } from "react";
 import clsx from "clsx";
 import { Search, X } from "lucide-react";
+import { useState } from "react";
+
 import { Input } from "@/app/components/ui/input";
+import { useSearchStore } from "@/app/stores/search-store";
 
 function SearchInput() {
   const [hidden, setHidden] = useState<boolean>(true);

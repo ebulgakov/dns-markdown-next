@@ -1,5 +1,5 @@
-import type { Meta, StoryObj } from "@storybook/react";
-import React from "react";
+import Link from "next/link";
+import { forwardRef } from "react";
 
 import { cn } from "@/app/lib/utils";
 
@@ -11,7 +11,9 @@ import {
   NavigationMenuList,
   NavigationMenuTrigger
 } from "./navigation-menu";
-import Link from "next/link";
+
+import type { Meta, StoryObj } from "@storybook/react";
+import type { ComponentPropsWithoutRef, ElementRef } from "react";
 
 const meta = {
   title: "UI/NavigationMenu",
@@ -62,7 +64,7 @@ const components: { title: string; href: string; description: string }[] = [
   }
 ];
 
-const ListItem = React.forwardRef<React.ElementRef<"a">, React.ComponentPropsWithoutRef<"a">>(
+const ListItem = forwardRef<ElementRef<"a">, ComponentPropsWithoutRef<"a">>(
   ({ className, title, children, ...props }, ref) => {
     return (
       <li>

@@ -1,15 +1,20 @@
 "use client";
+import clsx from "clsx";
+
 import { SearchInput } from "@/app/components/search-input";
+import { useDebounce } from "@/app/hooks/use-debounce";
+import { useFilteredGoods } from "@/app/hooks/use-filtered-goods";
+import { useSearchStore } from "@/app/stores/search-store";
+import { useSortGoodsStore } from "@/app/stores/sort-goods-store";
+
 import { PriceList } from "./price-list";
+import { PriceListFavoritesSection } from "./price-list-favorites-section";
+import { PriceListGoods } from "./price-list-goods";
+
 import type { Position as PositionType, PriceList as PriceListType } from "@/types/pricelist";
 import type { Favorite as FavoriteType, UserSections as UserSectionsType } from "@/types/user";
-import { useSearchStore } from "@/app/stores/search-store";
-import { PriceListGoods } from "./price-list-goods";
-import { PriceListFavoritesSection } from "./price-list-favorites-section";
-import clsx from "clsx";
-import { useFilteredGoods } from "@/app/hooks/use-filtered-goods";
-import { useDebounce } from "@/app/hooks/use-debounce";
-import { useSortGoodsStore } from "@/app/stores/sort-goods-store";
+
+
 
 type PriceListPageProps = {
   favoriteSections?: PositionType[];

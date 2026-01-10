@@ -1,9 +1,11 @@
-import type { Meta, StoryObj } from "@storybook/react";
+import { mockFavorites } from "./__mocks__/favorites";
+import { mockPositions } from "./__mocks__/goods";
 import { PriceListFavoritesSection } from "./price-list-favorites-section";
+
 import type { Position } from "@/types/pricelist";
 import type { Favorite, UserSections } from "@/types/user";
-import { mockPositions } from "./__mocks__/goods";
-import { mockFavorites } from "./__mocks__/favorites";
+import type { Meta, StoryObj } from "@storybook/react";
+
 
 const meta: Meta<typeof PriceListFavoritesSection> = {
   title: "Components/PriceList/PriceListFavoritesSection",

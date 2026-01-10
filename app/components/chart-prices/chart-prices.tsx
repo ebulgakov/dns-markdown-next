@@ -1,6 +1,7 @@
 "use client";
 
 import { Area, AreaChart, CartesianGrid, XAxis, YAxis } from "recharts";
+
 import { Card, CardContent } from "@/app/components/ui/card";
 import {
   ChartContainer,

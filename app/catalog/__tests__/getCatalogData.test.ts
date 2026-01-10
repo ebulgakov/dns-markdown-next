@@ -1,8 +1,9 @@
-import { getCatalogData } from "../get-catalog-data";
 import { getLastPriceList } from "@/db/pricelist/queries";
 import { getUser } from "@/db/user/queries";
 import { PriceList as PriceListType, Goods } from "@/types/pricelist";
 import { User as UserType } from "@/types/user";
+
+import { getCatalogData } from "../get-catalog-data";
 
 // Mock the DB query functions
 jest.mock("@/db/pricelist/queries", () => ({

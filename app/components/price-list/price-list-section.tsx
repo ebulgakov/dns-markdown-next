@@ -1,11 +1,14 @@
 "use client";
 
-import type { Position as PositionType } from "@/types/pricelist";
-import { PriceListGoods } from "./price-list-goods";
-import type { Favorite } from "@/types/user";
 import { Plus, Minus } from "lucide-react";
 import { useState } from "react";
+
 import { DiffsCollection as DiffsCollectionType } from "@/types/diff";
+
+import { PriceListGoods } from "./price-list-goods";
+
+import type { Position as PositionType } from "@/types/pricelist";
+import type { Favorite } from "@/types/user";
 
 type PriceListProps = {
   position: PositionType;

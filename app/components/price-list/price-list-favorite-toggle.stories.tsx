@@ -1,6 +1,7 @@
-import type { Meta, StoryObj } from "@storybook/react";
-import { PriceListFavoriteToggle } from "./price-list-favorite-toggle";
 import { mockGoodsList } from "./__mocks__/goods";
+import { PriceListFavoriteToggle } from "./price-list-favorite-toggle";
+
+import type { Meta, StoryObj } from "@storybook/react";
 
 const meta: Meta<typeof PriceListFavoriteToggle> = {
   component: PriceListFavoriteToggle,

@@ -1,5 +1,6 @@
-import type { Meta, StoryObj } from "@storybook/react";
 import { PriceListGoodsDiff } from "./price-list-goods-diff";
+
+import type { Meta, StoryObj } from "@storybook/react";
 
 const meta: Meta<typeof PriceListGoodsDiff> = {
   title: "Components/PriceList/PriceListGoodsDiff",

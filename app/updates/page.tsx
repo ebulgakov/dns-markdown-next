@@ -1,9 +1,9 @@
-import { getPriceListsDiff } from "@/db/pricelist/queries";
-import { PageTitle } from "@/app/components/ui/page-title";
 import { PriceListSection } from "@/app/components/price-list";
-import { DiffsCollection as DiffsCollectionType } from "@/types/diff";
-import { getUser } from "@/db/user/queries";
 import { Alert, AlertDescription, AlertTitle } from "@/app/components/ui/alert";
+import { PageTitle } from "@/app/components/ui/page-title";
+import { getPriceListsDiff } from "@/db/pricelist/queries";
+import { getUser } from "@/db/user/queries";
+import { DiffsCollection as DiffsCollectionType } from "@/types/diff";
 
 export default async function UpdatesPage() {
   let diffNew;

@@ -1,6 +1,7 @@
-import type { Meta, StoryObj } from "@storybook/react";
 import { ProfileSections } from "./profile-sections";
+
 import type { UserNotifications, UserSections } from "@/types/user";
+import type { Meta, StoryObj } from "@storybook/react";
 
 const mockNotifications: UserNotifications = {
   updates: {

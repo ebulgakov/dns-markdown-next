@@ -1,7 +1,8 @@
 "use client";
 
-import type { UserNotifications } from "@/types/user";
 import { Title } from "@/app/components/ui/title";
+
+import type { UserNotifications } from "@/types/user";
 
 type ProfileNotificationsProps = {
   notifications: UserNotifications;

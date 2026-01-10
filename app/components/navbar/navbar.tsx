@@ -1,13 +1,14 @@
 import { SignedIn, SignedOut, SignInButton, SignUpButton, UserButton } from "@clerk/nextjs";
 import Link from "next/link";
 import { useTranslations } from "next-intl";
+
+import { Button } from "@/app/components/ui/button";
 import {
   NavigationMenu,
   NavigationMenuList,
   NavigationActiveLink,
   NavigationMenuItem
 } from "@/app/components/ui/navigation-menu";
-import { Button } from "@/app/components/ui/button";
 
 function Navbar() {
   const t = useTranslations("Navbar");

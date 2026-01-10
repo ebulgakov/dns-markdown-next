@@ -1,13 +1,16 @@
 "use client";
 import clsx from "clsx";
-import Link from "next/link";
 import Image from "next/image";
+import Link from "next/link";
 import { NumericFormat } from "react-number-format";
-import type { Goods as GoodsType } from "@/types/pricelist";
-import type { GoodDiffChanges as GoodDiffChangesType } from "@/types/diff";
-import type { Favorite, FavoriteStatus } from "@/types/user";
+
 import { PriceListFavoriteToggle } from "./price-list-favorite-toggle";
 import { PriceListGoodsDiff } from "./price-list-goods-diff";
+
+import type { GoodDiffChanges as GoodDiffChangesType } from "@/types/diff";
+import type { Goods as GoodsType } from "@/types/pricelist";
+import type { Favorite, FavoriteStatus } from "@/types/user";
+
 
 type PriceListGoodsProps = {
   item: GoodsType;

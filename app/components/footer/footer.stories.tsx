@@ -1,8 +1,11 @@
-import type { Meta, StoryObj } from "@storybook/react";
-import { Footer } from "./footer";
 import { NextIntlClientProvider } from "next-intl";
-import messages from "@/i18n/locates/ru.json";
 import React from "react";
+
+import messages from "@/i18n/locates/ru.json";
+
+import { Footer } from "./footer";
+
+import type { Meta, StoryObj } from "@storybook/react";
 
 const meta: Meta<typeof Footer> = {
   title: "Components/Footer",

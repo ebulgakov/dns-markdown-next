@@ -1,6 +1,8 @@
-import type { Meta, StoryObj } from "@storybook/react";
-import { PageTitle } from "./page-title";
 import { Button } from "@/app/components/ui/button";
+
+import { PageTitle } from "./page-title";
+
+import type { Meta, StoryObj } from "@storybook/react";
 
 const meta: Meta<typeof PageTitle> = {
   title: "UI/PageTitle",

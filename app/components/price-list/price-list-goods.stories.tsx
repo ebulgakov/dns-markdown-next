@@ -1,8 +1,10 @@
-import type { Meta, StoryObj } from "@storybook/react";
-import { PriceListGoods } from "./price-list-goods";
-import type { GoodDiffChanges as GoodDiffChangesType } from "@/types/diff";
-import { mockGoodsList } from "./__mocks__/goods";
 import { mockFavorites } from "./__mocks__/favorites";
+import { mockGoodsList } from "./__mocks__/goods";
+import { PriceListGoods } from "./price-list-goods";
+
+import type { GoodDiffChanges as GoodDiffChangesType } from "@/types/diff";
+import type { Meta, StoryObj } from "@storybook/react";
+
 
 const meta: Meta<typeof PriceListGoods> = {
   title: "Components/PriceList/PriceListGoods",

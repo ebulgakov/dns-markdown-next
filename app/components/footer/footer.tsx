@@ -1,6 +1,7 @@
 import Link from "next/link";
-import { ChangeLocationSelector } from "@/app/components/change-location-selector";
 import { useTranslations } from "next-intl";
+
+import { ChangeLocationSelector } from "@/app/components/change-location-selector";
 import { ChangeThemeSelector } from "@/app/components/change-theme-selector";
 
 type FooterProps = {

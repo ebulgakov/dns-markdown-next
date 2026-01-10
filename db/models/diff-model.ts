@@ -1,4 +1,5 @@
 import mongoose from "mongoose";
+
 import Goods from "./goods-schema";
 
 const goodsDiffSchema = new mongoose.Schema({

@@ -1,9 +1,11 @@
 "use client";
-import type { UserNotifications, UserSections } from "@/types/user";
-import { ProfileUpdateSections } from "./profile-update-sections";
-import { ProfileNotifications } from "./profile-notifications";
 import { PageTitle } from "@/app/components/ui/page-title";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/app/components/ui/tabs";
+
+import { ProfileNotifications } from "./profile-notifications";
+import { ProfileUpdateSections } from "./profile-update-sections";
+
+import type { UserNotifications, UserSections } from "@/types/user";
 
 type ProfileSectionsProps = {
   notifications: UserNotifications;

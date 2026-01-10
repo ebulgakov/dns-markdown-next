@@ -1,9 +1,11 @@
 "use client";
 
-import { usePathname } from "next/navigation";
 import Link from "next/link";
-import { type ReactNode } from "react";
+import { usePathname } from "next/navigation";
+
 import { NavigationMenuLink } from "@/app/components/ui/navigation-menu";
+
+import type { ReactNode } from "react";
 
 type ActiveLinkProps = {
   children: ReactNode;

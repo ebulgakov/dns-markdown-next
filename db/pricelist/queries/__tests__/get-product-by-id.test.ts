@@ -1,7 +1,9 @@
-import { getProductById } from "../get-product-by-id";
 import { dbConnect } from "@/db/database";
 import { History } from "@/db/models/history-model";
 import { Pricelist } from "@/db/models/pricelist-model";
+
+import { getProductById } from "../get-product-by-id";
+
 import type { History as HistoryType } from "@/types/history";
 
 // Mock dependencies

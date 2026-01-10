@@ -1,5 +1,6 @@
-import type { Goods as GoodsType, PriceList as priceListType } from "@/types/pricelist";
 import { useSortGoodsStore } from "@/app/stores/sort-goods-store";
+
+import type { Goods as GoodsType, PriceList as priceListType } from "@/types/pricelist";
 
 export const useFilteredGoods = (term: string, priceList: priceListType): GoodsType[] => {
   const sortGoods = useSortGoodsStore(state => state.sortGoods);

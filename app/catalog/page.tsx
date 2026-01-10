@@ -1,9 +1,9 @@
 import { getCatalogData } from "@/app/catalog/get-catalog-data";
-import { formatDate, formatTime } from "@/app/helpers/format";
-import { PageTitle } from "@/app/components/ui/page-title";
 import { PriceListPage } from "@/app/components/price-list";
-import { Alert, AlertDescription, AlertTitle } from "@/app/components/ui/alert";
 import { SortGoods } from "@/app/components/sort-goods";
+import { Alert, AlertDescription, AlertTitle } from "@/app/components/ui/alert";
+import { PageTitle } from "@/app/components/ui/page-title";
+import { formatDate, formatTime } from "@/app/helpers/format";
 
 export default async function CatalogPage() {
   const {

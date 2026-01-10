@@ -1,7 +1,9 @@
-import { getLastPriceList } from "../get-last-price-list";
 import { dbConnect } from "@/db/database";
-import { getUser } from "@/db/user/queries";
 import { Pricelist } from "@/db/models/pricelist-model";
+import { getUser } from "@/db/user/queries";
+
+import { getLastPriceList } from "../get-last-price-list";
+
 import type { PriceList as PriceListType } from "@/types/pricelist";
 import type { User } from "@/types/user";
 

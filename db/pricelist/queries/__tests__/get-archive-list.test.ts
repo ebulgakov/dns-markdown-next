@@ -1,7 +1,9 @@
-import { getArchiveList } from "../get-archive-list";
 import { dbConnect } from "@/db/database";
-import { getUser } from "@/db/user/queries";
 import { Pricelist } from "@/db/models/pricelist-model";
+import { getUser } from "@/db/user/queries";
+
+import { getArchiveList } from "../get-archive-list";
+
 import type { User } from "@/types/user";
 
 // Mock dependencies
@@ -26,7 +28,7 @@ describe("getArchiveList", () => {
   });
 
   // Test case for when the user is not found
-  it("should return null if user is not found", async () => {
+  it("should throw if user is not found", async () => {
     // Mock getUser to return null
     (getUser as jest.Mock).mockResolvedValue(null);
 
