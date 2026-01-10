@@ -1,4 +1,4 @@
-import { Goods } from "@/types/pricelist";
+import type { Goods } from "@/types/pricelist";
 
 export type GoodDiffChanges = {
   priceOld: string;
