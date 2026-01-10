@@ -2,6 +2,8 @@ import { cva, type VariantProps } from "class-variance-authority";
 
 import { cn } from "@/app/lib/utils";
 
+import type { HTMLProps } from "react";
+
 const titleVariants = cva("block", {
   variants: {
     variant: {
@@ -18,7 +20,7 @@ function Title({
   className,
   variant,
   ...props
-}: React.HTMLProps<HTMLHeadingElement> & VariantProps<typeof titleVariants>) {
+}: HTMLProps<HTMLHeadingElement> & VariantProps<typeof titleVariants>) {
   const Comp: "h2" | "h3" = variant || "h2";
 
   return <Comp className={cn(titleVariants({ variant, className }))} {...props} />;
