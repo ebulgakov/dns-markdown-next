@@ -1,5 +1,4 @@
 "use client";
-import { useSortGoodsStore } from "@/app/stores/sort-goods-store";
 import {
   Select,
   SelectContent,
@@ -9,6 +8,8 @@ import {
   SelectTrigger,
   SelectValue
 } from "@/app/components/ui/select";
+import { useSortGoodsStore } from "@/app/stores/sort-goods-store";
+
 import type { SortGoodsOptions } from "@/types/common";
 
 function SortGoods() {

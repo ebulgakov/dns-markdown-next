@@ -1,9 +1,9 @@
-import { getProductById } from "@/db/pricelist/queries";
-import { PageTitle } from "@/app/components/ui/page-title";
-import { PriceListGoods } from "@/app/components/price-list";
 import { ChartPrices } from "@/app/components/chart-prices";
-import { Title } from "@/app/components/ui/title";
+import { PriceListGoods } from "@/app/components/price-list";
 import { Alert, AlertDescription, AlertTitle } from "@/app/components/ui/alert";
+import { PageTitle } from "@/app/components/ui/page-title";
+import { Title } from "@/app/components/ui/title";
+import { getProductById } from "@/db/pricelist/queries";
 
 type CatalogItemPage = {
   params: Promise<{ id: string }>;

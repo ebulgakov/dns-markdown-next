@@ -1,8 +1,8 @@
 "use client";
 
+import { useTranslations } from "next-intl";
 import { useTheme } from "next-themes";
 import { useState, useEffect } from "react";
-import { useTranslations } from "next-intl";
 
 function ChangeThemeSelector() {
   const { theme, setTheme } = useTheme();

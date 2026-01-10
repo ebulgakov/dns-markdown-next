@@ -1,6 +1,8 @@
-import type { Meta, StoryObj } from "@storybook/react";
-import { SortGoods } from "./sort-goods";
 import { useSortGoodsStore } from "@/app/stores/sort-goods-store";
+
+import { SortGoods } from "./sort-goods";
+
+import type { Meta, StoryObj } from "@storybook/react";
 
 const meta: Meta<typeof SortGoods> = {
   title: "Components/SortGoods",

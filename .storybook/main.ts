@@ -1,7 +1,8 @@
-import path from "path";
-import type { StorybookConfig } from "@storybook/nextjs-vite";
-import { fileURLToPath } from "node:url";
 import { dirname } from "node:path";
+import { fileURLToPath } from "node:url";
+import path from "path";
+
+import type { StorybookConfig } from "@storybook/nextjs-vite";
 
 const config: StorybookConfig = {
   stories: ["../app/**/*.mdx", "../app/**/*.stories.@(js|jsx|mjs|ts|tsx)"],
@@ -13,7 +14,7 @@ const config: StorybookConfig = {
     "@storybook/addon-docs"
   ],
   framework: "@storybook/nextjs-vite",
-  async viteFinal(config, { configType }) {
+  async viteFinal(config) {
     const __filename = fileURLToPath(import.meta.url);
     const __dirname = dirname(__filename);
 

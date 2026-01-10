@@ -1,17 +1,19 @@
 "use client";
 
-import type { AvailableUpdateSectionNames, UserSections as UserSectionsType } from "@/types/user";
 import { X } from "lucide-react";
 import { useState, useTransition, useOptimistic, Fragment } from "react";
-import { Button } from "@/app/components/ui/button";
-import { updateUserSection } from "@/db/user/mutations/update-user-section";
-import { uniqAbcSort } from "@/app/helpers/sort";
+
 import { Alert, AlertDescription, AlertTitle } from "@/app/components/ui/alert";
+import { Button } from "@/app/components/ui/button";
 import { Card } from "@/app/components/ui/card";
-import { ScrollArea } from "@/app/components/ui/scroll-area";
-import { Separator } from "@/app/components/ui/separator";
 import { Checkbox } from "@/app/components/ui/checkbox";
 import { Label } from "@/app/components/ui/label";
+import { ScrollArea } from "@/app/components/ui/scroll-area";
+import { Separator } from "@/app/components/ui/separator";
+import { uniqAbcSort } from "@/app/helpers/sort";
+import { updateUserSection } from "@/db/user/mutations/update-user-section";
+
+import type { AvailableUpdateSectionNames, UserSections as UserSectionsType } from "@/types/user";
 
 type ProfileUpdateSectionsProps = {
   sectionName: AvailableUpdateSectionNames;

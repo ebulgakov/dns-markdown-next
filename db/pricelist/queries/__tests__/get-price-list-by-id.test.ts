@@ -1,6 +1,8 @@
-import { getPriceListById } from "../get-price-list-by-id";
 import { dbConnect } from "@/db/database";
 import { Pricelist } from "@/db/models/pricelist-model";
+
+import { getPriceListById } from "../get-price-list-by-id";
+
 import type { PriceList as PriceListType } from "@/types/pricelist";
 
 // Mock dependencies

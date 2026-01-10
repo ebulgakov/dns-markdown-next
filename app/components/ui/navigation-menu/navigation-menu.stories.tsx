@@ -1,5 +1,6 @@
-import type { Meta, StoryObj } from "@storybook/react";
+import Link from "next/link";
 import React from "react";
+
 
 import { cn } from "@/app/lib/utils";
 
@@ -11,7 +12,9 @@ import {
   NavigationMenuList,
   NavigationMenuTrigger
 } from "./navigation-menu";
-import Link from "next/link";
+
+import type { Meta, StoryObj } from "@storybook/react";
+
 
 const meta = {
   title: "UI/NavigationMenu",

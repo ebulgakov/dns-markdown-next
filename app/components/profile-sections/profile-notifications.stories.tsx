@@ -1,6 +1,7 @@
+import { ProfileNotifications } from "./profile-notifications";
+
 import type { Meta, StoryObj } from "@storybook/react";
 
-import { ProfileNotifications } from "./profile-notifications";
 
 const meta: Meta<typeof ProfileNotifications> = {
   title: "Components/Profile/Notifications",

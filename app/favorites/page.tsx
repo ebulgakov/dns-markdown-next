@@ -1,8 +1,10 @@
-import { getUser } from "@/db/user/queries";
 import { PriceListGoods } from "@/app/components/price-list";
-import type { Favorite } from "@/types/user";
-import { PageTitle } from "@/app/components/ui/page-title";
 import { Alert, AlertTitle, AlertDescription } from "@/app/components/ui/alert";
+import { PageTitle } from "@/app/components/ui/page-title";
+import { getUser } from "@/db/user/queries";
+
+import type { Favorite } from "@/types/user";
+
 
 export default async function FavoritesPage() {
   let favorites;

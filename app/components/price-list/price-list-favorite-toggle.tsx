@@ -2,10 +2,12 @@
 
 import { Star } from "lucide-react";
 import { useState, useTransition, useOptimistic } from "react";
-import type { Goods as GoodsType } from "@/types/pricelist";
-import type { Favorite } from "@/types/user";
+
 import { addToFavorites } from "@/db/user/mutations/add-to-favorites";
 import { removeFromFavorites } from "@/db/user/mutations/remove-from-favorites";
+
+import type { Goods as GoodsType } from "@/types/pricelist";
+import type { Favorite } from "@/types/user";
 
 type PriceListFavoriteToggleProps = {
   favorites: Favorite[];

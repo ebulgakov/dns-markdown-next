@@ -1,6 +1,8 @@
 import { cookies } from "next/headers";
 import { getRequestConfig } from "next-intl/server";
+
 import { type LocaleList } from "@/types/i18n";
+
 import ruJson from "./locates/ru.json";
 
 const defaultLocateList: LocaleList = ruJson;

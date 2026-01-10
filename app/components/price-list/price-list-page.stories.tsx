@@ -1,8 +1,10 @@
-import type { Meta, StoryObj } from "@storybook/react";
+import { mockPriceList, mockPositions } from "./__mocks__/goods";
 import { PriceListPage } from "./price-list-page";
+
 import type { Position } from "@/types/pricelist";
 import type { Favorite, UserSections } from "@/types/user";
-import { mockPriceList, mockPositions } from "./__mocks__/goods";
+import type { Meta, StoryObj } from "@storybook/react";
+
 
 const meta: Meta<typeof PriceListPage> = {
   title: "Components/PriceList/PriceListPage",

@@ -1,10 +1,12 @@
 // Import the function to be tested
-import { updateUserSection } from "../update-user-section";
 
 // Mock dependencies
 import { dbConnect } from "@/db/database";
-import { getUser } from "@/db/user/queries";
 import { updateUser } from "@/db/user/mutations/update-user";
+import { getUser } from "@/db/user/queries";
+
+import { updateUserSection } from "../update-user-section";
+
 import type { User } from "@/types/user";
 
 // Mock the modules

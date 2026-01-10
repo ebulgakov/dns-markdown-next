@@ -1,6 +1,7 @@
+import { cva, type VariantProps } from "class-variance-authority";
 import { type HTMLProps } from "react";
 import * as React from "react";
-import { cva, type VariantProps } from "class-variance-authority";
+
 import { cn } from "@/app/lib/utils";
 
 const titleVariants = cva("block", {

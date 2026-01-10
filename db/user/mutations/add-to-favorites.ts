@@ -1,8 +1,8 @@
 "use server";
 import { dbConnect } from "@/db/database";
+import { updateUser } from "@/db/user/mutations/update-user";
 import { getUser } from "@/db/user/queries";
 import { Goods } from "@/types/pricelist";
-import { updateUser } from "@/db/user/mutations/update-user";
 
 export const addToFavorites = async (goods: Goods) => {
   if (!goods) throw new Error("No goods provided");

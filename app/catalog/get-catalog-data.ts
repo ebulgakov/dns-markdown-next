@@ -1,7 +1,8 @@
-import { Favorite as FavoriteType, UserSections as UserSectionsType } from "@/types/user";
-import type { Position as PositionType, PriceList as PriceListType } from "@/types/pricelist";
-import { getUser } from "@/db/user/queries";
 import { getLastPriceList } from "@/db/pricelist/queries";
+import { getUser } from "@/db/user/queries";
+import { Favorite as FavoriteType, UserSections as UserSectionsType } from "@/types/user";
+
+import type { Position as PositionType, PriceList as PriceListType } from "@/types/pricelist";
 
 export async function getCatalogData() {
   const favoriteSections: PositionType[] = [];
