@@ -3,6 +3,7 @@
 import { startTransition, useOptimistic, useState } from "react";
 
 import { PriceListGoods } from "@/app/components/price-list";
+import { Alert, AlertDescription, AlertTitle } from "@/app/components/ui/alert";
 import { PageTitle } from "@/app/components/ui/page-title";
 import { toggleBoughtVisibilityFavorites } from "@/db/user/mutations/toggle-bought-visibility-favorites";
 
@@ -19,6 +20,7 @@ function FavoritesPageClient({
   favorites,
   shownBoughtFavorites: defaultVisibility
 }: FavoritesPageClientProps) {
+  const [errorMessage, setErrorMessage] = useState<Error | null>(null);
   const [realShownBoughtFavorites, setRealShownBoughtFavorites] =
     useState<boolean>(defaultVisibility);
   const [shownBoughtFavorites, setShownBoughtFavorites] = useOptimistic<boolean, boolean>(
@@ -37,7 +39,7 @@ function FavoritesPageClient({
         const val = await toggleBoughtVisibilityFavorites(status);
         setRealShownBoughtFavorites(val);
       } catch (error) {
-        console.error("Ошибка при обновлении видимости купленных избранных:", error);
+        setErrorMessage(error as Error);
       }
     });
   };
@@ -49,6 +51,16 @@ function FavoritesPageClient({
           onChangeVisibility={handleFavoritesVisibility}
         />
       </PageTitle>
+
+      {errorMessage && (
+        <div className="mb-4">
+          <Alert variant="destructive">
+            <AlertTitle>Ошибка при обновлении видимости купленных избранных</AlertTitle>
+            <AlertDescription>{errorMessage.message}</AlertDescription>
+          </Alert>
+        </div>
+      )}
+
       <div className="divide-y divide-gray-200">
         {filteredFavorites.map(favorite => (
           <PriceListGoods
