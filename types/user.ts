@@ -42,6 +42,7 @@ export interface User {
   username?: string;
   email?: string;
   city: string;
+  shownBoughtFavorites: boolean;
   hiddenSections: UserSections;
   favoriteSections: UserSections;
   notifications: UserNotifications;

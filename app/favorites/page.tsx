@@ -1,17 +1,19 @@
-import { PriceListGoods } from "@/app/components/price-list";
+import { FavoritesPageClient } from "@/app/components/favorites";
 import { Alert, AlertTitle, AlertDescription } from "@/app/components/ui/alert";
-import { PageTitle } from "@/app/components/ui/page-title";
 import { getUser } from "@/db/user/queries";
 
-import type { Favorite } from "@/types/user";
+import type { Favorite, User } from "@/types/user";
 
 export default async function FavoritesPage() {
   let favorites;
+  let shownBoughtFavorites;
 
   try {
-    const user = await getUser();
+    let user = await getUser();
     if (!user) throw new Error("No user found!");
-    favorites = JSON.parse(JSON.stringify(user.favorites.reverse())) as Favorite[];
+    user = JSON.parse(JSON.stringify(user)) as User;
+    shownBoughtFavorites = user.shownBoughtFavorites;
+    favorites = user.favorites.reverse() as Favorite[];
   } catch (e) {
     const { message } = e as Error;
     return (
@@ -22,19 +24,5 @@ export default async function FavoritesPage() {
     );
   }
 
-  return (
-    <div>
-      <PageTitle title="Избранное" />
-      <div className="divide-y divide-gray-200">
-        {favorites.map(favorite => (
-          <PriceListGoods
-            key={favorite.item._id}
-            item={favorite.item}
-            status={favorite.status}
-            favorites={favorites}
-          />
-        ))}
-      </div>
-    </div>
-  );
+  return <FavoritesPageClient favorites={favorites} shownBoughtFavorites={shownBoughtFavorites} />;
 }
