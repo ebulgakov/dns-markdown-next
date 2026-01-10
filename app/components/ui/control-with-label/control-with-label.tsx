@@ -8,11 +8,13 @@ import type { ComponentProps } from "react";
 
 function CheckboxWithLabel({
   label,
+  id: idProp,
   ...props
 }: {
   label: string;
 } & ComponentProps<typeof CheckboxPrimitive.Root>) {
-  const id = useId();
+  const generatedId = useId();
+  const id = idProp ?? generatedId;
 
   return (
     <div>

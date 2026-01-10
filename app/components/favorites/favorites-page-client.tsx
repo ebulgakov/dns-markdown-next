@@ -38,6 +38,7 @@ function FavoritesPageClient({
       try {
         const val = await toggleBoughtVisibilityFavorites(status);
         setRealShownBoughtFavorites(val);
+        setErrorMessage(null);
       } catch (error) {
         setErrorMessage(error as Error);
       }
