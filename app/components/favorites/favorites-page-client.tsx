@@ -33,7 +33,7 @@ function FavoritesPageClient({
 
   const handleFavoritesVisibility = (status: boolean) => {
     startTransition(async () => {
-      setShownBoughtFavorites(!realShownBoughtFavorites);
+      setShownBoughtFavorites(status);
 
       try {
         const val = await toggleBoughtVisibilityFavorites(status);

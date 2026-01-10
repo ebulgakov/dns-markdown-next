@@ -1,16 +1,10 @@
 import * as CheckboxPrimitive from "@radix-ui/react-checkbox";
+import { useId } from "react";
 
 import { Checkbox } from "@/app/components/ui/checkbox";
 import { Label } from "@/app/components/ui/label";
 
 import type { ComponentProps } from "react";
-
-const getUniqueId = (prefix = "id") => {
-  const randomPart = Math.random().toString(36).substring(2, 8);
-  const timePart = Date.now().toString(36);
-  const suffix = `${randomPart}-${timePart}`;
-  return `${prefix}-${suffix}`;
-};
 
 function CheckboxWithLabel({
   label,
@@ -18,7 +12,7 @@ function CheckboxWithLabel({
 }: {
   label: string;
 } & ComponentProps<typeof CheckboxPrimitive.Root>) {
-  const id = getUniqueId("checkbox");
+  const id = useId();
 
   return (
     <div>
