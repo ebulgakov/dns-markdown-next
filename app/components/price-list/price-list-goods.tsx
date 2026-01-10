@@ -4,6 +4,8 @@ import Image from "next/image";
 import Link from "next/link";
 import { NumericFormat } from "react-number-format";
 
+import { formatDate } from "@/app/helpers/format";
+
 import { PriceListFavoriteToggle } from "./price-list-favorite-toggle";
 import { PriceListGoodsDiff } from "./price-list-goods-diff";
 
@@ -57,6 +59,12 @@ function PriceListGoods({ item, status, diff, favorites }: PriceListGoodsProps) 
             ))}
           </div>
         )}
+
+        {status?.createdAt && (
+          <div className="mt-2 text-sm text-gray-500">
+            Добавлен: {formatDate(status?.createdAt)}
+          </div>
+        )}
       </div>
 
       {diff && <PriceListGoodsDiff diff={diff} />}
@@ -87,7 +95,7 @@ function PriceListGoods({ item, status, diff, favorites }: PriceListGoodsProps) 
             suffix=" ₽)"
           />
         </div>
-        {status && status.updatedAt ? (
+        {status?.deleted && status?.updatedAt ? (
           <div className="pricelist_bought">
             Куплен {new Date(status.updatedAt).toLocaleDateString()}
           </div>
