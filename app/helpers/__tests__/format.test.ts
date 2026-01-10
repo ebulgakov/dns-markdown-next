@@ -1,4 +1,4 @@
-import { formatDate, formatTime } from "../format";
+import { formatDate, formatDateShort, formatTime } from "../format";
 
 // Test suite for date and time formatting functions
 describe("Formatting Functions", () => {
@@ -23,6 +23,22 @@ describe("Formatting Functions", () => {
         "Invalid time value"
       );
       expect(formatDate("2026-01-06T01:00:00+09:00" as unknown as number)).toBe("5 января 2026 г.");
+    });
+  });
+
+  // Test suite for the formatDateShort function
+  describe("formatDateShort", () => {
+    // Test case to ensure date is formatted correctly in short format
+    it("should format the date correctly in short format", () => {
+      const date = new Date("2024-01-15T12:30:00");
+      // The expected format is "DD.MM.YY"
+      expect(formatDateShort(date)).toBe("15.01.24");
+    });
+
+    // Another test case with a different date
+    it("should format another date correctly", () => {
+      const date = new Date("2025-12-05T00:00:00");
+      expect(formatDateShort(date)).toBe("05.12.25");
     });
   });
 
