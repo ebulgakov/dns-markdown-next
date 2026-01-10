@@ -51,15 +51,15 @@ function PriceListFavoriteToggle({ favorites, goods }: PriceListFavoriteTogglePr
     <>
       {inFavoritesOptimistic ? (
         <button
-          className="text-xl text-[#ffc529]"
+          className="text-favorite text-xl"
           title="Убрать из избранного"
           onClick={handleRemoveFromFavorites}
         >
-          <Star fill="#ffc529" />
+          <Star className="fill-favorite" />
         </button>
       ) : (
         <button
-          className="text-xl text-[#ffc529]"
+          className="text-favorite text-xl"
           title="Добавить в избранное"
           onClick={handleAddToFavorites}
         >
