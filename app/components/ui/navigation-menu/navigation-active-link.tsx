@@ -2,19 +2,18 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { type ReactNode } from "react";
 
 import { NavigationMenuLink } from "@/app/components/ui/navigation-menu";
 
 type ActiveLinkProps = {
-  children: ReactNode;
+  children: React.ReactNode;
   link: {
     name: string;
     url: string;
   };
 };
 
-function NavigationActiveLink({ link, children }: ActiveLinkProps): ReactNode {
+function NavigationActiveLink({ link, children }: ActiveLinkProps): React.ReactNode {
   const pathname = usePathname();
   const isActive = (url: string) => {
     return pathname === url;
