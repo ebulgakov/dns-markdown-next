@@ -39,6 +39,8 @@ export interface User {
   _id: string;
   id: string;
   userId: string;
+  username?: string;
+  email?: string;
   city: string;
   hiddenSections: UserSections;
   favoriteSections: UserSections;
