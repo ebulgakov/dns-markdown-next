@@ -3,14 +3,14 @@ import ejs from "ejs";
 import { home } from "./home/index.js";
 import updateRouter from "./update-request/index.js";
 import setGlobalMiddleware from "./middleware.js";
-import getPath from "#helpers/get_path.js";
+import { resolve } from "node:path";
 import logRouter from "./log/index.js";
 import configRouter from "./config/index.js";
 
 const app = express();
 
 app.set("view engine", "ejs");
-app.set("views", getPath("templates", import.meta.url));
+app.set("views", resolve("express", "templates"));
 app.engine("html", ejs.renderFile);
 
 // Apply middleware
