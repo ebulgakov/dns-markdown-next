@@ -48,7 +48,12 @@ export async function POST(req: Request) {
 
   if (eventType === "user.created") {
     try {
-      await createUser(evt.data.id);
+      const { id, email_addresses, username } = evt.data;
+      await createUser({
+        userId: id,
+        username: username || "",
+        email: email_addresses[0]?.email_address || ""
+      });
     } catch (err) {
       console.error("Error creation user:", err);
       throw new Error("Error creation user");

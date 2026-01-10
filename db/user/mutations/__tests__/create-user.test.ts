@@ -22,16 +22,18 @@ describe("createUser", () => {
 
   it("should connect to the database and create a new user", async () => {
     const userId = "test-user-id";
+    const email = "test@test.com";
+    const username = "testuser";
 
     // Call the function
-    await createUser(userId);
+    await createUser({ userId, email, username });
 
     // Expect dbConnect to have been called
     expect(dbConnect).toHaveBeenCalledTimes(1);
 
     // Expect User.create to have been called with the correct userId
     expect(User.create).toHaveBeenCalledTimes(1);
-    expect(User.create).toHaveBeenCalledWith({ userId });
+    expect(User.create).toHaveBeenCalledWith({ userId, email, username });
   });
 
   it("should handle errors during database connection", async () => {
@@ -42,7 +44,7 @@ describe("createUser", () => {
     (dbConnect as jest.Mock).mockRejectedValue(new Error(errorMessage));
 
     // Expect the function to throw an error
-    await expect(createUser(userId)).rejects.toThrow(errorMessage);
+    await expect(createUser({ userId })).rejects.toThrow(errorMessage);
 
     // Expect User.create not to have been called
     expect(User.create).not.toHaveBeenCalled();
@@ -59,7 +61,7 @@ describe("createUser", () => {
     (User.create as jest.Mock).mockRejectedValue(new Error(errorMessage));
 
     // Expect the function to throw an error
-    await expect(createUser(userId)).rejects.toThrow(errorMessage);
+    await expect(createUser({ userId })).rejects.toThrow(errorMessage);
 
     // Expect dbConnect to have been called
     expect(dbConnect).toHaveBeenCalledTimes(1);

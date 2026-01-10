@@ -6,11 +6,22 @@ const schema = new mongoose.Schema(
   {
     userId: {
       type: String,
-      required: true
+      required: true,
+      unique: true
     },
     city: {
       type: String,
       default: "samara"
+    },
+    email: {
+      type: String,
+      required: false,
+      default: ""
+    },
+    username: {
+      type: String,
+      required: false,
+      default: ""
     },
     hiddenSections: [String],
     favoriteSections: [String],
