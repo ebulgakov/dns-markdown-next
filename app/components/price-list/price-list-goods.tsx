@@ -10,6 +10,7 @@ import { PriceListGoodsDiff } from "./price-list-goods-diff";
 import type { GoodDiffChanges as GoodDiffChangesType } from "@/types/diff";
 import type { Goods as GoodsType } from "@/types/pricelist";
 import type { Favorite, FavoriteStatus } from "@/types/user";
+import { formatDate } from "@/app/helpers/format";
 
 type PriceListGoodsProps = {
   item: GoodsType;
@@ -55,6 +56,12 @@ function PriceListGoods({ item, status, diff, favorites }: PriceListGoodsProps) 
                 <dd className="inline">{reason.text}</dd>
               </dl>
             ))}
+          </div>
+        )}
+
+        {status?.createdAt && (
+          <div className="mt-2 text-sm text-gray-500">
+            Добавлен: {formatDate(status?.createdAt)}
           </div>
         )}
       </div>
