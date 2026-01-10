@@ -1,10 +1,11 @@
 import { dbConnect } from "@/db/database";
 import { updateUser } from "@/db/user/mutations/update-user";
 import { getUser } from "@/db/user/queries";
-import { Goods } from "@/types/pricelist";
-import { User } from "@/types/user";
 
 import { addToFavorites } from "../add-to-favorites";
+
+import type { Goods } from "@/types/pricelist";
+import type { User } from "@/types/user";
 
 // Mock the modules
 jest.mock("@/db/database", () => ({

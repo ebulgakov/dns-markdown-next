@@ -1,8 +1,7 @@
 "use client";
-import { Position as PositionType } from "@/types/pricelist";
-
 import { PriceListSection } from "./price-list-section";
 
+import type { Position as PositionType } from "@/types/pricelist";
 import type { Favorite, UserSections } from "@/types/user";
 
 type CatalogProps = {
