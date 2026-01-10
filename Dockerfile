@@ -19,8 +19,8 @@ RUN npm install
 COPY . .
 
 # CRITICAL FIX: Matches fly.toml internal_port = 3000
-ENV PORT=3069
-EXPOSE 3069
+ENV PORT=3100
+EXPOSE 3100
 
 # Start the application
 CMD [ "npm", "run",  "start" ]

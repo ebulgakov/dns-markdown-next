@@ -1,7 +1,6 @@
 import "dotenv/config";
 import { ObjectId } from "mongodb";
 import { dbConnect, dbDisconnect } from "#db/database.js";
-import joinPath from "#helpers/get_path.js";
 import createData from "./helpers/create_data.js";
 import { savePriceList } from "#db/pricelist/mutations/save_price_list.js";
 import { deleteLastPriceList } from "#db/pricelist/mutations/delete_last_price_list.js";
@@ -9,10 +8,10 @@ import { getLastPriceList } from "#db/pricelist/queries/get_last_price_list.js";
 import isSameDay from "./helpers/is_same_day.js";
 import getPerformance from "#helpers/get_performance.js";
 import { readFileSync } from "node:fs";
-import { join } from "node:path";
+import { join, resolve } from "node:path";
 
 async function addPriceList() {
-  const path = joinPath("../pages", import.meta.url);
+  const path = resolve('pages');
   const html = readFileSync(join(path, "body.html")).toString();
   const { data } = JSON.parse(readFileSync(join(path, "prices.html")).toString());
   const goods = createData(html, data);

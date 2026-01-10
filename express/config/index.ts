@@ -1,11 +1,10 @@
 import express from "express";
 import { writeFileSync, readFileSync } from "node:fs";
-import { join } from "node:path";
-import getPath from "#helpers/get_path.js";
+import { join, resolve } from "node:path";
 
 export const configRouter = express.Router();
 
-const path = getPath("../../parser", import.meta.url);
+const path = resolve("parser");
 
 configRouter.route("/").post((req, res) => {
   if (!req.body || !req.body.parser_goods || !req.body.parser_prices || !req.body.crawler) {
