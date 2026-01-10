@@ -6,7 +6,7 @@ export default function Home() {
   const t = useTranslations("HomePage");
   return (
     <div>
-      <h1 className="mt-2 text-5xl tracking-tight sm:text-6xl border-b border-gray-200 pb-2 mb-5">
+      <h1 className="mt-2 mb-5 border-b border-gray-200 pb-2 text-5xl tracking-tight sm:text-6xl">
         {t("title")}
       </h1>
       <div className="space-y-4">
