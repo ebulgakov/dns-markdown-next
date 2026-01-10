@@ -1,13 +1,13 @@
 "use client";
 
+import { Star } from "lucide-react";
 import { startTransition, useOptimistic, useState } from "react";
 
 import { PriceListGoods } from "@/app/components/price-list";
 import { Alert, AlertDescription, AlertTitle } from "@/app/components/ui/alert";
+import { CheckboxWithLabel } from "@/app/components/ui/control-with-label";
 import { PageTitle } from "@/app/components/ui/page-title";
 import { toggleBoughtVisibilityFavorites } from "@/db/user/mutations/toggle-bought-visibility-favorites";
-
-import { ToggleBoughtVisibilityFavorites } from "./toggle-bought-visibility-favorites";
 
 import type { Favorite } from "@/types/user";
 
@@ -46,9 +46,10 @@ function FavoritesPageClient({
   return (
     <div>
       <PageTitle title="Избранное">
-        <ToggleBoughtVisibilityFavorites
-          shownBoughtFavorites={shownBoughtFavorites}
-          onChangeVisibility={handleFavoritesVisibility}
+        <CheckboxWithLabel
+          label="Показать купленные товары"
+          checked={shownBoughtFavorites}
+          onCheckedChange={handleFavoritesVisibility}
         />
       </PageTitle>
 
@@ -61,16 +62,28 @@ function FavoritesPageClient({
         </div>
       )}
 
-      <div className="divide-y divide-gray-200">
-        {filteredFavorites.map(favorite => (
-          <PriceListGoods
-            key={favorite.item._id}
-            item={favorite.item}
-            status={favorite.status}
-            favorites={favorites}
-          />
-        ))}
-      </div>
+      {filteredFavorites.length > 0 ? (
+        <div className="divide-y divide-gray-200">
+          {filteredFavorites.map(favorite => (
+            <PriceListGoods
+              key={favorite.item._id}
+              item={favorite.item}
+              status={favorite.status}
+              favorites={favorites}
+            />
+          ))}
+        </div>
+      ) : (
+        <Alert>
+          <AlertTitle>Избранное пусто</AlertTitle>
+          <AlertDescription>
+            <div>
+              Добавьте товары в избранное (<Star className="text-favorite inline-block" />
+              ), чтобы они отобразились здесь.
+            </div>
+          </AlertDescription>
+        </Alert>
+      )}
     </div>
   );
 }
