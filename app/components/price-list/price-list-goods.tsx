@@ -11,7 +11,6 @@ import type { GoodDiffChanges as GoodDiffChangesType } from "@/types/diff";
 import type { Goods as GoodsType } from "@/types/pricelist";
 import type { Favorite, FavoriteStatus } from "@/types/user";
 
-
 type PriceListGoodsProps = {
   item: GoodsType;
   diff?: GoodDiffChangesType;

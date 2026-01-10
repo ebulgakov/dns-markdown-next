@@ -6,8 +6,6 @@ import { getUser } from "@/db/user/queries";
 import type { Diff as DiffType } from "@/types/diff";
 import type { RemovedGoods as RemovedGoodsType } from "@/types/pricelist";
 
-
-
 export const getPriceListsDiff = async () => {
   await dbConnect();
   const user = await getUser();

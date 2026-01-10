@@ -6,7 +6,6 @@ import { getPriceListById } from "@/db/pricelist/queries";
 
 import type { PriceList as PriceListType } from "@/types/pricelist";
 
-
 type ArchiveItemPage = {
   params: Promise<{ id: string }>;
 };

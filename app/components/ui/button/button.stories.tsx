@@ -5,7 +5,6 @@ import { Button } from "./button";
 
 import type { Meta, StoryObj } from "@storybook/react";
 
-
 const meta = {
   title: "UI/Button",
   component: Button,

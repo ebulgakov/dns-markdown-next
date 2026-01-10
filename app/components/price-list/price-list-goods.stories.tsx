@@ -5,7 +5,6 @@ import { PriceListGoods } from "./price-list-goods";
 import type { GoodDiffChanges as GoodDiffChangesType } from "@/types/diff";
 import type { Meta, StoryObj } from "@storybook/react";
 
-
 const meta: Meta<typeof PriceListGoods> = {
   title: "Components/PriceList/PriceListGoods",
   component: PriceListGoods,
