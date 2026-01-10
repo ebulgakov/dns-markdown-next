@@ -28,7 +28,7 @@ describe("getArchiveList", () => {
   });
 
   // Test case for when the user is not found
-  it("should return null if user is not found", async () => {
+  it("should return throw if user is not found", async () => {
     // Mock getUser to return null
     (getUser as jest.Mock).mockResolvedValue(null);
 
