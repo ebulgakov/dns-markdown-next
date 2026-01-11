@@ -55,7 +55,9 @@ function NavbarMobile({ t, linksList, locate }: NavbarMobileProps) {
                 ))}
                 <div>
                   <SignOutButton>
-                    <a className="block cursor-pointer py-2">{t("signout")}</a>
+                    <DialogClose asChild>
+                      <a className="block cursor-pointer py-2">{t("signout")}</a>
+                    </DialogClose>
                   </SignOutButton>
                 </div>
               </SignedIn>
