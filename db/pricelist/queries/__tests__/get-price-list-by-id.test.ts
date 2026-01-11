@@ -12,10 +12,7 @@ jest.mock("@/db/models/pricelist-model", () => ({
   }
 }));
 
-jest.mock("@/cache", () => ({
-  get: jest.fn(),
-  set: jest.fn()
-}));
+jest.mock("@/cache", () => ({ __esModule: true, default: { get: jest.fn(), set: jest.fn() } }));
 
 const mockedDbConnect = jest.mocked(dbConnect);
 const mockedPricelistFindOne = jest.mocked(Pricelist.findOne);

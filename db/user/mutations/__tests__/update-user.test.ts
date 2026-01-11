@@ -8,7 +8,7 @@ import { updateUser } from "../update-user";
 // Mock dependencies
 jest.mock("@/db/database", () => ({ dbConnect: jest.fn() }));
 jest.mock("@/db/models/user-model", () => ({ User: { findByIdAndUpdate: jest.fn() } }));
-jest.mock("@/cache", () => ({ get: jest.fn(), set: jest.fn() }));
+jest.mock("@/cache", () => ({ __esModule: true, default: { get: jest.fn(), set: jest.fn() } }));
 jest.mock("@/db/user/queries", () => ({ getUser: jest.fn() }));
 
 describe("updateUser", () => {

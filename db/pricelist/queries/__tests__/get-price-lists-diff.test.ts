@@ -18,10 +18,7 @@ jest.mock("@/db/user/queries", () => ({
   getUser: jest.fn()
 }));
 
-jest.mock("@/cache", () => ({
-  get: jest.fn(),
-  set: jest.fn()
-}));
+jest.mock("@/cache", () => ({ __esModule: true, default: { get: jest.fn(), set: jest.fn() } }));
 
 jest.mock("@/db/models/mutated-goods-model", () => ({
   RemovedGoods: { findOne: jest.fn() },

@@ -9,7 +9,7 @@ import type { History as HistoryType } from "@/types/history";
 jest.mock("@/db/database", () => ({ dbConnect: jest.fn() }));
 jest.mock("@/db/models/history-model", () => ({ History: { findOne: jest.fn() } }));
 jest.mock("@/db/models/pricelist-model", () => ({ Pricelist: { findOne: jest.fn() } }));
-jest.mock("@/cache", () => ({ get: jest.fn(), set: jest.fn() }));
+jest.mock("@/cache", () => ({ __esModule: true, default: { get: jest.fn(), set: jest.fn() } }));
 
 const mockedDbConnect = dbConnect as jest.Mock;
 const mockedHistoryFindOne = History.findOne as jest.Mock;
