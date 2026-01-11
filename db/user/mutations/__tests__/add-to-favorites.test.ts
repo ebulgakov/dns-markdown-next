@@ -27,7 +27,8 @@ describe("addToFavorites", () => {
   it("should add a product to favorites when a user is found", async () => {
     (getUser as jest.Mock).mockResolvedValue(mockUser);
 
-    await addToFavorites(mockGoods);
+    const [oneGoods] = mockGoods;
+    await addToFavorites(oneGoods);
 
     expect(dbConnect).toHaveBeenCalledTimes(1);
     expect(getUser).toHaveBeenCalledTimes(1);
@@ -36,11 +37,11 @@ describe("addToFavorites", () => {
         ...mockUser.favorites,
         {
           status: {
-            city: mockGoods.city,
+            city: oneGoods.city,
             deleted: false,
             createdAt: expect.any(Date)
           },
-          item: mockGoods
+          item: oneGoods
         }
       ]
     });
@@ -49,7 +50,8 @@ describe("addToFavorites", () => {
   it("should throw an error and not update if user is not found", async () => {
     (getUser as jest.Mock).mockResolvedValue(null);
 
-    await expect(addToFavorites(mockGoods)).rejects.toThrow(
+    const [oneGoods] = mockGoods;
+    await expect(addToFavorites(oneGoods)).rejects.toThrow(
       "Cannot read properties of null (reading 'favorites')"
     );
 
