@@ -51,17 +51,19 @@ export default async function RootLayout({
         <ClerkProvider>
           <html lang={locale} suppressHydrationWarning>
             <body
-              className={cn(["antialiased font-sans", robotoSans.variable, robotoMono.variable])}
+              className={cn(["font-sans antialiased", robotoSans.variable, robotoMono.variable])}
             >
               <ThemeProvider attribute="class" defaultTheme="light" enableSystem>
-                <div className="grid min-h-screen md:container mx-auto">
-                  <div className="mb-10">
-                    <div className="mt-4 mb-5">
-                      <Navbar />
+                <div className="px-4">
+                  <div className="mx-auto grid min-h-screen md:container">
+                    <div className="mb-10">
+                      <div className="mt-4 mb-5">
+                        <Navbar />
+                      </div>
+                      {children}
                     </div>
-                    {children}
+                    <Footer locate={locale} />
                   </div>
-                  <Footer locate={locale} />
                 </div>
               </ThemeProvider>
             </body>
