@@ -44,12 +44,14 @@ function PriceListGoods({ item, status, diff, favorites }: PriceListGoodsProps) 
             target="_blank"
             rel="noopener noreferrer"
             href={`http://dns-shop.ru${item.link}`}
-            className="text-[#337ab7]"
+            className="text-primary break-all md:break-normal"
           >
             {item.title}
           </a>
           &nbsp;
-          <small className="text-[75%] leading-none font-normal text-[#777777]">{item.code}</small>
+          <small className="text-[75%] leading-none font-normal whitespace-nowrap text-[#777777]">
+            {item.code}
+          </small>
         </div>
         <p className="mb-3">{item.description}</p>
         {item.reasons && (
