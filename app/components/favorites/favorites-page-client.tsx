@@ -1,7 +1,7 @@
 "use client";
 
 import { Star } from "lucide-react";
-import { startTransition, useOptimistic, useState } from "react";
+import { startTransition, useEffect, useOptimistic, useState } from "react";
 
 import { PriceListGoods } from "@/app/components/price-list";
 import { Alert, AlertDescription, AlertTitle } from "@/app/components/ui/alert";
@@ -20,6 +20,7 @@ function FavoritesPageClient({
   favorites,
   shownBoughtFavorites: defaultVisibility
 }: FavoritesPageClientProps) {
+  const [isClient, setIsClient] = useState(false);
   const [errorMessage, setErrorMessage] = useState<Error | null>(null);
   const [realShownBoughtFavorites, setRealShownBoughtFavorites] =
     useState<boolean>(defaultVisibility);
@@ -44,7 +45,12 @@ function FavoritesPageClient({
       }
     });
   };
-  return (
+
+  useEffect(() => {
+    // https://react.dev/reference/react-dom/client/hydrateRoot#handling-different-client-and-server-content
+    setIsClient(true); // eslint-disable-line react-hooks/set-state-in-effect
+  }, []);
+  return isClient ? (
     <div>
       <PageTitle title="Избранное">
         <div className="mt-2 md:mt-0">
@@ -88,7 +94,7 @@ function FavoritesPageClient({
         </Alert>
       )}
     </div>
-  );
+  ) : null;
 }
 
 export { FavoritesPageClient };
