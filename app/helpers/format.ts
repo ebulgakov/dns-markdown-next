@@ -18,6 +18,15 @@ export const formatDateShort = (date: Date | number | string): string => {
   return dateFormat.format(new Date(date));
 };
 
+export const formatDateMonthDay = (date: Date | number | string): string => {
+  const dateFormat = new Intl.DateTimeFormat("ru", {
+    month: "short",
+    day: "numeric"
+  });
+
+  return dateFormat.format(new Date(date));
+};
+
 export const formatTime = (date: Date | number | string): string => {
   const timeFormat = new Intl.DateTimeFormat("ru", {
     hour: "numeric",

@@ -105,7 +105,7 @@ function PriceListGoods({ item, status, diff, favorites }: PriceListGoodsProps) 
         ) : (
           <>
             {item.link && (
-              <Link className="text-[#337ab7]" href={item.link}>
+              <Link className="text-primary" href={item.link}>
                 Анализ цены
               </Link>
             )}

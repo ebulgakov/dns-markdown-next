@@ -11,6 +11,7 @@ import {
   ChartLegend,
   ChartLegendContent
 } from "@/app/components/ui/chart";
+import { formatDateMonthDay } from "@/app/helpers/format";
 
 const chartConfig = {
   price: {
@@ -37,16 +38,20 @@ type ChartPricesProps = {
 };
 
 function ChartPrices({ chartData }: ChartPricesProps) {
-  const data = Array.from({ length: chartData?.labels.length || 0 }, (_, index) => ({
-    date: chartData?.labels[index] || "-",
-    price: chartData?.price[index] || "0",
-    old: chartData?.priceOld[index] || "0",
-    profit: chartData?.profit[index] || "0"
+  if (!chartData) {
+    return null;
+  }
+
+  const data = Array.from({ length: chartData.labels.length || 0 }, (_, index) => ({
+    date: formatDateMonthDay(chartData.labels[index]),
+    price: chartData.price[index] || "0",
+    old: chartData.priceOld[index] || "0",
+    profit: chartData.profit[index] || "0"
   }));
 
   return (
     <Card>
-      <CardContent className="px-2 pt-4 sm:px-6 sm:pt-6">
+      <CardContent className="p-0 md:px-2 md:pt-4">
         <ChartContainer config={chartConfig} className="aspect-auto h-[250px] w-full">
           <AreaChart
             accessibilityLayer
@@ -63,13 +68,6 @@ function ChartPrices({ chartData }: ChartPricesProps) {
               axisLine={false}
               tickMargin={8}
               minTickGap={32}
-              tickFormatter={value => {
-                const date = new Date(value);
-                return date.toLocaleDateString("ru", {
-                  month: "short",
-                  day: "numeric"
-                });
-              }}
             />
             <YAxis tickLine={false} axisLine={false} tickMargin={8} tickCount={3} />
             <ChartTooltip cursor={false} content={<ChartTooltipContent indicator="line" />} />
