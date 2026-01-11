@@ -41,10 +41,10 @@ function Navbar({ locate }: NavbarProps) {
   return (
     <header>
       <div className="md:hidden">
-        <NavbarMobile linksList={mobileNavbar} t={t} locate={locate} />
+        <NavbarMobile linksList={mobileNavbar} locate={locate} />
       </div>
       <div className="hidden md:block">
-        <NavbarDesktop linksList={linksList} t={t} />
+        <NavbarDesktop linksList={linksList} />
       </div>
     </header>
   );

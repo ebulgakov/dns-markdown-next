@@ -1,6 +1,7 @@
 import { SignedIn, SignedOut, SignInButton, SignUpButton, SignOutButton } from "@clerk/nextjs";
 import { Menu } from "lucide-react";
 import Link from "next/link";
+import { useTranslations } from "next-intl";
 
 import { ChangeLocationSelector } from "@/app/components/change-location-selector";
 import { ChangeThemeSelector } from "@/app/components/change-theme-selector";
@@ -18,11 +19,11 @@ import type { NavbarLinks } from "@/types/common";
 
 type NavbarMobileProps = {
   linksList: NavbarLinks;
-  t: (key: string) => string;
   locate?: string;
 };
 
-function NavbarMobile({ t, linksList, locate }: NavbarMobileProps) {
+function NavbarMobile({ linksList, locate }: NavbarMobileProps) {
+  const t = useTranslations("Navbar");
   return (
     <Dialog>
       <div className="border-primary flex items-center gap-4 rounded border-2 py-2">
