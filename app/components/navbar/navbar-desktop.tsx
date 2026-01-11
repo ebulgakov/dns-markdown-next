@@ -1,9 +1,10 @@
 "use client";
 
-import { SignedIn, SignedOut, SignInButton, SignUpButton, UserButton } from "@clerk/nextjs";
+import { SignedIn, SignedOut, SignInButton, SignUpButton } from "@clerk/nextjs";
 import Link from "next/link";
 import { useTranslations } from "next-intl";
 
+import { ClientSideUserButton } from "@/app/components/navbar/navbar-user-button";
 import { Button } from "@/app/components/ui/button";
 import {
   NavigationActiveLink,
@@ -52,7 +53,7 @@ function NavbarDesktop({ linksList }: NavbarDesktopProps) {
         </SignedOut>
         <SignedIn>
           <div className="size-7">
-            <UserButton />
+            <ClientSideUserButton />
           </div>
         </SignedIn>
       </NavigationMenu>
