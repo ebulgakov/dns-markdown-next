@@ -25,7 +25,7 @@ function ProfileSections({
       <PageTitle title="Профиль" />
 
       <Tabs defaultValue="favoriteSections">
-        <TabsList>
+        <TabsList className="flex w-full flex-1 flex-col items-stretch md:flex-auto md:flex-row md:items-center">
           <TabsTrigger value="favoriteSections">Избранные категории</TabsTrigger>
           <TabsTrigger value="hiddenSections">Скрытые категории</TabsTrigger>
           <TabsTrigger value="notifications">Уведомления</TabsTrigger>

@@ -83,7 +83,7 @@ function ProfileUpdateSections({
           </Alert>
         </div>
       )}
-      <div className="flex gap-4">
+      <div className="flex flex-col gap-4 md:flex-row">
         <div className="flex-1">
           <Card className="p-2">
             <ScrollArea className="h-100">
