@@ -11,6 +11,9 @@ export const addToFavorites = async (goods: Goods) => {
   await dbConnect();
 
   const user = await getUser();
+
+  if (!user) throw new Error("User not found");
+
   const update = {
     favorites: [
       ...user.favorites,

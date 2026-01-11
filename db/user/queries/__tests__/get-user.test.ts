@@ -5,39 +5,19 @@ import { User } from "@/db/models/user-model";
 
 import { getUser } from "../get-user";
 
-// Mock dependencies
-jest.mock("@/db/database", () => ({
-  dbConnect: jest.fn()
-}));
-
-jest.mock("@clerk/nextjs/server", () => ({
-  currentUser: jest.fn()
-}));
-
-jest.mock("@/cache", () => ({
-  get: jest.fn(),
-  set: jest.fn()
-}));
-
+jest.mock("@/db/database", () => ({ dbConnect: jest.fn() }));
+jest.mock("@clerk/nextjs/server", () => ({ currentUser: jest.fn() }));
+jest.mock("@/cache", () => ({ __esModule: true, default: { get: jest.fn(), set: jest.fn() } }));
 jest.mock("@/db/models/user-model", () => ({
-  User: {
-    findOne: jest.fn()
-  }
+  User: { findOne: jest.fn() }
 }));
-
-// Type assertion for mocked functions
-const mockedDbConnect = dbConnect as jest.Mock;
-const mockedCurrentUser = currentUser as jest.Mock;
-const mockedUserFindOne = User.findOne as jest.Mock;
 
 describe("getUser", () => {
   beforeEach(() => {
-    // Clear all mocks before each test
     jest.clearAllMocks();
   });
 
   it("should return user data if a user is found in the database", async () => {
-    // Arrange: Set up mock data and return values
     const clerkUser = { id: "user_123" };
     const dbUser = {
       userId: "user_123",
@@ -46,44 +26,38 @@ describe("getUser", () => {
       favorites: []
     };
 
-    mockedCurrentUser.mockResolvedValue(clerkUser);
-    mockedUserFindOne.mockResolvedValue(dbUser);
+    // @ts-expect-error -- mocking
+    jest.mocked(currentUser).mockResolvedValue(clerkUser);
+    jest.mocked(User.findOne).mockResolvedValue(dbUser);
 
-    // Act: Call the function being tested
     const result = await getUser();
 
-    // Assert: Check if the function behaved as expected
-    expect(mockedDbConnect).toHaveBeenCalledTimes(1);
-    expect(mockedCurrentUser).toHaveBeenCalledTimes(1);
-    expect(mockedUserFindOne).toHaveBeenCalledWith({ userId: clerkUser.id });
+    expect(dbConnect).toHaveBeenCalledTimes(1);
+    expect(currentUser).toHaveBeenCalledTimes(1);
+    expect(User.findOne).toHaveBeenCalledWith({ userId: clerkUser.id });
     expect(result).toEqual(dbUser);
   });
 
-  it("should return null if no user is found in the database", async () => {
-    // Arrange: Set up mock data for a non-existent user
+  it("should throw an error if no user is found in the database", async () => {
     const clerkUser = { id: "user_456" };
-    mockedCurrentUser.mockResolvedValue(clerkUser);
-    mockedUserFindOne.mockResolvedValue(null);
+    // @ts-expect-error -- mocking
+    jest.mocked(currentUser).mockResolvedValue(clerkUser);
+    jest.mocked(User.findOne).mockResolvedValue(null);
 
-    // Act: Call the function
     await expect(getUser()).rejects.toThrow("User not found");
 
-    // Assert: Check the results for a non-existent user
-    expect(mockedDbConnect).toHaveBeenCalledTimes(1);
-    expect(mockedCurrentUser).toHaveBeenCalledTimes(1);
-    expect(mockedUserFindOne).toHaveBeenCalledWith({ userId: clerkUser.id });
+    expect(dbConnect).toHaveBeenCalledTimes(1);
+    expect(currentUser).toHaveBeenCalledTimes(1);
+    expect(User.findOne).toHaveBeenCalledWith({ userId: clerkUser.id });
   });
 
-  it("should return null if there is no authenticated user", async () => {
-    // Arrange: Mock that there is no authenticated user
-    mockedCurrentUser.mockResolvedValue(null);
+  it("should throw an error if there is no authenticated user", async () => {
+    jest.mocked(currentUser).mockResolvedValue(null);
 
-    // Act: Call the function
     await expect(getUser()).rejects.toThrow("User not authenticated");
 
-    // Assert: Check that findOne is called with null and result is null
-    expect(mockedDbConnect).toHaveBeenCalledTimes(0);
-    expect(mockedCurrentUser).toHaveBeenCalledTimes(1);
-    expect(mockedUserFindOne).not.toHaveBeenCalledWith({ userId: undefined });
+    expect(dbConnect).not.toHaveBeenCalled();
+    expect(currentUser).toHaveBeenCalledTimes(1);
+    expect(User.findOne).not.toHaveBeenCalled();
   });
 });

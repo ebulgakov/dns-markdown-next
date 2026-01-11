@@ -14,10 +14,14 @@ export async function getCatalogData() {
 
   try {
     const user = await getUser();
+    if (!user) throw new Error("User not found");
+
     userFavoritesGoods = user.favorites;
     hiddenSectionsTitles = user.hiddenSections;
 
     priceList = await getLastPriceList(user.city);
+    if (!priceList) throw new Error("Price list not found");
+
     if (user.favoriteSections.length > 0) {
       priceList.positions.forEach(position => {
         if (user.favoriteSections.includes(position.title)) {

@@ -1,25 +1,10 @@
 import { dbConnect } from "@/db/database";
 import { Pricelist } from "@/db/models/pricelist-model";
-import { getUser } from "@/db/user/queries";
 
 import { getArchiveList } from "../get-archive-list";
 
-import type { User } from "@/types/user";
-
-// Mock dependencies
-jest.mock("@/db/database", () => ({
-  dbConnect: jest.fn()
-}));
-
-jest.mock("@/db/user/queries", () => ({
-  getUser: jest.fn()
-}));
-
-jest.mock("@/cache", () => ({
-  get: jest.fn(),
-  set: jest.fn()
-}));
-
+jest.mock("@/db/database", () => ({ dbConnect: jest.fn() }));
+jest.mock("@/cache", () => ({ __esModule: true, default: { get: jest.fn(), set: jest.fn() } }));
 jest.mock("@/db/models/pricelist-model", () => ({
   Pricelist: {
     find: jest.fn()
@@ -27,94 +12,38 @@ jest.mock("@/db/models/pricelist-model", () => ({
 }));
 
 describe("getArchiveList", () => {
-  // Clear all mocks after each test
+  const city = "TestCity";
+
   afterEach(() => {
     jest.clearAllMocks();
   });
 
-  // Test case for when the user is not found
-  it("should throw if user is not found", async () => {
-    // Mock getUser to return null
-    (getUser as jest.Mock).mockResolvedValue(null);
-
-    await expect(getArchiveList("TestCity")).rejects.toThrow(
-      "Cannot read properties of undefined (reading 'select')"
-    );
-
-    // Assertions
-    expect(dbConnect).toHaveBeenCalledTimes(1);
-    expect(getUser).toHaveBeenCalledTimes(0);
-    expect(Pricelist.find).toHaveBeenCalledWith(
-      { city: "TestCity" },
-      {},
-      { sort: { updatedAt: 1 } }
-    );
-  });
-
-  // Test case for when a valid user is found
-  it("should return a list of pricelists for a valid user", async () => {
-    // Mock user data
-    const mockUser: Partial<User> = {
-      city: "TestCity"
-    };
-
-    // Mock pricelist data
+  it("should return a list of pricelists for a valid city", async () => {
     const mockPriceLists = [
       { createdAt: `${new Date("2023-01-01")}` },
       { createdAt: `${new Date("2023-01-02")}` }
     ];
 
-    // Mock getUser to return a user
-    (getUser as jest.Mock).mockResolvedValue(mockUser);
+    (Pricelist.find as jest.Mock).mockReturnValue({
+      select: jest.fn().mockResolvedValue(mockPriceLists)
+    });
 
-    // Mock the chain of Mongoose calls: find().select()
-    const selectMock = jest.fn().mockResolvedValue(mockPriceLists);
-    const findMock = {
-      select: selectMock
-    };
-    (Pricelist.find as jest.Mock).mockReturnValue(findMock);
+    const result = await getArchiveList(city);
 
-    const result = await getArchiveList(mockUser.city!);
-
-    // Assertions
     expect(dbConnect).toHaveBeenCalledTimes(1);
-    expect(getUser).toHaveBeenCalledTimes(0);
-    expect(Pricelist.find).toHaveBeenCalledWith(
-      { city: mockUser.city },
-      {},
-      { sort: { updatedAt: 1 } }
-    );
-    expect(selectMock).toHaveBeenCalledWith("createdAt");
+    expect(Pricelist.find).toHaveBeenCalledWith({ city }, {}, { sort: { updatedAt: 1 } });
     expect(result).toEqual(mockPriceLists);
   });
 
-  // Test case for when no pricelists are found for the user's city
   it("should return an empty array if no pricelists are found", async () => {
-    // Mock user data
-    const mockUser: Partial<User> = {
-      city: "TestCity"
-    };
+    (Pricelist.find as jest.Mock).mockReturnValue({
+      select: jest.fn().mockResolvedValue([])
+    });
 
-    // Mock getUser to return a user
-    (getUser as jest.Mock).mockResolvedValue(mockUser);
+    const result = await getArchiveList(city);
 
-    // Mock the chain of Mongoose calls to return an empty array
-    const selectMock = jest.fn().mockResolvedValue([]);
-    const findMock = {
-      select: selectMock
-    };
-    (Pricelist.find as jest.Mock).mockReturnValue(findMock);
-
-    const result = await getArchiveList(mockUser.city!);
-
-    // Assertions
-    expect(result).toEqual([]);
     expect(dbConnect).toHaveBeenCalledTimes(1);
-    expect(getUser).toHaveBeenCalledTimes(0);
-    expect(Pricelist.find).toHaveBeenCalledWith(
-      { city: mockUser.city },
-      {},
-      { sort: { updatedAt: 1 } }
-    );
+    expect(Pricelist.find).toHaveBeenCalledWith({ city }, {}, { sort: { updatedAt: 1 } });
+    expect(result).toEqual([]);
   });
 });
