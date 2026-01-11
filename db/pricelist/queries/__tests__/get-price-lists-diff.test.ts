@@ -18,6 +18,11 @@ jest.mock("@/db/user/queries", () => ({
   getUser: jest.fn()
 }));
 
+jest.mock("@/cache", () => ({
+  get: jest.fn(),
+  set: jest.fn()
+}));
+
 jest.mock("@/db/models/mutated-goods-model", () => ({
   RemovedGoods: {
     findOne: jest.fn()
@@ -51,14 +56,22 @@ describe("getPriceListsDiff", () => {
     mockedGetUser.mockResolvedValue(null);
 
     // Act: Call the function
-    const result = await getPriceListsDiff();
+    const result = await getPriceListsDiff("TestCity");
 
     // Assert: Check the result and that functions were called correctly
-    expect(result).toBeNull();
+    expect(result).toEqual({ diff: undefined, new: undefined, sold: undefined });
     expect(mockedDbConnect).toHaveBeenCalledTimes(1);
-    expect(mockedGetUser).toHaveBeenCalledTimes(1);
-    expect(mockedRemovedGoodsFindOne).not.toHaveBeenCalled();
-    expect(mockedDiffFindOne).not.toHaveBeenCalled();
+    expect(mockedGetUser).toHaveBeenCalledTimes(0);
+    expect(mockedRemovedGoodsFindOne).toHaveBeenCalledWith(
+      { city: "TestCity" },
+      {},
+      { sort: { updatedAt: -1 } }
+    );
+    expect(mockedDiffFindOne).toHaveBeenCalledWith(
+      { city: "TestCity" },
+      {},
+      { sort: { updatedAt: -1 } }
+    );
   });
 
   // Test case: User is authenticated, but no diff or sold data is found
@@ -70,12 +83,12 @@ describe("getPriceListsDiff", () => {
     mockedDiffFindOne.mockResolvedValue(null);
 
     // Act: Call the function
-    const result = await getPriceListsDiff();
+    const result = await getPriceListsDiff(mockUser.city!);
 
-    // Assert: Check that the result contains nulls and functions were called correctly
-    expect(result).toEqual({ diff: null, sold: null });
+    // Assert: Check that the result contains undefined and functions were called correctly
+    expect(result).toEqual({ diff: undefined, new: undefined, sold: undefined });
     expect(mockedDbConnect).toHaveBeenCalledTimes(1);
-    expect(mockedGetUser).toHaveBeenCalledTimes(1);
+    expect(mockedGetUser).toHaveBeenCalledTimes(0);
     expect(mockedRemovedGoodsFindOne).toHaveBeenCalledWith(
       { city: mockUser.city },
       {},
@@ -100,12 +113,12 @@ describe("getPriceListsDiff", () => {
     mockedDiffFindOne.mockResolvedValue(mockDiffData);
 
     // Act: Call the function
-    const result = await getPriceListsDiff();
+    const result = await getPriceListsDiff(mockUser.city!);
 
     // Assert: Check that the result contains the mocked data
     expect(result).toEqual({ diff: mockDiffData, sold: mockSoldData });
     expect(mockedDbConnect).toHaveBeenCalledTimes(1);
-    expect(mockedGetUser).toHaveBeenCalledTimes(1);
+    expect(mockedGetUser).toHaveBeenCalledTimes(0);
     expect(mockedRemovedGoodsFindOne).toHaveBeenCalledWith(
       { city: mockUser.city },
       {},

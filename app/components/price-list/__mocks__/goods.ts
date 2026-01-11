@@ -86,7 +86,7 @@ export const mockPositions: Position[] = [
 export const mockPriceList: PriceList = {
   _id: "1",
   positions: mockPositions,
-  city: "samara",
+  city: "TestCity",
   createdAt: `2024-01-01T00:00:00.000Z`
 };
 

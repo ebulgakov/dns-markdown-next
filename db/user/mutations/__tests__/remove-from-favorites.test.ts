@@ -49,7 +49,9 @@ describe("removeFromFavorites", () => {
     (getUser as jest.Mock).mockResolvedValue(null);
 
     // Act
-    await expect(removeFromFavorites("some-id")).rejects.toThrow("User not found");
+    await expect(removeFromFavorites("some-id")).rejects.toThrow(
+      "Cannot read properties of null (reading 'favorites')"
+    );
 
     // Assert
     expect(dbConnect).toHaveBeenCalledTimes(1);

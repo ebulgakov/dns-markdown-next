@@ -2,18 +2,14 @@ import { FavoritesPageClient } from "@/app/components/favorites";
 import { Alert, AlertTitle, AlertDescription } from "@/app/components/ui/alert";
 import { getUser } from "@/db/user/queries";
 
-import type { Favorite, User } from "@/types/user";
-
 export default async function FavoritesPage() {
   let favorites;
   let shownBoughtFavorites;
 
   try {
-    let user = await getUser();
-    if (!user) throw new Error("No user found!");
-    user = JSON.parse(JSON.stringify(user)) as User;
+    const user = await getUser();
     shownBoughtFavorites = user.shownBoughtFavorites;
-    favorites = user.favorites.reverse() as Favorite[];
+    favorites = user.favorites.reverse();
   } catch (e) {
     const { message } = e as Error;
     return (

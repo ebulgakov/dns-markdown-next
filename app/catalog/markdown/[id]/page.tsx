@@ -12,26 +12,14 @@ type CatalogItemPage = {
 export default async function CatalogItemPage({ params }: CatalogItemPage) {
   const { id } = await params;
   let product;
-  let error: Error | null = null;
-
   try {
     product = await getProductById(`/catalog/markdown/${id}/`);
-
-    if (!product)
-      throw new Error(
-        `Нет товара с id: ${id}. Возможно он был удалён. \nПопробуйте вернуться на главную страницу каталога.`
-      );
-
-    product = JSON.parse(JSON.stringify(product));
   } catch (e) {
-    error = e as Error;
-  }
-
-  if (!product) {
+    const { message } = e as Error;
     return (
       <Alert variant="destructive">
         <AlertTitle>Ошибка загрузки товара</AlertTitle>
-        <AlertDescription>{error?.message}</AlertDescription>
+        <AlertDescription>{message}</AlertDescription>
       </Alert>
     );
   }
@@ -44,7 +32,7 @@ export default async function CatalogItemPage({ params }: CatalogItemPage) {
 
       <Title variant="h2">Сравнение цен</Title>
 
-      <ul className="list-disc ml-5">
+      <ul className="ml-5 list-disc">
         <li>
           <a
             className="font-bold"
@@ -57,7 +45,7 @@ export default async function CatalogItemPage({ params }: CatalogItemPage) {
         </li>
         <li>
           <a
-            className="text-[#f37f00] font-bold"
+            className="font-bold text-[#f37f00]"
             rel="noopener noreferrer"
             target="_blank"
             href={`https://www.citilink.ru/search/?text=${encodeURI(product.item.title)}`}

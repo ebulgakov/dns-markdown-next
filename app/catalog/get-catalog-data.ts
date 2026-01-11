@@ -13,20 +13,11 @@ export async function getCatalogData() {
   let error;
 
   try {
-    //
-    priceList = await getLastPriceList();
-    if (!priceList) throw new Error("No any price lists in the catalog");
-    priceList = JSON.parse(JSON.stringify(priceList)) as PriceListType;
-
-    //
     const user = await getUser();
-    if (!user) throw new Error("No user found");
+    userFavoritesGoods = user.favorites;
+    hiddenSectionsTitles = user.hiddenSections;
 
-    //
-    userFavoritesGoods = JSON.parse(JSON.stringify(user.favorites));
-    hiddenSectionsTitles = JSON.parse(JSON.stringify(user.hiddenSections));
-
-    //
+    priceList = await getLastPriceList(user.city);
     if (user.favoriteSections.length > 0) {
       priceList.positions.forEach(position => {
         if (user.favoriteSections.includes(position.title)) {

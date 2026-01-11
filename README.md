@@ -22,16 +22,7 @@ bun dev
 Open [http://localhost:3000](http://localhost:3000) with your browser to see the local site.
 
 ## .env file
-```env
-NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY=pk_test_... # Your Clerk publishable key
-CLERK_SECRET_KEY=sk_test_... # Your Clerk secret key
-MONGODB_URI="mongodb+srv:" # Your MongoDB connection string
-
-NEXT_PUBLIC_CLERK_SIGN_IN_URL=/sign-in
-NEXT_PUBLIC_CLERK_SIGN_UP_URL=/sign-up
-NEXT_PUBLIC_CLERK_SIGN_IN_FALLBACK_REDIRECT_URL=/catalog
-NEXT_PUBLIC_CLERK_SIGN_UP_FALLBACK_REDIRECT_URL=/profile
-```
+Rename the `.env.example` file to `.env` and fill in the required variables.
 
 ## Storybook
 Chromatic Storybook is set up for this project: https://www.chromatic.com/library?appId=695938b24c4c7f59436c970b
@@ -47,3 +38,4 @@ Chromatic Storybook is set up for this project: https://www.chromatic.com/librar
 * Storybook
 * Jest
 * Sentry
+* Redis

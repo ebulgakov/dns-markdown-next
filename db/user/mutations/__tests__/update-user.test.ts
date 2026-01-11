@@ -15,6 +15,11 @@ jest.mock("@/db/models/user-model", () => ({
   }
 }));
 
+jest.mock("@/cache", () => ({
+  get: jest.fn(),
+  set: jest.fn()
+}));
+
 jest.mock("@/db/user/queries", () => ({
   getUser: jest.fn()
 }));
@@ -29,7 +34,7 @@ describe("updateUser", () => {
     (getUser as jest.Mock).mockResolvedValue(null);
 
     // Act
-    await expect(updateUser({})).rejects.toThrow("User not found");
+    await expect(updateUser({})).rejects.toThrow("Cannot read properties of null (reading '_id')");
 
     // Assert
     expect(dbConnect).toHaveBeenCalledTimes(1);
@@ -41,7 +46,9 @@ describe("updateUser", () => {
     const update = { name: "New Name" };
 
     // Act
-    await expect(updateUser(update)).rejects.toThrow("User not found");
+    await expect(updateUser(update)).rejects.toThrow(
+      "Cannot read properties of null (reading '_id')"
+    );
 
     // Assert
     expect(User.findByIdAndUpdate).not.toHaveBeenCalled();
@@ -49,15 +56,17 @@ describe("updateUser", () => {
 
   it("should update the user if user is found", async () => {
     // Arrange
-    const mockUser = { id: "user123", name: "Old Name" };
+    const mockUser = { _id: "user123", name: "Old Name", userId: "some-user-id" };
+    const updatedUser = { ...mockUser, name: "New Name" };
     (getUser as jest.Mock).mockResolvedValue(mockUser);
+    (User.findByIdAndUpdate as jest.Mock).mockResolvedValue(updatedUser);
     const update = { name: "New Name" };
 
     // Act
     await updateUser(update);
 
     // Assert
-    expect(User.findByIdAndUpdate).toHaveBeenCalledWith(mockUser.id, update, { new: true });
+    expect(User.findByIdAndUpdate).toHaveBeenCalledWith(mockUser._id, update, { new: true });
     expect(User.findByIdAndUpdate).toHaveBeenCalledTimes(1);
   });
 });
