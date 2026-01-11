@@ -16,7 +16,9 @@
     "favorites": "Избранное",
     "profile": "Профиль",
     "signin": "Войти",
-    "signup": "Зарегистрироваться"
+    "signup": "Зарегистрироваться",
+    "signout": "Выйти",
+    "menu": "Меню"
   },
   "Footer": {
     "copyright": "© 2018–2026 DNS-Markdown. Версия 2.0.0.",

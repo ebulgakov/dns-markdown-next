@@ -29,7 +29,7 @@ export default async function CatalogPage() {
   return (
     <div>
       <PageTitle title={formatDate(priceList.createdAt)} subTitle={formatTime(priceList.createdAt)}>
-        <div className="flex items-center gap-4">
+        <div className="mt-4 flex items-center justify-between gap-4 md:mt-0">
           <div>
             Количество: <b>{count}</b>
           </div>

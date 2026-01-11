@@ -12,18 +12,23 @@ function SearchInput() {
   const onChange = useSearchStore(state => state.updateSearchTerm);
   const searchTerm = useSearchStore(state => state.searchTerm);
 
+  const handleSearchVisibility = () => {
+    onChange("");
+    setHidden(!hidden);
+  };
+
   return (
     <>
       {!hidden && (
         <div
           className={clsx(
-            "fixed left-0 right-0 py-5 px-22 bottom-0 z-10 bg-white dark:bg-background border-t border-gray-200",
+            "dark:bg-background fixed right-0 bottom-0 left-0 z-10 border-t border-gray-200 bg-white px-22 py-5",
             {
               hidden: hidden
             }
           )}
         >
-          <div className="md:container mx-auto">
+          <div className="mx-auto md:container">
             <Input
               autoFocus={true}
               inputSize="lg"
@@ -37,11 +42,11 @@ function SearchInput() {
         </div>
       )}
       <button
-        onClick={() => setHidden(!hidden)}
+        onClick={handleSearchVisibility}
         type="button"
         aria-label={`Search ${hidden}`}
         name="toggle-visibility"
-        className="fixed right-3 bottom-3 size-14 z-20 p-4 bg-orange-400 text-white rounded-full cursor-pointer hover:bg-orange-500 "
+        className="fixed right-3 bottom-3 z-20 size-14 cursor-pointer rounded-full bg-orange-400 p-4 text-white hover:bg-orange-500"
       >
         {hidden ? <Search /> : <X />}
       </button>

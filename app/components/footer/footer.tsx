@@ -10,9 +10,9 @@ type FooterProps = {
 function Footer({ locate }: FooterProps) {
   const t = useTranslations("Footer");
   return (
-    <footer className="mt-auto border-t border-neutral-300 h-13 flex items-center justify-between">
+    <footer className="mt-auto flex h-13 items-center justify-between border-t border-neutral-300">
       <div className="text-sm text-gray-500">{t("copyright")}</div>
-      <div className="text-sm text-gray-500 flex gap-4">
+      <div className="hidden gap-4 text-sm text-gray-500 md:flex">
         <ChangeThemeSelector />
         <ChangeLocationSelector locate={locate} />
         <Link href="/disclaimer">
