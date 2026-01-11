@@ -5,6 +5,8 @@ import { Pricelist } from "@/db/models/pricelist-model";
 import type { PriceList as PriceListType } from "@/types/pricelist";
 
 export const getPriceListById = async (id: string) => {
+  if (!id) throw new Error("id is required");
+
   const key = `pricelist:archiveid:${String(id)}`;
   const cached = await redis.get(key);
   if (cached) return cached as PriceListType;

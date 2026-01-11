@@ -1,33 +1,51 @@
+import redis from "@/cache";
 import { dbConnect } from "@/db/database";
 import { Diff } from "@/db/models/diff-model";
 import { RemovedGoods, NewGoods } from "@/db/models/mutated-goods-model";
-import { getUser } from "@/db/user/queries";
 
 import type { Diff as DiffType } from "@/types/diff";
 import type { RemovedGoods as RemovedGoodsType } from "@/types/pricelist";
 
-export const getPriceListsDiff = async () => {
-  await dbConnect();
-  const user = await getUser();
+export const getPriceListsDiff = async (city: string) => {
+  if (!city) throw new Error("city is required");
 
-  if (!user) return null;
+  const soldKey = `pricelist:removed:${city}`;
+  const newKey = `pricelist:new:${city}`;
+  const diffKey = `pricelist:diff:${city}`;
 
-  const sold = (await RemovedGoods.findOne(
-    { city: user.city },
-    {},
-    { sort: { updatedAt: -1 } }
-  )) as unknown as RemovedGoodsType | null;
+  let cachedSold = await redis.get(soldKey);
+  let cachedNew = await redis.get(newKey);
+  let cachedDiff = await redis.get(diffKey);
 
-  const newGoods = (await NewGoods.findOne(
-    { city: user.city },
-    {},
-    { sort: { updatedAt: -1 } }
-  )) as unknown as RemovedGoodsType | null;
-  const diff = (await Diff.findOne(
-    { city: user.city },
-    {},
-    { sort: { updatedAt: -1 } }
-  )) as unknown as DiffType | null;
+  if (!cachedSold || !cachedNew || !cachedDiff) {
+    await dbConnect();
+  }
 
-  return { diff, sold, new: newGoods };
+  if (!cachedSold) {
+    const sold = await RemovedGoods.findOne({ city }, {}, { sort: { updatedAt: -1 } });
+    if (sold) {
+      const plainSold = JSON.stringify(sold);
+      await redis.set(soldKey, plainSold);
+      cachedSold = JSON.parse(plainSold) as RemovedGoodsType;
+    }
+  }
+
+  if (!cachedDiff) {
+    const diff = await Diff.findOne({ city }, {}, { sort: { updatedAt: -1 } });
+    if (diff) {
+      const plainDiff = JSON.stringify(diff);
+      await redis.set(diffKey, plainDiff);
+      cachedDiff = JSON.parse(plainDiff) as DiffType;
+    }
+  }
+  if (!cachedNew) {
+    const newGoods = await NewGoods.findOne({ city }, {}, { sort: { updatedAt: -1 } });
+    if (newGoods) {
+      const plainNew = JSON.stringify(newGoods);
+      await redis.set(newKey, plainNew);
+      cachedNew = JSON.parse(plainNew) as RemovedGoodsType;
+    }
+  }
+
+  return { diff: cachedDiff, sold: cachedSold, new: cachedNew };
 };

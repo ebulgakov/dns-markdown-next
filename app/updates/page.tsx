@@ -17,11 +17,9 @@ export default async function UpdatesPage() {
 
   try {
     const user = await getUser();
-    if (!user) throw new Error("No user found");
-    userFavoritesGoods = JSON.parse(JSON.stringify(user.favorites));
+    userFavoritesGoods = user.favorites;
 
-    let collection = await getPriceListsDiff();
-    collection = JSON.parse(JSON.stringify(collection));
+    const collection = await getPriceListsDiff(user.city);
     const collectionDiff = collection?.diff;
     const collectionSold = collection?.sold;
     const collectionNew = collection?.new;

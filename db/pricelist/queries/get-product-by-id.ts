@@ -6,6 +6,8 @@ import type { History as HistoryType } from "@/types/history";
 import type { PriceList as PriceListType } from "@/types/pricelist";
 
 export const getProductById = async (id: string) => {
+  if (!id) throw new Error("id is required");
+
   await dbConnect();
 
   const history = (await History.findOne(
@@ -13,6 +15,7 @@ export const getProductById = async (id: string) => {
     {},
     { sort: { updatedAt: -1 } }
   )) as unknown as HistoryType | null;
+
   if (!history) throw new Error("History not found");
 
   const priceList = (await Pricelist.findOne(

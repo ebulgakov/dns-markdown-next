@@ -13,8 +13,6 @@ export const getUser = async () => {
 
   const key = `user:${String(clerkUser.id)}`;
   const cached = await redis.get(key);
-
-  console.log("cached user", cached);
   if (cached) return cached as UserType;
 
   await dbConnect();
