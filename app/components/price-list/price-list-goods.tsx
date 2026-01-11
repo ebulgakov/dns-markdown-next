@@ -29,7 +29,7 @@ function PriceListGoods({ item, status, diff, favorites }: PriceListGoodsProps) 
         }
       )}
     >
-      <div className="flex flex-none items-center justify-center gap-5 rounded bg-white [grid-area:image] lg:h-55 dark:opacity-70">
+      <div className="flex flex-none items-center justify-center gap-5 rounded bg-white [grid-area:image] lg:size-55 dark:opacity-70">
         <Image
           src={item.image}
           alt={`Превью для ${item.title}`}
