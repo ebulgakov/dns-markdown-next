@@ -30,9 +30,7 @@ describe("removeFromFavorites", () => {
   it("should throw an error if user is not found", async () => {
     mockGetUser.mockResolvedValue(null);
 
-    await expect(removeFromFavorites("some-id")).rejects.toThrow(
-      "Cannot read properties of null (reading 'favorites')"
-    );
+    await expect(removeFromFavorites("some-id")).rejects.toThrow("User not found");
 
     expect(updateUser).not.toHaveBeenCalled();
   });

@@ -73,7 +73,7 @@ describe("getCatalogData", () => {
     const result = await getCatalogData();
 
     expect(result.error).toBeInstanceOf(Error);
-    expect(result.error?.message).toBe("Cannot read properties of undefined (reading 'length')");
+    expect(result.error?.message).toBe("Price list not found");
     expect(result.priceList).toBeNull();
   });
 
@@ -90,7 +90,7 @@ describe("getCatalogData", () => {
     const result = await getCatalogData();
 
     expect(result.error).toBeInstanceOf(Error);
-    expect(result.error?.message).toBe("Cannot read properties of null (reading 'favorites')");
+    expect(result.error?.message).toBe("User not found");
   });
 
   it("should put all sections into nonFavoriteSections if user has no favorite sections", async () => {

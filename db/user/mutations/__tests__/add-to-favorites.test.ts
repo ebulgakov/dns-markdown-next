@@ -51,9 +51,7 @@ describe("addToFavorites", () => {
     (getUser as jest.Mock).mockResolvedValue(null);
 
     const [oneGoods] = mockGoods;
-    await expect(addToFavorites(oneGoods)).rejects.toThrow(
-      "Cannot read properties of null (reading 'favorites')"
-    );
+    await expect(addToFavorites(oneGoods)).rejects.toThrow("User not found");
 
     expect(dbConnect).toHaveBeenCalledTimes(1);
     expect(getUser).toHaveBeenCalledTimes(1);

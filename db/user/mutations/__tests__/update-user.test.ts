@@ -16,14 +16,14 @@ describe("updateUser", () => {
 
   it("should connect to the database", async () => {
     (getUser as jest.Mock).mockResolvedValue(null);
-    await expect(updateUser({})).rejects.toThrow("Cannot read properties of null (reading '_id')");
+    await expect(updateUser({})).rejects.toThrow("Failed to update user or user not found");
     expect(dbConnect).toHaveBeenCalledTimes(1);
   });
 
   it("should not update if user is not found", async () => {
     (getUser as jest.Mock).mockResolvedValue(null);
     await expect(updateUser({ name: "New Name" })).rejects.toThrow(
-      "Cannot read properties of null (reading '_id')"
+      "Failed to update user or user not found"
     );
     expect(User.findByIdAndUpdate).not.toHaveBeenCalled();
   });

@@ -7,5 +7,7 @@ export const toggleBoughtVisibilityFavorites = async (status: boolean) => {
 
   const user = await updateUser({ shownBoughtFavorites: status });
 
+  if (!user) throw new Error("Failed to update user");
+
   return user.shownBoughtFavorites;
 };

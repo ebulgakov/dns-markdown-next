@@ -18,17 +18,13 @@ describe("toggleBoughtVisibilityFavorites", () => {
 
   it("should throw an error if user is not found", async () => {
     mockedGetUser.mockResolvedValue(null);
-    await expect(toggleBoughtVisibilityFavorites(true)).rejects.toThrow(
-      "Cannot read properties of undefined (reading 'shownBoughtFavorites')"
-    );
+    await expect(toggleBoughtVisibilityFavorites(true)).rejects.toThrow("Failed to update user");
   });
 
   it("should throw an error if user update fails", async () => {
     mockedGetUser.mockResolvedValue(mockUser);
     mockedUpdateUser.mockResolvedValue(null);
-    await expect(toggleBoughtVisibilityFavorites(true)).rejects.toThrow(
-      "Cannot read properties of null (reading 'shownBoughtFavorites')"
-    );
+    await expect(toggleBoughtVisibilityFavorites(true)).rejects.toThrow("Failed to update user");
   });
 
   it.each([true, false])(
