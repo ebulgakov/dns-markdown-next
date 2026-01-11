@@ -1,9 +1,20 @@
 type CustomDate = Date | number | string;
 
+const toDate = (value: CustomDate): Date => {
+  if (value instanceof Date) return value;
+  if (typeof value === "string" && /^\d{4}-\d{2}-\d{2}$/.test(value)) {
+    // Avoid UTC parsing shifting the day when formatted in local timezones.
+    return new Date(`${value}T00:00:00`);
+  }
+  return new Date(value);
+};
+
 const formatGenerator = (options: Intl.DateTimeFormatOptions): ((date: CustomDate) => string) => {
+  const dateFormat = new Intl.DateTimeFormat("ru", options);
   return (date: CustomDate): string => {
-    const dateFormat = new Intl.DateTimeFormat("ru", options);
-    return dateFormat.format(new Date(date));
+    const d = toDate(date);
+    if (Number.isNaN(d.getTime())) return "";
+    return dateFormat.format(d);
   };
 };
 

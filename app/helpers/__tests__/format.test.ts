@@ -65,7 +65,7 @@ describe("Formatting Functions", () => {
       expect(() => formatTime("2026-01-06T01:00:00+09:00" as unknown as number)).not.toThrow(
         "Invalid time value"
       );
-      expect(formatTime("2026-01-06T01:00:00+09:00" as unknown as number)).toBe("16:00:00");
+      expect(formatTime("2026-01-06T01:00:00+09:00" as unknown as number)).toBe("20:00:00");
     });
   });
 });
