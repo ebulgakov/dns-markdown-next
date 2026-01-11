@@ -5,8 +5,14 @@ import { NavbarMobile } from "@/app/components/navbar/navbar-mobile";
 
 import type { NavbarLinks } from "@/types/common";
 
-function Navbar() {
+type NavbarProps = {
+  locate?: string;
+};
+
+function Navbar({ locate }: NavbarProps) {
   const t = useTranslations("Navbar");
+  // TODO: add in the future a new section and name it Disclaimer
+  const disclaimerT = useTranslations("Footer");
   const linksList: NavbarLinks = [
     {
       name: t("catalog"),
@@ -30,10 +36,12 @@ function Navbar() {
     }
   ];
 
+  const mobileNavbar = [...linksList, { name: disclaimerT("disclaimer"), url: "/disclaimer" }];
+
   return (
     <header>
       <div className="md:hidden">
-        <NavbarMobile linksList={linksList} t={t} />
+        <NavbarMobile linksList={mobileNavbar} t={t} locate={locate} />
       </div>
       <div className="hidden md:block">
         <NavbarDesktop linksList={linksList} t={t} />

@@ -1,7 +1,9 @@
-import { SignedIn, SignedOut, SignInButton, SignUpButton, UserButton } from "@clerk/nextjs";
+import { SignedIn, SignedOut, SignInButton, SignUpButton, SignOutButton } from "@clerk/nextjs";
 import { Menu } from "lucide-react";
 import Link from "next/link";
 
+import { ChangeLocationSelector } from "@/app/components/change-location-selector";
+import { ChangeThemeSelector } from "@/app/components/change-theme-selector";
 import { Button } from "@/app/components/ui/button";
 import {
   Dialog,
@@ -17,9 +19,10 @@ import type { NavbarLinks } from "@/types/common";
 type NavbarMobileProps = {
   linksList: NavbarLinks;
   t: (key: string) => string;
+  locate?: string;
 };
 
-function NavbarMobile({ t, linksList }: NavbarMobileProps) {
+function NavbarMobile({ t, linksList, locate }: NavbarMobileProps) {
   return (
     <Dialog>
       <div className="border-primary flex items-center gap-4 rounded border-2 py-2">
@@ -50,6 +53,11 @@ function NavbarMobile({ t, linksList }: NavbarMobileProps) {
                     </DialogClose>
                   </div>
                 ))}
+                <div>
+                  <SignOutButton>
+                    <a className="block cursor-pointer py-2">{t("signout")}</a>
+                  </SignOutButton>
+                </div>
               </SignedIn>
               <SignedOut>
                 <SignInButton>
@@ -65,17 +73,9 @@ function NavbarMobile({ t, linksList }: NavbarMobileProps) {
               </SignedOut>
             </div>
 
-            <div className="mt-auto">
-              <SignedOut>
-                <div className="flex items-center gap-2">
-                  <div className="border-primary h-6 border-l-2"></div>
-                </div>
-              </SignedOut>
-              <SignedIn>
-                <div className="size-7">
-                  <UserButton />
-                </div>
-              </SignedIn>
+            <div className="mt-auto flex gap-4">
+              <ChangeThemeSelector />
+              <ChangeLocationSelector locate={locate} />
             </div>
           </div>
         </DialogContent>

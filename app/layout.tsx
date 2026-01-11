@@ -58,7 +58,7 @@ export default async function RootLayout({
                   <div className="mx-auto grid min-h-screen md:container">
                     <div className="mb-10">
                       <div className="mt-4 mb-5">
-                        <Navbar />
+                        <Navbar locate={locale} />
                       </div>
                       {children}
                     </div>
