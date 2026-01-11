@@ -23,13 +23,13 @@ function PriceListGoods({ item, status, diff, favorites }: PriceListGoodsProps) 
   return (
     <div
       className={clsx(
-        "grid gap-x-4 gap-y-1 py-4 [grid-template-areas:'image_prices'_'image_diff'_'image_store'_'description_description'] md:items-center md:py-1 md:[grid-template-areas:'image_description_diff_prices_store_favorites']",
+        "grid gap-x-4 gap-y-1 py-4 [grid-template-areas:'image_prices'_'image_diff'_'image_store'_'description_description'] md:[grid-template-areas:'image_description_prices'_'image_description_diff'_'image_description_store'] lg:items-center lg:py-1 lg:[grid-template-areas:'image_description_diff_prices_store_favorites']",
         {
           "opacity-40": status?.deleted
         }
       )}
     >
-      <div className="flex flex-none items-center justify-center gap-5 rounded bg-white [grid-area:image] md:h-55 dark:opacity-70">
+      <div className="flex flex-none items-center justify-center gap-5 rounded bg-white [grid-area:image] lg:h-55 dark:opacity-70">
         <Image
           src={item.image}
           alt={`Превью для ${item.title}`}
@@ -115,7 +115,7 @@ function PriceListGoods({ item, status, diff, favorites }: PriceListGoodsProps) 
 
       <div className="text-center [grid-area:store]">{item.available}</div>
 
-      <div className="[grid-area:image] md:[grid-area:favorites]">
+      <div className="[grid-area:image] lg:[grid-area:favorites]">
         {favorites && <PriceListFavoriteToggle favorites={favorites} goods={item} />}
       </div>
     </div>
