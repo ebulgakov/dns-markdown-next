@@ -22,11 +22,14 @@ type PriceListGoodsProps = {
 function PriceListGoods({ item, status, diff, favorites }: PriceListGoodsProps) {
   return (
     <div
-      className={clsx("flex items-center gap-4 py-1", {
-        "opacity-40": status?.deleted
-      })}
+      className={clsx(
+        "grid gap-x-4 gap-y-1 py-4 [grid-template-areas:'image_prices'_'image_diff'_'image_store'_'description_description'] md:items-center md:py-1 md:[grid-template-areas:'image_description_diff_prices_store_favorites']",
+        {
+          "opacity-40": status?.deleted
+        }
+      )}
     >
-      <div className="isolate flex h-55 flex-none basis-55 items-center justify-center gap-5 rounded bg-white dark:opacity-70">
+      <div className="flex flex-none items-center justify-center gap-5 rounded bg-white [grid-area:image] md:h-55 dark:opacity-70">
         <Image
           src={item.image}
           alt={`Превью для ${item.title}`}
@@ -35,7 +38,7 @@ function PriceListGoods({ item, status, diff, favorites }: PriceListGoodsProps) 
           height={200}
         />
       </div>
-      <div className="flex-1">
+      <div className="mt-3 [grid-area:description] md:mt-0">
         <div className="mb-2.5 text-base">
           <a
             target="_blank"
@@ -67,9 +70,9 @@ function PriceListGoods({ item, status, diff, favorites }: PriceListGoodsProps) 
         )}
       </div>
 
-      {diff && <PriceListGoodsDiff diff={diff} />}
+      <div className="[grid-area:diff]">{diff && <PriceListGoodsDiff diff={diff} />}</div>
 
-      <div className="basis-37 text-center">
+      <div className="text-center [grid-area:prices]">
         <NumericFormat
           value={item.price}
           displayType="text"
@@ -107,9 +110,12 @@ function PriceListGoods({ item, status, diff, favorites }: PriceListGoodsProps) 
           </>
         )}
       </div>
-      <div className="flex-none">{item.available}</div>
 
-      {favorites && <PriceListFavoriteToggle favorites={favorites} goods={item} />}
+      <div className="text-center [grid-area:store]">{item.available}</div>
+
+      <div className="[grid-area:image] md:[grid-area:favorites]">
+        {favorites && <PriceListFavoriteToggle favorites={favorites} goods={item} />}
+      </div>
     </div>
   );
 }

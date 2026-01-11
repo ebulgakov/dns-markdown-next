@@ -7,8 +7,8 @@ import type { HTMLProps } from "react";
 const titleVariants = cva("block", {
   variants: {
     variant: {
-      h2: "text-3xl mt-10 mb-5 font-semibold",
-      h3: "text-2xl mt-8 mb-2 font-semibold"
+      h2: "text-2xl md:text-3xl mt-10 mb-5 font-semibold",
+      h3: "text-xl md:text-2xl mt-8 mb-2 font-semibold"
     }
   },
   defaultVariants: {
