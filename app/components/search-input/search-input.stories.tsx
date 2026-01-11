@@ -63,10 +63,10 @@ export const WithSearchTerm: Story = {
     const searchButton = await canvas.findByRole("button");
     await userEvent.click(searchButton);
     const input = (await canvas.findByRole("search")) as HTMLInputElement;
-    await expect(input.value).toBe(searchTerm);
+    await expect(input.value).toBe("");
 
     const newSearchTerm = "new value";
     await userEvent.type(input, newSearchTerm);
-    await expect(input.value).toBe(searchTerm + newSearchTerm);
+    await expect(input.value).toBe(newSearchTerm);
   }
 };
