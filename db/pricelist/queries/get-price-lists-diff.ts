@@ -10,9 +10,9 @@ export const getPriceListsDiff = async (city: string) => {
   if (!city) throw new Error("city is required");
 
   // Check cache first
-  const soldKey = `pricelist:removed:${city}`;
-  const newKey = `pricelist:new:${city}`;
-  const diffKey = `pricelist:diff:${city}`;
+  const soldKey = `pricelist:removed:${String(city)}`;
+  const newKey = `pricelist:new:${String(city)}`;
+  const diffKey = `pricelist:diff:${String(city)}`;
   let cachedSold = (await redis.get(soldKey)) as RemovedGoodsType | null;
   let cachedNew = (await redis.get(newKey)) as RemovedGoodsType | null;
   let cachedDiff = (await redis.get(diffKey)) as DiffType | null;
