@@ -18,7 +18,8 @@
     "profile": "Profile",
     "signin": "Sign In",
     "signup": "Sign Up",
-    "signout": "Sign Out"
+    "signout": "Sign Out",
+    "menu": "Menu"
   },
   "Footer": {
     "copyright": "© 2018–2026 DNS Markdown. Version 2.0.0.",

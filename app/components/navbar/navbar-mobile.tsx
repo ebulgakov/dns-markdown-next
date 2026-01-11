@@ -31,7 +31,7 @@ function NavbarMobile({ t, linksList, locate }: NavbarMobileProps) {
         </Button>
 
         <DialogTrigger asChild>
-          <Button className="ml-auto" variant="link">
+          <Button className="ml-auto" variant="link" aria-label={t("menu")}>
             <Menu />
           </Button>
         </DialogTrigger>

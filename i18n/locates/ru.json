@@ -17,7 +17,8 @@
     "profile": "Профиль",
     "signin": "Войти",
     "signup": "Зарегистрироваться",
-    "signout": "Выйти"
+    "signout": "Выйти",
+    "menu": "Меню"
   },
   "Footer": {
     "copyright": "© 2018–2026 DNS-Markdown. Версия 2.0.0.",
