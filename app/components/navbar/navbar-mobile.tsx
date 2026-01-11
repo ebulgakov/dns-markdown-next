@@ -56,22 +56,26 @@ function NavbarMobile({ t, linksList, locate }: NavbarMobileProps) {
                 <div>
                   <SignOutButton>
                     <DialogClose asChild>
-                      <a className="block cursor-pointer py-2">{t("signout")}</a>
+                      <button className="block cursor-pointer py-2">{t("signout")}</button>
                     </DialogClose>
                   </SignOutButton>
                 </div>
               </SignedIn>
               <SignedOut>
-                <SignInButton>
-                  <DialogClose asChild>
-                    <a className="block py-2">{t("signin")}</a>
-                  </DialogClose>
-                </SignInButton>
-                <SignUpButton>
-                  <DialogClose asChild>
-                    <a className="block py-2">{t("signup")}</a>
-                  </DialogClose>
-                </SignUpButton>
+                <div>
+                  <SignInButton>
+                    <DialogClose asChild>
+                      <button className="block py-2">{t("signin")}</button>
+                    </DialogClose>
+                  </SignInButton>
+                </div>
+                <div>
+                  <SignUpButton>
+                    <DialogClose asChild>
+                      <button className="block py-2">{t("signup")}</button>
+                    </DialogClose>
+                  </SignUpButton>
+                </div>
               </SignedOut>
             </div>
 
