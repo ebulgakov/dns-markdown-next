@@ -47,11 +47,13 @@ function FavoritesPageClient({
   return (
     <div>
       <PageTitle title="Избранное">
-        <CheckboxWithLabel
-          label="Показать купленные товары"
-          checked={shownBoughtFavorites}
-          onCheckedChange={handleFavoritesVisibility}
-        />
+        <div className="mt-2 md:mt-0">
+          <CheckboxWithLabel
+            label="Показать купленные товары"
+            checked={shownBoughtFavorites}
+            onCheckedChange={handleFavoritesVisibility}
+          />
+        </div>
       </PageTitle>
 
       {errorMessage && (
