@@ -40,8 +40,6 @@ describe("updateUserSection", () => {
   it("should throw an error if updateUser returns null", async () => {
     mockedUpdateUser.mockResolvedValue(null);
 
-    await expect(updateUserSection([], "hiddenSections")).rejects.toThrow(
-      "Failed to update user or user not found"
-    );
+    await expect(updateUserSection([], "hiddenSections")).rejects.toThrow("User not found");
   });
 });

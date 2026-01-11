@@ -11,7 +11,7 @@ export const updateUser = async (update: object): Promise<UserType> => {
 
   const user = await getUser();
 
-  if (!user) throw new Error("Failed to update user or user not found");
+  if (!user) throw new Error("User not found");
 
   const newUser = (await User.findByIdAndUpdate(user._id, update, { new: true })) as UserType;
 
