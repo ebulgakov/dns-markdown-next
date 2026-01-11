@@ -17,5 +17,7 @@ export const updateUserSection = async (
   const update = { [`${sectionName}`]: sections };
   const newUser = await updateUser(update);
 
+  if (!newUser) throw new Error("Failed to update user or user not found");
+
   return newUser[sectionName];
 };

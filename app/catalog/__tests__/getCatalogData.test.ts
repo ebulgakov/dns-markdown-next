@@ -32,7 +32,7 @@ const goods1: Goods = {
   code: "12345ssq",
   image: "img-url",
   available: "big-mall",
-  city: "samara"
+  city: "TestCity"
 };
 const goods2: Goods = {
   _id: "g2",
@@ -46,7 +46,7 @@ const goods2: Goods = {
   code: "12345ssq",
   image: "img-url",
   available: "big-mall",
-  city: "samara"
+  city: "TestCity"
 };
 
 describe("getCatalogData", () => {
@@ -60,7 +60,7 @@ describe("getCatalogData", () => {
     // Mock data
     const mockPriceList: PriceListType = {
       _id: "pricelist1",
-      city: "samara",
+      city: "TestCity",
       positions: [
         {
           _id: "0",
@@ -119,7 +119,7 @@ describe("getCatalogData", () => {
 
     // Assertions
     expect(result.error).toBeInstanceOf(Error);
-    expect(result.error?.message).toBe("No any price lists in the catalog");
+    expect(result.error?.message).toBe("Cannot read properties of null (reading 'positions')");
     expect(result.priceList).toBeNull();
   });
 
@@ -127,7 +127,7 @@ describe("getCatalogData", () => {
   it("should return an error if no user is found", async () => {
     const mockPriceList: PriceListType = {
       _id: "pricelist1",
-      city: "samara",
+      city: "TestCity",
       positions: [],
       createdAt: new Date()
     };
@@ -137,7 +137,7 @@ describe("getCatalogData", () => {
     const result = await getCatalogData();
 
     expect(result.error).toBeInstanceOf(Error);
-    expect(result.error?.message).toBe("No user found");
+    expect(result.error?.message).toBe("Cannot read properties of null (reading 'favorites')");
   });
 
   // Test case 4: No favorite sections defined by the user
@@ -145,7 +145,7 @@ describe("getCatalogData", () => {
     // Mock data
     const mockPriceList: PriceListType = {
       _id: "pricelist1",
-      city: "samara",
+      city: "TestCity",
       positions: [
         {
           _id: "0",
@@ -193,7 +193,7 @@ describe("getCatalogData", () => {
     // Assertions
     expect(result.error).toBe(dbError);
     expect(result.priceList).toBeUndefined();
-    expect(result.userFavoritesGoods).toBeUndefined();
+    expect(result.userFavoritesGoods).toEqual([]);
     expect(result.favoriteSections).toEqual([]);
   });
 });

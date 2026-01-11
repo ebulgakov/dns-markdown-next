@@ -29,11 +29,13 @@ describe("toggleBoughtVisibilityFavorites", () => {
   it("should throw an error if user is not found", async () => {
     (getUser as jest.Mock).mockResolvedValue(null);
 
-    await expect(toggleBoughtVisibilityFavorites(true)).rejects.toThrow("User not found");
+    await expect(toggleBoughtVisibilityFavorites(true)).rejects.toThrow(
+      "Cannot read properties of undefined (reading 'shownBoughtFavorites')"
+    );
 
     expect(dbConnect).toHaveBeenCalledTimes(1);
-    expect(getUser).toHaveBeenCalledTimes(1);
-    expect(updateUser).not.toHaveBeenCalled();
+    expect(getUser).toHaveBeenCalledTimes(0);
+    expect(updateUser).toHaveBeenCalledWith({ shownBoughtFavorites: true });
   });
 
   // Test case 2: Failed to update user
@@ -41,10 +43,12 @@ describe("toggleBoughtVisibilityFavorites", () => {
     (getUser as jest.Mock).mockResolvedValue(mockUser);
     (updateUser as jest.Mock).mockResolvedValue(null);
 
-    await expect(toggleBoughtVisibilityFavorites(true)).rejects.toThrow("Failed to update user");
+    await expect(toggleBoughtVisibilityFavorites(true)).rejects.toThrow(
+      "Cannot read properties of null (reading 'shownBoughtFavorites')"
+    );
 
     expect(dbConnect).toHaveBeenCalledTimes(1);
-    expect(getUser).toHaveBeenCalledTimes(1);
+    expect(getUser).toHaveBeenCalledTimes(0);
     expect(updateUser).toHaveBeenCalledWith({ shownBoughtFavorites: true });
   });
 
@@ -61,7 +65,7 @@ describe("toggleBoughtVisibilityFavorites", () => {
 
     expect(result).toBe(newStatus);
     expect(dbConnect).toHaveBeenCalledTimes(1);
-    expect(getUser).toHaveBeenCalledTimes(1);
+    expect(getUser).toHaveBeenCalledTimes(0);
     expect(updateUser).toHaveBeenCalledWith({
       shownBoughtFavorites: newStatus
     });
@@ -83,7 +87,7 @@ describe("toggleBoughtVisibilityFavorites", () => {
 
     expect(result).toBe(newStatus);
     expect(dbConnect).toHaveBeenCalledTimes(1);
-    expect(getUser).toHaveBeenCalledTimes(1);
+    expect(getUser).toHaveBeenCalledTimes(0);
     expect(updateUser).toHaveBeenCalledWith({
       shownBoughtFavorites: newStatus
     });

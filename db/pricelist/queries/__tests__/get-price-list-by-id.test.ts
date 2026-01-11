@@ -16,6 +16,11 @@ jest.mock("@/db/models/pricelist-model", () => ({
   }
 }));
 
+jest.mock("@/cache", () => ({
+  get: jest.fn(),
+  set: jest.fn()
+}));
+
 // Type assertion for mocked functions
 const mockedDbConnect = dbConnect as jest.Mock;
 const mockedPricelistFindOne = Pricelist.findOne as jest.Mock;
@@ -29,7 +34,7 @@ describe("getPriceListById", () => {
   it("should return a pricelist if found", async () => {
     const mockPriceList: Partial<PriceListType> = {
       _id: "60d21b4667d0d8992e610c85",
-      createdAt: new Date(),
+      createdAt: `${new Date()}`,
       positions: []
     };
     mockedPricelistFindOne.mockResolvedValue(mockPriceList);
@@ -44,11 +49,10 @@ describe("getPriceListById", () => {
   it("should return null if pricelist is not found", async () => {
     mockedPricelistFindOne.mockResolvedValue(null);
 
-    const result = await getPriceListById("invalid-id");
+    await expect(getPriceListById("invalid-id")).rejects.toThrow("Price list not found");
 
     expect(mockedDbConnect).toHaveBeenCalledTimes(1);
     expect(mockedPricelistFindOne).toHaveBeenCalledWith({ _id: "invalid-id" });
-    expect(result).toBeNull();
   });
 
   it("should throw an error if database connection fails", async () => {

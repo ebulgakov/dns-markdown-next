@@ -17,6 +17,11 @@ jest.mock("@/db/models/history-model", () => ({
   }
 }));
 
+jest.mock("@/cache", () => ({
+  get: jest.fn(),
+  set: jest.fn()
+}));
+
 jest.mock("@/db/models/pricelist-model", () => ({
   Pricelist: {
     findOne: jest.fn()

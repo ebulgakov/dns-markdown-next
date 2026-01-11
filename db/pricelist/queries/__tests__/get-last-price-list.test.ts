@@ -16,6 +16,11 @@ jest.mock("@/db/user/queries", () => ({
   getUser: jest.fn()
 }));
 
+jest.mock("@/cache", () => ({
+  get: jest.fn(),
+  set: jest.fn()
+}));
+
 jest.mock("@/db/models/pricelist-model", () => ({
   Pricelist: {
     findOne: jest.fn()
@@ -36,14 +41,18 @@ describe("getLastPriceList", () => {
     // Mock getUser to return null
     mockedGetUser.mockResolvedValue(null);
 
-    await expect(getLastPriceList("samara")).rejects.toThrow("User not found");
+    await expect(getLastPriceList("TestCity")).rejects.toThrow("Price list not found");
 
     // Expect dbConnect to have been called
     expect(mockedDbConnect).toHaveBeenCalledTimes(1);
     // Expect getUser to have been called
-    expect(mockedGetUser).toHaveBeenCalledTimes(1);
+    expect(mockedGetUser).toHaveBeenCalledTimes(0);
     // Expect findOne not to have been called
-    expect(mockedFindOne).not.toHaveBeenCalled();
+    expect(mockedFindOne).toHaveBeenCalledWith(
+      { city: "TestCity" },
+      {},
+      { sort: { updatedAt: -1 } }
+    );
   });
 
   it("should return the last price list for the user's city", async () => {
@@ -55,7 +64,7 @@ describe("getLastPriceList", () => {
     // Mock pricelist data
     const mockPriceList: Partial<PriceListType> = {
       _id: "some-id",
-      city: "Test City"
+      city: "TestCity"
     };
 
     // Mock getUser to return a user
@@ -63,15 +72,15 @@ describe("getLastPriceList", () => {
     // Mock findOne to return a pricelist
     mockedFindOne.mockResolvedValue(mockPriceList);
 
-    const result = await getLastPriceList("samara");
+    const result = await getLastPriceList(mockPriceList.city!);
 
     // Expect dbConnect to have been called
     expect(mockedDbConnect).toHaveBeenCalledTimes(1);
     // Expect getUser to have been called
-    expect(mockedGetUser).toHaveBeenCalledTimes(1);
+    expect(mockedGetUser).toHaveBeenCalledTimes(0);
     // Expect findOne to have been called with correct parameters
     expect(mockedFindOne).toHaveBeenCalledWith(
-      { city: mockUser.city },
+      { city: mockPriceList.city },
       {},
       { sort: { updatedAt: -1 } }
     );
@@ -90,15 +99,13 @@ describe("getLastPriceList", () => {
     // Mock findOne to return null
     mockedFindOne.mockResolvedValue(null);
 
-    const result = await getLastPriceList("samara");
+    await expect(getLastPriceList("TestCity")).rejects.toThrow("Price list not found");
 
     // Expect dbConnect to have been called
     expect(mockedDbConnect).toHaveBeenCalledTimes(1);
     // Expect getUser to have been called
-    expect(mockedGetUser).toHaveBeenCalledTimes(1);
+    expect(mockedGetUser).toHaveBeenCalledTimes(0);
     // Expect findOne to have been called
     expect(mockedFindOne).toHaveBeenCalledTimes(1);
-    // Expect result to be null
-    expect(result).toBeNull();
   });
 });

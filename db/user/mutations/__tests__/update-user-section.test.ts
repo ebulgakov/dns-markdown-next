@@ -3,7 +3,6 @@
 // Mock dependencies
 import { dbConnect } from "@/db/database";
 import { updateUser } from "@/db/user/mutations/update-user";
-import { getUser } from "@/db/user/queries";
 
 import { updateUserSection } from "../update-user-section";
 
@@ -14,16 +13,11 @@ jest.mock("@/db/database", () => ({
   dbConnect: jest.fn()
 }));
 
-jest.mock("@/db/user/queries", () => ({
-  getUser: jest.fn()
-}));
-
 jest.mock("@/db/user/mutations/update-user", () => ({
   updateUser: jest.fn()
 }));
 
 // Type assertion for mocked functions
-const mockedGetUser = getUser as jest.Mock;
 const mockedUpdateUser = updateUser as jest.Mock;
 const mockedDbConnect = dbConnect as jest.Mock;
 
@@ -35,24 +29,19 @@ describe("updateUserSection", () => {
 
   // Test case for successful update of a section
   it("should update user section and return the updated section", async () => {
-    const initialUser: Partial<User> = {
-      _id: "1",
-      hiddenSections: []
-    };
     const updatedSections = ["section1", "section2"];
     const updatedUser: Partial<User> = {
       _id: "1",
       hiddenSections: updatedSections
     };
 
-    // Mock getUser to return the initial user first, then the updated user
-    mockedGetUser.mockResolvedValueOnce(initialUser).mockResolvedValueOnce(updatedUser);
+    // Mock updateUser to return the updated user
+    mockedUpdateUser.mockResolvedValue(updatedUser);
 
     const result = await updateUserSection(updatedSections, "hiddenSections");
 
     // Assertions
     expect(mockedDbConnect).toHaveBeenCalledTimes(1);
-    expect(mockedGetUser).toHaveBeenCalledTimes(2);
     expect(mockedUpdateUser).toHaveBeenCalledWith({ hiddenSections: updatedSections });
     expect(result).toEqual(updatedSections);
   });
@@ -65,25 +54,12 @@ describe("updateUserSection", () => {
     );
   });
 
-  // Test case for user not found initially
-  it("should throw an error if user is not found", async () => {
-    mockedGetUser.mockResolvedValue(null);
-
-    await expect(updateUserSection([], "hiddenSections")).rejects.toThrow("User not found");
-  });
-
-  // Test case for user not found after update
-  it("should throw an error if user is not found after update", async () => {
-    const initialUser: Partial<User> = {
-      _id: "1",
-      hiddenSections: []
-    };
-
-    // Mock getUser to return the initial user, then null
-    mockedGetUser.mockResolvedValueOnce(initialUser).mockResolvedValueOnce(null);
+  // Test case for updateUser returning null
+  it("should throw an error if updateUser returns null", async () => {
+    mockedUpdateUser.mockResolvedValue(null);
 
     await expect(updateUserSection(["section1"], "hiddenSections")).rejects.toThrow(
-      "User not found after update"
+      "Failed to update user or user not found"
     );
   });
 });

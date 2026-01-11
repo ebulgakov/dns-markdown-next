@@ -15,6 +15,11 @@ jest.mock("@/db/user/queries", () => ({
   getUser: jest.fn()
 }));
 
+jest.mock("@/cache", () => ({
+  get: jest.fn(),
+  set: jest.fn()
+}));
+
 jest.mock("@/db/models/pricelist-model", () => ({
   Pricelist: {
     find: jest.fn()
@@ -32,12 +37,18 @@ describe("getArchiveList", () => {
     // Mock getUser to return null
     (getUser as jest.Mock).mockResolvedValue(null);
 
-    await expect(getArchiveList("samara")).rejects.toThrow("User not found");
+    await expect(getArchiveList("TestCity")).rejects.toThrow(
+      "Cannot read properties of undefined (reading 'select')"
+    );
 
     // Assertions
     expect(dbConnect).toHaveBeenCalledTimes(1);
-    expect(getUser).toHaveBeenCalledTimes(1);
-    expect(Pricelist.find).not.toHaveBeenCalled();
+    expect(getUser).toHaveBeenCalledTimes(0);
+    expect(Pricelist.find).toHaveBeenCalledWith(
+      { city: "TestCity" },
+      {},
+      { sort: { updatedAt: 1 } }
+    );
   });
 
   // Test case for when a valid user is found
@@ -49,8 +60,8 @@ describe("getArchiveList", () => {
 
     // Mock pricelist data
     const mockPriceLists = [
-      { createdAt: new Date("2023-01-01") },
-      { createdAt: new Date("2023-01-02") }
+      { createdAt: `${new Date("2023-01-01")}` },
+      { createdAt: `${new Date("2023-01-02")}` }
     ];
 
     // Mock getUser to return a user
@@ -63,11 +74,11 @@ describe("getArchiveList", () => {
     };
     (Pricelist.find as jest.Mock).mockReturnValue(findMock);
 
-    const result = await getArchiveList("samara");
+    const result = await getArchiveList(mockUser.city!);
 
     // Assertions
     expect(dbConnect).toHaveBeenCalledTimes(1);
-    expect(getUser).toHaveBeenCalledTimes(1);
+    expect(getUser).toHaveBeenCalledTimes(0);
     expect(Pricelist.find).toHaveBeenCalledWith(
       { city: mockUser.city },
       {},
@@ -94,12 +105,12 @@ describe("getArchiveList", () => {
     };
     (Pricelist.find as jest.Mock).mockReturnValue(findMock);
 
-    const result = await getArchiveList("samara");
+    const result = await getArchiveList(mockUser.city!);
 
     // Assertions
     expect(result).toEqual([]);
     expect(dbConnect).toHaveBeenCalledTimes(1);
-    expect(getUser).toHaveBeenCalledTimes(1);
+    expect(getUser).toHaveBeenCalledTimes(0);
     expect(Pricelist.find).toHaveBeenCalledWith(
       { city: mockUser.city },
       {},

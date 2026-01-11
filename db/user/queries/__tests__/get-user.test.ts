@@ -14,6 +14,11 @@ jest.mock("@clerk/nextjs/server", () => ({
   currentUser: jest.fn()
 }));
 
+jest.mock("@/cache", () => ({
+  get: jest.fn(),
+  set: jest.fn()
+}));
+
 jest.mock("@/db/models/user-model", () => ({
   User: {
     findOne: jest.fn()
@@ -61,13 +66,12 @@ describe("getUser", () => {
     mockedUserFindOne.mockResolvedValue(null);
 
     // Act: Call the function
-    const result = await getUser();
+    await expect(getUser()).rejects.toThrow("User not found");
 
     // Assert: Check the results for a non-existent user
     expect(mockedDbConnect).toHaveBeenCalledTimes(1);
     expect(mockedCurrentUser).toHaveBeenCalledTimes(1);
     expect(mockedUserFindOne).toHaveBeenCalledWith({ userId: clerkUser.id });
-    expect(result).toBeNull();
   });
 
   it("should return null if there is no authenticated user", async () => {
@@ -75,12 +79,11 @@ describe("getUser", () => {
     mockedCurrentUser.mockResolvedValue(null);
 
     // Act: Call the function
-    const result = await getUser();
+    await expect(getUser()).rejects.toThrow("User not authenticated");
 
     // Assert: Check that findOne is called with null and result is null
-    expect(mockedDbConnect).toHaveBeenCalledTimes(1);
+    expect(mockedDbConnect).toHaveBeenCalledTimes(0);
     expect(mockedCurrentUser).toHaveBeenCalledTimes(1);
-    expect(mockedUserFindOne).toHaveBeenCalledWith({ userId: undefined });
-    expect(result).toBeNull();
+    expect(mockedUserFindOne).not.toHaveBeenCalledWith({ userId: undefined });
   });
 });

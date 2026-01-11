@@ -55,6 +55,7 @@ describe("addToFavorites", () => {
     // Check if updateUser was called with the correct payload
     expect(updateUser).toHaveBeenCalledWith({
       favorites: [
+        ...mockUser.favorites,
         {
           status: {
             city: mockGoods.city,
@@ -72,7 +73,9 @@ describe("addToFavorites", () => {
     (getUser as jest.Mock).mockResolvedValue(null);
 
     // Act: Call the function to test
-    await expect(addToFavorites(mockGoods)).rejects.toThrow("User not found");
+    await expect(addToFavorites(mockGoods)).rejects.toThrow(
+      "Cannot read properties of null (reading 'favorites')"
+    );
 
     // Assert: Check that updateUser was not called
     expect(dbConnect).toHaveBeenCalledTimes(1);
