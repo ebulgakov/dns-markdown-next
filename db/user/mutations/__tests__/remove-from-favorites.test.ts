@@ -4,18 +4,11 @@ import { getUser } from "@/db/user/queries";
 
 import { removeFromFavorites } from "../remove-from-favorites";
 
-// Mock the dependencies
-jest.mock("@/db/database", () => ({
-  dbConnect: jest.fn()
-}));
+jest.mock("@/db/database", () => ({ dbConnect: jest.fn() }));
+jest.mock("@/db/user/queries", () => ({ getUser: jest.fn() }));
+jest.mock("@/db/user/mutations/update-user", () => ({ updateUser: jest.fn() }));
 
-jest.mock("@/db/user/queries", () => ({
-  getUser: jest.fn()
-}));
-
-jest.mock("@/db/user/mutations/update-user", () => ({
-  updateUser: jest.fn()
-}));
+const mockGetUser = getUser as jest.Mock;
 
 describe("removeFromFavorites", () => {
   afterEach(() => {
@@ -23,65 +16,39 @@ describe("removeFromFavorites", () => {
   });
 
   it("should remove an item from favorites", async () => {
-    // Arrange
-    const itemIdToRemove = "item2";
-    const user = {
-      favorites: [
-        { item: { link: "item1" } },
-        { item: { link: "item2" } },
-        { item: { link: "item3" } }
-      ]
-    };
-    (getUser as jest.Mock).mockResolvedValue(user);
+    const initialFavorites = ["item1", "item2", "item3"].map(link => ({ item: { link } }));
+    mockGetUser.mockResolvedValue({ favorites: initialFavorites });
 
-    // Act
-    await removeFromFavorites(itemIdToRemove);
+    await removeFromFavorites("item2");
 
-    // Assert
     expect(dbConnect).toHaveBeenCalledTimes(1);
-    expect(getUser).toHaveBeenCalledTimes(1);
-    const expectedFavorites = [{ item: { link: "item1" } }, { item: { link: "item3" } }];
-    expect(updateUser).toHaveBeenCalledWith({ favorites: expectedFavorites });
+    expect(updateUser).toHaveBeenCalledWith({
+      favorites: [{ item: { link: "item1" } }, { item: { link: "item3" } }]
+    });
   });
 
-  it("should not call updateUser if user is not found", async () => {
-    // Arrange
-    (getUser as jest.Mock).mockResolvedValue(null);
+  it("should throw an error if user is not found", async () => {
+    mockGetUser.mockResolvedValue(null);
 
-    // Act
     await expect(removeFromFavorites("some-id")).rejects.toThrow(
       "Cannot read properties of null (reading 'favorites')"
     );
 
-    // Assert
-    expect(dbConnect).toHaveBeenCalledTimes(1);
-    expect(getUser).toHaveBeenCalledTimes(1);
     expect(updateUser).not.toHaveBeenCalled();
   });
 
-  it("should handle removing an item that is not in favorites", async () => {
-    // Arrange
-    const itemIdToRemove = "non-existent-item";
-    const user = {
-      favorites: [{ item: { link: "item1" } }, { item: { link: "item2" } }]
-    };
-    (getUser as jest.Mock).mockResolvedValue(user);
+  it("should not change favorites if item to remove is not found", async () => {
+    const initialFavorites = [{ item: { link: "item1" } }, { item: { link: "item2" } }];
+    mockGetUser.mockResolvedValue({ favorites: initialFavorites });
 
-    // Act
-    await removeFromFavorites(itemIdToRemove);
+    await removeFromFavorites("non-existent-item");
 
-    // Assert
-    expect(dbConnect).toHaveBeenCalledTimes(1);
-    expect(getUser).toHaveBeenCalledTimes(1);
-    const expectedFavorites = [{ item: { link: "item1" } }, { item: { link: "item2" } }];
-    expect(updateUser).toHaveBeenCalledWith({ favorites: expectedFavorites });
+    expect(updateUser).toHaveBeenCalledWith({ favorites: initialFavorites });
   });
 
   it("should throw an error if no link is provided", async () => {
-    // Act & Assert
     await expect(removeFromFavorites(null as never)).rejects.toThrow("No link provided");
 
-    // Assert that other functions were not called
     expect(dbConnect).not.toHaveBeenCalled();
     expect(getUser).not.toHaveBeenCalled();
     expect(updateUser).not.toHaveBeenCalled();

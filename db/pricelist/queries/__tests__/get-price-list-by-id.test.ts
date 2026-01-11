@@ -2,10 +2,6 @@ import { dbConnect } from "@/db/database";
 import { Pricelist } from "@/db/models/pricelist-model";
 
 import { getPriceListById } from "../get-price-list-by-id";
-
-import type { PriceList as PriceListType } from "@/types/pricelist";
-
-// Mock dependencies
 jest.mock("@/db/database", () => ({
   dbConnect: jest.fn()
 }));
@@ -21,18 +17,14 @@ jest.mock("@/cache", () => ({
   set: jest.fn()
 }));
 
-// Type assertion for mocked functions
-const mockedDbConnect = dbConnect as jest.Mock;
-const mockedPricelistFindOne = Pricelist.findOne as jest.Mock;
+const mockedDbConnect = jest.mocked(dbConnect);
+const mockedPricelistFindOne = jest.mocked(Pricelist.findOne);
 
 describe("getPriceListById", () => {
-  beforeEach(() => {
-    // Clear all mocks before each test
-    jest.clearAllMocks();
-  });
+  beforeEach(() => jest.clearAllMocks());
 
   it("should return a pricelist if found", async () => {
-    const mockPriceList: Partial<PriceListType> = {
+    const mockPriceList = {
       _id: "60d21b4667d0d8992e610c85",
       createdAt: `${new Date()}`,
       positions: []

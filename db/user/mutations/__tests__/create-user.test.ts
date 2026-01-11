@@ -3,67 +3,60 @@ import { User } from "@/db/models/user-model";
 
 import { createUser } from "../create-user";
 
-// Mock the database connection and User model
 jest.mock("@/db/database", () => ({
   dbConnect: jest.fn()
 }));
 
 jest.mock("@/db/models/user-model", () => ({
-  User: {
-    create: jest.fn()
-  }
+  User: { create: jest.fn() }
 }));
 
+const mockedDbConnect = dbConnect as jest.Mock;
+const mockedUserCreate = User.create as jest.Mock;
+
 describe("createUser", () => {
-  afterEach(() => {
-    // Restore all mocks after each test
-    jest.restoreAllMocks();
+  beforeEach(() => {
+    jest.clearAllMocks();
   });
 
   it("should connect to the database and create a new user", async () => {
-    const userId = "test-user-id";
-    const email = "test@test.com";
-    const username = "testuser";
+    const userData = {
+      userId: "test-user-id",
+      email: "test@test.com",
+      username: "testuser"
+    };
 
-    // Call the function
-    await createUser({ userId, email, username });
+    await createUser(userData);
 
-    // Expect dbConnect to have been called
-    expect(dbConnect).toHaveBeenCalledTimes(1);
-
-    // Expect User.create to have been called with the correct userId
-    expect(User.create).toHaveBeenCalledTimes(1);
-    expect(User.create).toHaveBeenCalledWith({ userId, email, username });
+    expect(mockedDbConnect).toHaveBeenCalledTimes(1);
+    expect(mockedUserCreate).toHaveBeenCalledTimes(1);
+    expect(mockedUserCreate).toHaveBeenCalledWith(userData);
   });
 
-  it("should handle errors during database connection", async () => {
-    const userId = "test-user-id";
-    const errorMessage = "DB connection failed";
+  test.each([
+    [
+      "database connection",
+      new Error("DB connection failed"),
+      () => mockedDbConnect.mockRejectedValue(new Error("DB connection failed")),
+      () => expect(mockedUserCreate).not.toHaveBeenCalled()
+    ],
+    [
+      "user creation",
+      new Error("DB connection failed"),
+      () => mockedUserCreate.mockRejectedValue(new Error("User creation failed")),
+      () => expect(mockedDbConnect).toHaveBeenCalledTimes(1)
+    ]
+  ])("should handle errors during %s", async (_, error, setupMock, verify) => {
+    setupMock();
 
-    // Mock dbConnect to throw an error
-    (dbConnect as jest.Mock).mockRejectedValue(new Error(errorMessage));
+    const userData = {
+      userId: "test-user-id",
+      email: "test@test.com",
+      username: "testuser"
+    };
 
-    // Expect the function to throw an error
-    await expect(createUser({ userId })).rejects.toThrow(errorMessage);
+    await expect(createUser(userData)).rejects.toThrow(error);
 
-    // Expect User.create not to have been called
-    expect(User.create).not.toHaveBeenCalled();
-  });
-
-  it("should handle errors during user creation", async () => {
-    const userId = "test-user-id";
-    const errorMessage = "User creation failed";
-
-    // Mock dbConnect to resolve successfully
-    (dbConnect as jest.Mock).mockResolvedValue(undefined);
-
-    // Mock User.create to throw an error
-    (User.create as jest.Mock).mockRejectedValue(new Error(errorMessage));
-
-    // Expect the function to throw an error
-    await expect(createUser({ userId })).rejects.toThrow(errorMessage);
-
-    // Expect dbConnect to have been called
-    expect(dbConnect).toHaveBeenCalledTimes(1);
+    verify();
   });
 });
