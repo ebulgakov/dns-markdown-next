@@ -17,7 +17,7 @@ docker build -t dns-markdown-parser .
 ### Run parser
 
 ```sh
-docker run -d --env-file .env --name dns-markdown-parser dns-markdown-parser
+docker run -p 3100:3100 -d --env-file .env dns-markdown-parser
 ```
 ### Stop parser
 

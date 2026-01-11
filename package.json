@@ -24,10 +24,12 @@
     "add:diff": "tsx ./add_diff",
     "add:history": "tsx ./add_history",
     "check:favorites": "tsx ./check_favorites",
-    "parse": "npm run downloader && npm run add:list && npm run add:mutated && npm run add:diff && npm run add:history && npm run check:favorites",
+    "cache:clear": "tsx ./cache_clear",
+    "parse": "npm run downloader && npm run add:list && npm run add:mutated && npm run add:diff && npm run add:history && npm run check:favorites && npm run cache:clear",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "dependencies": {
+    "@upstash/redis": "^1.36.1",
     "body-parser": "^2.2.1",
     "cheerio": "^1.1.2",
     "dotenv": "^17.2.3",
