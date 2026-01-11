@@ -4,7 +4,6 @@ import { Pricelist } from "@/db/models/pricelist-model";
 import { getArchiveList } from "../get-archive-list";
 
 jest.mock("@/db/database", () => ({ dbConnect: jest.fn() }));
-jest.mock("@/db/user/queries", () => ({ getUser: jest.fn() }));
 jest.mock("@/cache", () => ({ __esModule: true, default: { get: jest.fn(), set: jest.fn() } }));
 jest.mock("@/db/models/pricelist-model", () => ({
   Pricelist: {
