@@ -51,7 +51,7 @@ describe("getPriceListsDiff", () => {
     mockedGetUser.mockResolvedValue(null);
 
     // Act: Call the function
-    const result = await getPriceListsDiff();
+    const result = await getPriceListsDiff("samara");
 
     // Assert: Check the result and that functions were called correctly
     expect(result).toBeNull();
@@ -70,7 +70,7 @@ describe("getPriceListsDiff", () => {
     mockedDiffFindOne.mockResolvedValue(null);
 
     // Act: Call the function
-    const result = await getPriceListsDiff();
+    const result = await getPriceListsDiff("samara");
 
     // Assert: Check that the result contains nulls and functions were called correctly
     expect(result).toEqual({ diff: null, sold: null });
@@ -100,7 +100,7 @@ describe("getPriceListsDiff", () => {
     mockedDiffFindOne.mockResolvedValue(mockDiffData);
 
     // Act: Call the function
-    const result = await getPriceListsDiff();
+    const result = await getPriceListsDiff("samara");
 
     // Assert: Check that the result contains the mocked data
     expect(result).toEqual({ diff: mockDiffData, sold: mockSoldData });

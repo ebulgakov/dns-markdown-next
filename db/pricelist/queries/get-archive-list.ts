@@ -8,8 +8,8 @@ export const getArchiveList = async (city: string) => {
   if (!city) throw new Error("city is required");
 
   const key = `pricelist:archive:${String(city)}`;
-  const cached = await redis.get(key);
-  if (cached) return cached as PriceListType[];
+  const cached = (await redis.get(key)) as PriceListType[] | null;
+  if (cached) return cached;
 
   await dbConnect();
 

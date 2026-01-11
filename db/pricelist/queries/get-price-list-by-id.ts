@@ -8,8 +8,8 @@ export const getPriceListById = async (id: string) => {
   if (!id) throw new Error("id is required");
 
   const key = `pricelist:archiveid:${String(id)}`;
-  const cached = await redis.get(key);
-  if (cached) return cached as PriceListType;
+  const cached = (await redis.get(key)) as PriceListType | null;
+  if (cached) return cached;
 
   await dbConnect();
   const priceList = await Pricelist.findOne({ _id: id });

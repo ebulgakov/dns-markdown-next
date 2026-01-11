@@ -9,18 +9,20 @@ import type { RemovedGoods as RemovedGoodsType } from "@/types/pricelist";
 export const getPriceListsDiff = async (city: string) => {
   if (!city) throw new Error("city is required");
 
+  // Check cache first
   const soldKey = `pricelist:removed:${city}`;
   const newKey = `pricelist:new:${city}`;
   const diffKey = `pricelist:diff:${city}`;
+  let cachedSold = (await redis.get(soldKey)) as RemovedGoodsType | null;
+  let cachedNew = (await redis.get(newKey)) as RemovedGoodsType | null;
+  let cachedDiff = (await redis.get(diffKey)) as DiffType | null;
 
-  let cachedSold = await redis.get(soldKey);
-  let cachedNew = await redis.get(newKey);
-  let cachedDiff = await redis.get(diffKey);
-
+  // If any of the caches are missing, connect to DB and fetch
   if (!cachedSold || !cachedNew || !cachedDiff) {
     await dbConnect();
   }
 
+  // Fetch missing data and update cache
   if (!cachedSold) {
     const sold = await RemovedGoods.findOne({ city }, {}, { sort: { updatedAt: -1 } });
     if (sold) {
@@ -47,5 +49,6 @@ export const getPriceListsDiff = async (city: string) => {
     }
   }
 
+  // Return the assembled data
   return { diff: cachedDiff, sold: cachedSold, new: cachedNew };
 };

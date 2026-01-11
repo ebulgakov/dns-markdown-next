@@ -12,8 +12,8 @@ export const getUser = async () => {
   if (!clerkUser) throw new Error("User not authenticated");
 
   const key = `user:${String(clerkUser.id)}`;
-  const cached = await redis.get(key);
-  if (cached) return cached as UserType;
+  const cached = (await redis.get(key)) as UserType | null;
+  if (cached) return cached;
 
   await dbConnect();
 
