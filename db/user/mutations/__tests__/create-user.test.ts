@@ -33,7 +33,7 @@ describe("createUser", () => {
     expect(mockedUserCreate).toHaveBeenCalledWith(userData);
   });
 
-  test.each([
+  it.each([
     [
       "database connection",
       new Error("DB connection failed"),
@@ -42,8 +42,11 @@ describe("createUser", () => {
     ],
     [
       "user creation",
-      new Error("DB connection failed"),
-      () => mockedUserCreate.mockRejectedValue(new Error("User creation failed")),
+      new Error("User creation failed"),
+      () => {
+        mockedDbConnect.mockResolvedValue(undefined);
+        mockedUserCreate.mockRejectedValue(new Error("User creation failed"));
+      },
       () => expect(mockedDbConnect).toHaveBeenCalledTimes(1)
     ]
   ])("should handle errors during %s", async (_, error, setupMock, verify) => {
