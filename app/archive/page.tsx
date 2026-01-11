@@ -4,13 +4,14 @@ import { Alert, AlertDescription, AlertTitle } from "@/app/components/ui/alert";
 import { PageTitle } from "@/app/components/ui/page-title";
 import { formatDate } from "@/app/helpers/format";
 import { getArchiveList } from "@/db/pricelist/queries";
+import { getUser } from "@/db/user/queries";
 
 export default async function ArchivePage() {
   let archiveCollection;
 
   try {
-    archiveCollection = await getArchiveList();
-    if (!archiveCollection) throw new Error("No pricelist collection");
+    const user = await getUser();
+    archiveCollection = await getArchiveList(user.city);
   } catch (e) {
     const { message } = e as Error;
     return (

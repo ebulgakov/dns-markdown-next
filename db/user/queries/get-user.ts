@@ -1,13 +1,30 @@
 import { currentUser } from "@clerk/nextjs/server";
 
+import redis from "@/cache";
 import { dbConnect } from "@/db/database";
 import { User } from "@/db/models/user-model";
 
 import type { User as UserType } from "@/types/user";
 
 export const getUser = async () => {
-  await dbConnect();
   const clerkUser = await currentUser();
 
-  return User.findOne({ userId: clerkUser?.id }) as unknown as UserType | null;
+  if (!clerkUser) throw new Error("User not authenticated");
+
+  const key = `user:${String(clerkUser.id)}`;
+  const cached = await redis.get(key);
+
+  console.log("cached user", cached);
+  if (cached) return cached as UserType;
+
+  await dbConnect();
+
+  const user = await User.findOne({ userId: clerkUser.id });
+  if (!user) throw new Error("User not found");
+
+  const plainUser = JSON.stringify(user);
+
+  await redis.set(key, plainUser);
+
+  return JSON.parse(plainUser) as UserType;
 };

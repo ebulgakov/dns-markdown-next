@@ -36,7 +36,7 @@ describe("getLastPriceList", () => {
     // Mock getUser to return null
     mockedGetUser.mockResolvedValue(null);
 
-    await expect(getLastPriceList()).rejects.toThrow("User not found");
+    await expect(getLastPriceList("samara")).rejects.toThrow("User not found");
 
     // Expect dbConnect to have been called
     expect(mockedDbConnect).toHaveBeenCalledTimes(1);
@@ -63,7 +63,7 @@ describe("getLastPriceList", () => {
     // Mock findOne to return a pricelist
     mockedFindOne.mockResolvedValue(mockPriceList);
 
-    const result = await getLastPriceList();
+    const result = await getLastPriceList("samara");
 
     // Expect dbConnect to have been called
     expect(mockedDbConnect).toHaveBeenCalledTimes(1);
@@ -90,7 +90,7 @@ describe("getLastPriceList", () => {
     // Mock findOne to return null
     mockedFindOne.mockResolvedValue(null);
 
-    const result = await getLastPriceList();
+    const result = await getLastPriceList("samara");
 
     // Expect dbConnect to have been called
     expect(mockedDbConnect).toHaveBeenCalledTimes(1);

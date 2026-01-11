@@ -32,7 +32,7 @@ describe("getArchiveList", () => {
     // Mock getUser to return null
     (getUser as jest.Mock).mockResolvedValue(null);
 
-    await expect(getArchiveList()).rejects.toThrow("User not found");
+    await expect(getArchiveList("samara")).rejects.toThrow("User not found");
 
     // Assertions
     expect(dbConnect).toHaveBeenCalledTimes(1);
@@ -63,7 +63,7 @@ describe("getArchiveList", () => {
     };
     (Pricelist.find as jest.Mock).mockReturnValue(findMock);
 
-    const result = await getArchiveList();
+    const result = await getArchiveList("samara");
 
     // Assertions
     expect(dbConnect).toHaveBeenCalledTimes(1);
@@ -94,7 +94,7 @@ describe("getArchiveList", () => {
     };
     (Pricelist.find as jest.Mock).mockReturnValue(findMock);
 
-    const result = await getArchiveList();
+    const result = await getArchiveList("samara");
 
     // Assertions
     expect(result).toEqual([]);

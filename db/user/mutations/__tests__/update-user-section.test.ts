@@ -36,12 +36,12 @@ describe("updateUserSection", () => {
   // Test case for successful update of a section
   it("should update user section and return the updated section", async () => {
     const initialUser: Partial<User> = {
-      id: "1",
+      _id: "1",
       hiddenSections: []
     };
     const updatedSections = ["section1", "section2"];
     const updatedUser: Partial<User> = {
-      id: "1",
+      _id: "1",
       hiddenSections: updatedSections
     };
 
@@ -75,7 +75,7 @@ describe("updateUserSection", () => {
   // Test case for user not found after update
   it("should throw an error if user is not found after update", async () => {
     const initialUser: Partial<User> = {
-      id: "1",
+      _id: "1",
       hiddenSections: []
     };
 

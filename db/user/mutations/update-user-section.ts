@@ -1,7 +1,6 @@
 "use server";
 import { dbConnect } from "@/db/database";
 import { updateUser } from "@/db/user/mutations/update-user";
-import { getUser } from "@/db/user/queries";
 
 import type { UserSections, AvailableUpdateSectionNames } from "@/types/user";
 
@@ -15,15 +14,8 @@ export const updateUserSection = async (
   if (!availableSections.includes(sectionName)) throw new Error("Invalid section name");
 
   await dbConnect();
-
-  const user = await getUser();
-  if (!user) throw new Error("User not found");
-
   const update = { [`${sectionName}`]: sections };
-  await updateUser(update);
+  const newUser = await updateUser(update);
 
-  const updatedUser = await getUser();
-  if (!updatedUser) throw new Error("User not found after update");
-
-  return updatedUser[sectionName];
+  return newUser[sectionName];
 };

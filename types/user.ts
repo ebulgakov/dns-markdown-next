@@ -37,7 +37,6 @@ export interface Favorite {
 
 export interface User {
   _id: string;
-  id: string;
   userId: string;
   username?: string;
   email?: string;
