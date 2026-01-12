@@ -26,7 +26,9 @@ test.describe("Desktop Navbar", () => {
   });
 
   test("should not display mobile menu button on Desktop", async ({ page }) => {
+    await page.goto("/");
+
     const menuButton = page.getByLabel("Меню");
-    await expect(menuButton).toHaveCount(0);
+    await expect(menuButton).not.toBeVisible();
   });
 });
