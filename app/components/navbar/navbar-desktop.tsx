@@ -16,8 +16,9 @@ import type { NavbarLinks } from "@/types/common";
 
 type NavbarDesktopProps = {
   linksList: NavbarLinks;
+  userLinks: NavbarLinks;
 };
-function NavbarDesktop({ linksList }: NavbarDesktopProps) {
+function NavbarDesktop({ linksList, userLinks }: NavbarDesktopProps) {
   const t = useTranslations("Navbar");
 
   return (
@@ -27,15 +28,21 @@ function NavbarDesktop({ linksList }: NavbarDesktopProps) {
           <Link href="/">{t("logo")}</Link>
         </Button>
 
-        <SignedIn>
-          <NavigationMenuList>
-            {linksList.map(link => (
+        <NavigationMenuList>
+          {linksList.map(link => (
+            <NavigationMenuItem key={link.name}>
+              <NavigationActiveLink link={link}>{link.name}</NavigationActiveLink>
+            </NavigationMenuItem>
+          ))}
+
+          <SignedIn>
+            {userLinks.map(link => (
               <NavigationMenuItem key={link.name}>
                 <NavigationActiveLink link={link}>{link.name}</NavigationActiveLink>
               </NavigationMenuItem>
             ))}
-          </NavigationMenuList>
-        </SignedIn>
+          </SignedIn>
+        </NavigationMenuList>
       </NavigationMenu>
 
       <NavigationMenu className="mr-3 ml-auto">
@@ -44,12 +51,15 @@ function NavbarDesktop({ linksList }: NavbarDesktopProps) {
             <SignInButton>
               <Button variant="link">{t("signin")}</Button>
             </SignInButton>
+
             <div className="border-primary h-6 border-l-2"></div>
+
             <SignUpButton>
               <Button variant="link">{t("signup")}</Button>
             </SignUpButton>
           </div>
         </SignedOut>
+
         <SignedIn>
           <div className="size-7">
             <UserButton afterSignOutUrl="/" />
