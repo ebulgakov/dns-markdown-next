@@ -78,7 +78,8 @@ function FavoritesPageClient({
               key={favorite.item._id}
               item={favorite.item}
               status={favorite.status}
-              favorites={favorites}
+              favorites={!favorite.status.deleted ? favorites : undefined}
+              isUserLoggedIn={true}
             />
           ))}
         </div>

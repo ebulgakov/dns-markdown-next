@@ -1,5 +1,4 @@
 "use client";
-import { SignedIn } from "@clerk/nextjs";
 import clsx from "clsx";
 import Image from "next/image";
 import Link from "next/link";
@@ -19,8 +18,9 @@ type PriceListGoodsProps = {
   diff?: GoodDiffChangesType;
   favorites?: Favorite[];
   status?: FavoriteStatus;
+  isUserLoggedIn?: boolean;
 };
-function PriceListGoods({ item, status, diff, favorites }: PriceListGoodsProps) {
+function PriceListGoods({ item, status, diff, favorites, isUserLoggedIn }: PriceListGoodsProps) {
   return (
     <div
       data-testid="pricelist-goods"
@@ -118,9 +118,9 @@ function PriceListGoods({ item, status, diff, favorites }: PriceListGoodsProps) 
       <div className="text-center [grid-area:store]">{item.available}</div>
 
       <div className="[grid-area:image] lg:[grid-area:favorites]">
-        <SignedIn>
-          {favorites && <PriceListFavoriteToggle favorites={favorites} goods={item} />}
-        </SignedIn>
+        {isUserLoggedIn && favorites && (
+          <PriceListFavoriteToggle favorites={favorites} goods={item} />
+        )}
       </div>
     </div>
   );

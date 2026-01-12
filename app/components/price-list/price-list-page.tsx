@@ -54,6 +54,7 @@ function PriceListPage({
             favoriteSections={favoriteSections}
             hiddenSectionsTitles={hiddenSectionsTitles}
             userFavoritesGoods={userFavoritesGoods}
+            isUserLoggedIn={isUserLoggedIn}
           />
         )}
 
@@ -61,6 +62,7 @@ function PriceListPage({
           positions={priceListPositions}
           favorites={userFavoritesGoods}
           hiddenSections={hiddenSectionsTitles}
+          isUserLoggedIn={isUserLoggedIn}
         />
       </div>
 

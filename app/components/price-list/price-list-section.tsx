@@ -14,9 +14,16 @@ type PriceListProps = {
   favorites?: Favorite[];
   diffs?: DiffsCollectionType;
   isOpen?: boolean;
+  isUserLoggedIn?: boolean;
 };
 
-function PriceListSection({ position, favorites, diffs, isOpen: isOpenDefault }: PriceListProps) {
+function PriceListSection({
+  isUserLoggedIn,
+  position,
+  favorites,
+  diffs,
+  isOpen: isOpenDefault
+}: PriceListProps) {
   const [isOpen, setIsOpen] = useState(isOpenDefault);
   const toggleVisibility = () => {
     setIsOpen(!isOpen);
@@ -39,6 +46,7 @@ function PriceListSection({ position, favorites, diffs, isOpen: isOpenDefault }:
               item={item}
               favorites={favorites}
               diff={diffs && diffs[item._id]}
+              isUserLoggedIn={isUserLoggedIn}
             />
           ))}
       </div>
