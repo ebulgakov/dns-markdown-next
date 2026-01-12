@@ -16,5 +16,8 @@ const get = async (key: string) => {
 const remove = async (key: string) => {
   await redis.del(key);
 };
+const keys = async (keys: string) => {
+  await redis.keys(keys);
+};
 
-export { redis, get, add, remove };
+export { redis, get, add, remove, keys };
