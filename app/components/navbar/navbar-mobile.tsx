@@ -1,9 +1,10 @@
 "use client";
 
-import { SignedIn, SignedOut, SignInButton, SignUpButton, SignOutButton } from "@clerk/nextjs";
+import { SignInButton, SignUpButton, SignOutButton } from "@clerk/nextjs";
 import { Menu } from "lucide-react";
 import Link from "next/link";
 import { useTranslations } from "next-intl";
+import { Fragment } from "react";
 
 import { ChangeLocationSelector } from "@/app/components/change-location-selector";
 import { ChangeThemeSelector } from "@/app/components/change-theme-selector";
@@ -22,10 +23,11 @@ import type { NavbarLinks } from "@/types/common";
 type NavbarMobileProps = {
   linksList: NavbarLinks;
   userLinks: NavbarLinks;
+  isUserLoggedIn?: boolean;
   locate?: string;
 };
 
-function NavbarMobile({ linksList, userLinks, locate }: NavbarMobileProps) {
+function NavbarMobile({ linksList, userLinks, isUserLoggedIn, locate }: NavbarMobileProps) {
   const t = useTranslations("Navbar");
   return (
     <Dialog>
@@ -60,42 +62,44 @@ function NavbarMobile({ linksList, userLinks, locate }: NavbarMobileProps) {
                 </div>
               ))}
 
-              <SignedIn>
-                {userLinks.map(link => (
-                  <div key={link.name}>
-                    <DialogClose asChild>
-                      <Link href={link.url} className="block py-2">
-                        {link.name}
-                      </Link>
-                    </DialogClose>
+              {isUserLoggedIn ? (
+                <Fragment>
+                  {userLinks.map(link => (
+                    <div key={link.name}>
+                      <DialogClose asChild>
+                        <Link href={link.url} className="block py-2">
+                          {link.name}
+                        </Link>
+                      </DialogClose>
+                    </div>
+                  ))}
+                  <div>
+                    <SignOutButton>
+                      <DialogClose asChild>
+                        <button className="block cursor-pointer py-2">{t("signout")}</button>
+                      </DialogClose>
+                    </SignOutButton>
                   </div>
-                ))}
-                <div>
-                  <SignOutButton>
-                    <DialogClose asChild>
-                      <button className="block cursor-pointer py-2">{t("signout")}</button>
-                    </DialogClose>
-                  </SignOutButton>
-                </div>
-              </SignedIn>
+                </Fragment>
+              ) : (
+                <Fragment>
+                  <div>
+                    <SignInButton>
+                      <DialogClose asChild>
+                        <button className="block py-2">{t("signin")}</button>
+                      </DialogClose>
+                    </SignInButton>
+                  </div>
 
-              <SignedOut>
-                <div>
-                  <SignInButton>
-                    <DialogClose asChild>
-                      <button className="block py-2">{t("signin")}</button>
-                    </DialogClose>
-                  </SignInButton>
-                </div>
-
-                <div>
-                  <SignUpButton>
-                    <DialogClose asChild>
-                      <button className="block py-2">{t("signup")}</button>
-                    </DialogClose>
-                  </SignUpButton>
-                </div>
-              </SignedOut>
+                  <div>
+                    <SignUpButton>
+                      <DialogClose asChild>
+                        <button className="block py-2">{t("signup")}</button>
+                      </DialogClose>
+                    </SignUpButton>
+                  </div>
+                </Fragment>
+              )}
             </div>
 
             <div className="mt-auto flex gap-4">

@@ -1,4 +1,5 @@
 import { ClerkProvider } from "@clerk/nextjs";
+import { auth } from "@clerk/nextjs/server";
 import { Roboto, Roboto_Mono } from "next/font/google";
 import { NextIntlClientProvider } from "next-intl";
 import { getTranslations } from "next-intl/server";
@@ -45,6 +46,7 @@ export default async function RootLayout({
   children: ReactNode;
 }>) {
   const locale = await getLocale();
+  const { userId } = await auth();
   return (
     <StrictMode>
       <NextIntlClientProvider>
@@ -58,7 +60,7 @@ export default async function RootLayout({
                   <div className="mx-auto grid min-h-screen md:container">
                     <div className="mb-10">
                       <div className="mt-4 mb-5">
-                        <Navbar locate={locale} />
+                        <Navbar locate={locale} isUserLoggedIn={!!userId} />
                       </div>
                       {children}
                     </div>
