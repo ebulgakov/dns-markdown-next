@@ -1,5 +1,5 @@
 "use client";
-import { SignedIn } from "@clerk/nextjs";
+
 import clsx from "clsx";
 
 import { SearchInput } from "@/app/components/search-input";
@@ -21,6 +21,7 @@ type PriceListPageProps = {
   hiddenSectionsTitles?: UserSectionsType;
   nonFavoriteSections?: PositionType[];
   priceList: PriceListType;
+  isUserLoggedIn?: boolean;
 };
 
 function PriceListPage({
@@ -28,6 +29,7 @@ function PriceListPage({
   userFavoritesGoods,
   hiddenSectionsTitles,
   nonFavoriteSections,
+  isUserLoggedIn,
   priceList
 }: PriceListPageProps) {
   const sortGoods = useSortGoodsStore(state => state.sortGoods);
@@ -47,15 +49,13 @@ function PriceListPage({
       ))}
 
       <div className={clsx({ hidden: isHiddenDefaultList })}>
-        <SignedIn>
-          {favoriteSections && (
-            <PriceListFavoritesSection
-              favoriteSections={favoriteSections}
-              hiddenSectionsTitles={hiddenSectionsTitles}
-              userFavoritesGoods={userFavoritesGoods}
-            />
-          )}
-        </SignedIn>
+        {isUserLoggedIn && favoriteSections && (
+          <PriceListFavoritesSection
+            favoriteSections={favoriteSections}
+            hiddenSectionsTitles={hiddenSectionsTitles}
+            userFavoritesGoods={userFavoritesGoods}
+          />
+        )}
 
         <PriceList
           positions={priceListPositions}
