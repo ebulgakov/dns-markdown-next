@@ -8,7 +8,8 @@ import type { PriceList as PriceListType } from "@/types/pricelist";
 import type { User as UserType } from "@/types/user";
 
 jest.mock("@/db/pricelist/queries", () => ({
-  getLastPriceList: jest.fn()
+  getLastPriceList: jest.fn(),
+  getPriceListCity: jest.fn()
 }));
 
 jest.mock("@/db/user/queries", () => ({
@@ -77,7 +78,7 @@ describe("getCatalogData", () => {
     expect(result.priceList).toBeNull();
   });
 
-  it("should return an error if no user is found", async () => {
+  it("should not return an error if no user is found", async () => {
     const mockPriceList: PriceListType = {
       _id: "pricelist1",
       city: "TestCity",
@@ -89,8 +90,7 @@ describe("getCatalogData", () => {
 
     const result = await getCatalogData();
 
-    expect(result.error).toBeInstanceOf(Error);
-    expect(result.error?.message).toBe("User not found");
+    expect(result.error).toBeUndefined();
   });
 
   it("should put all sections into nonFavoriteSections if user has no favorite sections", async () => {
@@ -122,7 +122,7 @@ describe("getCatalogData", () => {
     const result = await getCatalogData();
 
     expect(result.error).toBe(dbError);
-    expect(result.priceList).toBeUndefined();
+    expect(result.priceList).toBeNull();
     expect(result.userFavoritesGoods).toEqual([]);
     expect(result.favoriteSections).toEqual([]);
   });

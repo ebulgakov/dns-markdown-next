@@ -1,3 +1,4 @@
+import { ClerkProvider } from "@clerk/nextjs";
 import { withThemeByClassName } from "@storybook/addon-themes";
 
 import type { Preview } from "@storybook/nextjs-vite";
@@ -27,7 +28,14 @@ const preview: Preview = {
         dark: "dark"
       },
       parentSelector: "html"
-    })
+    }),
+    (Story, { args }) => {
+      return (
+        <ClerkProvider>
+          <Story args={args} />
+        </ClerkProvider>
+      );
+    }
   ]
 };
 

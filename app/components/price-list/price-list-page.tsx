@@ -1,4 +1,5 @@
 "use client";
+import { SignedIn } from "@clerk/nextjs";
 import clsx from "clsx";
 
 import { SearchInput } from "@/app/components/search-input";
@@ -46,13 +47,15 @@ function PriceListPage({
       ))}
 
       <div className={clsx({ hidden: isHiddenDefaultList })}>
-        {favoriteSections && (
-          <PriceListFavoritesSection
-            favoriteSections={favoriteSections}
-            hiddenSectionsTitles={hiddenSectionsTitles}
-            userFavoritesGoods={userFavoritesGoods}
-          />
-        )}
+        <SignedIn>
+          {favoriteSections && (
+            <PriceListFavoritesSection
+              favoriteSections={favoriteSections}
+              hiddenSectionsTitles={hiddenSectionsTitles}
+              userFavoritesGoods={userFavoritesGoods}
+            />
+          )}
+        </SignedIn>
 
         <PriceList
           positions={priceListPositions}

@@ -1,25 +1,24 @@
 import { PriceListSection } from "@/app/components/price-list";
 import { Alert, AlertDescription, AlertTitle } from "@/app/components/ui/alert";
 import { PageTitle } from "@/app/components/ui/page-title";
-import { getPriceListsDiff } from "@/db/pricelist/queries";
+import { getPriceListCity, getPriceListsDiff } from "@/db/pricelist/queries";
 import { getUser } from "@/db/user/queries";
 
 import type { DiffsCollection as DiffsCollectionType } from "@/types/diff";
+import type { Favorite as FavoriteType } from "@/types/user";
 
 export default async function UpdatesPage() {
   let diffNew;
   let diffRemoved;
   let diffChangesPrice;
   let diffChangesProfit;
-  let userFavoritesGoods;
+  let userFavoritesGoods: FavoriteType[] = [];
   const changePriceDiff: DiffsCollectionType = {};
   const changeProfitDiff: DiffsCollectionType = {};
 
   try {
-    const user = await getUser();
-    userFavoritesGoods = user.favorites;
-
-    const collection = await getPriceListsDiff(user.city);
+    const city = await getPriceListCity();
+    const collection = await getPriceListsDiff(city);
     const collectionDiff = collection?.diff;
     const collectionSold = collection?.sold;
     const collectionNew = collection?.new;
@@ -69,6 +68,13 @@ export default async function UpdatesPage() {
         <AlertDescription>{message}</AlertDescription>
       </Alert>
     );
+  }
+
+  try {
+    const user = await getUser();
+    userFavoritesGoods = user.favorites;
+  } catch {
+    userFavoritesGoods = [];
   }
 
   return (

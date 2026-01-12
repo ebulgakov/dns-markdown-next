@@ -1,9 +1,12 @@
 # Dns-markdown service
 
+## Site
+https://dns-markdown.vercel.app/
+
 ## About 
 This is an unofficial website related to the DNS company. It helps you browse discounted items from different cities listed on the DNS website.
 
-The service provides a convenient way to view products from Moscow, Saint Petersburg, Samara, and Yekaterinburg. You can add items to your favorites to keep track of updates, such as price changes or product availability in stores.
+The service provides a convenient way to view products from Samara for now. You can add items to your favorites to keep track of updates, such as price changes or product availability in stores.
 
 ## Getting Started
 

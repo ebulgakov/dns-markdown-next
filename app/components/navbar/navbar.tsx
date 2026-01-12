@@ -25,7 +25,10 @@ function Navbar({ locate }: NavbarProps) {
     {
       name: t("updates"),
       url: "/updates"
-    },
+    }
+  ];
+
+  const userLinks: NavbarLinks = [
     {
       name: t("favorites"),
       url: "/favorites"
@@ -41,10 +44,10 @@ function Navbar({ locate }: NavbarProps) {
   return (
     <header>
       <div className="md:hidden">
-        <NavbarMobile linksList={mobileNavbar} locate={locate} />
+        <NavbarMobile linksList={mobileNavbar} userLinks={userLinks} locate={locate} />
       </div>
       <div className="hidden md:block">
-        <NavbarDesktop linksList={linksList} />
+        <NavbarDesktop linksList={linksList} userLinks={userLinks} />
       </div>
     </header>
   );

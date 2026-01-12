@@ -21,10 +21,11 @@ import type { NavbarLinks } from "@/types/common";
 
 type NavbarMobileProps = {
   linksList: NavbarLinks;
+  userLinks: NavbarLinks;
   locate?: string;
 };
 
-function NavbarMobile({ linksList, locate }: NavbarMobileProps) {
+function NavbarMobile({ linksList, userLinks, locate }: NavbarMobileProps) {
   const t = useTranslations("Navbar");
   return (
     <Dialog>
@@ -46,8 +47,18 @@ function NavbarMobile({ linksList, locate }: NavbarMobileProps) {
             </DialogHeader>
 
             <div className="divide-y-2 divide-gray-100">
+              {linksList.map(link => (
+                <div key={link.name}>
+                  <DialogClose asChild>
+                    <Link href={link.url} className="block py-2">
+                      {link.name}
+                    </Link>
+                  </DialogClose>
+                </div>
+              ))}
+
               <SignedIn>
-                {linksList.map(link => (
+                {userLinks.map(link => (
                   <div key={link.name}>
                     <DialogClose asChild>
                       <Link href={link.url} className="block py-2">
@@ -64,6 +75,7 @@ function NavbarMobile({ linksList, locate }: NavbarMobileProps) {
                   </SignOutButton>
                 </div>
               </SignedIn>
+
               <SignedOut>
                 <div>
                   <SignInButton>
@@ -72,6 +84,7 @@ function NavbarMobile({ linksList, locate }: NavbarMobileProps) {
                     </DialogClose>
                   </SignInButton>
                 </div>
+
                 <div>
                   <SignUpButton>
                     <DialogClose asChild>
@@ -84,6 +97,7 @@ function NavbarMobile({ linksList, locate }: NavbarMobileProps) {
 
             <div className="mt-auto flex gap-4">
               <ChangeThemeSelector />
+
               <ChangeLocationSelector locate={locate} />
             </div>
           </div>
