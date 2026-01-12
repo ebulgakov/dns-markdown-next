@@ -3,15 +3,14 @@ import Link from "next/link";
 import { Alert, AlertDescription, AlertTitle } from "@/app/components/ui/alert";
 import { PageTitle } from "@/app/components/ui/page-title";
 import { formatDate } from "@/app/helpers/format";
-import { getArchiveList } from "@/db/pricelist/queries";
-import { getUser } from "@/db/user/queries";
+import { getArchiveList, getPriceListCity } from "@/db/pricelist/queries";
 
 export default async function ArchivePage() {
   let archiveCollection;
 
   try {
-    const user = await getUser();
-    archiveCollection = await getArchiveList(user.city);
+    const city = await getPriceListCity();
+    archiveCollection = await getArchiveList(city);
   } catch (e) {
     const { message } = e as Error;
     return (
