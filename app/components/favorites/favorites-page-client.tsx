@@ -85,7 +85,7 @@ function FavoritesPageClient({
       ) : (
         <Alert>
           <AlertTitle>Избранное пусто</AlertTitle>
-          <AlertDescription>
+          <AlertDescription data-testid="favorites-empty-message">
             <div>
               Добавьте товары в избранное (<Star className="text-favorite inline-block" />
               ), чтобы они отобразились здесь.

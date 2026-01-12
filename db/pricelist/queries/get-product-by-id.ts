@@ -1,4 +1,4 @@
-import redis from "@/cache";
+import { get as cacheGet, add as cacheAdd } from "@/cache";
 import { dbConnect } from "@/db/database";
 import { History } from "@/db/models/history-model";
 import { Pricelist } from "@/db/models/pricelist-model";
@@ -15,7 +15,7 @@ export const getProductById = async (id: string) => {
   if (!id) throw new Error("id is required");
 
   const key = `pricelist:goods:${String(id)}`;
-  const cached = (await redis.get(key)) as PayloadType | null;
+  const cached = await cacheGet<PayloadType>(key);
   if (cached) return cached;
 
   await dbConnect();
@@ -42,7 +42,7 @@ export const getProductById = async (id: string) => {
   item.city = history.city; // Added city specially for adding to favorites
 
   const payload = JSON.stringify({ item, history });
-  await redis.set(key, payload);
+  await cacheAdd(key, payload);
 
   return JSON.parse(payload) as PayloadType;
 };

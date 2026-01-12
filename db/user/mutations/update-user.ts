@@ -1,5 +1,5 @@
 "use server";
-import redis from "@/cache";
+import { add as cacheAdd } from "@/cache";
 import { dbConnect } from "@/db/database";
 import { User } from "@/db/models/user-model";
 import { getUser } from "@/db/user/queries";
@@ -21,7 +21,7 @@ export const updateUser = async (update: object): Promise<UserType> => {
 
   const plainUser = JSON.stringify(newUser);
 
-  await redis.set(key, plainUser);
+  await cacheAdd(key, plainUser);
 
   return JSON.parse(plainUser) as UserType;
 };

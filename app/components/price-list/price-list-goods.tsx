@@ -23,6 +23,7 @@ type PriceListGoodsProps = {
 function PriceListGoods({ item, status, diff, favorites }: PriceListGoodsProps) {
   return (
     <div
+      data-testid="pricelist-goods"
       className={clsx(
         "grid gap-x-4 gap-y-1 py-4 [grid-template-areas:'image_prices'_'image_diff'_'image_store'_'description_description'] md:[grid-template-areas:'image_description_prices'_'image_description_diff'_'image_description_store'] lg:items-center lg:py-1 lg:[grid-template-areas:'image_description_diff_prices_store_favorites']",
         {
