@@ -15,7 +15,7 @@ export const getProductById = async (id: string) => {
   if (!id) throw new Error("id is required");
 
   const key = `pricelist:goods:${String(id)}`;
-  const cached = (await cacheGet(key)) as PayloadType | null;
+  const cached = await cacheGet<PayloadType>(key);
   if (cached) return cached;
 
   await dbConnect();

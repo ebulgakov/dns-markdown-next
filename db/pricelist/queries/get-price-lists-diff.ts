@@ -13,9 +13,9 @@ export const getPriceListsDiff = async (city: string) => {
   const soldKey = `pricelist:removed:${String(city)}`;
   const newKey = `pricelist:new:${String(city)}`;
   const diffKey = `pricelist:diff:${String(city)}`;
-  let cachedSold = (await cacheGet(soldKey)) as RemovedGoodsType | null;
-  let cachedNew = (await cacheGet(newKey)) as RemovedGoodsType | null;
-  let cachedDiff = (await cacheGet(diffKey)) as DiffType | null;
+  let cachedSold = await cacheGet<RemovedGoodsType>(soldKey);
+  let cachedNew = await cacheGet<RemovedGoodsType>(newKey);
+  let cachedDiff = await cacheGet<DiffType>(diffKey);
 
   // If any of the caches are missing, connect to DB and fetch
   if (!cachedSold || !cachedNew || !cachedDiff) {

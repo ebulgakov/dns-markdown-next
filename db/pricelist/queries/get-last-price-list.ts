@@ -8,7 +8,7 @@ export const getLastPriceList = async (city: string) => {
   if (!city) throw new Error("city is required");
 
   const key = `pricelist:last:${String(city)}`;
-  const cached = (await cacheGet(key)) as PriceListType | null;
+  const cached = await cacheGet<PriceListType>(key);
   if (cached) return cached;
 
   await dbConnect();

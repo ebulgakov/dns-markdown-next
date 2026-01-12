@@ -8,7 +8,7 @@ export const getPriceListById = async (id: string) => {
   if (!id) throw new Error("id is required");
 
   const key = `pricelist:archiveid:${String(id)}`;
-  const cached = (await cacheGet(key)) as PriceListType | null;
+  const cached = await cacheGet<PriceListType>(key);
   if (cached) return cached;
 
   await dbConnect();

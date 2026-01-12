@@ -5,12 +5,16 @@ const redis = new Redis({
   token: process.env.UPSTASH_REDIS_REST_TOKEN
 });
 
-const add = async (key: string, value: string) => await redis.set(key, value);
+async function add(key: string, value: string) {
+  await redis.set(key, value);
+}
 
-const get = async (key: string) => await redis.get(key);
+async function get<T>(key: string): Promise<T | null> {
+  return await redis.get(key);
+}
 
-const remove = async (key: string) => await redis.del(key);
+async function remove(key: string) {
+  await redis.del(key);
+}
 
-const keys = async (keys: string) => await redis.keys(keys);
-
-export { get, add, remove, keys };
+export { get, add, remove };

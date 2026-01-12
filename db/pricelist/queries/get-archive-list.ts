@@ -8,7 +8,7 @@ export const getArchiveList = async (city: string) => {
   if (!city) throw new Error("city is required");
 
   const key = `pricelist:archive:${String(city)}`;
-  const cached = (await cacheGet(key)) as PriceListType[] | null;
+  const cached = await cacheGet<PriceListType[]>(key);
   if (cached) return cached;
 
   await dbConnect();

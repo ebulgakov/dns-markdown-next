@@ -12,7 +12,7 @@ export const getUser = async () => {
   if (!clerkUser) throw new Error("User not authenticated");
 
   const key = `user:${String(clerkUser.id)}`;
-  const cached = (await cacheGet(key)) as UserType | null;
+  const cached = await cacheGet<UserType>(key);
   if (cached) return cached;
 
   await dbConnect();
