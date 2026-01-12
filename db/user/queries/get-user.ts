@@ -1,6 +1,6 @@
 import { currentUser } from "@clerk/nextjs/server";
 
-import redis from "@/cache";
+import { get as cacheGet, add as cacheAdd } from "@/cache";
 import { dbConnect } from "@/db/database";
 import { User } from "@/db/models/user-model";
 
@@ -12,7 +12,7 @@ export const getUser = async () => {
   if (!clerkUser) throw new Error("User not authenticated");
 
   const key = `user:${String(clerkUser.id)}`;
-  const cached = (await redis.get(key)) as UserType | null;
+  const cached = (await cacheGet(key)) as UserType | null;
   if (cached) return cached;
 
   await dbConnect();
@@ -22,7 +22,7 @@ export const getUser = async () => {
 
   const plainUser = JSON.stringify(user);
 
-  await redis.set(key, plainUser);
+  await cacheAdd(key, plainUser);
 
   return JSON.parse(plainUser) as UserType;
 };

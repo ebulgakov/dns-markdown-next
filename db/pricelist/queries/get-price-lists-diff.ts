@@ -1,4 +1,4 @@
-import redis from "@/cache";
+import { get as cacheGet, add as cacheAdd } from "@/cache";
 import { dbConnect } from "@/db/database";
 import { Diff } from "@/db/models/diff-model";
 import { RemovedGoods, NewGoods } from "@/db/models/mutated-goods-model";
@@ -13,9 +13,9 @@ export const getPriceListsDiff = async (city: string) => {
   const soldKey = `pricelist:removed:${String(city)}`;
   const newKey = `pricelist:new:${String(city)}`;
   const diffKey = `pricelist:diff:${String(city)}`;
-  let cachedSold = (await redis.get(soldKey)) as RemovedGoodsType | null;
-  let cachedNew = (await redis.get(newKey)) as RemovedGoodsType | null;
-  let cachedDiff = (await redis.get(diffKey)) as DiffType | null;
+  let cachedSold = (await cacheGet(soldKey)) as RemovedGoodsType | null;
+  let cachedNew = (await cacheGet(newKey)) as RemovedGoodsType | null;
+  let cachedDiff = (await cacheGet(diffKey)) as DiffType | null;
 
   // If any of the caches are missing, connect to DB and fetch
   if (!cachedSold || !cachedNew || !cachedDiff) {
@@ -27,7 +27,7 @@ export const getPriceListsDiff = async (city: string) => {
     const sold = await RemovedGoods.findOne({ city }, {}, { sort: { updatedAt: -1 } });
     if (sold) {
       const plainSold = JSON.stringify(sold);
-      await redis.set(soldKey, plainSold);
+      await cacheAdd(soldKey, plainSold);
       cachedSold = JSON.parse(plainSold) as RemovedGoodsType;
     }
   }
@@ -36,7 +36,7 @@ export const getPriceListsDiff = async (city: string) => {
     const diff = await Diff.findOne({ city }, {}, { sort: { updatedAt: -1 } });
     if (diff) {
       const plainDiff = JSON.stringify(diff);
-      await redis.set(diffKey, plainDiff);
+      await cacheAdd(diffKey, plainDiff);
       cachedDiff = JSON.parse(plainDiff) as DiffType;
     }
   }
@@ -44,7 +44,7 @@ export const getPriceListsDiff = async (city: string) => {
     const newGoods = await NewGoods.findOne({ city }, {}, { sort: { updatedAt: -1 } });
     if (newGoods) {
       const plainNew = JSON.stringify(newGoods);
-      await redis.set(newKey, plainNew);
+      await cacheAdd(newKey, plainNew);
       cachedNew = JSON.parse(plainNew) as RemovedGoodsType;
     }
   }

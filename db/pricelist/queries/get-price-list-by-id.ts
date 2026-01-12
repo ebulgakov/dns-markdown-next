@@ -1,4 +1,4 @@
-import redis from "@/cache";
+import { get as cacheGet, add as cacheAdd } from "@/cache";
 import { dbConnect } from "@/db/database";
 import { Pricelist } from "@/db/models/pricelist-model";
 
@@ -8,7 +8,7 @@ export const getPriceListById = async (id: string) => {
   if (!id) throw new Error("id is required");
 
   const key = `pricelist:archiveid:${String(id)}`;
-  const cached = (await redis.get(key)) as PriceListType | null;
+  const cached = (await cacheGet(key)) as PriceListType | null;
   if (cached) return cached;
 
   await dbConnect();
@@ -18,7 +18,7 @@ export const getPriceListById = async (id: string) => {
 
   const plainPriceList = JSON.stringify(priceList);
 
-  await redis.set(key, plainPriceList);
+  await cacheAdd(key, plainPriceList);
 
   return JSON.parse(plainPriceList) as PriceListType;
 };
