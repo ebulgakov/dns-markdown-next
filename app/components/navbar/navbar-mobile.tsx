@@ -41,7 +41,7 @@ function NavbarMobile({ linksList, userLinks, locate }: NavbarMobileProps) {
         </DialogTrigger>
 
         <DialogContent
-          data-testid="mobile-navbar-user-links"
+          data-testid="mobile-navbar-user"
           className="top-0 right-0 bottom-0 left-auto h-full translate-0 rounded-none"
         >
           <div className="flex flex-col">

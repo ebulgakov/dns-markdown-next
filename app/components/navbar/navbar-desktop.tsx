@@ -22,7 +22,10 @@ function NavbarDesktop({ linksList, userLinks }: NavbarDesktopProps) {
   const t = useTranslations("Navbar");
 
   return (
-    <div className="border-primary flex items-center gap-4 rounded border-2 py-2">
+    <div
+      data-testid="desktop-navbar-user"
+      className="border-primary flex items-center gap-4 rounded border-2 py-2"
+    >
       <NavigationMenu>
         <Button asChild variant="link" className="font-bold">
           <Link href="/">{t("logo")}</Link>
@@ -61,7 +64,7 @@ function NavbarDesktop({ linksList, userLinks }: NavbarDesktopProps) {
         </SignedOut>
 
         <SignedIn>
-          <div className="size-7">
+          <div data-testid="user-avatar" className="size-7">
             <UserButton afterSignOutUrl="/" />
           </div>
         </SignedIn>
