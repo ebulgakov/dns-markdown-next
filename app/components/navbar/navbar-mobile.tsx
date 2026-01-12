@@ -40,7 +40,10 @@ function NavbarMobile({ linksList, userLinks, locate }: NavbarMobileProps) {
           </Button>
         </DialogTrigger>
 
-        <DialogContent className="top-0 right-0 bottom-0 left-auto h-full translate-0 rounded-none">
+        <DialogContent
+          data-testid="mobile-navbar-user-links"
+          className="top-0 right-0 bottom-0 left-auto h-full translate-0 rounded-none"
+        >
           <div className="flex flex-col">
             <DialogHeader className="mb-4 text-left">
               <DialogTitle>{t("logo")}</DialogTitle>
