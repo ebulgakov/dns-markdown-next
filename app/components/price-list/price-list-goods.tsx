@@ -1,4 +1,5 @@
 "use client";
+import { SignedIn } from "@clerk/nextjs";
 import clsx from "clsx";
 import Image from "next/image";
 import Link from "next/link";
@@ -12,7 +13,6 @@ import { PriceListGoodsDiff } from "./price-list-goods-diff";
 import type { GoodDiffChanges as GoodDiffChangesType } from "@/types/diff";
 import type { Goods as GoodsType } from "@/types/pricelist";
 import type { Favorite, FavoriteStatus } from "@/types/user";
-import { SignedIn } from "@clerk/nextjs";
 
 type PriceListGoodsProps = {
   item: GoodsType;

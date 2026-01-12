@@ -1,4 +1,4 @@
-import { getLastPriceList, getPriceListCity } from "@/db/pricelist/queries";
+import { getLastPriceList } from "@/db/pricelist/queries";
 import { mockGoods } from "@/db/user/__mocks__/pricelist";
 import { getUser } from "@/db/user/queries";
 
