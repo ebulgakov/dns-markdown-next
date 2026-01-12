@@ -12,6 +12,7 @@ import { PriceListGoodsDiff } from "./price-list-goods-diff";
 import type { GoodDiffChanges as GoodDiffChangesType } from "@/types/diff";
 import type { Goods as GoodsType } from "@/types/pricelist";
 import type { Favorite, FavoriteStatus } from "@/types/user";
+import { SignedIn } from "@clerk/nextjs";
 
 type PriceListGoodsProps = {
   item: GoodsType;
@@ -116,7 +117,9 @@ function PriceListGoods({ item, status, diff, favorites }: PriceListGoodsProps) 
       <div className="text-center [grid-area:store]">{item.available}</div>
 
       <div className="[grid-area:image] lg:[grid-area:favorites]">
-        {favorites && <PriceListFavoriteToggle favorites={favorites} goods={item} />}
+        <SignedIn>
+          {favorites && <PriceListFavoriteToggle favorites={favorites} goods={item} />}
+        </SignedIn>
       </div>
     </div>
   );
