@@ -5,7 +5,7 @@ export const mockUser: User = {
   userId: "user123",
   username: "testuser",
   email: "testuser@example.com",
-  city: "Самара",
+  city: "TestCity",
   shownBoughtFavorites: false,
   hiddenSections: [],
   favoriteSections: [],
