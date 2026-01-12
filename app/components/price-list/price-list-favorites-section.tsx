@@ -10,12 +10,14 @@ type PriceListFavoritesSectionProps = {
   favoriteSections: PositionType[];
   userFavoritesGoods?: FavoriteType[];
   hiddenSectionsTitles?: UserSectionsType;
+  isUserLoggedIn?: boolean;
 };
 
 function PriceListFavoritesSection({
   favoriteSections,
   userFavoritesGoods,
-  hiddenSectionsTitles
+  hiddenSectionsTitles,
+  isUserLoggedIn
 }: PriceListFavoritesSectionProps) {
   return favoriteSections.length > 0 ? (
     <>
@@ -24,6 +26,7 @@ function PriceListFavoritesSection({
         positions={favoriteSections}
         favorites={userFavoritesGoods}
         hiddenSections={hiddenSectionsTitles}
+        isUserLoggedIn={isUserLoggedIn}
       />
       <Title variant="h2">Все категории</Title>
     </>

@@ -1,3 +1,5 @@
+import { auth } from "@clerk/nextjs/server";
+
 import { getCatalogData } from "@/app/catalog/get-catalog-data";
 import { PriceListPage } from "@/app/components/price-list";
 import { SortGoods } from "@/app/components/sort-goods";
@@ -6,6 +8,7 @@ import { PageTitle } from "@/app/components/ui/page-title";
 import { formatDate, formatTime } from "@/app/helpers/format";
 
 export default async function CatalogPage() {
+  const { userId } = await auth();
   const {
     priceList,
     userFavoritesGoods,
@@ -44,6 +47,7 @@ export default async function CatalogPage() {
         hiddenSectionsTitles={hiddenSectionsTitles}
         nonFavoriteSections={nonFavoriteSections}
         priceList={priceList}
+        isUserLoggedIn={!!userId}
       />
     </div>
   );

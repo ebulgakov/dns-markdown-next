@@ -1,8 +1,9 @@
 "use client";
 
-import { SignedIn, SignedOut, SignInButton, SignUpButton, UserButton } from "@clerk/nextjs";
+import { SignedIn, SignInButton, SignUpButton, UserButton } from "@clerk/nextjs";
 import Link from "next/link";
 import { useTranslations } from "next-intl";
+import { Fragment } from "react";
 
 import { Button } from "@/app/components/ui/button";
 import {
@@ -17,8 +18,9 @@ import type { NavbarLinks } from "@/types/common";
 type NavbarDesktopProps = {
   linksList: NavbarLinks;
   userLinks: NavbarLinks;
+  isUserLoggedIn?: boolean;
 };
-function NavbarDesktop({ linksList, userLinks }: NavbarDesktopProps) {
+function NavbarDesktop({ linksList, isUserLoggedIn, userLinks }: NavbarDesktopProps) {
   const t = useTranslations("Navbar");
 
   return (
@@ -38,36 +40,37 @@ function NavbarDesktop({ linksList, userLinks }: NavbarDesktopProps) {
             </NavigationMenuItem>
           ))}
 
-          <SignedIn>
-            {userLinks.map(link => (
+          {isUserLoggedIn &&
+            userLinks.map(link => (
               <NavigationMenuItem key={link.name}>
                 <NavigationActiveLink link={link}>{link.name}</NavigationActiveLink>
               </NavigationMenuItem>
             ))}
-          </SignedIn>
         </NavigationMenuList>
       </NavigationMenu>
 
       <NavigationMenu className="mr-3 ml-auto">
-        <SignedOut>
-          <div className="flex items-center gap-2">
-            <SignInButton>
-              <Button variant="link">{t("signin")}</Button>
-            </SignInButton>
+        {isUserLoggedIn ? (
+          <SignedIn>
+            <div data-testid="user-avatar" className="size-7">
+              <UserButton afterSignOutUrl="/" />
+            </div>
+          </SignedIn>
+        ) : (
+          <Fragment>
+            <div className="flex items-center gap-2">
+              <SignInButton>
+                <Button variant="link">{t("signin")}</Button>
+              </SignInButton>
 
-            <div className="border-primary h-6 border-l-2"></div>
+              <div className="border-primary h-6 border-l-2"></div>
 
-            <SignUpButton>
-              <Button variant="link">{t("signup")}</Button>
-            </SignUpButton>
-          </div>
-        </SignedOut>
-
-        <SignedIn>
-          <div data-testid="user-avatar" className="size-7">
-            <UserButton afterSignOutUrl="/" />
-          </div>
-        </SignedIn>
+              <SignUpButton>
+                <Button variant="link">{t("signup")}</Button>
+              </SignUpButton>
+            </div>
+          </Fragment>
+        )}
       </NavigationMenu>
     </div>
   );

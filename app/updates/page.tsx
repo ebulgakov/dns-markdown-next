@@ -1,3 +1,5 @@
+import { auth } from "@clerk/nextjs/server";
+
 import { PriceListSection } from "@/app/components/price-list";
 import { Alert, AlertDescription, AlertTitle } from "@/app/components/ui/alert";
 import { PageTitle } from "@/app/components/ui/page-title";
@@ -8,6 +10,8 @@ import type { DiffsCollection as DiffsCollectionType } from "@/types/diff";
 import type { Favorite as FavoriteType } from "@/types/user";
 
 export default async function UpdatesPage() {
+  const { userId } = await auth();
+
   let diffNew;
   let diffRemoved;
   let diffChangesPrice;
@@ -81,10 +85,16 @@ export default async function UpdatesPage() {
     <div>
       <PageTitle title="Обновления с начала дня" />
       {diffNew && (
-        <PriceListSection isOpen={true} position={diffNew} favorites={userFavoritesGoods} />
+        <PriceListSection
+          isUserLoggedIn={!!userId}
+          isOpen={true}
+          position={diffNew}
+          favorites={userFavoritesGoods}
+        />
       )}
       {diffChangesPrice && (
         <PriceListSection
+          isUserLoggedIn={!!userId}
           isOpen={true}
           position={diffChangesPrice}
           favorites={userFavoritesGoods}
@@ -94,6 +104,7 @@ export default async function UpdatesPage() {
       {diffRemoved && <PriceListSection isOpen={true} position={diffRemoved} />}
       {diffChangesProfit && (
         <PriceListSection
+          isUserLoggedIn={!!userId}
           position={diffChangesProfit}
           diffs={changeProfitDiff}
           favorites={userFavoritesGoods}
