@@ -33,6 +33,14 @@ export const Default: Story = {
   }
 };
 
+export const AuthUser: Story = {
+  args: {
+    item: mockGoodsList[0],
+    isUserLoggedIn: true,
+    favorites: mockFavorites
+  }
+};
+
 export const WithDiff: Story = {
   args: {
     item: mockGoodsList[0],

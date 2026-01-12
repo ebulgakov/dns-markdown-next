@@ -24,6 +24,7 @@ const mockHiddenSectionsTitles: UserSections = ["Смартфоны"];
 export const Default: Story = {
   args: {
     favoriteSections: mockFavoriteSections,
+    isUserLoggedIn: true,
     userFavoritesGoods: mockUserFavoritesGoods,
     hiddenSectionsTitles: mockHiddenSectionsTitles
   }
@@ -32,6 +33,7 @@ export const Default: Story = {
 export const NoFavorites: Story = {
   args: {
     favoriteSections: [],
+    isUserLoggedIn: true,
     userFavoritesGoods: [],
     hiddenSectionsTitles: []
   }
