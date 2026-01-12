@@ -16,28 +16,28 @@ export async function getCatalogData() {
     const city = await getPriceListCity();
     priceList = await getLastPriceList(city);
     if (!priceList) throw new Error("Price list not found");
-
-    try {
-      const user = await getUser();
-
-      userFavoritesGoods = user.favorites;
-      hiddenSectionsTitles = user.hiddenSections;
-
-      if (user.favoriteSections.length > 0) {
-        priceList.positions.forEach(position => {
-          if (user.favoriteSections.includes(position.title)) {
-            favoriteSections.push(position);
-          } else {
-            nonFavoriteSections.push(position);
-          }
-        });
-      }
-    } catch {
-      userFavoritesGoods = [];
-      hiddenSectionsTitles = [];
-    }
   } catch (e) {
     error = e as Error;
+  }
+
+  try {
+    const user = await getUser();
+
+    userFavoritesGoods = user.favorites;
+    hiddenSectionsTitles = user.hiddenSections;
+
+    if (user.favoriteSections.length > 0) {
+      priceList?.positions.forEach(position => {
+        if (user.favoriteSections.includes(position.title)) {
+          favoriteSections.push(position);
+        } else {
+          nonFavoriteSections.push(position);
+        }
+      });
+    }
+  } catch {
+    userFavoritesGoods = [];
+    hiddenSectionsTitles = [];
   }
 
   return {
