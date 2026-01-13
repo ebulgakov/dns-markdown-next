@@ -46,7 +46,15 @@ export default async function RootLayout({
   children: ReactNode;
 }>) {
   const locale = await getLocale();
-  const { userId } = await auth();
+  let userId;
+
+  try {
+    const authData = await auth();
+    userId = authData.userId;
+  } catch {
+    userId = null;
+  }
+
   return (
     <StrictMode>
       <NextIntlClientProvider>
