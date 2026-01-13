@@ -50,7 +50,7 @@ function NavbarDesktop({ linksList, userLinks }: NavbarDesktopProps) {
       <NavigationMenu className="mr-3 ml-auto">
         <SignedIn>
           <div data-testid="user-avatar" className="size-7">
-            <UserButton afterSignOutUrl="/" />
+            <UserButton />
           </div>
         </SignedIn>
 
