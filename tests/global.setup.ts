@@ -7,9 +7,7 @@ import { remove, keys } from "@/cache";
 setup.describe.configure({ mode: "serial" });
 
 setup("global setup", async () => {
-  const prefix = process.env.CACHE_PREFIX || "";
-  const foundKeys = await keys(`${prefix}*`);
-
+  const foundKeys = await keys("*");
   for (const key of foundKeys) {
     await remove(key);
   }

@@ -19,11 +19,11 @@ async function get<T>(key: string): Promise<T | null> {
 }
 
 async function remove(key: string) {
-  await redis.del(key);
+  await redis.del(withPrefix(key));
 }
 
 async function keys(pattern: string) {
-  return await redis.keys(pattern);
+  return await redis.keys(withPrefix(pattern));
 }
 
 export { get, add, remove, keys };
