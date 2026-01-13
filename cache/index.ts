@@ -19,7 +19,7 @@ async function get<T>(key: string): Promise<T | null> {
 }
 
 async function remove(key: string) {
-  await redis.del(withPrefix(key));
+  await redis.del(key);
 }
 
 async function keys(pattern: string) {

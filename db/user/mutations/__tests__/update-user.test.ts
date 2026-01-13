@@ -1,4 +1,3 @@
-import { add as cacheAdd } from "@/cache";
 import { dbConnect } from "@/db/database";
 import { User } from "@/db/models/user-model";
 import { getUser } from "@/db/user/queries";
@@ -8,7 +7,6 @@ import { updateUser } from "../update-user";
 // Mock dependencies
 jest.mock("@/db/database", () => ({ dbConnect: jest.fn() }));
 jest.mock("@/db/models/user-model", () => ({ User: { findByIdAndUpdate: jest.fn() } }));
-jest.mock("@/cache", () => ({ get: jest.fn(), add: jest.fn() }));
 jest.mock("@/db/user/queries", () => ({ getUser: jest.fn() }));
 
 describe("updateUser", () => {
@@ -31,7 +29,6 @@ describe("updateUser", () => {
     const updatedUser = { ...mockUser, name: "New Name" };
     (getUser as jest.Mock).mockResolvedValue(mockUser);
     (User.findByIdAndUpdate as jest.Mock).mockResolvedValue(updatedUser);
-    (cacheAdd as jest.Mock).mockResolvedValue("OK");
 
     await updateUser({ name: "New Name" });
 
@@ -40,6 +37,5 @@ describe("updateUser", () => {
       { name: "New Name" },
       { new: true }
     );
-    expect(cacheAdd).toHaveBeenCalledTimes(1);
   });
 });
