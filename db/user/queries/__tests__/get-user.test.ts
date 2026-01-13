@@ -7,7 +7,7 @@ import { getUser } from "../get-user";
 
 jest.mock("@/db/database", () => ({ dbConnect: jest.fn() }));
 jest.mock("@clerk/nextjs/server", () => ({ currentUser: jest.fn() }));
-jest.mock("@/cache", () => ({ get: jest.fn(), add: jest.fn() }));
+
 jest.mock("@/db/models/user-model", () => ({
   User: { findOne: jest.fn() }
 }));
