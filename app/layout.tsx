@@ -47,9 +47,15 @@ export default async function RootLayout({
   children: ReactNode;
 }>) {
   const locale = await getLocale();
-  const city = await getPriceListCity();
-  let userId;
 
+  let city;
+  try {
+    city = await getPriceListCity();
+  } catch {
+    city = undefined;
+  }
+
+  let userId;
   try {
     const authData = await auth();
     userId = authData.userId;
