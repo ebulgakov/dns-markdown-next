@@ -23,9 +23,9 @@ export async function getOffersData() {
     const mostDiscountedArr = await getMostDiscountedGoods(city);
     const mostProfitableArr = await getMostProfitableGoods(city);
 
-    mostCheap = mostCheapArr[0] || null;
-    mostDiscounted = mostDiscountedArr[0] || null;
-    mostProfitable = mostProfitableArr[0] || null;
+    mostCheap = mostCheapArr[0];
+    mostDiscounted = mostDiscountedArr[0];
+    mostProfitable = mostProfitableArr[0];
     catalogDate = priceList.createdAt;
   } catch (e) {
     error = e as Error;
