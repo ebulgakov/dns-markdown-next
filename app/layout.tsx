@@ -86,7 +86,7 @@ export default async function RootLayout({
                 </div>
               </ThemeProvider>
             </body>
-            <GoogleAnalytics gaId="G-9JRYZ5VS6V" />
+            {process.env.GA_ID && <GoogleAnalytics gaId={process.env.GA_ID} />}
           </html>
         </ClerkProvider>
       </NextIntlClientProvider>
