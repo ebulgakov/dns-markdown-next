@@ -6,10 +6,11 @@ import {
   getLastPriceList
 } from "@/db/pricelist/queries";
 
+import type { CustomDate } from "@/types/common";
 import type { Goods } from "@/types/pricelist";
 
 export async function getOffersData() {
-  let catalogDate: Date | string = new Date();
+  let catalogDate: CustomDate | undefined;
   let mostDiscounted: Goods | undefined;
   let mostProfitable: Goods | undefined;
   let mostCheap: Goods | undefined;

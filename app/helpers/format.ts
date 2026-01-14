@@ -1,4 +1,4 @@
-type CustomDate = Date | number | string;
+import type { CustomDate } from "@/types/common";
 
 const toDate = (value: CustomDate): Date => {
   if (value instanceof Date) return value;

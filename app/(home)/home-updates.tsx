@@ -1,5 +1,6 @@
 import { Fragment } from "react";
 
+import { HotOffer } from "@/app/components/hot-offer";
 import { Alert, AlertDescription, AlertTitle } from "@/app/components/ui/alert";
 import { Title } from "@/app/components/ui/title";
 import { formatDate } from "@/app/helpers/format";
@@ -13,6 +14,11 @@ type HomeUpdatesProps = {
   mostCheap?: Goods;
   error?: Error;
 };
+
+function EmptyOffer() {
+  return <>-</>;
+}
+
 export default function HomeUpdates({
   date,
   mostProfitable,
@@ -20,7 +26,7 @@ export default function HomeUpdates({
   mostCheap,
   error
 }: HomeUpdatesProps) {
-  if (error || !date || !mostProfitable || !mostDiscounted || !mostCheap) {
+  if (error || !date) {
     return (
       <Alert variant="destructive">
         <AlertTitle>Ошибка загрузки обновлений</AlertTitle>
@@ -37,15 +43,15 @@ export default function HomeUpdates({
       <div className="flex justify-between">
         <div>
           <Title variant="h3">Самый дешёвый</Title>
-          <pre>{JSON.stringify(mostCheap, null, 2)}</pre>
+          {mostCheap ? <HotOffer goods={mostCheap} /> : <EmptyOffer />}
         </div>
         <div>
           <Title variant="h3">С наибольшей скидкой</Title>
-          <pre>{JSON.stringify(mostDiscounted, null, 2)}</pre>
+          {mostDiscounted ? <HotOffer goods={mostDiscounted} /> : <EmptyOffer />}
         </div>
         <div>
           <Title variant="h3">С наибольшей выгодой</Title>
-          <pre>{JSON.stringify(mostProfitable, null, 2)}</pre>
+          {mostProfitable ? <HotOffer goods={mostProfitable} /> : <EmptyOffer />}
         </div>
       </div>
     </Fragment>
