@@ -7,7 +7,7 @@ import type { Favorite as FavoriteType, UserSections as UserSectionsType } from 
 export async function getCatalogData() {
   const favoriteSections: PositionType[] = [];
   const nonFavoriteSections: PositionType[] = [];
-  let priceList: PriceListType | null = null;
+  let priceList: PriceListType | undefined;
   let userFavoritesGoods: FavoriteType[] = [];
   let hiddenSectionsTitles: UserSectionsType = [];
   let error;
