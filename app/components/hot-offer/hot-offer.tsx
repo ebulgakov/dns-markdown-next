@@ -26,7 +26,7 @@ function HotOffer({ goods }: HotOfferProps) {
         <a
           target="_blank"
           rel="noopener noreferrer"
-          href={`http://dns-shop.ru${goods.link}`}
+          href={`https://dns-shop.ru${goods.link}`}
           className="text-primary break-all md:break-normal"
         >
           {goods.title}

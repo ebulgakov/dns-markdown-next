@@ -45,7 +45,7 @@ function PriceListGoods({ item, status, diff, favorites, isUserLoggedIn }: Price
           <a
             target="_blank"
             rel="noopener noreferrer"
-            href={`http://dns-shop.ru${item.link}`}
+            href={`https://dns-shop.ru${item.link}`}
             className="text-primary break-all md:break-normal"
           >
             {item.title}
