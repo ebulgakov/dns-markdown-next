@@ -29,31 +29,32 @@ export default function HomeUpdates({
   mostCheap,
   error
 }: HomeUpdatesProps) {
-  const t = useTranslations("cities");
+  const t = useTranslations("HomePage");
+  const cities = useTranslations("cities");
 
   if (error || !date || !city) {
     return (
-      <Alert variant="destructive">
-        <AlertTitle>Ошибка загрузки обновлений</AlertTitle>
-        <AlertDescription>
-          {error?.message || "Недостаточно данных для отображения обновлений."}
-        </AlertDescription>
+      <Alert variant="destructive" className="mt-4">
+        <AlertTitle>{t("error_title")}</AlertTitle>
+        <AlertDescription>{error?.message || t("error_text")}</AlertDescription>
       </Alert>
     );
   }
 
   return (
     <Fragment>
-      <Title variant="h2">Самые-самые из каталога DNS в городе {t(city)}</Title>
+      <Title variant="h2">
+        {t("most_title")} {cities(city)}
+      </Title>
 
       <div className="grid gap-x-8 gap-y-2 md:grid-cols-[repeat(2,_1fr)] lg:grid-cols-[repeat(3,_1fr)]">
         <div>
-          <Title variant="h3">Самый дешёвый</Title>
+          <Title variant="h3">{t("most_cheap")}</Title>
 
           {mostCheap ? (
             <Fragment>
               <p>
-                <b>{mostCheap.price}₽</b> &mdash; столько стоит самый дешёвый товар в каталоге.
+                <b>{mostCheap.price}&nbsp;₽</b> &mdash; {t("most_cheap_text")}.
               </p>
               <HotOffer goods={mostCheap} />
             </Fragment>
@@ -62,7 +63,7 @@ export default function HomeUpdates({
           )}
         </div>
         <div>
-          <Title variant="h3">С наибольшей скидкой</Title>
+          <Title variant="h3">{t("most_discount")}</Title>
 
           {mostDiscounted ? (
             <Fragment>
@@ -76,7 +77,7 @@ export default function HomeUpdates({
                   )}
                   %
                 </b>
-                &mdash; это товар с самой большой скидкой в каталоге.
+                &nbsp;&mdash; {t("most_discount_text")}.
               </p>
               <HotOffer goods={mostDiscounted} />
             </Fragment>
@@ -85,12 +86,11 @@ export default function HomeUpdates({
           )}
         </div>
         <div>
-          <Title variant="h3">С наибольшей выгодой</Title>
+          <Title variant="h3">{t("most_profit")}</Title>
           {mostProfitable ? (
             <Fragment>
               <p>
-                <b>{mostProfitable.profit}₽</b> &mdash; именно столько можно сэкономить, купив этот
-                товар.
+                <b>{mostProfitable.profit}&nbsp;₽</b> &mdash; {t("most_profit_text")}.
               </p>
               <HotOffer goods={mostProfitable} />
             </Fragment>
