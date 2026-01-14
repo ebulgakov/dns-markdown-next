@@ -5,10 +5,11 @@ import { Alert, AlertDescription, AlertTitle } from "@/app/components/ui/alert";
 import { Title } from "@/app/components/ui/title";
 import { formatDate } from "@/app/helpers/format";
 
+import type { CustomDate } from "@/types/common";
 import type { Goods } from "@/types/pricelist";
 
 type HomeUpdatesProps = {
-  date?: string | Date;
+  date?: CustomDate;
   mostProfitable?: Goods;
   mostDiscounted?: Goods;
   mostCheap?: Goods;
@@ -40,7 +41,7 @@ export default function HomeUpdates({
     <Fragment>
       <Title variant="h2">Последние обновления на {formatDate(date)}</Title>
 
-      <div className="flex justify-between gap-8">
+      <div className="grid gap-x-8 gap-y-2 md:grid-cols-[repeat(2,_1fr)] lg:grid-cols-[repeat(3,_1fr)]">
         <div>
           <Title variant="h3">Самый дешёвый</Title>
           {mostCheap ? <HotOffer goods={mostCheap} /> : <EmptyOffer />}
