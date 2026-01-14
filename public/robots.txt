@@ -9,4 +9,4 @@ Disallow: /disclaimer
 Disallow: /api
 Disallow: /sign-in
 Disallow: /sign-up
-Host: https://dns-markdown.vercel.app
+Host: https://dns.ebulgakov.com/

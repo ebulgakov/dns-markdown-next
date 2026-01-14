@@ -1,3 +1,5 @@
+import { getTranslations } from "next-intl/server";
+
 import { ChartPrices } from "@/app/components/chart-prices";
 import { PriceListGoods } from "@/app/components/price-list";
 import { Alert, AlertDescription, AlertTitle } from "@/app/components/ui/alert";
@@ -5,9 +7,26 @@ import { PageTitle } from "@/app/components/ui/page-title";
 import { Title } from "@/app/components/ui/title";
 import { getProductById } from "@/db/pricelist/queries";
 
+import type { Metadata } from "next";
+
 type CatalogItemPage = {
-  params: Promise<{ id: string }>;
+  params: Promise<{ id: string; locale: string }>;
 };
+
+export async function generateMetadata({ params }: CatalogItemPage): Promise<Metadata> {
+  const { id, locale } = await params;
+  const t = await getTranslations({ locale, namespace: "metadata" });
+
+  let title = "";
+  try {
+    const product = await getProductById(`/catalog/markdown/${id}/`);
+    title = product.item.title;
+  } catch {
+    title = t("goods_not_found_title");
+  }
+
+  return { title: `${t("sub_title")}${title}` };
+}
 
 export default async function CatalogItemPage({ params }: CatalogItemPage) {
   const { id } = await params;

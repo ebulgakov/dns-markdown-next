@@ -1,4 +1,5 @@
 import { auth } from "@clerk/nextjs/server";
+import { getTranslations } from "next-intl/server";
 
 import { PriceListSection } from "@/app/components/price-list";
 import { Alert, AlertDescription, AlertTitle } from "@/app/components/ui/alert";
@@ -8,6 +9,19 @@ import { getUser } from "@/db/user/queries";
 
 import type { DiffsCollection as DiffsCollectionType } from "@/types/diff";
 import type { Favorite as FavoriteType } from "@/types/user";
+import type { Metadata } from "next";
+
+type UpdatesPageProps = {
+  params: Promise<{ locale: string }>;
+};
+
+export async function generateMetadata({ params }: UpdatesPageProps): Promise<Metadata> {
+  const { locale } = await params;
+  const t = await getTranslations({ locale, namespace: "metadata" });
+  const title = t("updates_title");
+
+  return { title: `${t("sub_title")}${title}` };
+}
 
 export default async function UpdatesPage() {
   const { userId } = await auth();

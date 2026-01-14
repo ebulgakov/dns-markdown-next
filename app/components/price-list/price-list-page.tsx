@@ -51,21 +51,25 @@ function PriceListPage({
       ))}
 
       <div className={clsx({ hidden: isHiddenDefaultList })}>
-        {isUserLoggedIn && favoriteSections && favoriteSections.length > 0 ? (
+        {favoriteSections && (
           <Fragment>
-            <Title variant="h2">Избранные категории</Title>
+            {isUserLoggedIn && favoriteSections.length > 0 ? (
+              <Fragment>
+                <Title variant="h2">Избранные категории</Title>
 
-            <PriceList
-              positions={favoriteSections}
-              favorites={userFavoritesGoods}
-              hiddenSections={hiddenSectionsTitles}
-              isUserLoggedIn={isUserLoggedIn}
-            />
+                <PriceList
+                  positions={favoriteSections}
+                  favorites={userFavoritesGoods}
+                  hiddenSections={hiddenSectionsTitles}
+                  isUserLoggedIn={isUserLoggedIn}
+                />
 
-            <Title variant="h2">Все категории</Title>
+                <Title variant="h2">Все категории</Title>
+              </Fragment>
+            ) : (
+              <PriceListFavoritesEmptyAlert isUserLoggedIn={isUserLoggedIn} />
+            )}
           </Fragment>
-        ) : (
-          <PriceListFavoritesEmptyAlert isUserLoggedIn={isUserLoggedIn} />
         )}
 
         <PriceList
