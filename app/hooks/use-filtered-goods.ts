@@ -7,7 +7,7 @@ export const useFilteredGoods = (term: string, priceList: priceListType): GoodsT
 
   if (term.length > 1 || sortGoods !== "default") {
     const flatCatalog = priceList.positions.flatMap(position => position.items.flat());
-    const filteredArray = flatCatalog.filter(item =>
+    let filteredArray = flatCatalog.filter(item =>
       item.title.toLowerCase().includes(term.toLowerCase())
     );
 
@@ -24,7 +24,14 @@ export const useFilteredGoods = (term: string, priceList: priceListType): GoodsT
     }
 
     if (sortGoods === "profit") {
-      filteredArray.sort((a, b) => Number(b.profit) - Number(a.profit));
+      const profitableItems = filteredArray.filter(
+        item => Number(item.profit) && Number(item.profit) > 0
+      );
+      const nonProfitableItems = filteredArray.filter(
+        item => !Number(item.profit) || Number(item.profit) <= 0
+      );
+      profitableItems.sort((a, b) => Number(b.profit) - Number(a.profit));
+      filteredArray = [...profitableItems, ...nonProfitableItems];
     }
 
     return filteredArray;

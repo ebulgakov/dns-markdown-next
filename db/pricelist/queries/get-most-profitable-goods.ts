@@ -17,11 +17,15 @@ export const getMostProfitableGoods = async (city: string) => {
   if (!priceList) throw new Error("Price list not found");
 
   const flatCatalog = priceList.positions.flatMap(position => position.items.flat());
+  const profitableItems = flatCatalog.filter(
+    item => Number(item.profit) && Number(item.profit) > 0
+  );
+  const nonProfitableItems = flatCatalog.filter(
+    item => !Number(item.profit) || Number(item.profit) <= 0
+  );
+  profitableItems.sort((a, b) => Number(b.profit) - Number(a.profit));
 
-  const sortedByProfit = flatCatalog
-    .filter(item => Number(item.profit) && Number(item.profit) > 0)
-    .sort((a, b) => Number(b.profit) - Number(a.profit));
-
+  const sortedByProfit = [...profitableItems, ...nonProfitableItems];
   await cacheAdd(key, JSON.stringify(sortedByProfit));
 
   // Placeholder implementation
