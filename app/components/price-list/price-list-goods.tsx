@@ -31,7 +31,12 @@ function PriceListGoods({ item, status, diff, favorites, isUserLoggedIn }: Price
         }
       )}
     >
-      <div className="flex flex-none items-center justify-center gap-5 rounded bg-white [grid-area:image] lg:size-55 dark:opacity-70">
+      <a
+        target="_blank"
+        rel="noopener noreferrer"
+        href={`https://dns-shop.ru${item.link}`}
+        className="flex flex-none items-center justify-center gap-5 rounded bg-white [grid-area:image] lg:size-55 dark:opacity-70"
+      >
         <Image
           src={item.image}
           alt={`Превью для ${item.title}`}
@@ -39,13 +44,13 @@ function PriceListGoods({ item, status, diff, favorites, isUserLoggedIn }: Price
           width={200}
           height={200}
         />
-      </div>
+      </a>
       <div className="mt-3 [grid-area:description] md:mt-0">
         <div className="mb-2.5 text-base">
           <a
             target="_blank"
             rel="noopener noreferrer"
-            href={`http://dns-shop.ru${item.link}`}
+            href={`https://dns-shop.ru${item.link}`}
             className="text-primary break-all md:break-normal"
           >
             {item.title}

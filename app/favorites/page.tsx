@@ -1,4 +1,4 @@
-import { FavoritesPageClient } from "@/app/components/favorites";
+import { FavoritesPageClient, FavoritesEmpty } from "@/app/components/favorites";
 import { Alert, AlertTitle, AlertDescription } from "@/app/components/ui/alert";
 import { getUser } from "@/db/user/queries";
 
@@ -18,6 +18,10 @@ export default async function FavoritesPage() {
         <AlertDescription>{message}</AlertDescription>
       </Alert>
     );
+  }
+
+  if (favorites.length === 0) {
+    return <FavoritesEmpty />;
   }
 
   return <FavoritesPageClient favorites={favorites} shownBoughtFavorites={shownBoughtFavorites} />;

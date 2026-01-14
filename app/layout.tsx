@@ -12,6 +12,7 @@ import { Footer } from "@/app/components/footer";
 import { Navbar } from "@/app/components/navbar";
 import { cn } from "@/app/lib/utils";
 import { ThemeProvider } from "@/app/providers/theme-provider";
+import { getPriceListCity } from "@/db/pricelist/queries";
 
 import type { Metadata } from "next";
 
@@ -46,8 +47,15 @@ export default async function RootLayout({
   children: ReactNode;
 }>) {
   const locale = await getLocale();
-  let userId;
 
+  let city;
+  try {
+    city = await getPriceListCity();
+  } catch {
+    city = undefined;
+  }
+
+  let userId;
   try {
     const authData = await auth();
     userId = authData.userId;
@@ -68,7 +76,7 @@ export default async function RootLayout({
                   <div className="mx-auto grid min-h-screen md:container">
                     <div className="mb-10">
                       <div className="mt-4 mb-5">
-                        <Navbar locate={locale} isUserLoggedIn={!!userId} />
+                        <Navbar locate={locale} isUserLoggedIn={!!userId} city={city} />
                       </div>
                       {children}
                     </div>

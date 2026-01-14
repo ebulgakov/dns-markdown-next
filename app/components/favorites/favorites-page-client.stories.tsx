@@ -32,10 +32,3 @@ export const WithBoughtItemsShown: Story = {
     shownBoughtFavorites: true
   }
 };
-
-export const Empty: Story = {
-  args: {
-    favorites: [],
-    shownBoughtFavorites: false
-  }
-};
