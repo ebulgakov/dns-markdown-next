@@ -1,11 +1,12 @@
 import { useTranslations } from "next-intl";
+import { Fragment } from "react";
 import ReactMarkdown from "react-markdown";
 import rehypeRaw from "rehype-raw";
 
-export default function Home() {
+export function HomeIntro() {
   const t = useTranslations("HomePage");
   return (
-    <div>
+    <Fragment>
       <h1 className="mt-2 mb-5 border-b border-gray-200 pb-2 text-5xl tracking-tight sm:text-6xl">
         {t("title")}
       </h1>
@@ -18,6 +19,6 @@ export default function Home() {
           })}
         </ReactMarkdown>
       </div>
-    </div>
+    </Fragment>
   );
 }

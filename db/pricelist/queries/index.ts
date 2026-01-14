@@ -4,3 +4,6 @@ export { getPriceListById } from "@/db/pricelist/queries/get-price-list-by-id";
 export { getPriceListsDiff } from "@/db/pricelist/queries/get-price-lists-diff";
 export { getProductById } from "@/db/pricelist/queries/get-product-by-id";
 export { getPriceListCity } from "@/db/pricelist/queries/get-price-list-city";
+export { getMostDiscountedGoods } from "@/db/pricelist/queries/get-most-discounted-goods";
+export { getMostProfitableGoods } from "@/db/pricelist/queries/get-most-profitable-goods";
+export { getMostCheapGoods } from "@/db/pricelist/queries/get-most-cheap-goods";
