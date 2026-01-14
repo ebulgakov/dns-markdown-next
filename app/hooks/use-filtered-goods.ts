@@ -16,11 +16,18 @@ export const useFilteredGoods = (term: string, priceList: priceListType): GoodsT
     }
 
     if (sortGoods === "discount") {
-      filteredArray.sort(
+      const withOldPrice = filteredArray.filter(
+        item => Number(item.priceOld) && Number(item.priceOld) > 0
+      );
+      const withoutOldPrice = filteredArray.filter(
+        item => !Number(item.priceOld) || Number(item.priceOld) <= 0
+      );
+      withOldPrice.sort(
         (a, b) =>
           (Number(a.price) * 100) / Number(a.priceOld) -
           (Number(b.price) * 100) / Number(b.priceOld)
       );
+      filteredArray = [...withOldPrice, ...withoutOldPrice];
     }
 
     if (sortGoods === "profit") {

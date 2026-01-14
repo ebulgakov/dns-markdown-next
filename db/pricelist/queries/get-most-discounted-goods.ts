@@ -18,14 +18,18 @@ export const getMostDiscountedGoods = async (city: string) => {
 
   const flatCatalog = priceList.positions.flatMap(position => position.items.flat());
 
-  const sortedByDiscount = flatCatalog
-    .filter(item => Number(item.price) && Number(item.price) > 0)
-    .filter(item => Number(item.priceOld) && Number(item.priceOld) > 0)
-    .sort(
-      (a, b) =>
-        (Number(a.price) * 100) / Number(a.priceOld) - (Number(b.price) * 100) / Number(b.priceOld)
-    );
+  const withOldPrice = flatCatalog.filter(
+    item => Number(item.priceOld) && Number(item.priceOld) > 0
+  );
+  const withoutOldPrice = flatCatalog.filter(
+    item => !Number(item.priceOld) || Number(item.priceOld) <= 0
+  );
+  withOldPrice.sort(
+    (a, b) =>
+      (Number(a.price) * 100) / Number(a.priceOld) - (Number(b.price) * 100) / Number(b.priceOld)
+  );
 
+  const sortedByDiscount = [...withOldPrice, ...withoutOldPrice];
   await cacheAdd(key, JSON.stringify(sortedByDiscount));
 
   return sortedByDiscount;
