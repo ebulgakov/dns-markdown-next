@@ -40,6 +40,9 @@ test.describe("Favorites", () => {
     await removeGoodsFromFavorites(page);
     await visitFavoritesPage(page);
 
+    await page.goto("/favorites"); // Ensure we are on the favorites page
+    expect(page.url()).toContain("/favorites");
+
     const noFavoritesMessage = page.getByTestId("favorites-empty-message");
     await expect(noFavoritesMessage).toBeVisible();
   });
