@@ -1,15 +1,17 @@
 "use client";
 
 import clsx from "clsx";
+import { Fragment } from "react";
 
 import { SearchInput } from "@/app/components/search-input";
+import { Title } from "@/app/components/ui/title";
 import { useDebounce } from "@/app/hooks/use-debounce";
 import { useFilteredGoods } from "@/app/hooks/use-filtered-goods";
 import { useSearchStore } from "@/app/stores/search-store";
 import { useSortGoodsStore } from "@/app/stores/sort-goods-store";
 
 import { PriceList } from "./price-list";
-import { PriceListFavoritesSection } from "./price-list-favorites-section";
+import { PriceListFavoritesEmptyAlert } from "./price-list-favorites-empty-alert";
 import { PriceListGoods } from "./price-list-goods";
 
 import type { Position as PositionType, PriceList as PriceListType } from "@/types/pricelist";
@@ -49,13 +51,21 @@ function PriceListPage({
       ))}
 
       <div className={clsx({ hidden: isHiddenDefaultList })}>
-        {isUserLoggedIn && favoriteSections && (
-          <PriceListFavoritesSection
-            favoriteSections={favoriteSections}
-            hiddenSectionsTitles={hiddenSectionsTitles}
-            userFavoritesGoods={userFavoritesGoods}
-            isUserLoggedIn={isUserLoggedIn}
-          />
+        {isUserLoggedIn && favoriteSections && favoriteSections.length > 0 ? (
+          <Fragment>
+            <Title variant="h2">Избранные категории</Title>
+
+            <PriceList
+              positions={favoriteSections}
+              favorites={userFavoritesGoods}
+              hiddenSections={hiddenSectionsTitles}
+              isUserLoggedIn={isUserLoggedIn}
+            />
+
+            <Title variant="h2">Все категории</Title>
+          </Fragment>
+        ) : (
+          <PriceListFavoritesEmptyAlert isUserLoggedIn={isUserLoggedIn} />
         )}
 
         <PriceList
