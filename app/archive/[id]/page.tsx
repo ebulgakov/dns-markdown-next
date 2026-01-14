@@ -16,16 +16,16 @@ export async function generateMetadata({ params }: ArchiveItemPage): Promise<Met
   const { id, locale } = await params;
   const t = await getTranslations({ locale, namespace: "metadata" });
 
-  let priceListTitle = "";
+  let title = "";
   try {
     const priceList = await getPriceListById(id);
     const archiveTitle = t("archive_title");
-    priceListTitle = `${archiveTitle} - ${formatDate(priceList.createdAt)}`;
+    title = `${archiveTitle} - ${formatDate(priceList.createdAt)}`;
   } catch {
-    priceListTitle = t("archive_not_found_title");
+    title = t("archive_not_found_title");
   }
 
-  return { title: `${t("sub_title")}${priceListTitle}` };
+  return { title: `${t("sub_title")}${title}` };
 }
 
 export default async function ArchiveItemPage({ params }: ArchiveItemPage) {

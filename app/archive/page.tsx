@@ -15,9 +15,9 @@ type ArchivePage = {
 export async function generateMetadata({ params }: ArchivePage): Promise<Metadata> {
   const { locale } = await params;
   const t = await getTranslations({ locale, namespace: "metadata" });
-  const archiveTitle = t("archive_title");
+  const title = t("archive_title");
 
-  return { title: `${t("sub_title")}${archiveTitle}` };
+  return { title: `${t("sub_title")}${title}` };
 }
 export default async function ArchivePage() {
   let archiveCollection;

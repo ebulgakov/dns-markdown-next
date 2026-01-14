@@ -17,9 +17,9 @@ type CatalogPage = {
 export async function generateMetadata({ params }: CatalogPage): Promise<Metadata> {
   const { locale } = await params;
   const t = await getTranslations({ locale, namespace: "metadata" });
-  const catalogTitle = t("catalog_title");
+  const title = t("catalog_title");
 
-  return { title: `${t("sub_title")}${catalogTitle}` };
+  return { title: `${t("sub_title")}${title}` };
 }
 
 export default async function CatalogPage() {
