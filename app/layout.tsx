@@ -1,5 +1,6 @@
 import { ClerkProvider } from "@clerk/nextjs";
 import { auth } from "@clerk/nextjs/server";
+import { GoogleAnalytics } from "@next/third-parties/google";
 import { Roboto, Roboto_Mono } from "next/font/google";
 import { NextIntlClientProvider } from "next-intl";
 import { getTranslations } from "next-intl/server";
@@ -85,6 +86,7 @@ export default async function RootLayout({
                 </div>
               </ThemeProvider>
             </body>
+            <GoogleAnalytics gaId="G-9JRYZ5VS6V" />
           </html>
         </ClerkProvider>
       </NextIntlClientProvider>
