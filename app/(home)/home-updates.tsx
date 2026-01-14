@@ -53,7 +53,7 @@ export default function HomeUpdates({
 
           {mostCheap ? (
             <Fragment>
-              <p>
+              <p className="mb-2">
                 <b>{mostCheap.price}&nbsp;₽</b> &mdash; {t("most_cheap_text")}.
               </p>
               <HotOffer goods={mostCheap} />
@@ -67,7 +67,7 @@ export default function HomeUpdates({
 
           {mostDiscounted ? (
             <Fragment>
-              <p>
+              <p className="mb-2">
                 <b>
                   {parseInt(
                     String(
@@ -89,7 +89,7 @@ export default function HomeUpdates({
           <Title variant="h3">{t("most_profit")}</Title>
           {mostProfitable ? (
             <Fragment>
-              <p>
+              <p className="mb-2">
                 <b>{mostProfitable.profit}&nbsp;₽</b> &mdash; {t("most_profit_text")}.
               </p>
               <HotOffer goods={mostProfitable} />
