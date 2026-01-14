@@ -41,6 +41,7 @@ export const WithHiddenSections: Story = {
   args: {
     priceList: mockPriceList,
     isUserLoggedIn: true,
+    favoriteSections: [],
     hiddenSectionsTitles: mockHiddenSectionsTitles,
     nonFavoriteSections: nonFavoriteSections
   }
