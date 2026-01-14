@@ -15,11 +15,16 @@ type CatalogItemPage = {
 
 export async function generateMetadata({ params }: CatalogItemPage): Promise<Metadata> {
   const { id, locale } = await params;
-  const product = await getProductById(`/catalog/markdown/${id}/`);
-
   const t = await getTranslations({ locale, namespace: "metadata" });
 
-  const postTitle = `${t("sub_title")} | ${product.item.title}`;
+  let productTitle = "";
+  try {
+    const product = await getProductById(`/catalog/markdown/${id}/`);
+    productTitle = product.item.title;
+  } catch {
+    productTitle = t("goods_not_found_title");
+  }
+  const postTitle = `${t("sub_title")} | ${productTitle}`;
 
   return {
     title: postTitle
