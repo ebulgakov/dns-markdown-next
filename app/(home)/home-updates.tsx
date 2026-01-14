@@ -1,14 +1,15 @@
+import { useTranslations } from "next-intl";
 import { Fragment } from "react";
 
 import { HotOffer } from "@/app/components/hot-offer";
 import { Alert, AlertDescription, AlertTitle } from "@/app/components/ui/alert";
 import { Title } from "@/app/components/ui/title";
-import { formatDate } from "@/app/helpers/format";
 
 import type { CustomDate } from "@/types/common";
 import type { Goods } from "@/types/pricelist";
 
 type HomeUpdatesProps = {
+  city?: string;
   date?: CustomDate;
   mostProfitable?: Goods;
   mostDiscounted?: Goods;
@@ -24,10 +25,13 @@ export default function HomeUpdates({
   date,
   mostProfitable,
   mostDiscounted,
+  city,
   mostCheap,
   error
 }: HomeUpdatesProps) {
-  if (error || !date) {
+  const t = useTranslations("cities");
+
+  if (error || !date || !city) {
     return (
       <Alert variant="destructive">
         <AlertTitle>Ошибка загрузки обновлений</AlertTitle>
@@ -37,9 +41,10 @@ export default function HomeUpdates({
       </Alert>
     );
   }
+
   return (
     <Fragment>
-      <Title variant="h2">Самые-самые из каталога DNS</Title>
+      <Title variant="h2">Самые-самые из каталога DNS в городе {t(city)}</Title>
 
       <div className="grid gap-x-8 gap-y-2 md:grid-cols-[repeat(2,_1fr)] lg:grid-cols-[repeat(3,_1fr)]">
         <div>

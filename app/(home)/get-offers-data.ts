@@ -15,9 +15,10 @@ export async function getOffersData() {
   let mostProfitable: Goods | undefined;
   let mostCheap: Goods | undefined;
   let error: Error | undefined;
+  let city: string | undefined;
 
   try {
-    const city = await getPriceListCity();
+    city = await getPriceListCity();
     const priceList = await getLastPriceList(city);
     const mostCheapArr = await getMostCheapGoods(city);
     const mostDiscountedArr = await getMostDiscountedGoods(city);
@@ -36,6 +37,7 @@ export async function getOffersData() {
     mostDiscounted,
     mostProfitable,
     mostCheap,
+    city,
     error
   };
 }
