@@ -2,8 +2,8 @@ import { add, get } from "@/cache";
 import { dbConnect } from "@/db/database";
 import { getLastPriceList } from "@/db/pricelist/queries/get-last-price-list";
 
-import { mockPriceList, sortedByPrice, brokenPosition } from "../__mocks__/price_sort_list";
-import { getMostCheapGoods } from "../get-most-cheap-goods";
+import { mockPriceList, sortedByProfit, brokenPosition } from "../__mocks__/profitable_sort_list";
+import { getMostProfitableGoods } from "../get-most-profitable-goods";
 
 import type { PriceList } from "@/types/pricelist";
 
@@ -24,22 +24,22 @@ const mockedGetLastPriceList = getLastPriceList as jest.Mock;
 
 const city = "TestCity";
 
-describe("getMostCheapGoods", () => {
+describe("getMostProfitableGoods", () => {
   beforeEach(() => {
     jest.resetAllMocks();
   });
 
   it("throws an error if city is not provided", async () => {
-    await expect(getMostCheapGoods("")).rejects.toThrow("city is required");
+    await expect(getMostProfitableGoods("")).rejects.toThrow("city is required");
   });
 
   it("returns cached data if available", async () => {
-    mockedCacheGet.mockResolvedValue(sortedByPrice);
+    mockedCacheGet.mockResolvedValue(sortedByProfit);
 
-    const result = await getMostCheapGoods(city);
+    const result = await getMostProfitableGoods(city);
 
-    expect(result).toEqual(sortedByPrice);
-    expect(mockedCacheGet).toHaveBeenCalledWith(`pricelist:mostcheapgoods:${city}`);
+    expect(result).toEqual(sortedByProfit);
+    expect(mockedCacheGet).toHaveBeenCalledWith(`pricelist:mostprofitablegoods:${city}`);
     expect(mockedDbConnect).not.toHaveBeenCalled();
   });
 
@@ -47,14 +47,14 @@ describe("getMostCheapGoods", () => {
     mockedCacheGet.mockResolvedValue(null);
     mockedGetLastPriceList.mockResolvedValue(mockPriceList);
 
-    const result = await getMostCheapGoods(city);
+    const result = await getMostProfitableGoods(city);
 
-    expect(result).toEqual(sortedByPrice);
+    expect(result).toEqual(sortedByProfit);
     expect(mockedDbConnect).toHaveBeenCalled();
     expect(mockedGetLastPriceList).toHaveBeenCalledWith(city);
     expect(mockedCacheAdd).toHaveBeenCalledWith(
-      `pricelist:mostcheapgoods:${city}`,
-      JSON.stringify(sortedByPrice)
+      `pricelist:mostprofitablegoods:${city}`,
+      JSON.stringify(sortedByProfit)
     );
   });
 
@@ -62,10 +62,10 @@ describe("getMostCheapGoods", () => {
     mockedCacheGet.mockResolvedValue(null);
     mockedGetLastPriceList.mockResolvedValue(null);
 
-    await expect(getMostCheapGoods(city)).rejects.toThrow("Price list not found");
+    await expect(getMostProfitableGoods(city)).rejects.toThrow("Price list not found");
   });
 
-  it("filters out items with zero or invalid price", async () => {
+  it("filters out items with zero or invalid profit", async () => {
     const priceListWithInvalidItems: PriceList = {
       ...mockPriceList,
       positions: [...mockPriceList.positions, brokenPosition]
@@ -73,20 +73,20 @@ describe("getMostCheapGoods", () => {
     mockedCacheGet.mockResolvedValue(null);
     mockedGetLastPriceList.mockResolvedValue(priceListWithInvalidItems);
 
-    const result = await getMostCheapGoods(city);
+    const result = await getMostProfitableGoods(city);
 
-    expect(result).toEqual(sortedByPrice);
+    expect(result).toEqual([...sortedByProfit, ...brokenPosition.items]);
   });
 
   it("caches the sorted goods", async () => {
     mockedCacheGet.mockResolvedValue(null);
     mockedGetLastPriceList.mockResolvedValue(mockPriceList);
 
-    await getMostCheapGoods(city);
+    await getMostProfitableGoods(city);
 
     expect(mockedCacheAdd).toHaveBeenCalledWith(
-      `pricelist:mostcheapgoods:${city}`,
-      JSON.stringify(sortedByPrice)
+      `pricelist:mostprofitablegoods:${city}`,
+      JSON.stringify(sortedByProfit)
     );
   });
 });
