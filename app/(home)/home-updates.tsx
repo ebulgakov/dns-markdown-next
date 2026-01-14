@@ -39,20 +39,59 @@ export default function HomeUpdates({
   }
   return (
     <Fragment>
-      <Title variant="h2">Последние обновления на {formatDate(date)}</Title>
+      <Title variant="h2">Самые-самые из каталога DNS</Title>
 
       <div className="grid gap-x-8 gap-y-2 md:grid-cols-[repeat(2,_1fr)] lg:grid-cols-[repeat(3,_1fr)]">
         <div>
           <Title variant="h3">Самый дешёвый</Title>
-          {mostCheap ? <HotOffer goods={mostCheap} /> : <EmptyOffer />}
+
+          {mostCheap ? (
+            <Fragment>
+              <p>
+                <b>{mostCheap.price}₽</b> &mdash; столько стоит самый дешёвый товар в каталоге.
+              </p>
+              <HotOffer goods={mostCheap} />
+            </Fragment>
+          ) : (
+            <EmptyOffer />
+          )}
         </div>
         <div>
           <Title variant="h3">С наибольшей скидкой</Title>
-          {mostDiscounted ? <HotOffer goods={mostDiscounted} /> : <EmptyOffer />}
+
+          {mostDiscounted ? (
+            <Fragment>
+              <p>
+                <b>
+                  {parseInt(
+                    String(
+                      100 - (Number(mostDiscounted.price) * 100) / Number(mostDiscounted.priceOld)
+                    ),
+                    10
+                  )}
+                  %
+                </b>
+                &mdash; это товар с самой большой скидкой в каталоге.
+              </p>
+              <HotOffer goods={mostDiscounted} />
+            </Fragment>
+          ) : (
+            <EmptyOffer />
+          )}
         </div>
         <div>
           <Title variant="h3">С наибольшей выгодой</Title>
-          {mostProfitable ? <HotOffer goods={mostProfitable} /> : <EmptyOffer />}
+          {mostProfitable ? (
+            <Fragment>
+              <p>
+                <b>{mostProfitable.profit}₽</b> &mdash; именно столько можно сэкономить, купив этот
+                товар.
+              </p>
+              <HotOffer goods={mostProfitable} />
+            </Fragment>
+          ) : (
+            <EmptyOffer />
+          )}
         </div>
       </div>
     </Fragment>
