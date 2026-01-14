@@ -1,6 +1,5 @@
 "use client";
 
-import { Star } from "lucide-react";
 import { startTransition, useEffect, useOptimistic, useState } from "react";
 
 import { PriceListGoods } from "@/app/components/price-list";
@@ -71,29 +70,17 @@ function FavoritesPageClient({
         </div>
       )}
 
-      {filteredFavorites.length > 0 ? (
-        <div className="divide-y divide-gray-200">
-          {filteredFavorites.map(favorite => (
-            <PriceListGoods
-              key={favorite.item._id}
-              item={favorite.item}
-              status={favorite.status}
-              favorites={!favorite.status.deleted ? favorites : undefined}
-              isUserLoggedIn={true}
-            />
-          ))}
-        </div>
-      ) : (
-        <Alert>
-          <AlertTitle>Избранное пусто</AlertTitle>
-          <AlertDescription data-testid="favorites-empty-message">
-            <div>
-              Добавьте товары в избранное (<Star className="text-favorite inline-block" />
-              ), чтобы они отобразились здесь.
-            </div>
-          </AlertDescription>
-        </Alert>
-      )}
+      <div className="divide-y divide-gray-200">
+        {filteredFavorites.map(favorite => (
+          <PriceListGoods
+            key={favorite.item._id}
+            item={favorite.item}
+            status={favorite.status}
+            favorites={!favorite.status.deleted ? favorites : undefined}
+            isUserLoggedIn={true}
+          />
+        ))}
+      </div>
     </div>
   ) : null;
 }
