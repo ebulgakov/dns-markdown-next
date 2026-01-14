@@ -6,7 +6,7 @@ import { ChangeThemeSelector } from "./change-theme-selector";
 import type { Meta, StoryObj } from "@storybook/react";
 
 const meta = {
-  title: "components/ChangeThemeSelector",
+  title: "Components/ChangeThemeSelector",
   component: ChangeThemeSelector,
   parameters: {
     layout: "centered"

@@ -7,8 +7,14 @@ export const mockGoodsList: Goods[] = [
     title: "Ноутбук Apple MacBook Air",
     price: "9999",
     link: "#",
-    description: "",
-    reasons: [],
+    description:
+      "[2G, 3G, 4G, ремешок - черный, Android 4.0 и выше, iOS 10 и выше, камера, GPS, LBS, Wi-Fi, IP67]",
+    reasons: [
+      { _id: "r1", label: "Тип товара:", text: "б/у" },
+      { _id: "r2", label: "Внешний вид:", text: "потертости, царапины" },
+      { _id: "r3", label: "Комплектация:", text: "неполный комплект" },
+      { _id: "r3", label: "Тип ремонта:", text: "замена детали устройства" }
+    ],
     priceOld: "19999",
     profit: "10000",
     image: "https://placehold.co/400",

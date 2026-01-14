@@ -40,7 +40,7 @@ export default function HomeUpdates({
     <Fragment>
       <Title variant="h2">Последние обновления на {formatDate(date)}</Title>
 
-      <div className="flex justify-between">
+      <div className="flex justify-between gap-8">
         <div>
           <Title variant="h3">Самый дешёвый</Title>
           {mostCheap ? <HotOffer goods={mostCheap} /> : <EmptyOffer />}
