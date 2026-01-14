@@ -1,0 +1,12 @@
+User-agent: *
+Allow: /
+Disallow: /catalog
+Disallow: /archive
+Disallow: /updates
+Disallow: /favorites
+Disallow: /profile
+Disallow: /disclaimer
+Disallow: /api
+Disallow: /sign-in
+Disallow: /sign-up
+Host: https://dns-markdown.vercel.app
