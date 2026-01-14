@@ -1,4 +1,3 @@
-import { mockFavorites } from "./__mocks__/favories";
 import { FavoritesEmpty } from "./favorites-empty";
 
 import type { Meta, StoryObj } from "@storybook/react";

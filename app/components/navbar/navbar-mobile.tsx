@@ -25,15 +25,19 @@ type NavbarMobileProps = {
   userLinks: NavbarLinks;
   isUserLoggedIn?: boolean;
   locate?: string;
+  city?: string;
 };
 
-function NavbarMobile({ linksList, userLinks, isUserLoggedIn, locate }: NavbarMobileProps) {
+function NavbarMobile({ linksList, userLinks, isUserLoggedIn, locate, city }: NavbarMobileProps) {
   const t = useTranslations("Navbar");
+  const cities = useTranslations("cities");
   return (
     <Dialog>
       <div className="border-primary flex items-center gap-4 rounded border-2 py-2">
         <Button asChild variant="link" className="font-bold">
-          <Link href="/">{t("logo")}</Link>
+          <Link href="/">
+            {t("logo")} {city ? cities(city) : ""}
+          </Link>
         </Button>
 
         <DialogTrigger asChild>

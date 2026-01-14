@@ -19,9 +19,11 @@ type NavbarDesktopProps = {
   linksList: NavbarLinks;
   userLinks: NavbarLinks;
   isUserLoggedIn?: boolean;
+  city?: string;
 };
-function NavbarDesktop({ linksList, isUserLoggedIn, userLinks }: NavbarDesktopProps) {
+function NavbarDesktop({ linksList, isUserLoggedIn, userLinks, city }: NavbarDesktopProps) {
   const t = useTranslations("Navbar");
+  const cities = useTranslations("cities");
 
   return (
     <div
@@ -30,7 +32,9 @@ function NavbarDesktop({ linksList, isUserLoggedIn, userLinks }: NavbarDesktopPr
     >
       <NavigationMenu>
         <Button asChild variant="link" className="font-bold">
-          <Link href="/">{t("logo")}</Link>
+          <Link href="/">
+            {t("logo")} {city ? cities(city) : ""}
+          </Link>
         </Button>
 
         <NavigationMenuList>
