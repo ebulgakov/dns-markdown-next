@@ -123,8 +123,12 @@ function PriceListGoods({ item, status, diff, favorites, isUserLoggedIn }: Price
       <div className="text-center [grid-area:store]">{item.available}</div>
 
       <div className="[grid-area:image] lg:[grid-area:favorites]">
-        {isUserLoggedIn && favorites && (
-          <PriceListFavoriteToggle favorites={favorites} goods={item} />
+        {favorites && (
+          <PriceListFavoriteToggle
+            isUserLoggedIn={isUserLoggedIn}
+            favorites={favorites}
+            goods={item}
+          />
         )}
       </div>
     </div>
