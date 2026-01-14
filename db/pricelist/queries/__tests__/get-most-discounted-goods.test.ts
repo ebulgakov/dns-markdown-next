@@ -65,7 +65,7 @@ describe("getMostDiscountedGoods", () => {
     await expect(getMostDiscountedGoods(city)).rejects.toThrow("Price list not found");
   });
 
-  it("filters out items with zero or invalid priceOld", async () => {
+  it("places items with zero or invalid priceOld at the end", async () => {
     const priceListWithInvalidItems: PriceList = {
       ...mockPriceList,
       positions: [brokenPosition, ...mockPriceList.positions]
