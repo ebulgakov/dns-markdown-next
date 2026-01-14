@@ -13,7 +13,12 @@ type HotOfferProps = {
 function HotOffer({ goods }: HotOfferProps) {
   return (
     <div data-testid="offer-goods" className="space-y-4">
-      <div className="mb-4 flex h-60 w-full items-center justify-center rounded bg-white dark:opacity-70">
+      <a
+        target="_blank"
+        rel="noopener noreferrer"
+        href={`https://dns-shop.ru${goods.link}`}
+        className="mb-4 flex h-60 w-full items-center justify-center rounded bg-white dark:opacity-70"
+      >
         <Image
           src={goods.image}
           alt={`Превью для ${goods.title}`}
@@ -21,7 +26,7 @@ function HotOffer({ goods }: HotOfferProps) {
           width={200}
           height={200}
         />
-      </div>
+      </a>
       <div className="text-base">
         <a
           target="_blank"
