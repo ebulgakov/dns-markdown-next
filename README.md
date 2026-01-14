@@ -1,7 +1,7 @@
 # Dns-markdown service
 
-## Site
-https://dns-markdown.vercel.app/
+## Site URL
+https://dns.ebulgakov.com/
 
 ## About 
 This is an unofficial website related to the DNS company. It helps you browse discounted items from different cities listed on the DNS website.
