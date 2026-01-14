@@ -122,7 +122,7 @@ describe("getCatalogData", () => {
     const result = await getCatalogData();
 
     expect(result.error).toBe(dbError);
-    expect(result.priceList).toBeNull();
+    expect(result.priceList).toBeUndefined();
     expect(result.userFavoritesGoods).toEqual([]);
     expect(result.favoriteSections).toEqual([]);
   });
