@@ -1,14 +1,14 @@
 import mongoose from "mongoose";
-import { AnalysisData } from "./analysis_data_model.js";
+import { analysisDataSchema } from "./analysis_data_model.js";
 
 const analysisDiffSchema = new mongoose.Schema({
   city: { type: String, required: true, index: true },
   dateAdded: { type: Date, default: Date.now, index: true },
-  newItems: [AnalysisData],
-  removedItems: [AnalysisData],
+  newItems: [analysisDataSchema],
+  removedItems: [analysisDataSchema],
   changesPrice: [
     {
-      item: AnalysisData,
+      item: analysisDataSchema,
       diff: {
         priceOld: String,
         price: String,
@@ -18,7 +18,7 @@ const analysisDiffSchema = new mongoose.Schema({
   ],
   changesProfit: [
     {
-      item: AnalysisData,
+      item: analysisDataSchema,
       diff: {
         priceOld: String,
         price: String,

@@ -28,7 +28,7 @@
     "add:analysis-data:full": "WRITE_STRATEGY=replace tsx ./add_analysis_data",
     "check:favorites": "tsx ./check_favorites",
     "cache:clear": "tsx ./cache_clear",
-    "parse": "npm run downloader && npm run add:list && npm run add:mutated && npm run add:diff && npm run add:history && npm run check:favorites && npm run add:analysis-data && npm run cache:clear",
+    "parse": "npm run downloader && npm run add:list && add:analysis-diff && npm run add:history && npm run check:favorites && npm run add:analysis-data && npm run cache:clear",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "dependencies": {
