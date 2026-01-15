@@ -1,4 +1,4 @@
-import { getAnalysisData } from "@/app/analysis/get-alalysis-data";
+import { getAnalysisData } from "@/app/analysis/get-analysis-data";
 import AnalysisPageTitle from "@/app/analysis/page-title";
 import { AnalyticsGoodsCountChart, AnalyticsGoodsChangesChart } from "@/app/components/analytics";
 import { Alert, AlertDescription, AlertTitle } from "@/app/components/ui/alert";
