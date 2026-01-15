@@ -20,7 +20,7 @@ export default function makeDiff(flatLastCatalog: AnalysisData[], flatPrevCatalo
           price: prevItem.price,
           profit: prevItem.profit
         }
-      } as never;
+      };
 
       if (lastItem.price !== prevItem.price) {
         result.changesPrice.push(payload);

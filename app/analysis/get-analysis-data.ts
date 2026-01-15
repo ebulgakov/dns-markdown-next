@@ -21,7 +21,7 @@ export async function getAnalysisData() {
   } catch (error) {
     const e = error as Error;
     console.error(e);
-    throw new Error("Не удалось получить город прайс-листа", e);
+    throw new Error("Не удалось получить город прайс-листа", { cause: e });
   }
 
   try {
@@ -29,25 +29,25 @@ export async function getAnalysisData() {
   } catch (error) {
     const e = error as Error;
     console.error(e);
-    throw new Error("Не удалось получить ссылки на товары для анализа", e);
+    throw new Error("Не удалось получить ссылки на товары для анализа", { cause: e });
   }
 
   try {
     archiveDatesCollection = await getArchiveListDates(city);
     startFrom = formatDate(archiveDatesCollection[0].createdAt);
-  } catch (e) {
-    const error = e as Error;
-    console.error(error);
-    throw new Error("Не удалось получить архив прайс-листов", error);
+  } catch (error) {
+    const e = error as Error;
+    console.error(e);
+    throw new Error("Не удалось получить архив прайс-листов", { cause: e });
   }
 
   try {
     const lastPriceList = await getLastPriceList(city);
     currentCountGoods = lastPriceList.positions.reduce((acc, cur) => acc + cur.items.length, 0);
-  } catch (e) {
-    const error = e as Error;
-    console.error(error);
-    throw new Error("Не удалось получить последний прайс-лист", error);
+  } catch (error) {
+    const e = error as Error;
+    console.error(e);
+    throw new Error("Не удалось получить последний прайс-лист", { cause: e });
   }
 
   try {
@@ -66,10 +66,10 @@ export async function getAnalysisData() {
         count: goodsByDatesCollection[idx].length
       };
     });
-  } catch (e) {
-    const error = e as Error;
-    console.error(error);
-    throw new Error("Не удалось получить проанализированные товары по дате", error);
+  } catch (error) {
+    const e = error as Error;
+    console.error(e);
+    throw new Error("Не удалось получить проанализированные товары по дате", { cause: e });
   }
 
   try {
@@ -87,10 +87,10 @@ export async function getAnalysisData() {
         sold: diff.removedItems.length
       });
     }
-  } catch (e) {
-    const error = e as Error;
-    console.error(error);
-    throw new Error("Не удалось получить динамику товаров по дате", error);
+  } catch (error) {
+    const e = error as Error;
+    console.error(e);
+    throw new Error("Не удалось получить динамику товаров по дате", { cause: e });
   }
 
   return {

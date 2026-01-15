@@ -1,3 +1,4 @@
+"use client";
 import { useTranslations } from "next-intl";
 
 import { PageTitle } from "@/app/components/ui/page-title";

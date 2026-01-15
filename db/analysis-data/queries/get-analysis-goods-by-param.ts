@@ -11,7 +11,7 @@ type GetAnalysisGoodsByParam = {
 };
 
 export const getAnalysisGoodsByParam = async ({ param, value, city }: GetAnalysisGoodsByParam) => {
-  const cacheKey = `analysis-goods-by-${String(param)}-${value}`;
+  const cacheKey = `analysis-goods-by-${String(param)}-${value}-${city}`;
   const cachedData = await cacheGet<AnalysisDataType[]>(cacheKey);
   if (cachedData) return cachedData;
 
