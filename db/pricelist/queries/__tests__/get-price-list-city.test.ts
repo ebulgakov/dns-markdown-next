@@ -1,9 +1,13 @@
 import { getUser } from "@/db/user/queries";
-
+import { dbConnect } from "@/db/database";
 import { getPriceListCity } from "../get-price-list-city";
 
 jest.mock("@/db/user/queries", () => ({
   getUser: jest.fn()
+}));
+
+jest.mock("@/db/database", () => ({
+  dbConnect: jest.fn()
 }));
 
 const mockedGetUser = getUser as jest.Mock;
