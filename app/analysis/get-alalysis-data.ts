@@ -1,7 +1,9 @@
+import makeDiff from "@/app/analysis/make-diff";
 import { formatDate, formatDateShort } from "@/app/helpers/format";
 import { getAnalysisGoodsLinks, getAnalysisGoodsByParam } from "@/db/analysis-data/queries";
 import { getArchiveListDates, getLastPriceList, getPriceListCity } from "@/db/pricelist/queries";
 
+import type { AnalysisData } from "@/types/analysis-data";
 import type { PriceListDates } from "@/types/pricelist";
 
 export async function getAnalysisData() {
@@ -11,7 +13,14 @@ export async function getAnalysisData() {
   let currentCountGoods: number;
   let archiveDatesCollection: PriceListDates;
   let goodsCountByDates: { date: string; count: number }[];
-  let goodsChangesByDates: { date: string; sold: number; new: number; pricesChanged: number }[];
+  let goodsChangesByDates: {
+    date: string;
+    sold: number;
+    new: number;
+    profitChanged: number;
+    pricesChanged: number;
+  }[];
+  let goodsByDatesCollection: AnalysisData[][];
 
   try {
     city = await getPriceListCity();
@@ -55,7 +64,7 @@ export async function getAnalysisData() {
         city
       })
     );
-    const goodsByDatesCollection = await Promise.all(promises);
+    goodsByDatesCollection = await Promise.all(promises);
 
     goodsCountByDates = archiveDatesCollection.map((date, idx) => {
       return {
@@ -71,6 +80,20 @@ export async function getAnalysisData() {
 
   try {
     goodsChangesByDates = [];
+    for (let i = goodsByDatesCollection.length - 1; i >= 1; i--) {
+      const currentDateGoods = goodsByDatesCollection[i];
+      const previousDateGoods = goodsByDatesCollection[i - 1];
+
+      const diff = makeDiff(currentDateGoods, previousDateGoods);
+
+      goodsChangesByDates.push({
+        date: formatDateShort(archiveDatesCollection[i].createdAt),
+        pricesChanged: diff.changesPrice.length,
+        profitChanged: diff.changesProfit.length,
+        new: diff.newItems.length,
+        sold: diff.removedItems.length
+      });
+    }
   } catch (e) {
     const error = e as Error;
     console.error(error);
