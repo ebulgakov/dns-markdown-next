@@ -5,7 +5,7 @@ import { Alert, AlertDescription, AlertTitle } from "@/app/components/ui/alert";
 import { Title } from "@/app/components/ui/title";
 
 export default async function AnalysisPage() {
-  let city, countUniqueGoods, startFrom, currentCountGoods, goodsCountByDates;
+  let city, countUniqueGoods, startFrom, currentCountGoods, goodsCountByDates, goodsChangesByDates;
 
   try {
     const data = await getAnalysisData();
@@ -15,6 +15,7 @@ export default async function AnalysisPage() {
     startFrom = data.startFrom;
     currentCountGoods = data.currentCountGoods;
     goodsCountByDates = data.goodsCountByDates;
+    goodsChangesByDates = data.goodsChangesByDates;
   } catch (e) {
     const { message } = e as Error;
     return (
@@ -46,6 +47,10 @@ export default async function AnalysisPage() {
         <Title variant="h2">Динамика количества товаров</Title>
 
         <AnalyticsGoodsChart chartData={goodsCountByDates} />
+
+        <Title variant="h2">Динамика изменения состояния в каталоге</Title>
+
+        {JSON.stringify(goodsChangesByDates, null, 2)}
       </div>
     </div>
   );

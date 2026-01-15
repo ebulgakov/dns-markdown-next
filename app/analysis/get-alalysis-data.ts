@@ -2,7 +2,6 @@ import { formatDate, formatDateShort } from "@/app/helpers/format";
 import { getAnalysisGoodsLinks, getAnalysisGoodsByParam } from "@/db/analysis-data/queries";
 import { getArchiveListDates, getLastPriceList, getPriceListCity } from "@/db/pricelist/queries";
 
-import type { AnalysisData as AnalysisDataType } from "@/types/analysis-data";
 import type { PriceListDates } from "@/types/pricelist";
 
 export async function getAnalysisData() {
@@ -12,6 +11,7 @@ export async function getAnalysisData() {
   let currentCountGoods: number;
   let archiveDatesCollection: PriceListDates;
   let goodsCountByDates: { date: string; count: number }[];
+  let goodsChangesByDates: { date: string; sold: number; new: number; pricesChanged: number }[];
 
   try {
     city = await getPriceListCity();
@@ -69,5 +69,20 @@ export async function getAnalysisData() {
     throw new Error("Не удалось получить проанализированные товары по дате", error);
   }
 
-  return { city, countUniqueGoods: links.length, startFrom, currentCountGoods, goodsCountByDates };
+  try {
+    goodsChangesByDates = [];
+  } catch (e) {
+    const error = e as Error;
+    console.error(error);
+    throw new Error("Не удалось получить динамику товаров по дате", error);
+  }
+
+  return {
+    city,
+    countUniqueGoods: links.length,
+    startFrom,
+    currentCountGoods,
+    goodsCountByDates,
+    goodsChangesByDates
+  };
 }
