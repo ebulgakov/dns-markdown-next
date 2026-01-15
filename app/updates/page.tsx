@@ -25,7 +25,13 @@ export async function generateMetadata({ params }: UpdatesPageProps): Promise<Me
 }
 
 export default async function UpdatesPage() {
-  const { userId } = await auth();
+  let isUserLoggedIn;
+  try {
+    const { userId } = await auth();
+    isUserLoggedIn = !!userId;
+  } catch {
+    isUserLoggedIn = false;
+  }
 
   let diffNew;
   let diffRemoved;
@@ -90,7 +96,7 @@ export default async function UpdatesPage() {
       <PageTitle title="Обновления с начала дня" />
       {diffNew && (
         <PriceListSection
-          isUserLoggedIn={!!userId}
+          isUserLoggedIn={isUserLoggedIn}
           isOpen={true}
           position={diffNew}
           favorites={userFavoritesGoods}
@@ -98,7 +104,7 @@ export default async function UpdatesPage() {
       )}
       {diffChangesPrice && (
         <PriceListSection
-          isUserLoggedIn={!!userId}
+          isUserLoggedIn={isUserLoggedIn}
           isOpen={true}
           position={diffChangesPrice}
           favorites={userFavoritesGoods}
@@ -108,7 +114,7 @@ export default async function UpdatesPage() {
       {diffRemoved && <PriceListSection isOpen={true} position={diffRemoved} />}
       {diffChangesProfit && (
         <PriceListSection
-          isUserLoggedIn={!!userId}
+          isUserLoggedIn={isUserLoggedIn}
           position={diffChangesProfit}
           diffs={changeProfitDiff}
           favorites={userFavoritesGoods}

@@ -23,7 +23,14 @@ export async function generateMetadata({ params }: CatalogPage): Promise<Metadat
 }
 
 export default async function CatalogPage() {
-  const { userId } = await auth();
+  let isUserLoggedIn;
+  try {
+    const { userId } = await auth();
+    isUserLoggedIn = !!userId;
+  } catch {
+    isUserLoggedIn = false;
+  }
+
   const {
     priceList,
     userFavoritesGoods,
@@ -62,7 +69,7 @@ export default async function CatalogPage() {
         hiddenSectionsTitles={hiddenSectionsTitles}
         nonFavoriteSections={nonFavoriteSections}
         priceList={priceList}
-        isUserLoggedIn={!!userId}
+        isUserLoggedIn={isUserLoggedIn}
       />
     </div>
   );
