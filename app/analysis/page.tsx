@@ -1,6 +1,8 @@
 import { getAnalysisData } from "@/app/analysis/get-alalysis-data";
+import AnalysisPageTitle from "@/app/analysis/page-title";
+import { AnalyticsGoodsChart } from "@/app/components/analytics";
 import { Alert, AlertDescription, AlertTitle } from "@/app/components/ui/alert";
-import { PageTitle } from "@/app/components/ui/page-title";
+import { Title } from "@/app/components/ui/title";
 
 export default async function AnalysisPage() {
   let city, countUniqueGoods, startFrom, currentCountGoods, goodsCountByDates;
@@ -25,7 +27,7 @@ export default async function AnalysisPage() {
 
   return (
     <div>
-      <PageTitle title={`Анализ каталога в городе ${city}`} />
+      <AnalysisPageTitle city={city} />
 
       <div className="mt-4 text-lg">
         <p>
@@ -41,7 +43,9 @@ export default async function AnalysisPage() {
           В текущем прайс-листе доступно товаров: <b>{currentCountGoods}</b>
         </p>
 
-        <pre>{JSON.stringify(goodsCountByDates, null, 2)}</pre>
+        <Title variant="h2">Динамика количества товаров</Title>
+
+        <AnalyticsGoodsChart chartData={goodsCountByDates} />
       </div>
     </div>
   );

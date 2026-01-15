@@ -1,4 +1,4 @@
-import { formatDate } from "@/app/helpers/format";
+import { formatDate, formatDateShort } from "@/app/helpers/format";
 import { getAnalysisGoodsLinks, getAnalysisGoodsByParam } from "@/db/analysis-data/queries";
 import { getArchiveListDates, getLastPriceList, getPriceListCity } from "@/db/pricelist/queries";
 
@@ -59,7 +59,7 @@ export async function getAnalysisData() {
 
     goodsCountByDates = archiveDatesCollection.map((date, idx) => {
       return {
-        date: formatDate(date.createdAt),
+        date: formatDateShort(date.createdAt),
         count: goodsByDatesCollection[idx].length
       };
     });
