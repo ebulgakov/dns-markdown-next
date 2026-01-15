@@ -1,9 +1,10 @@
-import makeDiff from "@/app/analysis/make-diff";
 import { formatDate, formatDateShort } from "@/app/helpers/format";
 import { getAnalysisGoodsLinks, getAnalysisGoodsByParam } from "@/db/analysis-data/queries";
+import { getAllDiffsByCity } from "@/db/analysis-diff/queries/get-all-diffs-by-city";
 import { getArchiveListDates, getLastPriceList, getPriceListCity } from "@/db/pricelist/queries";
 
-import type { AnalysisChangesByDates, AnalysisData } from "@/types/analysis-data";
+import type { AnalysisData } from "@/types/analysis-data";
+import type { AnalysisDiff as AnalysisDiffType } from "@/types/analysis-diff";
 import type { PriceListDates } from "@/types/pricelist";
 
 export async function getAnalysisData() {
@@ -13,7 +14,7 @@ export async function getAnalysisData() {
   let currentCountGoods: number;
   let archiveDatesCollection: PriceListDates;
   let goodsCountByDates: { date: string; count: number }[];
-  let goodsChangesByDates: AnalysisChangesByDates;
+  let goodsChangesByDates: AnalysisDiffType[];
   let goodsByDatesCollection: AnalysisData[][];
 
   try {
@@ -73,20 +74,8 @@ export async function getAnalysisData() {
   }
 
   try {
-    goodsChangesByDates = [];
-    for (let i = 1; i < goodsByDatesCollection.length; i++) {
-      const currentDateGoods = goodsByDatesCollection[i];
-      const previousDateGoods = goodsByDatesCollection[i - 1];
-      const diff = makeDiff(currentDateGoods, previousDateGoods);
-
-      goodsChangesByDates.push({
-        date: formatDateShort(archiveDatesCollection[i].createdAt),
-        pricesChanged: diff.changesPrice.length,
-        profitChanged: diff.changesProfit.length,
-        new: diff.newItems.length,
-        sold: diff.removedItems.length
-      });
-    }
+    goodsChangesByDates = await getAllDiffsByCity(city);
+    goodsChangesByDates.reverse();
   } catch (error) {
     const e = error as Error;
     console.error(e);

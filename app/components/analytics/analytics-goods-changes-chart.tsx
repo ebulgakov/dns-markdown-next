@@ -11,13 +11,21 @@ import {
   ChartTooltipContent
 } from "@/app/components/ui/chart";
 
-import type { AnalysisChangesByDates } from "@/types/analysis-data";
+import type { AnalysisDiff as AnalysisDiffType } from "@/types/analysis-diff";
+import { formatDateShort } from "@/app/helpers/format";
 
 type AnalyticsGoodsChartProps = {
-  chartData: AnalysisChangesByDates;
+  chartData: AnalysisDiffType[];
 };
 
 function AnalyticsGoodsChangesChart({ chartData }: AnalyticsGoodsChartProps) {
+  const data = chartData.map(diff => ({
+    date: formatDateShort(diff.dateAdded),
+    new: diff.newItems.length,
+    sold: diff.removedItems.length,
+    pricesChanged: diff.changesPrice.length,
+    profitChanged: diff.changesProfit.length
+  }));
   return (
     <Card>
       <CardContent className="p-0 md:px-2 md:pt-4">
@@ -42,7 +50,7 @@ function AnalyticsGoodsChangesChart({ chartData }: AnalyticsGoodsChartProps) {
           }}
           className="aspect-auto h-[250px] w-full"
         >
-          <BarChart data={chartData}>
+          <BarChart data={data}>
             <CartesianGrid vertical={false} />
             <XAxis dataKey="date" tickLine={false} tickMargin={10} axisLine={false} />
             <ChartTooltip cursor={false} content={<ChartTooltipContent />} />
