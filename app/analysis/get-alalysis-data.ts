@@ -1,5 +1,5 @@
 import { getAnalysisGoodsLinks } from "@/db/analysis-data/queries/get-analysis-goods-links";
-import { getArchiveList, getPriceListCity } from "@/db/pricelist/queries";
+import { getArchiveListDates, getPriceListCity } from "@/db/pricelist/queries";
 
 export async function getAnalysisData() {
   let city: string | undefined;
@@ -23,7 +23,7 @@ export async function getAnalysisData() {
   }
 
   try {
-    archiveCollection = await getArchiveList(city);
+    archiveCollection = await getArchiveListDates(city);
   } catch (e) {
     const error = e as Error;
     console.error(error);

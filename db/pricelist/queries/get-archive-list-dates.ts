@@ -4,7 +4,7 @@ import { Pricelist } from "@/db/models/pricelist-model";
 
 import type { PriceList as PriceListType } from "@/types/pricelist";
 
-export const getArchiveList = async (city: string) => {
+export const getArchiveListDates = async (city: string) => {
   if (!city) throw new Error("city is required");
 
   const key = `pricelist:archive:${String(city)}`;
