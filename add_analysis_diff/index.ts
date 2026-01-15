@@ -20,10 +20,10 @@ async function addAnalysisDiff() {
 
   if (writeStrategy === "replace") {
     usedPriceLists = priceListsCollections;
-    removeAllAnalysisDiff(city);
+    await removeAllAnalysisDiff(city);
   } else {
     usedPriceLists = [priceListsCollections[0], priceListsCollections[1]];
-    removeAnalysisByDateDiff(priceListsCollections[1].createdAt, city);
+    await removeAnalysisByDateDiff(priceListsCollections[1].createdAt, city);
   }
 
   const diffs = [];
