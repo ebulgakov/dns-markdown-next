@@ -1,4 +1,5 @@
 import { add as cacheAdd, get as cacheGet } from "@/cache";
+import { dbConnect } from "@/db/database";
 import { AnalysisData } from "@/db/models/analysis-data-model";
 
 import type { AnalysisData as AnalysisDataType } from "@/types/analysis-data";
@@ -13,6 +14,8 @@ export const getAnalysisGoodsByParam = async ({ param, value, city }: GetAnalysi
   const cacheKey = `analysis-goods-by-${String(param)}-${value}`;
   const cachedData = cacheGet<AnalysisDataType[]>(cacheKey);
   if (cachedData) return cachedData;
+
+  await dbConnect();
 
   const analysisGoods = await AnalysisData.find({ [param]: value, city })
     .lean()

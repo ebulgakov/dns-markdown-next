@@ -1,7 +1,10 @@
+import { dbConnect } from "@/db/database";
 import { getUser } from "@/db/user/queries";
 
 export const getPriceListCity = async () => {
   const defaultCity = process.env.DEFAULT_CITY || "samara"; // Fallback city
+
+  await dbConnect();
 
   try {
     const user = await getUser();

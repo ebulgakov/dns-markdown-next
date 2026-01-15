@@ -1,4 +1,5 @@
 import { add as cacheAdd, get as cacheGet } from "@/cache";
+import { dbConnect } from "@/db/database";
 import { AnalysisData } from "@/db/models/analysis-data-model";
 
 export const getAnalysisGoodsLinks = async (city: string): Promise<string[]> => {
@@ -7,6 +8,8 @@ export const getAnalysisGoodsLinks = async (city: string): Promise<string[]> => 
   const key = `analysis:links:${String(city)}`;
   const cached = await cacheGet<string[]>(key);
   if (cached) return cached;
+
+  await dbConnect();
 
   const data = await AnalysisData.find({ city }, {}, { sort: { updatedAt: 1 } }).select("link");
   if (!data) throw new Error("No analysis data found");
