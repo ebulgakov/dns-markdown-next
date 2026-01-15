@@ -1,12 +1,16 @@
 import type { AnalysisData } from "@/types/analysis-data.js";
 
-type DiffDetail = {
+export type Diff = {
+  priceOld: string;
+  price: string;
+  profit: string;
+};
+
+export type DiffsCollection = { [key: string]: Diff };
+
+export type DiffDetail = {
   item: AnalysisData;
-  diff: {
-    priceOld: string;
-    price: string;
-    profit: string;
-  };
+  diff: Diff;
 };
 
 export type AnalysisDiff = {

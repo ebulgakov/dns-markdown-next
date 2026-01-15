@@ -2,7 +2,7 @@ import { mockFavorites } from "./__mocks__/favorites";
 import { mockGoodsList } from "./__mocks__/goods";
 import { PriceListGoods } from "./price-list-goods";
 
-import type { GoodDiffChanges as GoodDiffChangesType } from "@/types/diff";
+import type { Diff as DiffType } from "@/types/analysis-diff";
 import type { Meta, StoryObj } from "@storybook/react";
 
 const meta: Meta<typeof PriceListGoods> = {
@@ -20,7 +20,7 @@ const meta: Meta<typeof PriceListGoods> = {
 export default meta;
 type Story = StoryObj<typeof PriceListGoods>;
 
-const mockDiff: GoodDiffChangesType = {
+const mockDiff: DiffType = {
   price: "19999",
   priceOld: "21999",
   profit: "2000"

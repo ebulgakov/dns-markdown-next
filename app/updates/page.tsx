@@ -8,7 +8,7 @@ import { getLastDiffByCity } from "@/db/analysis-diff/queries";
 import { getPriceListCity } from "@/db/pricelist/queries";
 import { getUser } from "@/db/user/queries";
 
-import type { DiffsCollection as DiffsCollectionType } from "@/types/diff";
+import type { DiffsCollection as DiffsType } from "@/types/analysis-diff";
 import type { Favorite as FavoriteType } from "@/types/user";
 import type { Metadata } from "next";
 
@@ -32,8 +32,8 @@ export default async function UpdatesPage() {
   let diffChangesPrice;
   let diffChangesProfit;
   let userFavoritesGoods: FavoriteType[] = [];
-  const changePriceDiff: DiffsCollectionType = {};
-  const changeProfitDiff: DiffsCollectionType = {};
+  const changePriceDiff: DiffsType = {};
+  const changeProfitDiff: DiffsType = {};
 
   try {
     const city = await getPriceListCity();
