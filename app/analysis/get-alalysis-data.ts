@@ -1,10 +1,12 @@
+import { formatDate } from "@/app/helpers/format";
 import { getAnalysisGoodsLinks } from "@/db/analysis-data/queries/get-analysis-goods-links";
-import { getArchiveListDates, getPriceListCity } from "@/db/pricelist/queries";
+import { getArchiveListDates, getLastPriceList, getPriceListCity } from "@/db/pricelist/queries";
 
 export async function getAnalysisData() {
   let city: string | undefined;
   let links: string[] | undefined;
-  let archiveCollection;
+  let startFrom: string;
+  let currentCountGoods: number;
 
   try {
     city = await getPriceListCity();
@@ -23,12 +25,22 @@ export async function getAnalysisData() {
   }
 
   try {
-    archiveCollection = await getArchiveListDates(city);
+    const archiveCollection = await getArchiveListDates(city);
+    startFrom = formatDate(archiveCollection[0]?.createdAt);
   } catch (e) {
     const error = e as Error;
     console.error(error);
     throw new Error("Не удалось получить архив прайс-листов", error);
   }
 
-  return { city, countUniqueGoods: links.length, archiveCollection };
+  try {
+    const lastPriceList = await getLastPriceList(city);
+    currentCountGoods = lastPriceList.positions.reduce((acc, cur) => acc + cur.items.length, 0);
+  } catch (e) {
+    const error = e as Error;
+    console.error(error);
+    throw new Error("Не удалось получить последний прайс-лист", error);
+  }
+
+  return { city, countUniqueGoods: links.length, startFrom, currentCountGoods };
 }

@@ -1,28 +1,17 @@
 import { getAnalysisData } from "@/app/analysis/get-alalysis-data";
 import { Alert, AlertDescription, AlertTitle } from "@/app/components/ui/alert";
 import { PageTitle } from "@/app/components/ui/page-title";
-import { formatDate } from "@/app/helpers/format";
 
 export default async function AnalysisPage() {
-  let city;
-  let countUniqueGoods;
-  let archiveCollection;
-  let startFrom;
-  let currentCountGoods;
+  let city, countUniqueGoods, startFrom, currentCountGoods;
 
   try {
     const data = await getAnalysisData();
 
     city = data.city;
     countUniqueGoods = data.countUniqueGoods;
-    archiveCollection = data.archiveCollection;
-    startFrom = formatDate(archiveCollection[0].createdAt);
-
-    console.log(archiveCollection);
-    // currentCountGoods = archiveCollection[archiveCollection.length - 1].positions.reduce(
-    //   (acc, cur) => acc + cur.items.length,
-    //   0
-    // );
+    startFrom = data.startFrom;
+    currentCountGoods = data.currentCountGoods;
   } catch (e) {
     const { message } = e as Error;
     return (
@@ -45,7 +34,10 @@ export default async function AnalysisPage() {
           C этого времени в каталог было добавлено товаров: <b>{countUniqueGoods}</b>
         </p>
         <p>
-          C этого времени в каталог было добавлено товаров: <b>{currentCountGoods}</b>
+          Из них продано на текущий момент : <b>{countUniqueGoods - currentCountGoods}</b>
+        </p>
+        <p>
+          В текущем прайс-листе доступно товаров: <b>{currentCountGoods}</b>
         </p>
       </div>
     </div>
