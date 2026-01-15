@@ -1,6 +1,6 @@
 import { getAnalysisData } from "@/app/analysis/get-alalysis-data";
 import AnalysisPageTitle from "@/app/analysis/page-title";
-import { AnalyticsGoodsChart } from "@/app/components/analytics";
+import { AnalyticsGoodsCountChart, AnalyticsGoodsChangesChart } from "@/app/components/analytics";
 import { Alert, AlertDescription, AlertTitle } from "@/app/components/ui/alert";
 import { Title } from "@/app/components/ui/title";
 
@@ -46,11 +46,11 @@ export default async function AnalysisPage() {
 
         <Title variant="h2">Динамика количества товаров</Title>
 
-        <AnalyticsGoodsChart chartData={goodsCountByDates} />
+        <AnalyticsGoodsCountChart chartData={goodsCountByDates} />
 
         <Title variant="h2">Динамика изменения состояния в каталоге</Title>
 
-        {JSON.stringify(goodsChangesByDates, null, 2)}
+        <AnalyticsGoodsChangesChart chartData={goodsChangesByDates} />
       </div>
     </div>
   );

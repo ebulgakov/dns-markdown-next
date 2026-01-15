@@ -1,1 +1,2 @@
-export { AnalyticsGoodsChart } from "./chart";
+export { AnalyticsGoodsCountChart } from "./analytics-goods-count-chart";
+export { AnalyticsGoodsChangesChart } from "./analytics-goods-changes-chart";

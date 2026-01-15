@@ -12,7 +12,7 @@ type AnalyticsGoodsChartProps = {
   }[];
 };
 
-function AnalyticsGoodsChart({ chartData }: AnalyticsGoodsChartProps) {
+function AnalyticsGoodsCountChart({ chartData }: AnalyticsGoodsChartProps) {
   return (
     <Card>
       <CardContent className="p-0 md:px-2 md:pt-4">
@@ -37,4 +37,4 @@ function AnalyticsGoodsChart({ chartData }: AnalyticsGoodsChartProps) {
   );
 }
 
-export { AnalyticsGoodsChart };
+export { AnalyticsGoodsCountChart };

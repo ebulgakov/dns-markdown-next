@@ -5,3 +5,11 @@ export type AnalysisData = Goods & {
   category: string;
   dateAdded: string;
 };
+
+export type AnalysisChangesByDates = {
+  date: string;
+  sold: number;
+  new: number;
+  profitChanged: number;
+  pricesChanged: number;
+}[];

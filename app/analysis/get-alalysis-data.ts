@@ -3,7 +3,7 @@ import { formatDate, formatDateShort } from "@/app/helpers/format";
 import { getAnalysisGoodsLinks, getAnalysisGoodsByParam } from "@/db/analysis-data/queries";
 import { getArchiveListDates, getLastPriceList, getPriceListCity } from "@/db/pricelist/queries";
 
-import type { AnalysisData } from "@/types/analysis-data";
+import type { AnalysisChangesByDates, AnalysisData } from "@/types/analysis-data";
 import type { PriceListDates } from "@/types/pricelist";
 
 export async function getAnalysisData() {
@@ -13,13 +13,7 @@ export async function getAnalysisData() {
   let currentCountGoods: number;
   let archiveDatesCollection: PriceListDates;
   let goodsCountByDates: { date: string; count: number }[];
-  let goodsChangesByDates: {
-    date: string;
-    sold: number;
-    new: number;
-    profitChanged: number;
-    pricesChanged: number;
-  }[];
+  let goodsChangesByDates: AnalysisChangesByDates;
   let goodsByDatesCollection: AnalysisData[][];
 
   try {
@@ -80,10 +74,9 @@ export async function getAnalysisData() {
 
   try {
     goodsChangesByDates = [];
-    for (let i = goodsByDatesCollection.length - 1; i >= 1; i--) {
+    for (let i = 1; i < goodsByDatesCollection.length; i++) {
       const currentDateGoods = goodsByDatesCollection[i];
       const previousDateGoods = goodsByDatesCollection[i - 1];
-
       const diff = makeDiff(currentDateGoods, previousDateGoods);
 
       goodsChangesByDates.push({
