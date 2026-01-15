@@ -45,9 +45,17 @@ export default async function ArchiveItemPage({ params }: ArchiveItemPage) {
   }
 
   const pageTitle = `Страница Архива за ${formatDate(priceList.createdAt)}`;
+  const count = priceList.positions.reduce((acc, cur) => acc + cur.items.length, 0);
+
   return (
     <div>
-      <PageTitle title={pageTitle} />
+      <PageTitle title={pageTitle}>
+        <div className="mt-4 flex items-center justify-between gap-4 md:mt-0">
+          <div>
+            Количество: <b>{count}</b>
+          </div>
+        </div>
+      </PageTitle>
       <PriceListPage priceList={priceList} />
     </div>
   );

@@ -6,6 +6,10 @@ jest.mock("@/db/user/queries", () => ({
   getUser: jest.fn()
 }));
 
+jest.mock("@/db/database", () => ({
+  dbConnect: jest.fn()
+}));
+
 const mockedGetUser = getUser as jest.Mock;
 
 describe("getPriceListCity", () => {

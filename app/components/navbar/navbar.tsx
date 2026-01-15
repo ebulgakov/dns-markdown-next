@@ -27,6 +27,10 @@ function Navbar({ locate, isUserLoggedIn, city }: NavbarProps) {
     {
       name: t("updates"),
       url: "/updates"
+    },
+    {
+      name: t("analysis"),
+      url: "/analysis"
     }
   ];
 
