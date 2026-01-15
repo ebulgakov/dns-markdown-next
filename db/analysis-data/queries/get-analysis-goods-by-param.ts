@@ -12,7 +12,7 @@ type GetAnalysisGoodsByParam = {
 
 export const getAnalysisGoodsByParam = async ({ param, value, city }: GetAnalysisGoodsByParam) => {
   const cacheKey = `analysis-goods-by-${String(param)}-${value}`;
-  const cachedData = cacheGet<AnalysisDataType[]>(cacheKey);
+  const cachedData = await cacheGet<AnalysisDataType[]>(cacheKey);
   if (cachedData) return cachedData;
 
   await dbConnect();
