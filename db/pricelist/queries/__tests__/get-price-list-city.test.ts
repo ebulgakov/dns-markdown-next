@@ -1,5 +1,5 @@
 import { getUser } from "@/db/user/queries";
-import { dbConnect } from "@/db/database";
+
 import { getPriceListCity } from "../get-price-list-city";
 
 jest.mock("@/db/user/queries", () => ({

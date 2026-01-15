@@ -43,5 +43,6 @@ export interface PriceList {
 }
 
 export type PriceListDates = {
+  _id: string;
   createdAt: string;
 }[];
