@@ -41,3 +41,7 @@ export interface PriceList {
   positions: Position[];
   createdAt: Date | string;
 }
+
+export type PriceListDates = {
+  createdAt: string;
+}[];

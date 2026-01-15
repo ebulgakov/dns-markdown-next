@@ -2,11 +2,14 @@ import { formatDate } from "@/app/helpers/format";
 import { getAnalysisGoodsLinks } from "@/db/analysis-data/queries/get-analysis-goods-links";
 import { getArchiveListDates, getLastPriceList, getPriceListCity } from "@/db/pricelist/queries";
 
+import type { PriceListDates } from "@/types/pricelist";
+
 export async function getAnalysisData() {
   let city: string | undefined;
   let links: string[] | undefined;
   let startFrom: string;
   let currentCountGoods: number;
+  let archiveDatesCollection: PriceListDates;
 
   try {
     city = await getPriceListCity();
@@ -25,8 +28,8 @@ export async function getAnalysisData() {
   }
 
   try {
-    const archiveCollection = await getArchiveListDates(city);
-    startFrom = formatDate(archiveCollection[0]?.createdAt);
+    archiveDatesCollection = await getArchiveListDates(city);
+    startFrom = formatDate(archiveDatesCollection[0].createdAt);
   } catch (e) {
     const error = e as Error;
     console.error(error);
