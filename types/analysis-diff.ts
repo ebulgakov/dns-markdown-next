@@ -1,4 +1,5 @@
 import type { AnalysisData } from "@/types/analysis-data.js";
+import type { CustomDate } from "@/types/common";
 
 export type Diff = {
   priceOld: string;
@@ -12,6 +13,8 @@ export type DiffDetail = {
   item: AnalysisData;
   diff: Diff;
 };
+
+export type DiffHistory = (Diff & { dateAdded: CustomDate })[];
 
 export type AnalysisDiff = {
   city: string;

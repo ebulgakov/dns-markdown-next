@@ -13,12 +13,14 @@ import {
 } from "@/app/components/ui/chart";
 import { formatDateMonthDay } from "@/app/helpers/format";
 
+import type { DiffHistory } from "@/types/analysis-diff";
+
 const chartConfig = {
   price: {
     label: "Цена",
     color: "var(--accent)"
   },
-  old: {
+  priceOld: {
     label: "Обычная цена",
     color: "var(--secondary)"
   },
@@ -29,33 +31,17 @@ const chartConfig = {
 } satisfies ChartConfig;
 
 type ChartPricesProps = {
-  chartData: {
-    labels: string[];
-    price: string[];
-    priceOld: string[];
-    profit: string[];
-  } | null;
+  chartData: DiffHistory;
 };
 
 function ChartPrices({ chartData }: ChartPricesProps) {
-  if (!chartData) {
-    return null;
-  }
-
-  const data = Array.from({ length: chartData.labels.length || 0 }, (_, index) => ({
-    date: formatDateMonthDay(chartData.labels[index]),
-    price: chartData.price[index] || "0",
-    old: chartData.priceOld[index] || "0",
-    profit: chartData.profit[index] || "0"
-  }));
-
   return (
     <Card>
       <CardContent className="p-0 md:px-2 md:pt-4">
         <ChartContainer config={chartConfig} className="aspect-auto h-[250px] w-full">
           <AreaChart
             accessibilityLayer
-            data={data}
+            data={chartData}
             margin={{
               left: 12,
               right: 12
@@ -63,11 +49,12 @@ function ChartPrices({ chartData }: ChartPricesProps) {
           >
             <CartesianGrid vertical={false} />
             <XAxis
-              dataKey="date"
+              dataKey="dateAdded"
               tickLine={false}
               axisLine={false}
               tickMargin={8}
               minTickGap={32}
+              tickFormatter={date => formatDateMonthDay(date)}
             />
             <YAxis tickLine={false} axisLine={false} tickMargin={8} tickCount={3} />
             <ChartTooltip cursor={false} content={<ChartTooltipContent indicator="line" />} />
@@ -88,11 +75,11 @@ function ChartPrices({ chartData }: ChartPricesProps) {
               stackId="a"
             />
             <Area
-              dataKey="old"
+              dataKey="priceOld"
               type="natural"
-              fill="var(--color-old)"
+              fill="var(--color-priceOld)"
               fillOpacity={0.4}
-              stroke="var(--color-old)"
+              stroke="var(--color-priceOld)"
               stackId="c"
             />
             <ChartLegend content={<ChartLegendContent />} />
