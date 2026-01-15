@@ -1,6 +1,6 @@
 import { formatDate, formatDateShort } from "@/app/helpers/format";
 import { getAnalysisGoodsLinks, getAnalysisGoodsByParam } from "@/db/analysis-data/queries";
-import { getAllDiffsByCity } from "@/db/analysis-diff/queries/get-all-diffs-by-city";
+import { getAllDiffsByCity } from "@/db/analysis-diff/queries";
 import { getArchiveListDates, getLastPriceList, getPriceListCity } from "@/db/pricelist/queries";
 
 import type { AnalysisData } from "@/types/analysis-data";

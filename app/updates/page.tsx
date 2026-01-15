@@ -4,7 +4,8 @@ import { getTranslations } from "next-intl/server";
 import { PriceListSection } from "@/app/components/price-list";
 import { Alert, AlertDescription, AlertTitle } from "@/app/components/ui/alert";
 import { PageTitle } from "@/app/components/ui/page-title";
-import { getPriceListCity, getPriceListsDiff } from "@/db/pricelist/queries";
+import { getLastDiffByCity } from "@/db/analysis-diff/queries";
+import { getPriceListCity } from "@/db/pricelist/queries";
 import { getUser } from "@/db/user/queries";
 
 import type { DiffsCollection as DiffsCollectionType } from "@/types/diff";
@@ -36,48 +37,37 @@ export default async function UpdatesPage() {
 
   try {
     const city = await getPriceListCity();
-    const collection = await getPriceListsDiff(city);
-    const collectionDiff = collection?.diff;
-    const collectionSold = collection?.sold;
-    const collectionNew = collection?.new;
+    const collection = await getLastDiffByCity(city);
 
-    if (collectionNew && collectionNew.goods.length > 0) {
-      diffNew = {
-        _id: "new-items",
-        title: "Новые поступления",
-        items: collectionNew.goods
-      };
-    }
+    diffNew = {
+      _id: "new-items",
+      title: "Новые поступления",
+      items: collection.newItems
+    };
 
-    if (collectionDiff && collectionDiff.changesProfit.length > 0) {
-      diffChangesProfit = {
-        _id: "change-profit-items",
-        title: "Изменения Выгоды",
-        items: collectionDiff.changesProfit?.map(item => {
-          changeProfitDiff[`${item.item._id}`] = item.diff;
-          return item.item;
-        })
-      };
-    }
+    diffRemoved = {
+      _id: "removed-items",
+      title: "Продано на сегодня",
+      items: collection.removedItems
+    };
 
-    if (collectionDiff && collectionDiff.changesPrice.length > 0) {
-      diffChangesPrice = {
-        _id: "change-price-items",
-        title: "Изменения цены",
-        items: collectionDiff.changesPrice?.map(item => {
-          changePriceDiff[`${item.item._id}`] = item.diff;
-          return item.item;
-        })
-      };
-    }
+    diffChangesProfit = {
+      _id: "removed-items",
+      title: "Продано на сегодня",
+      items: collection.changesProfit.map(item => {
+        changeProfitDiff[`${item.item._id}`] = item.diff;
+        return item.item;
+      })
+    };
 
-    if (collectionSold && collectionSold.goods.length > 0) {
-      diffRemoved = {
-        _id: "removed-items",
-        title: "Продано на сегодня",
-        items: collectionSold.goods
-      };
-    }
+    diffChangesPrice = {
+      _id: "removed-items",
+      title: "Продано на сегодня",
+      items: collection.changesPrice.map(item => {
+        changePriceDiff[`${item.item._id}`] = item.diff;
+        return item.item;
+      })
+    };
   } catch (e) {
     const { message } = e as Error;
     return (
