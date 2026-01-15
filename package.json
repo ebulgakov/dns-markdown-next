@@ -23,6 +23,8 @@
     "add:mutated": "tsx ./add_mutated_items",
     "add:diff": "tsx ./add_diff",
     "add:history": "tsx ./add_history",
+    "add:analysis-data": "WRITE_STRATEGY=insert tsx ./add_analysis_data",
+    "add:analysis-data:full": "WRITE_STRATEGY=replace tsx ./add_analysis_data",
     "check:favorites": "tsx ./check_favorites",
     "cache:clear": "tsx ./cache_clear",
     "parse": "npm run downloader && npm run add:list && npm run add:mutated && npm run add:diff && npm run add:history && npm run check:favorites && npm run cache:clear",
