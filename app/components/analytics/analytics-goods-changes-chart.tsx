@@ -10,9 +10,9 @@ import {
   ChartTooltip,
   ChartTooltipContent
 } from "@/app/components/ui/chart";
+import { formatDateShort } from "@/app/helpers/format";
 
 import type { AnalysisDiff as AnalysisDiffType } from "@/types/analysis-diff";
-import { formatDateShort } from "@/app/helpers/format";
 
 type AnalyticsGoodsChartProps = {
   chartData: AnalysisDiffType[];
