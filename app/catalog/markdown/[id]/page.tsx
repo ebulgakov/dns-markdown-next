@@ -1,3 +1,4 @@
+import { auth } from "@clerk/nextjs/server";
 import { getTranslations } from "next-intl/server";
 
 import { ChartPrices } from "@/app/components/chart-prices";
@@ -6,7 +7,9 @@ import { Alert, AlertDescription, AlertTitle } from "@/app/components/ui/alert";
 import { PageTitle } from "@/app/components/ui/page-title";
 import { Title } from "@/app/components/ui/title";
 import { getPriceListCity, getProductById } from "@/db/pricelist/queries";
+import { getUser } from "@/db/user/queries";
 
+import type { Favorite } from "@/types/user";
 import type { Metadata } from "next";
 
 type CatalogItemPage = {
@@ -45,11 +48,27 @@ export default async function CatalogItemPage({ params }: CatalogItemPage) {
     );
   }
 
+  let favorites: Favorite[];
+  try {
+    const user = await getUser();
+    favorites = user.favorites;
+  } catch {
+    favorites = [];
+  }
+
+  let isUserLoggedIn;
+  try {
+    const { userId } = await auth();
+    isUserLoggedIn = !!userId;
+  } catch {
+    isUserLoggedIn = false;
+  }
+
   return (
     <div>
       <PageTitle title={product.item.title} />
 
-      <PriceListGoods item={product.item} />
+      <PriceListGoods isUserLoggedIn={isUserLoggedIn} item={product.item} favorites={favorites} />
 
       <Title variant="h2">Сравнение цен</Title>
 
