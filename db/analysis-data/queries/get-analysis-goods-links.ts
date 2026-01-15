@@ -12,8 +12,6 @@ export const getAnalysisGoodsLinks = async (city: string): Promise<string[]> => 
   await dbConnect();
 
   const data = await AnalysisData.find({ city }, {}, { sort: { updatedAt: 1 } }).select("link");
-  if (!data) throw new Error("No analysis data found");
-
   const links = data.map(item => item.link) as string[];
   const uniqueLinks = Array.from(new Set(links));
   const plainLinks = JSON.stringify(uniqueLinks);

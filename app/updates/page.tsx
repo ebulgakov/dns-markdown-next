@@ -58,8 +58,8 @@ export default async function UpdatesPage() {
     };
 
     diffChangesProfit = {
-      _id: "removed-items",
-      title: "Продано на сегодня",
+      _id: "change-profit-items",
+      title: "Изменения Выгоды",
       items: collection.changesProfit.map(item => {
         changeProfitDiff[`${item.item._id}`] = item.diff;
         return item.item;
@@ -67,8 +67,8 @@ export default async function UpdatesPage() {
     };
 
     diffChangesPrice = {
-      _id: "removed-items",
-      title: "Продано на сегодня",
+      _id: "change-price-items",
+      title: "Изменения цены",
       items: collection.changesPrice.map(item => {
         changePriceDiff[`${item.item._id}`] = item.diff;
         return item.item;

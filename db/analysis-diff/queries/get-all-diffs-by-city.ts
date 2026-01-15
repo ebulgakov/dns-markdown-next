@@ -12,8 +12,11 @@ export const getAllDiffsByCity = async (city: string) => {
 
   await dbConnect();
 
-  const diffs = await AnalysisDiff.find({ city }, {}, { sort: { dateAdded: -1 } });
-  if (!diffs) throw new Error("No analysis diffs found");
+  const diffs = (await AnalysisDiff.find(
+    { city },
+    {},
+    { sort: { dateAdded: -1 } }
+  )) as AnalysisDiffType[];
 
   const plainDiffs = JSON.stringify(diffs);
 
