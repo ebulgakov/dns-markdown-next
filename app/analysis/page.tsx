@@ -3,7 +3,7 @@ import { Alert, AlertDescription, AlertTitle } from "@/app/components/ui/alert";
 import { PageTitle } from "@/app/components/ui/page-title";
 
 export default async function AnalysisPage() {
-  let city, countUniqueGoods, startFrom, currentCountGoods;
+  let city, countUniqueGoods, startFrom, currentCountGoods, goodsCountByDates;
 
   try {
     const data = await getAnalysisData();
@@ -12,6 +12,7 @@ export default async function AnalysisPage() {
     countUniqueGoods = data.countUniqueGoods;
     startFrom = data.startFrom;
     currentCountGoods = data.currentCountGoods;
+    goodsCountByDates = data.goodsCountByDates;
   } catch (e) {
     const { message } = e as Error;
     return (
@@ -39,6 +40,8 @@ export default async function AnalysisPage() {
         <p>
           В текущем прайс-листе доступно товаров: <b>{currentCountGoods}</b>
         </p>
+
+        <pre>{JSON.stringify(goodsCountByDates, null, 2)}</pre>
       </div>
     </div>
   );

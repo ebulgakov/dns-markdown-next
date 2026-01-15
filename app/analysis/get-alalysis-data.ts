@@ -1,7 +1,8 @@
 import { formatDate } from "@/app/helpers/format";
-import { getAnalysisGoodsLinks } from "@/db/analysis-data/queries/get-analysis-goods-links";
+import { getAnalysisGoodsLinks, getAnalysisGoodsByParam } from "@/db/analysis-data/queries";
 import { getArchiveListDates, getLastPriceList, getPriceListCity } from "@/db/pricelist/queries";
 
+import type { AnalysisData as AnalysisDataType } from "@/types/analysis-data";
 import type { PriceListDates } from "@/types/pricelist";
 
 export async function getAnalysisData() {
@@ -10,6 +11,7 @@ export async function getAnalysisData() {
   let startFrom: string;
   let currentCountGoods: number;
   let archiveDatesCollection: PriceListDates;
+  let goodsCountByDates: { date: string; count: number }[];
 
   try {
     city = await getPriceListCity();
@@ -45,5 +47,27 @@ export async function getAnalysisData() {
     throw new Error("Не удалось получить последний прайс-лист", error);
   }
 
-  return { city, countUniqueGoods: links.length, startFrom, currentCountGoods };
+  try {
+    const promises = archiveDatesCollection.map(dateItem =>
+      getAnalysisGoodsByParam({
+        param: "dateAdded",
+        value: dateItem.createdAt,
+        city
+      })
+    );
+    const goodsByDatesCollection = await Promise.all(promises);
+
+    goodsCountByDates = archiveDatesCollection.map((date, idx) => {
+      return {
+        date: formatDate(date.createdAt),
+        count: goodsByDatesCollection[idx].length
+      };
+    });
+  } catch (e) {
+    const error = e as Error;
+    console.error(error);
+    throw new Error("Не удалось получить проанализированные товары по дате", error);
+  }
+
+  return { city, countUniqueGoods: links.length, startFrom, currentCountGoods, goodsCountByDates };
 }
