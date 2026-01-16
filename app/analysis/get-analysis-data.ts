@@ -6,6 +6,8 @@ import { getArchiveListDates, getLastPriceList, getPriceListCity } from "@/db/pr
 import type { AnalysisData } from "@/types/analysis-data";
 import type { AnalysisDiff as AnalysisDiffType } from "@/types/analysis-diff";
 import type { PriceListDates } from "@/types/pricelist";
+import type { ReportsResponse } from "@/types/reports";
+import { getAllReportsByCity } from "@/db/reports/queries";
 
 export async function getAnalysisData() {
   let city: string | undefined;
@@ -16,6 +18,7 @@ export async function getAnalysisData() {
   let goodsCountByDates: { date: string; count: number }[];
   let goodsChangesByDates: AnalysisDiffType[];
   let goodsByDatesCollection: AnalysisData[][];
+  let reports: ReportsResponse;
 
   try {
     city = await getPriceListCity();
@@ -89,12 +92,22 @@ export async function getAnalysisData() {
     throw new Error("Analysis goods changes by dates not found", { cause: e });
   }
 
+  try {
+    reports = await getAllReportsByCity(city);
+    if (!reports) throw new Error();
+  } catch (error) {
+    const e = error as Error;
+    console.error(e);
+    throw new Error("Reports data not found", { cause: e });
+  }
+
   return {
     city,
     countUniqueGoods: links.length,
     startFrom,
     currentCountGoods,
     goodsCountByDates,
-    goodsChangesByDates
+    goodsChangesByDates,
+    reports
   };
 }
