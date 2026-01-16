@@ -19,36 +19,40 @@ export async function getAnalysisData() {
 
   try {
     city = await getPriceListCity();
+    if (!city) throw new Error();
   } catch (error) {
     const e = error as Error;
     console.error(e);
-    throw new Error("Не удалось получить город прайс-листа", { cause: e });
+    throw new Error("City not found", { cause: e });
   }
 
   try {
     links = await getAnalysisGoodsLinks(city);
+    if (!links) throw new Error();
   } catch (error) {
     const e = error as Error;
     console.error(e);
-    throw new Error("Не удалось получить ссылки на товары для анализа", { cause: e });
+    throw new Error("Analysis goods links not found", { cause: e });
   }
 
   try {
     archiveDatesCollection = await getArchiveListDates(city);
+    if (!archiveDatesCollection || archiveDatesCollection.length === 0) throw new Error();
     startFrom = formatDate(archiveDatesCollection[0].createdAt);
   } catch (error) {
     const e = error as Error;
     console.error(e);
-    throw new Error("Не удалось получить архив прайс-листов", { cause: e });
+    throw new Error("Archive of price lists not found", { cause: e });
   }
 
   try {
     const lastPriceList = await getLastPriceList(city);
+    if (!lastPriceList) throw new Error();
     currentCountGoods = lastPriceList.positions.reduce((acc, cur) => acc + cur.items.length, 0);
   } catch (error) {
     const e = error as Error;
     console.error(e);
-    throw new Error("Не удалось получить последний прайс-лист", { cause: e });
+    throw new Error("Price list not found", { cause: e });
   }
 
   try {
@@ -60,6 +64,7 @@ export async function getAnalysisData() {
       })
     );
     goodsByDatesCollection = await Promise.all(promises);
+    if (!goodsByDatesCollection || goodsByDatesCollection.length === 0) throw new Error();
 
     goodsCountByDates = archiveDatesCollection.map((date, idx) => {
       return {
@@ -70,16 +75,18 @@ export async function getAnalysisData() {
   } catch (error) {
     const e = error as Error;
     console.error(e);
-    throw new Error("Не удалось получить проанализированные товары по дате", { cause: e });
+    throw new Error("Not able to get analyzed goods by date", { cause: e });
   }
 
   try {
     goodsChangesByDates = await getAllDiffsByCity(city);
+    if (!goodsChangesByDates) throw new Error();
+
     goodsChangesByDates.reverse();
   } catch (error) {
     const e = error as Error;
     console.error(e);
-    throw new Error("Не удалось получить динамику товаров по дате", { cause: e });
+    throw new Error("Analysis goods changes by dates not found", { cause: e });
   }
 
   return {
