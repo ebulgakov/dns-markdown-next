@@ -1,11 +1,21 @@
 import { getAnalysisData } from "@/app/analysis/get-analysis-data";
 import AnalysisPageTitle from "@/app/analysis/page-title";
-import { AnalyticsGoodsCountChart, AnalyticsGoodsChangesChart } from "@/app/components/analytics";
+import {
+  AnalyticsGoodsCountChart,
+  AnalyticsGoodsChangesChart,
+  AnalyticsReports
+} from "@/app/components/analytics";
 import { Alert, AlertDescription, AlertTitle } from "@/app/components/ui/alert";
 import { Title } from "@/app/components/ui/title";
 
 export default async function AnalysisPage() {
-  let city, countUniqueGoods, startFrom, currentCountGoods, goodsCountByDates, goodsChangesByDates;
+  let city,
+    countUniqueGoods,
+    startFrom,
+    currentCountGoods,
+    goodsCountByDates,
+    goodsChangesByDates,
+    reports;
 
   try {
     const data = await getAnalysisData();
@@ -15,6 +25,10 @@ export default async function AnalysisPage() {
     startFrom = data.startFrom;
     currentCountGoods = data.currentCountGoods;
     goodsCountByDates = data.goodsCountByDates;
+    reports = data.reports;
+
+    // Hide the first entry as it represents the initial state with new goods only
+    data.goodsChangesByDates.shift();
     goodsChangesByDates = data.goodsChangesByDates;
   } catch (e) {
     const { message } = e as Error;
@@ -44,12 +58,13 @@ export default async function AnalysisPage() {
           В текущем прайс-листе доступно товаров: <b>{currentCountGoods}</b>
         </p>
 
-        <Title variant="h2">Динамика количества товаров</Title>
+        <Title variant="h2">Отчёт по каталогу</Title>
+        <AnalyticsReports reports={reports} />
 
+        <Title variant="h2">Динамика количества товаров</Title>
         <AnalyticsGoodsCountChart chartData={goodsCountByDates} />
 
         <Title variant="h2">Динамика изменения состояния в каталоге</Title>
-
         <AnalyticsGoodsChangesChart chartData={goodsChangesByDates} />
       </div>
     </div>

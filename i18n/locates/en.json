@@ -24,7 +24,8 @@
     "most_discount": "Biggest Discount",
     "most_discount_text": "item with the largest discount in the catalog",
     "most_profit": "Most Profitable",
-    "most_profit_text": "this is how much money you can save"
+    "most_profit_text": "this is how much money you can save",
+    "view_analysis": "More detailed information can be found in the"
   },
   "Navbar": {
     "logo": "DNS Markdown",

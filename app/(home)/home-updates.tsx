@@ -1,3 +1,5 @@
+import { ChartBar } from "lucide-react";
+import Link from "next/link";
 import { useTranslations } from "next-intl";
 import { Fragment } from "react";
 
@@ -30,6 +32,7 @@ export default function HomeUpdates({
   error
 }: HomeUpdatesProps) {
   const t = useTranslations("HomePage");
+  const tNav = useTranslations("Navbar");
   const cities = useTranslations("cities");
 
   if (error || !date || !city) {
@@ -98,6 +101,15 @@ export default function HomeUpdates({
             <EmptyOffer />
           )}
         </div>
+      </div>
+
+      <div className="mt-4 border-t border-gray-200 pt-4 text-lg font-bold text-gray-600 dark:text-gray-400">
+        <ChartBar className="text-accent mr-2 inline" />
+        {t("view_analysis")}&nbsp;
+        <Link href="/analysis" className="text-primary">
+          {tNav("analysis")}
+        </Link>
+        .
       </div>
     </Fragment>
   );
