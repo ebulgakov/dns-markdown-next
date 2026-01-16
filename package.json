@@ -20,15 +20,13 @@
     "crawler": "tsx ./parser/crawler.ts",
     "downloader": "bash parser/dns_shop_downloader.sh && npm run crawler && bash parser/dns_shop_downloader_prices.sh",
     "add:list": "tsx ./add_price_list",
-    "add:mutated": "tsx ./add_mutated_items",
+    "add:analysis-data:full": "WRITE_STRATEGY=replace tsx ./add_analysis_data",
+    "add:analysis-data": "WRITE_STRATEGY=insert tsx ./add_analysis_data",
     "add:analysis-diff:full": "WRITE_STRATEGY=replace tsx ./add_analysis_diff",
     "add:analysis-diff": "WRITE_STRATEGY=insert tsx ./add_analysis_diff",
-    "add:history": "tsx ./add_history",
-    "add:analysis-data": "WRITE_STRATEGY=insert tsx ./add_analysis_data",
-    "add:analysis-data:full": "WRITE_STRATEGY=replace tsx ./add_analysis_data",
     "check:favorites": "tsx ./check_favorites",
     "cache:clear": "tsx ./cache_clear",
-    "parse": "npm run downloader && npm run add:list && add:analysis-diff && npm run add:history && npm run check:favorites && npm run add:analysis-data && npm run cache:clear",
+    "parse": "npm run downloader && npm run add:list && npm run add:analysis-data && npm run add:analysis-diff && npm run check:favorites && npm run cache:clear",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "dependencies": {
