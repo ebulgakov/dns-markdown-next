@@ -4,10 +4,11 @@ import { getTranslations } from "next-intl/server";
 import { PriceListSection } from "@/app/components/price-list";
 import { Alert, AlertDescription, AlertTitle } from "@/app/components/ui/alert";
 import { PageTitle } from "@/app/components/ui/page-title";
-import { getPriceListCity, getPriceListsDiff } from "@/db/pricelist/queries";
+import { getLastDiffByCity } from "@/db/analysis-diff/queries";
+import { getPriceListCity } from "@/db/pricelist/queries";
 import { getUser } from "@/db/user/queries";
 
-import type { DiffsCollection as DiffsCollectionType } from "@/types/diff";
+import type { DiffsCollection as DiffsType } from "@/types/analysis-diff";
 import type { Favorite as FavoriteType } from "@/types/user";
 import type { Metadata } from "next";
 
@@ -24,60 +25,55 @@ export async function generateMetadata({ params }: UpdatesPageProps): Promise<Me
 }
 
 export default async function UpdatesPage() {
-  const { userId } = await auth();
+  let isUserLoggedIn;
+  try {
+    const { userId } = await auth();
+    isUserLoggedIn = !!userId;
+  } catch {
+    isUserLoggedIn = false;
+  }
 
   let diffNew;
   let diffRemoved;
   let diffChangesPrice;
   let diffChangesProfit;
   let userFavoritesGoods: FavoriteType[] = [];
-  const changePriceDiff: DiffsCollectionType = {};
-  const changeProfitDiff: DiffsCollectionType = {};
+  const changePriceDiff: DiffsType = {};
+  const changeProfitDiff: DiffsType = {};
 
   try {
     const city = await getPriceListCity();
-    const collection = await getPriceListsDiff(city);
-    const collectionDiff = collection?.diff;
-    const collectionSold = collection?.sold;
-    const collectionNew = collection?.new;
+    const collection = await getLastDiffByCity(city);
 
-    if (collectionNew && collectionNew.goods.length > 0) {
-      diffNew = {
-        _id: "new-items",
-        title: "Новые поступления",
-        items: collectionNew.goods
-      };
-    }
+    diffNew = {
+      _id: "new-items",
+      title: "Новые поступления",
+      items: collection.newItems
+    };
 
-    if (collectionDiff && collectionDiff.changesProfit.length > 0) {
-      diffChangesProfit = {
-        _id: "change-profit-items",
-        title: "Изменения Выгоды",
-        items: collectionDiff.changesProfit?.map(item => {
-          changeProfitDiff[`${item.item._id}`] = item.diff;
-          return item.item;
-        })
-      };
-    }
+    diffRemoved = {
+      _id: "removed-items",
+      title: "Продано на сегодня",
+      items: collection.removedItems
+    };
 
-    if (collectionDiff && collectionDiff.changesPrice.length > 0) {
-      diffChangesPrice = {
-        _id: "change-price-items",
-        title: "Изменения цены",
-        items: collectionDiff.changesPrice?.map(item => {
-          changePriceDiff[`${item.item._id}`] = item.diff;
-          return item.item;
-        })
-      };
-    }
+    diffChangesProfit = {
+      _id: "change-profit-items",
+      title: "Изменения Выгоды",
+      items: collection.changesProfit.map(item => {
+        changeProfitDiff[`${item.item._id}`] = item.diff;
+        return item.item;
+      })
+    };
 
-    if (collectionSold && collectionSold.goods.length > 0) {
-      diffRemoved = {
-        _id: "removed-items",
-        title: "Продано на сегодня",
-        items: collectionSold.goods
-      };
-    }
+    diffChangesPrice = {
+      _id: "change-price-items",
+      title: "Изменения цены",
+      items: collection.changesPrice.map(item => {
+        changePriceDiff[`${item.item._id}`] = item.diff;
+        return item.item;
+      })
+    };
   } catch (e) {
     const { message } = e as Error;
     return (
@@ -100,7 +96,7 @@ export default async function UpdatesPage() {
       <PageTitle title="Обновления с начала дня" />
       {diffNew && (
         <PriceListSection
-          isUserLoggedIn={!!userId}
+          isUserLoggedIn={isUserLoggedIn}
           isOpen={true}
           position={diffNew}
           favorites={userFavoritesGoods}
@@ -108,7 +104,7 @@ export default async function UpdatesPage() {
       )}
       {diffChangesPrice && (
         <PriceListSection
-          isUserLoggedIn={!!userId}
+          isUserLoggedIn={isUserLoggedIn}
           isOpen={true}
           position={diffChangesPrice}
           favorites={userFavoritesGoods}
@@ -118,7 +114,7 @@ export default async function UpdatesPage() {
       {diffRemoved && <PriceListSection isOpen={true} position={diffRemoved} />}
       {diffChangesProfit && (
         <PriceListSection
-          isUserLoggedIn={!!userId}
+          isUserLoggedIn={isUserLoggedIn}
           position={diffChangesProfit}
           diffs={changeProfitDiff}
           favorites={userFavoritesGoods}

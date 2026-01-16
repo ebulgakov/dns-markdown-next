@@ -1,10 +1,10 @@
 "use client";
 import { NumericFormat } from "react-number-format";
 
-import type { GoodDiffChanges as GoodDiffChangesType } from "@/types/diff";
+import type { Diff as DiffType } from "@/types/analysis-diff";
 
 type PriceListGoodsDiffProps = {
-  diff: GoodDiffChangesType;
+  diff: DiffType;
 };
 
 function PriceListGoodsDiff({ diff }: PriceListGoodsDiffProps) {

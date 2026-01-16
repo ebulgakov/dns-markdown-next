@@ -9,13 +9,13 @@ import { formatDate, formatDateShort } from "@/app/helpers/format";
 import { PriceListFavoriteToggle } from "./price-list-favorite-toggle";
 import { PriceListGoodsDiff } from "./price-list-goods-diff";
 
-import type { GoodDiffChanges as GoodDiffChangesType } from "@/types/diff";
+import type { Diff as DiffType } from "@/types/analysis-diff";
 import type { Goods as GoodsType } from "@/types/pricelist";
 import type { Favorite, FavoriteStatus } from "@/types/user";
 
 type PriceListGoodsProps = {
   item: GoodsType;
-  diff?: GoodDiffChangesType;
+  diff?: DiffType;
   favorites?: Favorite[];
   status?: FavoriteStatus;
   isUserLoggedIn?: boolean;

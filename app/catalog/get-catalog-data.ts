@@ -8,16 +8,26 @@ export async function getCatalogData() {
   const favoriteSections: PositionType[] = [];
   const nonFavoriteSections: PositionType[] = [];
   let priceList: PriceListType | undefined;
-  let userFavoritesGoods: FavoriteType[] = [];
-  let hiddenSectionsTitles: UserSectionsType = [];
-  let error;
+  let userFavoritesGoods: FavoriteType[] | undefined;
+  let hiddenSectionsTitles: UserSectionsType | undefined;
+  let city: string | undefined;
 
   try {
-    const city = await getPriceListCity();
+    city = await getPriceListCity();
+    if (!city) throw new Error();
+  } catch (error) {
+    const e = error as Error;
+    console.error(e);
+    throw new Error("City not found", { cause: e });
+  }
+
+  try {
     priceList = await getLastPriceList(city);
-    if (!priceList) throw new Error("Price list not found");
-  } catch (e) {
-    error = e as Error;
+    if (!priceList) throw new Error();
+  } catch (error) {
+    const e = error as Error;
+    console.error(e);
+    throw new Error("Price list not found", { cause: e });
   }
 
   try {
@@ -27,7 +37,7 @@ export async function getCatalogData() {
     hiddenSectionsTitles = user.hiddenSections;
 
     if (user.favoriteSections.length > 0) {
-      priceList?.positions.forEach(position => {
+      priceList.positions.forEach(position => {
         if (user.favoriteSections.includes(position.title)) {
           favoriteSections.push(position);
         } else {
@@ -45,7 +55,6 @@ export async function getCatalogData() {
     userFavoritesGoods,
     favoriteSections,
     hiddenSectionsTitles,
-    nonFavoriteSections,
-    error
+    nonFavoriteSections
   };
 }

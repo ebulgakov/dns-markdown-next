@@ -1,3 +1,4 @@
+import { auth } from "@clerk/nextjs/server";
 import { getTranslations } from "next-intl/server";
 
 import { ChartPrices } from "@/app/components/chart-prices";
@@ -5,8 +6,10 @@ import { PriceListGoods } from "@/app/components/price-list";
 import { Alert, AlertDescription, AlertTitle } from "@/app/components/ui/alert";
 import { PageTitle } from "@/app/components/ui/page-title";
 import { Title } from "@/app/components/ui/title";
-import { getProductById } from "@/db/pricelist/queries";
+import { getPriceListCity, getProductById } from "@/db/pricelist/queries";
+import { getUser } from "@/db/user/queries";
 
+import type { Favorite } from "@/types/user";
 import type { Metadata } from "next";
 
 type CatalogItemPage = {
@@ -19,7 +22,8 @@ export async function generateMetadata({ params }: CatalogItemPage): Promise<Met
 
   let title = "";
   try {
-    const product = await getProductById(`/catalog/markdown/${id}/`);
+    const city = await getPriceListCity();
+    const product = await getProductById(`/catalog/markdown/${id}/`, city);
     title = product.item.title;
   } catch {
     title = t("goods_not_found_title");
@@ -32,7 +36,8 @@ export default async function CatalogItemPage({ params }: CatalogItemPage) {
   const { id } = await params;
   let product;
   try {
-    product = await getProductById(`/catalog/markdown/${id}/`);
+    const city = await getPriceListCity();
+    product = await getProductById(`/catalog/markdown/${id}/`, city);
   } catch (e) {
     const { message } = e as Error;
     return (
@@ -43,11 +48,27 @@ export default async function CatalogItemPage({ params }: CatalogItemPage) {
     );
   }
 
+  let favorites: Favorite[];
+  try {
+    const user = await getUser();
+    favorites = user.favorites;
+  } catch {
+    favorites = [];
+  }
+
+  let isUserLoggedIn;
+  try {
+    const { userId } = await auth();
+    isUserLoggedIn = !!userId;
+  } catch {
+    isUserLoggedIn = false;
+  }
+
   return (
     <div>
       <PageTitle title={product.item.title} />
 
-      <PriceListGoods item={product.item} />
+      <PriceListGoods isUserLoggedIn={isUserLoggedIn} item={product.item} favorites={favorites} />
 
       <Title variant="h2">Сравнение цен</Title>
 
@@ -75,8 +96,7 @@ export default async function CatalogItemPage({ params }: CatalogItemPage) {
       </ul>
 
       <Title variant="h2">График цены</Title>
-
-      {product.history && <ChartPrices chartData={product.history} />}
+      <ChartPrices chartData={product.history} />
     </div>
   );
 }

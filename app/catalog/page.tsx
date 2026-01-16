@@ -23,23 +23,31 @@ export async function generateMetadata({ params }: CatalogPage): Promise<Metadat
 }
 
 export default async function CatalogPage() {
-  const { userId } = await auth();
-  const {
-    priceList,
-    userFavoritesGoods,
-    hiddenSectionsTitles,
-    favoriteSections,
-    nonFavoriteSections,
-    error
-  } = await getCatalogData();
-
-  if (error || !priceList) {
+  let priceList, userFavoritesGoods, hiddenSectionsTitles, favoriteSections, nonFavoriteSections;
+  try {
+    const data = await getCatalogData();
+    priceList = data.priceList;
+    userFavoritesGoods = data.userFavoritesGoods;
+    hiddenSectionsTitles = data.hiddenSectionsTitles;
+    favoriteSections = data.favoriteSections;
+    nonFavoriteSections = data.nonFavoriteSections;
+  } catch (error) {
+    const e = error as Error;
+    console.error(e);
     return (
       <Alert variant="destructive">
         <AlertTitle>Ошибка загрузки каталога</AlertTitle>
-        <AlertDescription>{error?.message}</AlertDescription>
+        <AlertDescription>{e.message}</AlertDescription>
       </Alert>
     );
+  }
+
+  let isUserLoggedIn;
+  try {
+    const { userId } = await auth();
+    isUserLoggedIn = !!userId;
+  } catch {
+    isUserLoggedIn = false;
   }
 
   const count = priceList.positions.reduce((acc, cur) => acc + cur.items.length, 0);
@@ -62,7 +70,7 @@ export default async function CatalogPage() {
         hiddenSectionsTitles={hiddenSectionsTitles}
         nonFavoriteSections={nonFavoriteSections}
         priceList={priceList}
-        isUserLoggedIn={!!userId}
+        isUserLoggedIn={isUserLoggedIn}
       />
     </div>
   );

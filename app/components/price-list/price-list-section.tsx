@@ -5,14 +5,14 @@ import { useState } from "react";
 
 import { PriceListGoods } from "./price-list-goods";
 
-import type { DiffsCollection as DiffsCollectionType } from "@/types/diff";
+import type { DiffsCollection as DiffsType } from "@/types/analysis-diff";
 import type { Position as PositionType } from "@/types/pricelist";
 import type { Favorite } from "@/types/user";
 
 type PriceListProps = {
   position: PositionType;
   favorites?: Favorite[];
-  diffs?: DiffsCollectionType;
+  diffs?: DiffsType;
   isOpen?: boolean;
   isUserLoggedIn?: boolean;
 };

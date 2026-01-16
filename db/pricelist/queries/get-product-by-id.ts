@@ -1,45 +1,36 @@
 import { get as cacheGet, add as cacheAdd } from "@/cache";
+import { getAnalysisGoodsByParam } from "@/db/analysis-data/queries";
 import { dbConnect } from "@/db/database";
-import { History } from "@/db/models/history-model";
-import { Pricelist } from "@/db/models/pricelist-model";
 
-import type { History as HistoryType } from "@/types/history";
-import type { Goods, PriceList as PriceListType } from "@/types/pricelist";
+import type { AnalysisData } from "@/types/analysis-data";
+import type { DiffHistory } from "@/types/analysis-diff";
 
 type PayloadType = {
-  item: Goods;
-  history: HistoryType;
+  item: AnalysisData;
+  history: DiffHistory;
 };
 
-export const getProductById = async (id: string) => {
-  if (!id) throw new Error("id is required");
+export const getProductById = async (link: string, city: string) => {
+  if (!link) throw new Error("link is required");
 
-  const key = `pricelist:goods:${String(id)}`;
+  const key = `pricelist:goods:${String(link)}:${city}`;
   const cached = await cacheGet<PayloadType>(key);
   if (cached) return cached;
 
   await dbConnect();
 
-  const history = (await History.findOne(
-    { link: id },
-    {},
-    { sort: { updatedAt: -1 } }
-  )) as unknown as HistoryType | null;
-  if (!history) throw new Error("History not found"); // Return
+  const historyList = await getAnalysisGoodsByParam({ param: "link", value: link, city });
+  if (!historyList || historyList.length === 0) throw new Error("Product not found");
 
-  const priceList = (await Pricelist.findOne(
-    { city: history.city },
-    {},
-    { sort: { updatedAt: -1 } }
-  )) as unknown as PriceListType | null;
-  if (!priceList) throw new Error("Price list not found"); // Return
-
-  const positions = priceList.positions.flatMap(positionGroup => positionGroup.items);
-  const item = positions.find((position: { link: string }) => position.link === id);
-
-  if (!item) throw new Error("Product Item not found"); // Return
-
-  item.city = history.city; // Added city specially for adding to favorites
+  const item = historyList[historyList.length - 1];
+  const history: DiffHistory = historyList.map(entry => {
+    return {
+      dateAdded: entry.dateAdded,
+      price: entry.price,
+      priceOld: entry.priceOld,
+      profit: entry.profit
+    };
+  });
 
   const payload = JSON.stringify({ item, history });
   await cacheAdd(key, payload);

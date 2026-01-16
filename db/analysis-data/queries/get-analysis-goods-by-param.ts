@@ -6,7 +6,7 @@ import type { AnalysisData as AnalysisDataType } from "@/types/analysis-data";
 
 type GetAnalysisGoodsByParam = {
   param: keyof typeof AnalysisData.schema.obj;
-  value: string | number | boolean;
+  value: Date | string | number | boolean;
   city: string;
 };
 
@@ -22,8 +22,12 @@ export const getAnalysisGoodsByParam = async ({ param, value, city }: GetAnalysi
     .exec();
   if (!analysisGoods) throw new Error("No analysis goods found");
 
+  (analysisGoods as unknown as AnalysisDataType[]).sort(
+    (a, b) => new Date(a.dateAdded).getTime() - new Date(b.dateAdded).getTime()
+  );
+
   const plainAnalysisGoods = JSON.stringify(analysisGoods);
   await cacheAdd(cacheKey, plainAnalysisGoods);
 
-  return JSON.parse(plainAnalysisGoods);
+  return JSON.parse(plainAnalysisGoods) as AnalysisDataType[];
 };
