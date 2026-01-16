@@ -1,6 +1,7 @@
 import { ClerkProvider } from "@clerk/nextjs";
 import { auth } from "@clerk/nextjs/server";
 import { GoogleAnalytics } from "@next/third-parties/google";
+import { SpeedInsights } from "@vercel/speed-insights/next";
 import { Roboto, Roboto_Mono } from "next/font/google";
 import { NextIntlClientProvider } from "next-intl";
 import { getTranslations } from "next-intl/server";
@@ -95,6 +96,7 @@ export default async function RootLayout({
                   </div>
                 </div>
               </ThemeProvider>
+              <SpeedInsights />
             </body>
             {process.env.GA_ID && <GoogleAnalytics gaId={process.env.GA_ID} />}
           </html>
