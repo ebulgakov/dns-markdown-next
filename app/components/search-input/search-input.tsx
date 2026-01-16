@@ -30,7 +30,6 @@ function SearchInput() {
         >
           <div className="mx-auto md:container">
             <Input
-              autoFocus={true}
               inputSize="lg"
               role="search"
               type="search"
