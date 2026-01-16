@@ -1,13 +1,16 @@
 import { get as cacheGet, add as cacheAdd } from "@/cache";
 import { getAnalysisGoodsByParam } from "@/db/analysis-data/queries";
 import { dbConnect } from "@/db/database";
+import { getLastPriceList } from "@/db/pricelist/queries/get-last-price-list";
 
 import type { AnalysisData } from "@/types/analysis-data";
 import type { DiffHistory } from "@/types/analysis-diff";
+import type { FavoriteStatus } from "@/types/user";
 
 type PayloadType = {
   item: AnalysisData;
   history: DiffHistory;
+  status: FavoriteStatus;
 };
 
 export const getProductById = async (link: string, city: string) => {
@@ -32,7 +35,18 @@ export const getProductById = async (link: string, city: string) => {
     };
   });
 
-  const payload = JSON.stringify({ item, history });
+  const lastPriceList = await getLastPriceList(city);
+  const flatCatalog = lastPriceList.positions.flatMap(position => position.items.flat());
+  const ifExists = flatCatalog.find(item => item.link === link);
+  const status = {
+    city,
+    updates: [],
+    createdAt: history[history.length - 1].dateAdded,
+    updatedAt: history[history.length - 1].dateAdded,
+    deleted: !ifExists
+  };
+
+  const payload = JSON.stringify({ item, history, status });
   await cacheAdd(key, payload);
 
   return JSON.parse(payload) as PayloadType;

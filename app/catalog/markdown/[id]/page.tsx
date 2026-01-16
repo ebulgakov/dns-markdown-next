@@ -35,6 +35,7 @@ export async function generateMetadata({ params }: CatalogItemPage): Promise<Met
 export default async function CatalogItemPage({ params }: CatalogItemPage) {
   const { id } = await params;
   let product;
+
   try {
     const city = await getPriceListCity();
     product = await getProductById(`/catalog/markdown/${id}/`, city);
@@ -48,12 +49,14 @@ export default async function CatalogItemPage({ params }: CatalogItemPage) {
     );
   }
 
-  let favorites: Favorite[];
-  try {
-    const user = await getUser();
-    favorites = user.favorites;
-  } catch {
-    favorites = [];
+  let favorites: Favorite[] | undefined;
+  if (!product.status.deleted) {
+    try {
+      const user = await getUser();
+      favorites = user.favorites;
+    } catch {
+      favorites = [];
+    }
   }
 
   let isUserLoggedIn;
@@ -68,7 +71,12 @@ export default async function CatalogItemPage({ params }: CatalogItemPage) {
     <div>
       <PageTitle title={product.item.title} />
 
-      <PriceListGoods isUserLoggedIn={isUserLoggedIn} item={product.item} favorites={favorites} />
+      <PriceListGoods
+        isUserLoggedIn={isUserLoggedIn}
+        item={product.item}
+        favorites={favorites}
+        status={product.status}
+      />
 
       <Title variant="h2">Сравнение цен</Title>
 
