@@ -22,7 +22,7 @@ function SearchInput() {
       {!hidden && (
         <div
           className={clsx(
-            "dark:bg-background fixed right-0 bottom-0 left-0 z-10 border-t border-gray-200 bg-white px-22 py-5",
+            "dark:bg-background fixed right-0 bottom-0 left-0 z-10 border-t border-gray-200 bg-white py-5 pr-22 pl-4 lg:pl-22",
             {
               hidden: hidden
             }
@@ -30,7 +30,6 @@ function SearchInput() {
         >
           <div className="mx-auto md:container">
             <Input
-              autoFocus={true}
               inputSize="lg"
               role="search"
               type="search"
