@@ -25,7 +25,7 @@ export const getProductById = async (link: string, city: string) => {
   const historyList = await getAnalysisGoodsByParam({ param: "link", value: link, city });
   if (!historyList || historyList.length === 0) throw new Error("Product not found");
 
-  const item = historyList[historyList.length - 1];
+  const product = historyList[historyList.length - 1];
   const history: DiffHistory = historyList.map(entry => {
     return {
       dateAdded: entry.dateAdded,
@@ -41,12 +41,12 @@ export const getProductById = async (link: string, city: string) => {
   const status = {
     city,
     updates: [],
-    createdAt: history[history.length - 1].dateAdded,
+    createdAt: history[0].dateAdded,
     updatedAt: history[history.length - 1].dateAdded,
     deleted: !ifExists
   };
 
-  const payload = JSON.stringify({ item, history, status });
+  const payload = JSON.stringify({ item: product, history, status });
   await cacheAdd(key, payload);
 
   return JSON.parse(payload) as PayloadType;

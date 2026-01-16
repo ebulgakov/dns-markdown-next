@@ -13,7 +13,8 @@ type AnalyticsReportsProps = {
 };
 
 function AnalyticsReports({ reports }: AnalyticsReportsProps) {
-  console.log(reports);
+  if (!reports || reports.length === 0) return null;
+
   return (
     <Tabs defaultValue={reports[0].dateAdded}>
       <TabsList className="flex w-full flex-1 flex-col items-stretch md:flex-auto md:flex-row md:items-center">

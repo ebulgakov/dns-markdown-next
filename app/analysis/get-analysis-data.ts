@@ -94,7 +94,7 @@ export async function getAnalysisData() {
 
   try {
     reports = await getAllReportsByCity(city);
-    if (!reports) throw new Error();
+    if (!reports || reports.length === 0) throw new Error();
   } catch (error) {
     const e = error as Error;
     console.error(e);
