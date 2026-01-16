@@ -11,6 +11,7 @@ import "./globals.css";
 
 import { Footer } from "@/app/components/footer";
 import { Navbar } from "@/app/components/navbar";
+import { ProgressBarProvider } from "@/app/components/page-loader";
 import { cn } from "@/app/lib/utils";
 import { ThemeProvider } from "@/app/providers/theme-provider";
 import { getPriceListCity } from "@/db/pricelist/queries";
@@ -78,26 +79,28 @@ export default async function RootLayout({
     <StrictMode>
       <NextIntlClientProvider>
         <ClerkProvider>
-          <html lang={locale} suppressHydrationWarning>
-            <body
-              className={cn(["font-sans antialiased", robotoSans.variable, robotoMono.variable])}
-            >
-              <ThemeProvider attribute="class" defaultTheme="light" enableSystem>
-                <div className="px-4">
-                  <div className="mx-auto grid min-h-screen md:container">
-                    <div className="mb-10">
-                      <div className="mt-4 mb-5">
-                        <Navbar locate={locale} isUserLoggedIn={!!userId} city={city} />
+          <ProgressBarProvider>
+            <html lang={locale} suppressHydrationWarning>
+              <body
+                className={cn(["font-sans antialiased", robotoSans.variable, robotoMono.variable])}
+              >
+                <ThemeProvider attribute="class" defaultTheme="light" enableSystem>
+                  <div className="px-4">
+                    <div className="mx-auto grid min-h-screen md:container">
+                      <div className="mb-10">
+                        <div className="mt-4 mb-5">
+                          <Navbar locate={locale} isUserLoggedIn={!!userId} city={city} />
+                        </div>
+                        {children}
                       </div>
-                      {children}
+                      <Footer locate={locale} />
                     </div>
-                    <Footer locate={locale} />
                   </div>
-                </div>
-              </ThemeProvider>
-            </body>
-            {process.env.GA_ID && <GoogleAnalytics gaId={process.env.GA_ID} />}
-          </html>
+                </ThemeProvider>
+              </body>
+              {process.env.GA_ID && <GoogleAnalytics gaId={process.env.GA_ID} />}
+            </html>
+          </ProgressBarProvider>
         </ClerkProvider>
       </NextIntlClientProvider>
     </StrictMode>
