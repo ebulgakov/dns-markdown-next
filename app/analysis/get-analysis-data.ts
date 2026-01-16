@@ -2,12 +2,12 @@ import { formatDate, formatDateShort } from "@/app/helpers/format";
 import { getAnalysisGoodsLinks, getAnalysisGoodsByParam } from "@/db/analysis-data/queries";
 import { getAllDiffsByCity } from "@/db/analysis-diff/queries";
 import { getArchiveListDates, getLastPriceList, getPriceListCity } from "@/db/pricelist/queries";
+import { getAllReportsByCity } from "@/db/reports/queries";
 
 import type { AnalysisData } from "@/types/analysis-data";
 import type { AnalysisDiff as AnalysisDiffType } from "@/types/analysis-diff";
 import type { PriceListDates } from "@/types/pricelist";
 import type { ReportsResponse } from "@/types/reports";
-import { getAllReportsByCity } from "@/db/reports/queries";
 
 export async function getAnalysisData() {
   let city: string | undefined;
