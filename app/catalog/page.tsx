@@ -23,30 +23,31 @@ export async function generateMetadata({ params }: CatalogPage): Promise<Metadat
 }
 
 export default async function CatalogPage() {
+  let priceList, userFavoritesGoods, hiddenSectionsTitles, favoriteSections, nonFavoriteSections;
+  try {
+    const data = await getCatalogData();
+    priceList = data.priceList;
+    userFavoritesGoods = data.userFavoritesGoods;
+    hiddenSectionsTitles = data.hiddenSectionsTitles;
+    favoriteSections = data.favoriteSections;
+    nonFavoriteSections = data.nonFavoriteSections;
+  } catch (error) {
+    const e = error as Error;
+    console.error(e);
+    return (
+      <Alert variant="destructive">
+        <AlertTitle>Ошибка загрузки каталога</AlertTitle>
+        <AlertDescription>{e.message}</AlertDescription>
+      </Alert>
+    );
+  }
+
   let isUserLoggedIn;
   try {
     const { userId } = await auth();
     isUserLoggedIn = !!userId;
   } catch {
     isUserLoggedIn = false;
-  }
-
-  const {
-    priceList,
-    userFavoritesGoods,
-    hiddenSectionsTitles,
-    favoriteSections,
-    nonFavoriteSections,
-    error
-  } = await getCatalogData();
-
-  if (error || !priceList) {
-    return (
-      <Alert variant="destructive">
-        <AlertTitle>Ошибка загрузки каталога</AlertTitle>
-        <AlertDescription>{error?.message}</AlertDescription>
-      </Alert>
-    );
   }
 
   const count = priceList.positions.reduce((acc, cur) => acc + cur.items.length, 0);

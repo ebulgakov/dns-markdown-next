@@ -1,4 +1,4 @@
-import { getLastPriceList } from "@/db/pricelist/queries";
+import { getLastPriceList, getPriceListCity } from "@/db/pricelist/queries";
 import { mockGoods } from "@/db/user/__mocks__/pricelist";
 import { getUser } from "@/db/user/queries";
 
@@ -18,6 +18,8 @@ jest.mock("@/db/user/queries", () => ({
 
 const mockedGetLastPriceList = getLastPriceList as jest.Mock;
 const mockedGetUser = getUser as jest.Mock;
+const mockedGetPriceListCity = getPriceListCity as jest.Mock;
+console.error = jest.fn();
 
 describe("getCatalogData", () => {
   afterEach(() => {
@@ -52,12 +54,12 @@ describe("getCatalogData", () => {
       hiddenSections: ["Hidden Section"]
     };
 
+    mockedGetPriceListCity.mockResolvedValue("TestCity");
     mockedGetLastPriceList.mockResolvedValue(mockPriceList);
     mockedGetUser.mockResolvedValue(mockUser);
 
     const result = await getCatalogData();
 
-    expect(result.error).toBeUndefined();
     expect(result.priceList).toEqual(mockPriceList);
     expect(result.userFavoritesGoods).toEqual(mockUser.favorites);
     expect(result.hiddenSectionsTitles).toEqual(mockUser.hiddenSections);
@@ -67,18 +69,22 @@ describe("getCatalogData", () => {
     expect(result.nonFavoriteSections?.[0].title).toBe("Non-Favorite Section");
   });
 
+  it("should return an error if no city is found", async () => {
+    mockedGetPriceListCity.mockResolvedValue(null);
+
+    await expect(getCatalogData()).rejects.toThrow("City not found");
+  });
+
   it("should return an error if no price list is found", async () => {
+    mockedGetPriceListCity.mockResolvedValue("TestCity");
     mockedGetLastPriceList.mockResolvedValue(null);
     mockedGetUser.mockResolvedValue({});
 
-    const result = await getCatalogData();
-
-    expect(result.error).toBeInstanceOf(Error);
-    expect(result.error?.message).toBe("Price list not found");
-    expect(result.priceList).toBeNull();
+    await expect(getCatalogData()).rejects.toThrow("Price list not found");
   });
 
   it("should not return an error if no user is found", async () => {
+    mockedGetPriceListCity.mockResolvedValue("TestCity");
     const mockPriceList: PriceListType = {
       _id: "pricelist1",
       city: "TestCity",
@@ -90,7 +96,13 @@ describe("getCatalogData", () => {
 
     const result = await getCatalogData();
 
-    expect(result.error).toBeUndefined();
+    expect(result).toEqual({
+      favoriteSections: [],
+      hiddenSectionsTitles: [],
+      nonFavoriteSections: [],
+      priceList: mockPriceList,
+      userFavoritesGoods: []
+    });
   });
 
   it("should put all sections into nonFavoriteSections if user has no favorite sections", async () => {
@@ -110,7 +122,6 @@ describe("getCatalogData", () => {
 
     const result = await getCatalogData();
 
-    expect(result.error).toBeUndefined();
     expect(result.favoriteSections).toEqual([]);
     expect(result.nonFavoriteSections).toEqual([]);
   });
@@ -119,11 +130,6 @@ describe("getCatalogData", () => {
     const dbError = new Error("Database connection failed");
     mockedGetLastPriceList.mockRejectedValue(dbError);
 
-    const result = await getCatalogData();
-
-    expect(result.error).toBe(dbError);
-    expect(result.priceList).toBeUndefined();
-    expect(result.userFavoritesGoods).toEqual([]);
-    expect(result.favoriteSections).toEqual([]);
+    await expect(getCatalogData()).rejects.toThrow("Price list not found");
   });
 });
