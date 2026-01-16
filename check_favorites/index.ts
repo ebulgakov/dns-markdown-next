@@ -21,7 +21,6 @@ async function checkFavorites() {
   })
   const users = await getAllUsers(city).select("favorites").exec();
   const updatedUsers = updateFavorites(users, goods);
-  console.log(updatedUsers)
   await updateUsers(updatedUsers);
 
   await dbDisconnect();
