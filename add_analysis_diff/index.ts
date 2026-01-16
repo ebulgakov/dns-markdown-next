@@ -20,6 +20,7 @@ async function addAnalysisDiff() {
 
   if (writeStrategy === "replace") {
     usedPriceLists = priceListsCollections;
+    usedPriceLists.push(priceListsCollections[priceListsCollections.length - 1]); // add last again to make diff for it
     await removeAllAnalysisDiff(city);
   } else {
     usedPriceLists = [priceListsCollections[0], priceListsCollections[1]];
@@ -28,8 +29,8 @@ async function addAnalysisDiff() {
 
   const diffs = [];
   for (let i = 1; i < usedPriceLists.length; i++) {
-    const currentDateGoods = usedPriceLists[i];
-    const previousDateGoods = usedPriceLists[i - 1];
+    const previousDateGoods = usedPriceLists[i];
+    const currentDateGoods = usedPriceLists[i - 1];
 
     const prev = await getAnalysisGoodsByParam({
       param: "dateAdded",
