@@ -7,6 +7,7 @@ import { getAnalysisGoodsByParam } from "#db/analysis_data/queries/get-analysis-
 import { addManyAnalysisDiff } from "#db/analysis_diff/mutations/add_many_analysis_diff.js";
 import { removeAllAnalysisDiff } from "#db/analysis_diff/mutations/remove_all_analysis_diff.js";
 import { removeAnalysisByDateDiff } from "#db/analysis_diff/mutations/remove_analysis_by_date_diff.js";
+import type { AnalysisData } from "#types/analysis_data.js";
 
 async function addAnalysisDiff() {
   const writeStrategy = process.env.WRITE_STRATEGY || "insert";
@@ -20,7 +21,6 @@ async function addAnalysisDiff() {
 
   if (writeStrategy === "replace") {
     usedPriceLists = priceListsCollections;
-    usedPriceLists.push(priceListsCollections[priceListsCollections.length - 1]); // add last again to make diff for it
     await removeAllAnalysisDiff(city);
   } else {
     usedPriceLists = [priceListsCollections[0], priceListsCollections[1]];
@@ -43,6 +43,18 @@ async function addAnalysisDiff() {
       city
     });
 
+    diffs.push(makeDiff(current, prev, { city, dateAdded: currentDateGoods.createdAt }));
+  }
+
+  // Add diff for the very first price list against an empty previous state
+  if (writeStrategy === "replace") {
+    const currentDateGoods = priceListsCollections[priceListsCollections.length - 1];
+    const current = await getAnalysisGoodsByParam({
+      param: "dateAdded",
+      value: currentDateGoods.createdAt,
+      city
+    });
+    const prev: AnalysisData[] = [];
     diffs.push(makeDiff(current, prev, { city, dateAdded: currentDateGoods.createdAt }));
   }
 
