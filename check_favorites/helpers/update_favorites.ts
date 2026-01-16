@@ -1,8 +1,8 @@
 import { type User } from "#types/user.js";
-import { type History } from "#types/history.js";
 import { ObjectId } from "mongodb";
+import type { AnalysisData } from "#types/analysis_data.js";
 
-export default function updateFavorites(users: User[], history: History[]) {
+export default function updateFavorites(users: User[], history: AnalysisData[]) {
   return users.map(user => {
     user.favorites = user.favorites.map(favorite => {
       const historyItem = history.find(historyItem => historyItem.link === favorite.item.link);
@@ -14,9 +14,9 @@ export default function updateFavorites(users: User[], history: History[]) {
       }
 
       if (historyItem) {
-        const priceOld = historyItem.priceOld.pop() || "0";
-        const price = historyItem.price.pop() || "0";
-        const profit = historyItem.profit.pop() || "0";
+        const priceOld = historyItem.priceOld || "0";
+        const price = historyItem.price ||  "0";
+        const profit = historyItem.profit || "0";
 
         if (price !== favorite.item.price) {
           favorite.status.updatedAt = `${new ObjectId().getTimestamp()}`;
