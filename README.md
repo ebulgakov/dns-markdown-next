@@ -1,16 +1,20 @@
-# Dns-markdown service
+Русский | [English](./README.en.md)
 
-## Site URL
-https://dns.ebulgakov.com/
+# Сервис по подбору уценённых товаров с магазина DNS
 
-## About 
-This is an unofficial website related to the DNS company. It helps you browse discounted items from different cities listed on the DNS website.
+## Адрес сайта
+- https://dns.ebulgakov.com/ - с VPN, может быть недоступен из РФ
+- https://dns-markdown.vercel.app/ - из РФ без VPN. Зеркало.  
 
-The service provides a convenient way to view products from Samara for now. You can add items to your favorites to keep track of updates, such as price changes or product availability in stores.
 
-## Getting Started
+## О сервисе
+Это неофициальный сайт, связанный с компанией DNS. Он помогает просматривать уценённые товары из разных городов, представленные на сайте DNS.
 
-First, run the development server:
+Сервис предоставляет удобный способ просмотра товаров из Самары на данный момент. Вы можете добавлять товары в избранное, чтобы отслеживать обновления, такие как изменения цен или наличие товара в магазинах.
+
+## Начало работы
+
+Запустите сервер разработки:
 
 ```bash
 npm run dev
@@ -22,15 +26,15 @@ pnpm dev
 bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the local site.
+Откройте [http://localhost:3000](http://localhost:3000) в вашем браузере, чтобы увидеть локальный сайт.
 
-## .env file
-Rename the `.env.example` file to `.env` and fill in the required variables.
+## .env файл
+Переименуйте `.env.example` файл в `.env` и заполните необходимые переменные.
 
 ## Storybook
-Chromatic Storybook is set up for this project: https://www.chromatic.com/library?appId=695938b24c4c7f59436c970b
+Chromatic Storybook настроен для этого проекта: https://www.chromatic.com/library?appId=695938b24c4c7f59436c970b
 
-## Technologies
+## Используемые технологии
 
 * Next.js 16
 * MongoDB
