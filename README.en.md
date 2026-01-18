@@ -3,8 +3,7 @@
 # Dns-markdown service
 
 ## Site URL
-- https://dns.ebulgakov.com/ - worldwide with VPN (may be unavailable from Russia)
-- https://dns-markdown.vercel.app/ - from Russia without VPN. Mirror.
+https://dns.ebulgakov.com/
 
 ## About 
 This is an unofficial website related to the DNS company. It helps you browse discounted items from different cities listed on the DNS website.
