@@ -40,8 +40,6 @@ export async function getAnalysisData() {
       })
     );
     const goodsByDatesCollection = await Promise.all(promises);
-    if (!goodsByDatesCollection || goodsByDatesCollection.length === 0) throw new Error();
-
     goodsCountByDates = archiveDatesCollection.map((date, idx) => {
       return {
         date: formatDateShort(date.createdAt),
@@ -57,8 +55,6 @@ export async function getAnalysisData() {
   let goodsChangesByDates: AnalysisDiffType[];
   try {
     goodsChangesByDates = await getAllDiffsByCity(city);
-    if (!goodsChangesByDates) throw new Error();
-
     goodsChangesByDates.reverse();
   } catch (error) {
     const e = error as Error;
@@ -69,7 +65,6 @@ export async function getAnalysisData() {
   let reports: ReportsResponse;
   try {
     reports = await getAllReportsByCity(city);
-    if (!reports || reports.length === 0) throw new Error();
   } catch (error) {
     const e = error as Error;
     console.error(e);

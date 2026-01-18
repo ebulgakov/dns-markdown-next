@@ -42,7 +42,7 @@ export interface PriceList {
   createdAt: Date | string;
 }
 
-export type PriceListDates = {
+export type PriceListDate = {
   _id: string;
   createdAt: string;
-}[];
+};

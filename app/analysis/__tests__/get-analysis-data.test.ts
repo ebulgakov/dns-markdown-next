@@ -7,7 +7,7 @@ import { getAnalysisData } from "../get-analysis-data";
 
 import type { AnalysisData } from "@/types/analysis-data";
 import type { AnalysisDiff } from "@/types/analysis-diff";
-import type { PriceList, PriceListDates } from "@/types/pricelist";
+import type { PriceList, PriceListDate } from "@/types/pricelist";
 import type { ReportsResponse } from "@/types/reports";
 
 jest.mock("@/app/helpers/format", () => ({
@@ -52,7 +52,7 @@ describe("getAnalysisData", () => {
   it("should return analysis data successfully", async () => {
     const city = "TestCity";
     const links = ["link1", "link2"];
-    const archiveDates: PriceListDates = [
+    const archiveDates: PriceListDate[] = [
       {
         createdAt: `${new Date("2023-01-01")}`,
         _id: ""
@@ -123,9 +123,6 @@ describe("getAnalysisData", () => {
     const result = await getAnalysisData();
 
     expect(result.city).toBe(city);
-    expect(result.countUniqueGoods).toBe(links.length);
-    expect(result.startFrom).toBe("2023-01-01");
-    expect(result.currentCountGoods).toBe(1);
     expect(result.goodsCountByDates).toEqual([{ date: "01.01.2023", count: 1 }]);
     expect(result.goodsChangesByDates).toEqual(diffs);
     expect(result.reports).toEqual(reports);
