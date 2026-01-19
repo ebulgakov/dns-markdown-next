@@ -53,9 +53,9 @@ export const Bought: Story = {
   args: {
     item: mockGoodsList[0],
     status: {
-      updatedAt: new Date().toISOString(),
+      updatedAt: new Date("2024-06-01T10:00:00Z").toISOString(),
       city: "",
-      createdAt: new Date().toISOString(),
+      createdAt: new Date("2024-05-25T10:00:00Z").toISOString(),
       deleted: true,
       updates: []
     },
