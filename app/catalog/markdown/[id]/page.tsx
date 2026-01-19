@@ -6,7 +6,7 @@ import { PriceListGoods } from "@/app/components/price-list";
 import { Alert, AlertDescription, AlertTitle } from "@/app/components/ui/alert";
 import { PageTitle } from "@/app/components/ui/page-title";
 import { Title } from "@/app/components/ui/title";
-import { getPriceListCity, getProductById } from "@/db/pricelist/queries";
+import { getLastPriceListDate, getPriceListCity, getProductById } from "@/db/pricelist/queries";
 import { getUser } from "@/db/user/queries";
 
 import type { Favorite } from "@/types/user";
@@ -23,7 +23,8 @@ export async function generateMetadata({ params }: CatalogItemPage): Promise<Met
   let title = "";
   try {
     const city = await getPriceListCity();
-    const product = await getProductById(`/catalog/markdown/${id}/`, city);
+    const lastPriceListDate = await getLastPriceListDate(city);
+    const product = await getProductById(`/catalog/markdown/${id}/`, city, lastPriceListDate);
     title = product.item.title;
   } catch {
     title = t("goods_not_found_title");
@@ -38,7 +39,8 @@ export default async function CatalogItemPage({ params }: CatalogItemPage) {
 
   try {
     const city = await getPriceListCity();
-    product = await getProductById(`/catalog/markdown/${id}/`, city);
+    const lastPriceListDate = await getLastPriceListDate(city);
+    product = await getProductById(`/catalog/markdown/${id}/`, city, lastPriceListDate);
   } catch (e) {
     const { message } = e as Error;
     return (

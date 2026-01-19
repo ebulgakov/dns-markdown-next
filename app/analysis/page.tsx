@@ -21,10 +21,10 @@ export default async function AnalysisPage() {
     const data = await getAnalysisData();
 
     city = data.city;
-    countUniqueGoods = data.countUniqueGoods;
-    startFrom = data.startFrom;
-    currentCountGoods = data.currentCountGoods;
     goodsCountByDates = data.goodsCountByDates;
+    countUniqueGoods = data.countUniqueGoods;
+    startFrom = goodsCountByDates[0].date;
+    currentCountGoods = goodsCountByDates[goodsCountByDates.length - 1].count;
     reports = data.reports;
 
     // Hide the first entry as it represents the initial state with new goods only

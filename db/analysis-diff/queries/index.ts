@@ -1,2 +1,2 @@
 export { getLastDiffByCity } from "./get-last-diff-by-city";
-export { getAllDiffsByCity } from "./get-all-diffs-by-city";
+export { getAllDiffsReportByCity } from "./get-all-diffs-report-by-city";

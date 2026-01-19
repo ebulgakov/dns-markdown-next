@@ -18,8 +18,8 @@ export const mockFavorites: Favorite[] = [
     },
     status: {
       city: "Москва",
-      updatedAt: new Date(),
-      createdAt: new Date(),
+      updatedAt: new Date("2024-06-10T10:00:00Z").toISOString(),
+      createdAt: new Date("2024-06-01T10:00:00Z").toISOString(),
       deleted: false,
       updates: []
     }

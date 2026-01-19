@@ -12,19 +12,19 @@ import {
 } from "@/app/components/ui/chart";
 import { formatDateShort } from "@/app/helpers/format";
 
-import type { AnalysisDiff as AnalysisDiffType } from "@/types/analysis-diff";
+import type { AnalysisDiffReport as AnalysisDiffReportType } from "@/types/analysis-diff";
 
 type AnalyticsGoodsChartProps = {
-  chartData: AnalysisDiffType[];
+  chartData: AnalysisDiffReportType[];
 };
 
 function AnalyticsGoodsChangesChart({ chartData }: AnalyticsGoodsChartProps) {
   const data = chartData.map(diff => ({
     date: formatDateShort(diff.dateAdded),
-    new: diff.newItems.length,
-    sold: diff.removedItems.length,
-    pricesChanged: diff.changesPrice.length,
-    profitChanged: diff.changesProfit.length
+    new: diff.newItems,
+    sold: diff.removedItems,
+    pricesChanged: diff.changesPrice,
+    profitChanged: diff.changesProfit
   }));
   return (
     <Card>

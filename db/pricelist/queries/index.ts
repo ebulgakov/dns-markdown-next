@@ -6,3 +6,5 @@ export { getPriceListCity } from "@/db/pricelist/queries/get-price-list-city";
 export { getMostDiscountedGoods } from "@/db/pricelist/queries/get-most-discounted-goods";
 export { getMostProfitableGoods } from "@/db/pricelist/queries/get-most-profitable-goods";
 export { getMostCheapGoods } from "@/db/pricelist/queries/get-most-cheap-goods";
+export { getArchiveGoodsCount } from "@/db/pricelist/queries/get-archive-goods-count";
+export { getLastPriceListDate } from "@/db/pricelist/queries/get-last-price-list-date";

@@ -23,23 +23,25 @@ const mockedDbConnect = dbConnect as jest.Mock;
 const mockedGetLastPriceList = getLastPriceList as jest.Mock;
 
 const city = "TestCity";
+const date = "2023-01-01";
 
 describe("getMostProfitableGoods", () => {
   beforeEach(() => {
     jest.resetAllMocks();
   });
 
-  it("throws an error if city is not provided", async () => {
-    await expect(getMostProfitableGoods("")).rejects.toThrow("city is required");
+  it("throws an error if city or date is not provided", async () => {
+    await expect(getMostProfitableGoods("", date)).rejects.toThrow("city|date is required");
+    await expect(getMostProfitableGoods(city, "")).rejects.toThrow("city|date is required");
   });
 
   it("returns cached data if available", async () => {
     mockedCacheGet.mockResolvedValue(sortedByProfit);
 
-    const result = await getMostProfitableGoods(city);
+    const result = await getMostProfitableGoods(city, date);
 
     expect(result).toEqual(sortedByProfit);
-    expect(mockedCacheGet).toHaveBeenCalledWith(`pricelist:mostprofitablegoods:${city}`);
+    expect(mockedCacheGet).toHaveBeenCalledWith(`pricelist:mostprofitablegoods:${city}-${date}`);
     expect(mockedDbConnect).not.toHaveBeenCalled();
   });
 
@@ -47,14 +49,15 @@ describe("getMostProfitableGoods", () => {
     mockedCacheGet.mockResolvedValue(null);
     mockedGetLastPriceList.mockResolvedValue(mockPriceList);
 
-    const result = await getMostProfitableGoods(city);
+    const result = await getMostProfitableGoods(city, date);
 
     expect(result).toEqual(sortedByProfit);
     expect(mockedDbConnect).toHaveBeenCalled();
     expect(mockedGetLastPriceList).toHaveBeenCalledWith(city);
     expect(mockedCacheAdd).toHaveBeenCalledWith(
-      `pricelist:mostprofitablegoods:${city}`,
-      JSON.stringify(sortedByProfit)
+      `pricelist:mostprofitablegoods:${city}-${date}`,
+      JSON.stringify(sortedByProfit),
+      { ex: 60 * 60 * 24 }
     );
   });
 
@@ -62,7 +65,7 @@ describe("getMostProfitableGoods", () => {
     mockedCacheGet.mockResolvedValue(null);
     mockedGetLastPriceList.mockResolvedValue(null);
 
-    await expect(getMostProfitableGoods(city)).rejects.toThrow("Price list not found");
+    await expect(getMostProfitableGoods(city, date)).rejects.toThrow("Price list not found");
   });
 
   it("filters out items with zero or invalid profit", async () => {
@@ -73,7 +76,7 @@ describe("getMostProfitableGoods", () => {
     mockedCacheGet.mockResolvedValue(null);
     mockedGetLastPriceList.mockResolvedValue(priceListWithInvalidItems);
 
-    const result = await getMostProfitableGoods(city);
+    const result = await getMostProfitableGoods(city, date);
 
     expect(result).toEqual([...sortedByProfit, ...brokenPosition.items]);
   });
@@ -82,11 +85,12 @@ describe("getMostProfitableGoods", () => {
     mockedCacheGet.mockResolvedValue(null);
     mockedGetLastPriceList.mockResolvedValue(mockPriceList);
 
-    await getMostProfitableGoods(city);
+    await getMostProfitableGoods(city, date);
 
     expect(mockedCacheAdd).toHaveBeenCalledWith(
-      `pricelist:mostprofitablegoods:${city}`,
-      JSON.stringify(sortedByProfit)
+      `pricelist:mostprofitablegoods:${city}-${date}`,
+      JSON.stringify(sortedByProfit),
+      { ex: 60 * 60 * 24 }
     );
   });
 });

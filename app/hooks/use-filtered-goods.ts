@@ -1,3 +1,4 @@
+import { getFlatPriceList } from "@/app/helpers/pricelist";
 import { useSortGoodsStore } from "@/app/stores/sort-goods-store";
 
 import type { Goods as GoodsType, PriceList as priceListType } from "@/types/pricelist";
@@ -6,7 +7,7 @@ export const useFilteredGoods = (term: string, priceList: priceListType): GoodsT
   const sortGoods = useSortGoodsStore(state => state.sortGoods);
 
   if (term.length > 1 || sortGoods !== "default") {
-    const flatCatalog = priceList.positions.flatMap(position => position.items.flat());
+    const flatCatalog = getFlatPriceList(priceList);
     let filteredArray = flatCatalog.filter(item =>
       item.title.toLowerCase().includes(term.toLowerCase())
     );
