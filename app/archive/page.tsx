@@ -4,7 +4,11 @@ import { getTranslations } from "next-intl/server";
 import { Alert, AlertDescription, AlertTitle } from "@/app/components/ui/alert";
 import { PageTitle } from "@/app/components/ui/page-title";
 import { formatDate } from "@/app/helpers/format";
-import { getArchiveListDates, getPriceListCity } from "@/db/pricelist/queries";
+import {
+  getArchiveListDates,
+  getLastPriceListDate,
+  getPriceListCity
+} from "@/db/pricelist/queries";
 
 import type { Metadata } from "next";
 
@@ -24,7 +28,8 @@ export default async function ArchivePage() {
 
   try {
     const city = await getPriceListCity();
-    archiveCollection = await getArchiveListDates(city);
+    const lastPriceListDate = await getLastPriceListDate(city);
+    archiveCollection = await getArchiveListDates(city, lastPriceListDate);
   } catch (e) {
     const { message } = e as Error;
     return (

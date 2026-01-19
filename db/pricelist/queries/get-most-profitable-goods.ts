@@ -4,10 +4,10 @@ import { getLastPriceList } from "@/db/pricelist/queries/get-last-price-list";
 
 import type { Goods } from "@/types/pricelist";
 
-export const getMostProfitableGoods = async (city: string) => {
-  if (!city) throw new Error("city is required");
+export const getMostProfitableGoods = async (city: string, date: string) => {
+  if (!city || !date) throw new Error("city|date is required");
 
-  const key = `pricelist:mostprofitablegoods:${String(city)}`;
+  const key = `pricelist:mostprofitablegoods:${String(city)}-${date}`;
   const cached = await cacheGet<Goods[]>(key);
   if (cached) return cached;
 
@@ -26,7 +26,7 @@ export const getMostProfitableGoods = async (city: string) => {
   profitableItems.sort((a, b) => Number(b.profit) - Number(a.profit));
 
   const sortedByProfit = [...profitableItems, ...nonProfitableItems];
-  await cacheAdd(key, JSON.stringify(sortedByProfit));
+  await cacheAdd(key, JSON.stringify(sortedByProfit), { ex: 60 * 60 * 24 }); // 24 hours
 
   // Placeholder implementation
   return sortedByProfit;

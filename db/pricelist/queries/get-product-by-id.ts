@@ -13,16 +13,16 @@ type PayloadType = {
   status: FavoriteStatus;
 };
 
-export const getProductById = async (link: string, city: string) => {
-  if (!link) throw new Error("link is required");
+export const getProductById = async (link: string, city: string, date: string) => {
+  if (!city || !date || !link) throw new Error("link|city|date is required");
 
-  const key = `pricelist:goods:${String(link)}:${city}`;
+  const key = `pricelist:goods:${String(link)}:${city}-${date}`;
   const cached = await cacheGet<PayloadType>(key);
   if (cached) return cached;
 
   await dbConnect();
 
-  const historyList = await getAnalysisGoodsByParam({ param: "link", value: link, city });
+  const historyList = await getAnalysisGoodsByParam({ param: "link", value: link, city, date });
   if (!historyList || historyList.length === 0) throw new Error("Product not found");
 
   const product = historyList[historyList.length - 1];
@@ -47,7 +47,7 @@ export const getProductById = async (link: string, city: string) => {
   };
 
   const payload = JSON.stringify({ item: product, history, status });
-  await cacheAdd(key, payload);
+  await cacheAdd(key, payload, { ex: 60 * 60 * 24 }); // 24 hours
 
   return JSON.parse(payload) as PayloadType;
 };

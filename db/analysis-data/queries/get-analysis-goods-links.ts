@@ -2,10 +2,10 @@ import { add as cacheAdd, get as cacheGet } from "@/cache";
 import { dbConnect } from "@/db/database";
 import { AnalysisData } from "@/db/models/analysis-data-model";
 
-export const getAnalysisGoodsLinks = async (city: string): Promise<string[]> => {
-  if (!city) throw new Error("city is required");
+export const getAnalysisGoodsLinks = async (city: string, date: string): Promise<string[]> => {
+  if (!city || !date) throw new Error("city|date is required");
 
-  const key = `analysis:links:${String(city)}`;
+  const key = `analysis:links:${String(city)}-${date}`;
   const cached = await cacheGet<string[]>(key);
   if (cached) return cached;
 
@@ -16,7 +16,7 @@ export const getAnalysisGoodsLinks = async (city: string): Promise<string[]> => 
   const uniqueLinks = Array.from(new Set(links));
   const plainLinks = JSON.stringify(uniqueLinks);
 
-  await cacheAdd(key, plainLinks);
+  await cacheAdd(key, plainLinks, { ex: 60 * 60 * 24 }); // 24 hours
 
   return JSON.parse(plainLinks);
 };

@@ -4,10 +4,10 @@ import { getLastPriceList } from "@/db/pricelist/queries/get-last-price-list";
 
 import type { Goods } from "@/types/pricelist";
 
-export const getMostCheapGoods = async (city: string) => {
-  if (!city) throw new Error("city is required");
+export const getMostCheapGoods = async (city: string, date: string) => {
+  if (!city || !date) throw new Error("city|date is required");
 
-  const key = `pricelist:mostcheapgoods:${String(city)}`;
+  const key = `pricelist:mostcheapgoods:${String(city)}-${date}`;
   const cached = await cacheGet<Goods[]>(key);
   if (cached) return cached;
 
@@ -22,7 +22,7 @@ export const getMostCheapGoods = async (city: string) => {
     .filter(item => Number(item.price) && Number(item.price) > 0)
     .sort((a, b) => Number(a.price) - Number(b.price));
 
-  await cacheAdd(key, JSON.stringify(sortedByPrice));
+  await cacheAdd(key, JSON.stringify(sortedByPrice), { ex: 60 * 60 * 24 }); // 24 hours
 
   return sortedByPrice;
 };

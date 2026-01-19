@@ -1,10 +1,14 @@
 import { getUniqueAnalysisGoodsCount } from "@/db/analysis-data/queries";
 import { getAllDiffsReportByCity } from "@/db/analysis-diff/queries";
-import { getLastPriceList, getPriceListCity, getArchiveGoodsCount } from "@/db/pricelist/queries";
+import {
+  getPriceListCity,
+  getArchiveGoodsCount,
+  getLastPriceListDate
+} from "@/db/pricelist/queries";
 import { getAllReportsByCity } from "@/db/reports/queries";
 
 import type { AnalysisDiffReport as AnalysisDiffReportType } from "@/types/analysis-diff";
-import type { PriceList, PriceListsArchiveCount } from "@/types/pricelist";
+import type { PriceListsArchiveCount } from "@/types/pricelist";
 import type { ReportsResponse } from "@/types/reports";
 
 export async function getAnalysisData() {
@@ -18,10 +22,10 @@ export async function getAnalysisData() {
     throw new Error("City not found", { cause: e });
   }
 
-  let lastPriceList: PriceList | undefined;
+  let lastPriceListDate: string;
   try {
-    lastPriceList = await getLastPriceList(city);
-    if (!lastPriceList) throw new Error();
+    lastPriceListDate = await getLastPriceListDate(city);
+    if (!lastPriceListDate) throw new Error();
   } catch (error) {
     const e = error as Error;
     console.error(e);
@@ -30,7 +34,7 @@ export async function getAnalysisData() {
 
   let goodsCountByDates: PriceListsArchiveCount[];
   try {
-    goodsCountByDates = await getArchiveGoodsCount(city);
+    goodsCountByDates = await getArchiveGoodsCount(city, lastPriceListDate);
     if (!goodsCountByDates) throw new Error();
   } catch (error) {
     const e = error as Error;
@@ -40,7 +44,7 @@ export async function getAnalysisData() {
 
   let goodsChangesByDates: AnalysisDiffReportType[];
   try {
-    goodsChangesByDates = await getAllDiffsReportByCity(city);
+    goodsChangesByDates = await getAllDiffsReportByCity(city, lastPriceListDate);
     goodsChangesByDates.reverse();
   } catch (error) {
     const e = error as Error;
@@ -50,7 +54,7 @@ export async function getAnalysisData() {
 
   let reports: ReportsResponse;
   try {
-    reports = await getAllReportsByCity(city);
+    reports = await getAllReportsByCity(city, lastPriceListDate);
   } catch (error) {
     const e = error as Error;
     console.error(e);
@@ -59,7 +63,7 @@ export async function getAnalysisData() {
 
   let countUniqueGoods: number;
   try {
-    countUniqueGoods = await getUniqueAnalysisGoodsCount(city);
+    countUniqueGoods = await getUniqueAnalysisGoodsCount(city, lastPriceListDate);
     if (!countUniqueGoods) throw new Error();
   } catch (error) {
     const e = error as Error;

@@ -19,7 +19,7 @@ export const getLastPriceList = async (city: string) => {
 
   const plainPriceList = JSON.stringify(priceList);
 
-  await cacheAdd(key, plainPriceList);
+  await cacheAdd(key, plainPriceList, { ex: 60 * 60 * 24 }); // 24 hours
 
   return JSON.parse(plainPriceList) as PriceListType;
 };

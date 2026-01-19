@@ -5,10 +5,10 @@ import { Pricelist } from "@/db/models/pricelist-model";
 
 import type { PriceList, PriceListsArchiveCount } from "@/types/pricelist";
 
-export const getArchiveGoodsCount = async (city: string) => {
-  if (!city) throw new Error("city is required");
+export const getArchiveGoodsCount = async (city: string, date: string) => {
+  if (!city || !date) throw new Error("city|date is required");
 
-  const key = `pricelist:archive-goods-count:${String(city)}`;
+  const key = `pricelist:archive-goods-count:${String(city)}-${date}`;
   const cached = await cacheGet<PriceListsArchiveCount[]>(key);
   if (cached) return cached;
 
@@ -23,9 +23,7 @@ export const getArchiveGoodsCount = async (city: string) => {
     };
   });
 
-  await cacheAdd(key, JSON.stringify(goodsCountByDates), {
-    ex: 3600 * 24 // 24 hours
-  });
+  await cacheAdd(key, JSON.stringify(goodsCountByDates), { ex: 60 * 60 * 24 }); // 24 hours
 
   return goodsCountByDates;
 };

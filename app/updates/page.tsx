@@ -5,7 +5,7 @@ import { PriceListSection } from "@/app/components/price-list";
 import { Alert, AlertDescription, AlertTitle } from "@/app/components/ui/alert";
 import { PageTitle } from "@/app/components/ui/page-title";
 import { getLastDiffByCity } from "@/db/analysis-diff/queries";
-import { getPriceListCity } from "@/db/pricelist/queries";
+import { getLastPriceListDate, getPriceListCity } from "@/db/pricelist/queries";
 import { getUser } from "@/db/user/queries";
 
 import type { DiffsCollection as DiffsType } from "@/types/analysis-diff";
@@ -43,7 +43,8 @@ export default async function UpdatesPage() {
 
   try {
     const city = await getPriceListCity();
-    const collection = await getLastDiffByCity(city);
+    const lastPriceListDate = await getLastPriceListDate(city);
+    const collection = await getLastDiffByCity(city, lastPriceListDate);
 
     diffNew = {
       _id: "new-items",

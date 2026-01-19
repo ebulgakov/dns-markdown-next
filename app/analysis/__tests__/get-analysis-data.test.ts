@@ -1,5 +1,5 @@
 import { getAnalysisGoodsByParam, getAnalysisGoodsLinks } from "@/db/analysis-data/queries";
-import { getAllDiffsByCity } from "@/db/analysis-diff/queries";
+import { getAllDiffsReportByCity } from "@/db/analysis-diff/queries";
 import { getArchiveListDates, getLastPriceList, getPriceListCity } from "@/db/pricelist/queries";
 import { getAllReportsByCity } from "@/db/reports/queries";
 
@@ -39,7 +39,7 @@ const mockedGetAnalysisGoodsLinks = getAnalysisGoodsLinks as jest.Mock;
 const mockedGetArchiveListDates = getArchiveListDates as jest.Mock;
 const mockedGetLastPriceList = getLastPriceList as jest.Mock;
 const mockedGetAnalysisGoodsByParam = getAnalysisGoodsByParam as jest.Mock;
-const mockedGetAllDiffsByCity = getAllDiffsByCity as jest.Mock;
+const mockedGetAllDiffsByCity = getAllDiffsReportByCity as jest.Mock;
 const mockedGetAllReportsByCity = getAllReportsByCity as jest.Mock;
 
 console.error = jest.fn();
