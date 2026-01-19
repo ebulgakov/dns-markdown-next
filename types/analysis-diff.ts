@@ -24,3 +24,12 @@ export type AnalysisDiff = {
   changesPrice: DiffDetail[];
   changesProfit: DiffDetail[];
 };
+
+export type AnalysisDiffReport = {
+  city: string;
+  dateAdded: string;
+  newItems: number;
+  removedItems: number;
+  changesPrice: number;
+  changesProfit: number;
+};

@@ -1,6 +1,6 @@
 import { add as cacheAdd, get as cacheGet } from "@/cache";
 import { mockAnalysisData } from "@/db/analysis-data/queries/__mocks__/mock-data";
-import { getAllDiffsByCity } from "@/db/analysis-diff/queries/get-all-diffs-by-city";
+import { getAllDiffsReportByCity } from "@/db/analysis-diff/queries/get-all-diffs-report-by-city";
 import { dbConnect } from "@/db/database";
 import { AnalysisDiff } from "@/db/models/analysis-diff-model";
 
@@ -18,14 +18,14 @@ describe("getAllDiffsByCity", () => {
   });
 
   it("should throw an error if city is not provided", async () => {
-    await expect(getAllDiffsByCity("")).rejects.toThrow("city is required");
+    await expect(getAllDiffsReportByCity("")).rejects.toThrow("city is required");
   });
 
   it("should return diffs from cache when available", async () => {
     const city = "TestCity";
     (cacheGet as jest.Mock).mockResolvedValue(mockAnalysisData);
 
-    const result = await getAllDiffsByCity(city);
+    const result = await getAllDiffsReportByCity(city);
 
     expect(cacheGet).toHaveBeenCalledWith(`analysisdiff:all:${city}`);
     expect(dbConnect).not.toHaveBeenCalled();
@@ -37,7 +37,7 @@ describe("getAllDiffsByCity", () => {
     (cacheGet as jest.Mock).mockResolvedValue(null);
     (AnalysisDiff.find as jest.Mock).mockResolvedValue(mockAnalysisData);
 
-    const result = await getAllDiffsByCity(city);
+    const result = await getAllDiffsReportByCity(city);
 
     expect(dbConnect).toHaveBeenCalled();
     expect(AnalysisDiff.find).toHaveBeenCalledWith({ city }, {}, { sort: { dateAdded: -1 } });
@@ -53,7 +53,7 @@ describe("getAllDiffsByCity", () => {
     (cacheGet as jest.Mock).mockResolvedValue(null);
     (AnalysisDiff.find as jest.Mock).mockResolvedValue([]);
 
-    const result = await getAllDiffsByCity(city);
+    const result = await getAllDiffsReportByCity(city);
 
     expect(result).toEqual([]);
     expect(cacheAdd).toHaveBeenCalledWith(`analysisdiff:all:${city}`, "[]");
