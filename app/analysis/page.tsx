@@ -22,7 +22,7 @@ export default async function AnalysisPage() {
 
     city = data.city;
     goodsCountByDates = data.goodsCountByDates;
-    countUniqueGoods = goodsCountByDates.reduce((count, good) => count + good.count, 0);
+    countUniqueGoods = data.countUniqueGoods;
     startFrom = goodsCountByDates[0].date;
     currentCountGoods = goodsCountByDates[goodsCountByDates.length - 1].count;
     reports = data.reports;

@@ -1,5 +1,5 @@
 import { formatDateShort } from "@/app/helpers/format";
-import { getAnalysisGoodsByParam } from "@/db/analysis-data/queries";
+import { getUniqueAnalysisGoodsCount, getAnalysisGoodsByParam } from "@/db/analysis-data/queries";
 import { getAllDiffsByCity } from "@/db/analysis-diff/queries";
 import { getArchiveListDates, getLastPriceList, getPriceListCity } from "@/db/pricelist/queries";
 import { getAllReportsByCity } from "@/db/reports/queries";
@@ -71,5 +71,15 @@ export async function getAnalysisData() {
     throw new Error("Reports data not found", { cause: e });
   }
 
-  return { city, goodsCountByDates, goodsChangesByDates, reports };
+  let countUniqueGoods: number;
+  try {
+    countUniqueGoods = await getUniqueAnalysisGoodsCount(city);
+    if (!countUniqueGoods) throw new Error();
+  } catch (error) {
+    const e = error as Error;
+    console.error(e);
+    throw new Error("Analysis goods count not found", { cause: e });
+  }
+
+  return { city, goodsCountByDates, goodsChangesByDates, reports, countUniqueGoods };
 }
