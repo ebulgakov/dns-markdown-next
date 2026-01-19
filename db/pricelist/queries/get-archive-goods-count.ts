@@ -1,0 +1,31 @@
+import { formatDateShort } from "@/app/helpers/format";
+import { get as cacheGet, add as cacheAdd } from "@/cache";
+import { dbConnect } from "@/db/database";
+import { Pricelist } from "@/db/models/pricelist-model";
+
+import type { PriceList, PriceListsArchiveCount } from "@/types/pricelist";
+
+export const getArchiveGoodsCount = async (city: string) => {
+  if (!city) throw new Error("city is required");
+
+  const key = `pricelist:archive-goods-count:${String(city)}`;
+  const cached = await cacheGet<PriceListsArchiveCount[]>(key);
+  if (cached) return cached;
+
+  await dbConnect();
+
+  const archive = (await Pricelist.find({ city }, {}, { sort: { updatedAt: 1 } })) as PriceList[];
+
+  const goodsCountByDates: PriceListsArchiveCount[] = archive.map(priceList => {
+    return {
+      date: formatDateShort(priceList.createdAt),
+      count: priceList.positions.flatMap(position => position.items.flat()).length
+    };
+  });
+
+  await cacheAdd(key, JSON.stringify(goodsCountByDates), {
+    ex: 3600 * 24 // 24 hours
+  });
+
+  return goodsCountByDates;
+};

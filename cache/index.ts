@@ -1,5 +1,7 @@
 import { Redis } from "@upstash/redis";
 
+import type { SetCommandOptions } from "@upstash/redis";
+
 const redis = new Redis({
   url: process.env.UPSTASH_REDIS_REST_URL,
   token: process.env.UPSTASH_REDIS_REST_TOKEN
@@ -10,8 +12,8 @@ const withPrefix = (key: string) => {
   return `${prefix}${key}`;
 };
 
-async function add(key: string, value: string) {
-  await redis.set(withPrefix(key), value);
+async function add(key: string, value: string, options: SetCommandOptions = {}) {
+  await redis.set(withPrefix(key), value, options);
 }
 
 async function get<T>(key: string): Promise<T | null> {

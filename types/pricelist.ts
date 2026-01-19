@@ -46,3 +46,5 @@ export type PriceListDate = {
   _id: string;
   createdAt: string;
 };
+
+export type PriceListsArchiveCount = { date: string; count: number };

@@ -1,11 +1,10 @@
-import { formatDateShort } from "@/app/helpers/format";
-import { getUniqueAnalysisGoodsCount, getAnalysisGoodsByParam } from "@/db/analysis-data/queries";
+import { getUniqueAnalysisGoodsCount } from "@/db/analysis-data/queries";
 import { getAllDiffsByCity } from "@/db/analysis-diff/queries";
-import { getArchiveListDates, getLastPriceList, getPriceListCity } from "@/db/pricelist/queries";
+import { getLastPriceList, getPriceListCity, getArchiveGoodsCount } from "@/db/pricelist/queries";
 import { getAllReportsByCity } from "@/db/reports/queries";
 
 import type { AnalysisDiff as AnalysisDiffType } from "@/types/analysis-diff";
-import type { PriceList } from "@/types/pricelist";
+import type { PriceList, PriceListsArchiveCount } from "@/types/pricelist";
 import type { ReportsResponse } from "@/types/reports";
 
 export async function getAnalysisData() {
@@ -29,23 +28,10 @@ export async function getAnalysisData() {
     throw new Error("Price list not found", { cause: e });
   }
 
-  let goodsCountByDates: { date: string; count: number }[];
+  let goodsCountByDates: PriceListsArchiveCount[];
   try {
-    const archiveDatesCollection = await getArchiveListDates(city);
-    const promises = archiveDatesCollection.map(dateItem =>
-      getAnalysisGoodsByParam({
-        param: "dateAdded",
-        value: dateItem.createdAt,
-        city
-      })
-    );
-    const goodsByDatesCollection = await Promise.all(promises);
-    goodsCountByDates = archiveDatesCollection.map((date, idx) => {
-      return {
-        date: formatDateShort(date.createdAt),
-        count: goodsByDatesCollection[idx].length
-      };
-    });
+    goodsCountByDates = await getArchiveGoodsCount(city);
+    if (!goodsCountByDates) throw new Error();
   } catch (error) {
     const e = error as Error;
     console.error(e);
