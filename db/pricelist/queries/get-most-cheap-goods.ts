@@ -1,3 +1,4 @@
+import { getFlatPriceList } from "@/app/helpers/pricelist";
 import { get as cacheGet, add as cacheAdd } from "@/cache";
 import { dbConnect } from "@/db/database";
 import { getLastPriceList } from "@/db/pricelist/queries/get-last-price-list";
@@ -16,9 +17,7 @@ export const getMostCheapGoods = async (city: string, date: string) => {
   const priceList = await getLastPriceList(city);
   if (!priceList) throw new Error("Price list not found");
 
-  const flatCatalog = priceList.positions.flatMap(position => position.items.flat());
-
-  const sortedByPrice = flatCatalog
+  const sortedByPrice = getFlatPriceList(priceList)
     .filter(item => Number(item.price) && Number(item.price) > 0)
     .sort((a, b) => Number(a.price) - Number(b.price));
 

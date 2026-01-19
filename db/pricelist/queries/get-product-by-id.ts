@@ -1,3 +1,4 @@
+import { getFlatPriceList } from "@/app/helpers/pricelist";
 import { get as cacheGet, add as cacheAdd } from "@/cache";
 import { getAnalysisGoodsByParam } from "@/db/analysis-data/queries";
 import { dbConnect } from "@/db/database";
@@ -35,8 +36,7 @@ export const getProductById = async (link: string, city: string, date: string) =
     };
   });
 
-  const lastPriceList = await getLastPriceList(city);
-  const flatCatalog = lastPriceList.positions.flatMap(position => position.items.flat());
+  const flatCatalog = getFlatPriceList(await getLastPriceList(city));
   const ifExists = flatCatalog.find(item => item.link === link);
   const status = {
     city,

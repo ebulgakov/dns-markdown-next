@@ -7,7 +7,7 @@ export const getUniqueAnalysisGoodsCount = async (city: string, date: string): P
 
   const key = `analysis:uniq-count:${String(city)}-${date}`;
   const cached = await cacheGet<number>(key);
-  if (cached) return cached;
+  if (cached !== null && cached !== undefined) return cached; // allow zero count
 
   await dbConnect();
 

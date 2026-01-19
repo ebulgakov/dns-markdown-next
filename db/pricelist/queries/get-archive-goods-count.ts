@@ -1,4 +1,5 @@
 import { formatDateShort } from "@/app/helpers/format";
+import { getFlatPriceList } from "@/app/helpers/pricelist";
 import { get as cacheGet, add as cacheAdd } from "@/cache";
 import { dbConnect } from "@/db/database";
 import { Pricelist } from "@/db/models/pricelist-model";
@@ -19,7 +20,7 @@ export const getArchiveGoodsCount = async (city: string, date: string) => {
   const goodsCountByDates: PriceListsArchiveCount[] = archive.map(priceList => {
     return {
       date: formatDateShort(priceList.createdAt),
-      count: priceList.positions.flatMap(position => position.items.flat()).length
+      count: getFlatPriceList(priceList).length
     };
   });
 

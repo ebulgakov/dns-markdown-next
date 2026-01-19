@@ -64,7 +64,7 @@ export async function getAnalysisData() {
   let countUniqueGoods: number;
   try {
     countUniqueGoods = await getUniqueAnalysisGoodsCount(city, lastPriceListDate);
-    if (!countUniqueGoods) throw new Error();
+    if (countUniqueGoods == null) throw new Error(); // allow zero count
   } catch (error) {
     const e = error as Error;
     console.error(e);
