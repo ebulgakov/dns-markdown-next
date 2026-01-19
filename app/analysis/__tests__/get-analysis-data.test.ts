@@ -1,13 +1,16 @@
-import { getAnalysisGoodsByParam, getAnalysisGoodsLinks } from "@/db/analysis-data/queries";
+import { getUniqueAnalysisGoodsCount } from "@/db/analysis-data/queries";
 import { getAllDiffsReportByCity } from "@/db/analysis-diff/queries";
-import { getArchiveListDates, getLastPriceList, getPriceListCity } from "@/db/pricelist/queries";
+import {
+  getArchiveGoodsCount,
+  getLastPriceListDate,
+  getPriceListCity
+} from "@/db/pricelist/queries";
 import { getAllReportsByCity } from "@/db/reports/queries";
 
 import { getAnalysisData } from "../get-analysis-data";
 
-import type { AnalysisData } from "@/types/analysis-data";
-import type { AnalysisDiff } from "@/types/analysis-diff";
-import type { PriceList, PriceListDate } from "@/types/pricelist";
+import type { AnalysisDiffReport } from "@/types/analysis-diff";
+import type { PriceListsArchiveCount } from "@/types/pricelist";
 import type { ReportsResponse } from "@/types/reports";
 
 jest.mock("@/app/helpers/format", () => ({
@@ -16,12 +19,11 @@ jest.mock("@/app/helpers/format", () => ({
 }));
 
 jest.mock("@/db/analysis-data/queries", () => ({
-  getAnalysisGoodsLinks: jest.fn(),
-  getAnalysisGoodsByParam: jest.fn()
+  getUniqueAnalysisGoodsCount: jest.fn()
 }));
 
 jest.mock("@/db/analysis-diff/queries", () => ({
-  getAllDiffsByCity: jest.fn()
+  getAllDiffsReportByCity: jest.fn()
 }));
 
 jest.mock("@/db/reports/queries", () => ({
@@ -29,18 +31,17 @@ jest.mock("@/db/reports/queries", () => ({
 }));
 
 jest.mock("@/db/pricelist/queries", () => ({
-  getArchiveListDates: jest.fn(),
-  getLastPriceList: jest.fn(),
+  getArchiveGoodsCount: jest.fn(),
+  getLastPriceListDate: jest.fn(),
   getPriceListCity: jest.fn()
 }));
 
 const mockedGetPriceListCity = getPriceListCity as jest.Mock;
-const mockedGetAnalysisGoodsLinks = getAnalysisGoodsLinks as jest.Mock;
-const mockedGetArchiveListDates = getArchiveListDates as jest.Mock;
-const mockedGetLastPriceList = getLastPriceList as jest.Mock;
-const mockedGetAnalysisGoodsByParam = getAnalysisGoodsByParam as jest.Mock;
-const mockedGetAllDiffsByCity = getAllDiffsReportByCity as jest.Mock;
+const mockedGetLastPriceListDate = getLastPriceListDate as jest.Mock;
+const mockedGetArchiveGoodsCount = getArchiveGoodsCount as jest.Mock;
+const mockedGetAllDiffsReportByCity = getAllDiffsReportByCity as jest.Mock;
 const mockedGetAllReportsByCity = getAllReportsByCity as jest.Mock;
+const mockedGetUniqueAnalysisGoodsCount = getUniqueAnalysisGoodsCount as jest.Mock;
 
 console.error = jest.fn();
 
@@ -51,58 +52,9 @@ describe("getAnalysisData", () => {
 
   it("should return analysis data successfully", async () => {
     const city = "TestCity";
-    const links = ["link1", "link2"];
-    const archiveDates: PriceListDate[] = [
-      {
-        createdAt: `${new Date("2023-01-01")}`,
-        _id: ""
-      }
-    ];
-    const lastPriceList: PriceList = {
-      _id: "1",
-      city,
-      createdAt: new Date(),
-      positions: [
-        {
-          _id: "1",
-          title: "section",
-          items: [
-            {
-              code: "1",
-              title: "item",
-              price: "100",
-              link: "link1",
-              _id: "",
-              description: "",
-              reasons: [],
-              priceOld: "",
-              profit: "",
-              image: "",
-              available: ""
-            }
-          ]
-        }
-      ]
-    };
-    const goodsByDate: AnalysisData[] = [
-      {
-        code: "1",
-        category: "section",
-        city: "TestCity",
-        title: "item",
-        price: "100",
-        link: "link1",
-        _id: "",
-        description: "",
-        reasons: [],
-        priceOld: "",
-        profit: "",
-        image: "",
-        available: "",
-        dateAdded: `${new Date("2023-01-01")}`
-      }
-    ];
-    const diffs: AnalysisDiff[] = [];
+    const lastPriceListDate = new Date("2023-01-01").toISOString();
+    const goodsCountByDates: PriceListsArchiveCount[] = [{ date: "01.01.2023", count: 1 }];
+    const diffs: AnalysisDiffReport[] = [];
     const reports: ReportsResponse = [
       {
         _id: "1",
@@ -111,21 +63,22 @@ describe("getAnalysisData", () => {
         report: "Report content"
       }
     ];
+    const countUniqueGoods = 10;
 
     mockedGetPriceListCity.mockResolvedValue(city);
-    mockedGetAnalysisGoodsLinks.mockResolvedValue(links);
-    mockedGetArchiveListDates.mockResolvedValue(archiveDates);
-    mockedGetLastPriceList.mockResolvedValue(lastPriceList);
-    mockedGetAnalysisGoodsByParam.mockResolvedValue(goodsByDate);
-    mockedGetAllDiffsByCity.mockResolvedValue(diffs);
+    mockedGetLastPriceListDate.mockResolvedValue(lastPriceListDate);
+    mockedGetArchiveGoodsCount.mockResolvedValue(goodsCountByDates);
+    mockedGetAllDiffsReportByCity.mockResolvedValue(diffs);
     mockedGetAllReportsByCity.mockResolvedValue(reports);
+    mockedGetUniqueAnalysisGoodsCount.mockResolvedValue(countUniqueGoods);
 
     const result = await getAnalysisData();
 
     expect(result.city).toBe(city);
-    expect(result.goodsCountByDates).toEqual([{ date: "01.01.2023", count: 1 }]);
+    expect(result.goodsCountByDates).toEqual(goodsCountByDates);
     expect(result.goodsChangesByDates).toEqual(diffs);
     expect(result.reports).toEqual(reports);
+    expect(result.countUniqueGoods).toBe(countUniqueGoods);
   });
 
   it("should throw an error if city is not found", async () => {
@@ -133,54 +86,43 @@ describe("getAnalysisData", () => {
     await expect(getAnalysisData()).rejects.toThrow("City not found");
   });
 
-  it("should throw an error if links are not found", async () => {
+  it("should throw an error if last price list date is not found", async () => {
     mockedGetPriceListCity.mockResolvedValue("TestCity");
-    mockedGetAnalysisGoodsLinks.mockResolvedValue(undefined);
-    await expect(getAnalysisData()).rejects.toThrow("Analysis goods links not found");
-  });
-
-  it("should throw an error if archive dates are not found", async () => {
-    mockedGetPriceListCity.mockResolvedValue("TestCity");
-    mockedGetAnalysisGoodsLinks.mockResolvedValue(["link1"]);
-    mockedGetArchiveListDates.mockResolvedValue([]);
-    await expect(getAnalysisData()).rejects.toThrow("Archive of price lists not found");
-  });
-
-  it("should throw an error if last price list is not found", async () => {
-    mockedGetPriceListCity.mockResolvedValue("TestCity");
-    mockedGetAnalysisGoodsLinks.mockResolvedValue(["link1"]);
-    mockedGetArchiveListDates.mockResolvedValue([{ createdAt: new Date() }]);
-    mockedGetLastPriceList.mockResolvedValue(undefined);
+    mockedGetLastPriceListDate.mockRejectedValue(new Error("DB error"));
     await expect(getAnalysisData()).rejects.toThrow("Price list not found");
   });
 
-  it("should throw an error if goods by date are not found", async () => {
+  it("should throw an error if goods count by dates are not found", async () => {
     mockedGetPriceListCity.mockResolvedValue("TestCity");
-    mockedGetAnalysisGoodsLinks.mockResolvedValue(["link1"]);
-    mockedGetArchiveListDates.mockResolvedValue([{ createdAt: new Date() }]);
-    mockedGetLastPriceList.mockResolvedValue({ positions: [] });
-    mockedGetAnalysisGoodsByParam.mockResolvedValue(undefined);
+    mockedGetLastPriceListDate.mockResolvedValue(new Date().toISOString());
+    mockedGetArchiveGoodsCount.mockRejectedValue(new Error("DB error"));
     await expect(getAnalysisData()).rejects.toThrow("Not able to get analyzed goods by date");
   });
 
-  it("should throw an error if diffs are not found", async () => {
+  it("should throw an error if goods changes by dates are not found", async () => {
     mockedGetPriceListCity.mockResolvedValue("TestCity");
-    mockedGetAnalysisGoodsLinks.mockResolvedValue(["link1"]);
-    mockedGetArchiveListDates.mockResolvedValue([{ createdAt: new Date() }]);
-    mockedGetLastPriceList.mockResolvedValue({ positions: [] });
-    mockedGetAnalysisGoodsByParam.mockResolvedValue([]);
-    mockedGetAllDiffsByCity.mockResolvedValue(undefined);
+    mockedGetLastPriceListDate.mockResolvedValue(new Date().toISOString());
+    mockedGetArchiveGoodsCount.mockResolvedValue([]);
+    mockedGetAllDiffsReportByCity.mockRejectedValue(new Error("DB error"));
     await expect(getAnalysisData()).rejects.toThrow("Analysis goods changes by dates not found");
   });
 
   it("should throw an error if reports are not found", async () => {
     mockedGetPriceListCity.mockResolvedValue("TestCity");
-    mockedGetAnalysisGoodsLinks.mockResolvedValue(["link1"]);
-    mockedGetArchiveListDates.mockResolvedValue([{ createdAt: new Date(), _id: "1" }]);
-    mockedGetLastPriceList.mockResolvedValue({ positions: [{ items: [""] }] });
-    mockedGetAnalysisGoodsByParam.mockResolvedValue([[]]);
-    mockedGetAllDiffsByCity.mockResolvedValue([]);
-    mockedGetAllReportsByCity.mockResolvedValue(undefined);
+    mockedGetLastPriceListDate.mockResolvedValue(new Date().toISOString());
+    mockedGetArchiveGoodsCount.mockResolvedValue([]);
+    mockedGetAllDiffsReportByCity.mockResolvedValue([]);
+    mockedGetAllReportsByCity.mockRejectedValue(new Error("DB error"));
     await expect(getAnalysisData()).rejects.toThrow("Reports data not found");
+  });
+
+  it("should throw an error if unique goods count is not found", async () => {
+    mockedGetPriceListCity.mockResolvedValue("TestCity");
+    mockedGetLastPriceListDate.mockResolvedValue(new Date().toISOString());
+    mockedGetArchiveGoodsCount.mockResolvedValue([]);
+    mockedGetAllDiffsReportByCity.mockResolvedValue([]);
+    mockedGetAllReportsByCity.mockResolvedValue([]);
+    mockedGetUniqueAnalysisGoodsCount.mockRejectedValue(new Error("DB error"));
+    await expect(getAnalysisData()).rejects.toThrow("Analysis goods count not found");
   });
 });
