@@ -1,9 +1,9 @@
 import { add as cacheAdd, get as cacheGet } from "@/cache";
+import { mockAnalysisData } from "@/db/analysis-data/queries/__mocks__/mock-data";
 import { getAllDiffsReportByCity } from "@/db/analysis-diff/queries/get-all-diffs-report-by-city";
 import { dbConnect } from "@/db/database";
 import { AnalysisDiff } from "@/db/models/analysis-diff-model";
 import { AnalysisDiff as AnalysisDiffType } from "@/types/analysis-diff";
-import { mockAnalysisData } from "@/db/analysis-data/queries/__mocks__/mock-data";
 
 jest.mock("@/db/database", () => ({ dbConnect: jest.fn() }));
 jest.mock("@/cache", () => ({ get: jest.fn(), add: jest.fn() }));

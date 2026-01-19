@@ -58,9 +58,9 @@ describe("getArchiveListDates", () => {
   });
 
   it("should throw an error if city or date is not provided", async () => {
-    // @ts-expect-error
+    // @ts-expect-error -- testing invalid input
     await expect(getArchiveListDates(null, date)).rejects.toThrow("city|date is required");
-    // @ts-expect-error
+    // @ts-expect-error -- testing invalid input
     await expect(getArchiveListDates(city, null)).rejects.toThrow("city|date is required");
   });
 
