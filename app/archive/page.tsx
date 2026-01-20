@@ -1,9 +1,8 @@
-import Link from "next/link";
 import { getTranslations } from "next-intl/server";
 
+import { ArchiveList } from "@/app/archive/ArchiveList";
 import { Alert, AlertDescription, AlertTitle } from "@/app/components/ui/alert";
 import { PageTitle } from "@/app/components/ui/page-title";
-import { formatDate } from "@/app/helpers/format";
 import {
   getArchiveListDates,
   getLastPriceListDate,
@@ -43,15 +42,7 @@ export default async function ArchivePage() {
   return (
     <div>
       <PageTitle title="Архив прайслистов" />
-      <ul className="space-y-1">
-        {archiveCollection.map(item => (
-          <li key={item._id}>
-            <Link href={`/archive/${item._id}`}>
-              <span className="text-blue-500 hover:underline">{formatDate(item.createdAt)}</span>
-            </Link>
-          </li>
-        ))}
-      </ul>
+      <ArchiveList archiveCollection={archiveCollection} />
     </div>
   );
 }

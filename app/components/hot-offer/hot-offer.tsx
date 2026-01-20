@@ -1,5 +1,6 @@
 "use client";
 
+import { sendGAEvent } from "@next/third-parties/google";
 import Image from "next/image";
 import Link from "next/link";
 import { NumericFormat } from "react-number-format";
@@ -11,6 +12,15 @@ type HotOfferProps = {
 };
 
 function HotOffer({ goods }: HotOfferProps) {
+  const handleSendGAEvent = (event: string) => {
+    sendGAEvent({
+      event,
+      value: goods.title,
+      category: "HotOffer",
+      action: "click"
+    });
+  };
+
   return (
     <div data-testid="offer-goods" className="space-y-4">
       <a
@@ -18,6 +28,7 @@ function HotOffer({ goods }: HotOfferProps) {
         rel="noopener noreferrer"
         href={`https://dns-shop.ru${goods.link}`}
         className="mb-4 flex h-60 w-full items-center justify-center rounded bg-white dark:opacity-70"
+        onClick={() => handleSendGAEvent("hot_offer_click")}
       >
         <Image
           src={goods.image}
@@ -33,6 +44,7 @@ function HotOffer({ goods }: HotOfferProps) {
           rel="noopener noreferrer"
           href={`https://dns-shop.ru${goods.link}`}
           className="text-primary break-all md:break-normal"
+          onClick={() => handleSendGAEvent("hot_offer_title_click")}
         >
           {goods.title}
         </a>
@@ -86,7 +98,11 @@ function HotOffer({ goods }: HotOfferProps) {
           />
         </div>
 
-        <Link className="text-primary text-lg" href={goods.link}>
+        <Link
+          className="text-primary text-lg"
+          href={goods.link}
+          onClick={() => handleSendGAEvent("hot_offer_price_analysis")}
+        >
           Анализ цены
         </Link>
       </div>

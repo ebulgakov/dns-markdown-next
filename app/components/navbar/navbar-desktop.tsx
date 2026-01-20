@@ -1,6 +1,7 @@
 "use client";
 
 import { SignedIn, SignInButton, SignUpButton, UserButton } from "@clerk/nextjs";
+import { sendGAEvent } from "@next/third-parties/google";
 import Link from "next/link";
 import { useTranslations } from "next-intl";
 import { Fragment } from "react";
@@ -25,6 +26,15 @@ function NavbarDesktop({ linksList, isUserLoggedIn, userLinks, city }: NavbarDes
   const t = useTranslations("Navbar");
   const cities = useTranslations("cities");
 
+  const handleSendGAEvent = (link: { name: string; url: string }) => {
+    sendGAEvent({
+      event: "desktop_navbar_user_click",
+      value: link.name,
+      category: "Navbar",
+      action: "click"
+    });
+  };
+
   return (
     <div
       data-testid="desktop-navbar-user"
@@ -32,7 +42,7 @@ function NavbarDesktop({ linksList, isUserLoggedIn, userLinks, city }: NavbarDes
     >
       <NavigationMenu>
         <Button asChild variant="link" className="font-bold">
-          <Link href="/">
+          <Link href="/" onClick={() => handleSendGAEvent({ name: "home", url: "/" })}>
             {t("logo")} {city ? cities(city) : ""}
           </Link>
         </Button>
@@ -40,14 +50,18 @@ function NavbarDesktop({ linksList, isUserLoggedIn, userLinks, city }: NavbarDes
         <NavigationMenuList>
           {linksList.map(link => (
             <NavigationMenuItem key={link.name}>
-              <NavigationActiveLink link={link}>{link.name}</NavigationActiveLink>
+              <NavigationActiveLink link={link} onClick={() => handleSendGAEvent(link)}>
+                {link.name}
+              </NavigationActiveLink>
             </NavigationMenuItem>
           ))}
 
           {isUserLoggedIn &&
             userLinks.map(link => (
               <NavigationMenuItem key={link.name}>
-                <NavigationActiveLink link={link}>{link.name}</NavigationActiveLink>
+                <NavigationActiveLink link={link} onClick={() => handleSendGAEvent(link)}>
+                  {link.name}
+                </NavigationActiveLink>
               </NavigationMenuItem>
             ))}
         </NavigationMenuList>
@@ -64,13 +78,33 @@ function NavbarDesktop({ linksList, isUserLoggedIn, userLinks, city }: NavbarDes
           <Fragment>
             <div className="flex items-center gap-2">
               <SignInButton>
-                <Button variant="link">{t("signin")}</Button>
+                <Button
+                  variant="link"
+                  onClick={() =>
+                    handleSendGAEvent({
+                      name: "signin",
+                      url: "/signin"
+                    })
+                  }
+                >
+                  {t("signin")}
+                </Button>
               </SignInButton>
 
               <div className="border-primary h-6 border-l-2"></div>
 
               <SignUpButton>
-                <Button variant="link">{t("signup")}</Button>
+                <Button
+                  variant="link"
+                  onClick={() =>
+                    handleSendGAEvent({
+                      name: "signup",
+                      url: "/signup"
+                    })
+                  }
+                >
+                  {t("signup")}
+                </Button>
               </SignUpButton>
             </div>
           </Fragment>

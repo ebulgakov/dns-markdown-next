@@ -1,5 +1,6 @@
 "use client";
 
+import { sendGAEvent } from "@next/third-parties/google";
 import { Star } from "lucide-react";
 import { useState, useTransition, useOptimistic } from "react";
 
@@ -35,7 +36,15 @@ function PriceListFavoriteToggle({
       setInFavoritesOptimistic(false);
       try {
         const removed = await removeFromFavorites(goods.link);
-        if (removed) setInFavorites(false);
+        if (removed) {
+          setInFavorites(false);
+          sendGAEvent({
+            event: "pricelist_goods_remove_from_favorites",
+            value: goods.title,
+            category: "PriceListGoods",
+            action: "click"
+          });
+        }
       } catch (error) {
         window.alert(error);
       }
@@ -46,7 +55,15 @@ function PriceListFavoriteToggle({
       setInFavoritesOptimistic(true);
       try {
         const added = await addToFavorites(goods);
-        if (added) setInFavorites(true);
+        if (added) {
+          setInFavorites(true);
+          sendGAEvent({
+            event: "pricelist_goods_add_to_favorites",
+            value: goods.title,
+            category: "PriceListGoods",
+            action: "click"
+          });
+        }
       } catch (error) {
         window.alert(error);
       }

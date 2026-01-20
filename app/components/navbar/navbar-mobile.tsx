@@ -1,6 +1,7 @@
 "use client";
 
 import { SignInButton, SignUpButton, SignOutButton } from "@clerk/nextjs";
+import { sendGAEvent } from "@next/third-parties/google";
 import { Menu } from "lucide-react";
 import Link from "next/link";
 import { useTranslations } from "next-intl";
@@ -31,11 +32,20 @@ type NavbarMobileProps = {
 function NavbarMobile({ linksList, userLinks, isUserLoggedIn, locate, city }: NavbarMobileProps) {
   const t = useTranslations("Navbar");
   const cities = useTranslations("cities");
+
+  const handleSendGAEvent = (link: { name: string; url: string }) => {
+    sendGAEvent({
+      event: "mobile_navbar_user_click",
+      value: link.name,
+      category: "Navbar",
+      action: "click"
+    });
+  };
   return (
     <Dialog>
       <div className="border-primary flex items-center gap-4 rounded border-2 py-2">
         <Button asChild variant="link" className="font-bold">
-          <Link href="/">
+          <Link href="/" onClick={() => handleSendGAEvent({ name: "home", url: "/" })}>
             {t("logo")} {city ? cities(city) : ""}
           </Link>
         </Button>
@@ -59,7 +69,11 @@ function NavbarMobile({ linksList, userLinks, isUserLoggedIn, locate, city }: Na
               {linksList.map(link => (
                 <div key={link.name}>
                   <DialogClose asChild>
-                    <Link href={link.url} className="block py-2">
+                    <Link
+                      href={link.url}
+                      className="block py-2"
+                      onClick={() => handleSendGAEvent(link)}
+                    >
                       {link.name}
                     </Link>
                   </DialogClose>
@@ -71,7 +85,11 @@ function NavbarMobile({ linksList, userLinks, isUserLoggedIn, locate, city }: Na
                   {userLinks.map(link => (
                     <div key={link.name}>
                       <DialogClose asChild>
-                        <Link href={link.url} className="block py-2">
+                        <Link
+                          href={link.url}
+                          className="block py-2"
+                          onClick={() => handleSendGAEvent(link)}
+                        >
                           {link.name}
                         </Link>
                       </DialogClose>
@@ -80,7 +98,17 @@ function NavbarMobile({ linksList, userLinks, isUserLoggedIn, locate, city }: Na
                   <div>
                     <SignOutButton>
                       <DialogClose asChild>
-                        <button className="block cursor-pointer py-2">{t("signout")}</button>
+                        <button
+                          className="block cursor-pointer py-2"
+                          onClick={() =>
+                            handleSendGAEvent({
+                              name: "signout",
+                              url: "/signout"
+                            })
+                          }
+                        >
+                          {t("signout")}
+                        </button>
                       </DialogClose>
                     </SignOutButton>
                   </div>
@@ -90,7 +118,17 @@ function NavbarMobile({ linksList, userLinks, isUserLoggedIn, locate, city }: Na
                   <div>
                     <SignInButton>
                       <DialogClose asChild>
-                        <button className="block py-2">{t("signin")}</button>
+                        <button
+                          className="block py-2"
+                          onClick={() =>
+                            handleSendGAEvent({
+                              name: "signin",
+                              url: "/signin"
+                            })
+                          }
+                        >
+                          {t("signin")}
+                        </button>
                       </DialogClose>
                     </SignInButton>
                   </div>
@@ -98,7 +136,17 @@ function NavbarMobile({ linksList, userLinks, isUserLoggedIn, locate, city }: Na
                   <div>
                     <SignUpButton>
                       <DialogClose asChild>
-                        <button className="block py-2">{t("signup")}</button>
+                        <button
+                          className="block py-2"
+                          onClick={() =>
+                            handleSendGAEvent({
+                              name: "signup",
+                              url: "/signup"
+                            })
+                          }
+                        >
+                          {t("signup")}
+                        </button>
                       </DialogClose>
                     </SignUpButton>
                   </div>

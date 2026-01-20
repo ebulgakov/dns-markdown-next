@@ -1,5 +1,6 @@
 "use client";
 
+import { sendGAEvent } from "@next/third-parties/google";
 import clsx from "clsx";
 import { Search, X } from "lucide-react";
 import { useState } from "react";
@@ -15,6 +16,13 @@ function SearchInput() {
   const handleSearchVisibility = () => {
     onChange("");
     setHidden(!hidden);
+
+    sendGAEvent({
+      event: "toggle_click",
+      value: !hidden,
+      category: "SearchInput",
+      action: "click"
+    });
   };
 
   return (
