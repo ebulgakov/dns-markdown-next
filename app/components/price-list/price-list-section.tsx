@@ -1,5 +1,6 @@
 "use client";
 
+import { sendGAEvent } from "@next/third-parties/google";
 import { Plus, Minus } from "lucide-react";
 import { useState } from "react";
 
@@ -27,6 +28,12 @@ function PriceListSection({
   const [isOpen, setIsOpen] = useState(isOpenDefault);
   const toggleVisibility = () => {
     setIsOpen(!isOpen);
+    sendGAEvent({
+      event: "pricelist_section_toggle",
+      value: !isOpen,
+      category: "PriceListGoods",
+      action: "click"
+    });
   };
   return (
     <div className="mb-3">

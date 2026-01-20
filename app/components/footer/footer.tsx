@@ -1,3 +1,6 @@
+"use client";
+
+import { sendGAEvent } from "@next/third-parties/google";
 import { Github } from "lucide-react";
 import Link from "next/link";
 import { useTranslations } from "next-intl";
@@ -12,6 +15,16 @@ type FooterProps = {
 
 function Footer({ locate }: FooterProps) {
   const t = useTranslations("About");
+
+  const handleSendGAEvent = () => {
+    sendGAEvent({
+      event: "nav_click",
+      value: t("title"),
+      category: "Footer",
+      action: "click"
+    });
+  };
+
   return (
     <footer className="mt-auto flex h-13 items-center justify-between border-t border-neutral-300">
       <div className="text-sm text-gray-500">
@@ -28,7 +41,7 @@ function Footer({ locate }: FooterProps) {
       <div className="hidden gap-4 text-sm text-gray-500 md:flex">
         <ChangeThemeSelector />
         <ChangeLocationSelector locate={locate} />
-        <Link href="/about">
+        <Link href="/about" onClick={handleSendGAEvent}>
           <span className="text-blue-500 hover:underline">{t("title")}</span>
         </Link>
       </div>

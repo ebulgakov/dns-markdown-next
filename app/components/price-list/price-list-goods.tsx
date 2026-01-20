@@ -1,4 +1,5 @@
 "use client";
+import { sendGAEvent } from "@next/third-parties/google";
 import clsx from "clsx";
 import Image from "next/image";
 import Link from "next/link";
@@ -21,6 +22,15 @@ type PriceListGoodsProps = {
   isUserLoggedIn?: boolean;
 };
 function PriceListGoods({ item, status, diff, favorites, isUserLoggedIn }: PriceListGoodsProps) {
+  const handleSendGAEvent = (event: string) => {
+    sendGAEvent({
+      event,
+      value: item.title,
+      category: "PriceListGoods",
+      action: "click"
+    });
+  };
+
   return (
     <div
       data-testid="pricelist-goods"
@@ -36,6 +46,7 @@ function PriceListGoods({ item, status, diff, favorites, isUserLoggedIn }: Price
         rel="noopener noreferrer"
         href={`https://dns-shop.ru${item.link}`}
         className="flex flex-none items-center justify-center gap-5 rounded bg-white [grid-area:image] lg:size-55 dark:opacity-70"
+        onClick={() => handleSendGAEvent("pricelist_goods_image_click")}
       >
         <Image
           src={item.image}
@@ -52,6 +63,7 @@ function PriceListGoods({ item, status, diff, favorites, isUserLoggedIn }: Price
             rel="noopener noreferrer"
             href={`https://dns-shop.ru${item.link}`}
             className="text-primary break-all md:break-normal"
+            onClick={() => handleSendGAEvent("pricelist_goods_title_click")}
           >
             {item.title}
           </a>
@@ -112,7 +124,11 @@ function PriceListGoods({ item, status, diff, favorites, isUserLoggedIn }: Price
         ) : (
           <>
             {item.link && (
-              <Link className="text-primary" href={item.link}>
+              <Link
+                className="text-primary"
+                href={item.link}
+                onClick={() => handleSendGAEvent("pricelist_goods_price_analysis_click")}
+              >
                 Анализ цены
               </Link>
             )}

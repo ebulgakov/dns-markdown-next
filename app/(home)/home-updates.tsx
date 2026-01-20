@@ -1,3 +1,6 @@
+"use client";
+
+import { sendGAEvent } from "@next/third-parties/google";
 import { ChartBar } from "lucide-react";
 import Link from "next/link";
 import { useTranslations } from "next-intl";
@@ -44,6 +47,15 @@ export default function HomeUpdates({
       </Alert>
     );
   }
+
+  const handleSendGAEvent = () => {
+    sendGAEvent({
+      event: "more_click",
+      value: tNav("analysis"),
+      category: "HomePage",
+      action: "click"
+    });
+  };
 
   return (
     <Fragment>
@@ -106,7 +118,7 @@ export default function HomeUpdates({
 
       <MoreLink icon={ChartBar}>
         {t("view_more")}&nbsp;
-        <Link href="/analysis" className="text-primary">
+        <Link href="/analysis" className="text-primary" onClick={handleSendGAEvent}>
           {tNav("analysis")}
         </Link>
         .

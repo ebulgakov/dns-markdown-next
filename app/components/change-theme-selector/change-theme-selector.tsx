@@ -1,5 +1,6 @@
 "use client";
 
+import { sendGAEvent } from "@next/third-parties/google";
 import { useTranslations } from "next-intl";
 import { useTheme } from "next-themes";
 import { useState, useEffect } from "react";
@@ -15,11 +16,23 @@ function ChangeThemeSelector() {
     setIsClient(true); // eslint-disable-line react-hooks/set-state-in-effect
   }, []);
 
+  const handleSendGAEvent = (theme: string) => {
+    sendGAEvent({
+      event: "change_theme",
+      value: theme,
+      category: "Utility",
+      action: "click"
+    });
+  };
+
   return isClient ? (
     <button
       suppressHydrationWarning={false}
-      className="cursor-pointer flex items-center"
-      onClick={() => setTheme(altTheme)}
+      className="flex cursor-pointer items-center"
+      onClick={() => {
+        setTheme(altTheme);
+        handleSendGAEvent(altTheme);
+      }}
     >
       {t(altTheme)} {altTheme === "light" ? "🌞" : "🌜"}
     </button>

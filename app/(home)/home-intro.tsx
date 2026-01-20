@@ -1,3 +1,6 @@
+"use client";
+
+import { sendGAEvent } from "@next/third-parties/google";
 import { Info } from "lucide-react";
 import Link from "next/link";
 import { useTranslations } from "next-intl";
@@ -11,6 +14,14 @@ import { PageTitle } from "@/app/components/ui/page-title";
 export function HomeIntro() {
   const t = useTranslations("HomePage");
   const tAbout = useTranslations("About");
+  const handleSendGAEvent = () => {
+    sendGAEvent({
+      event: "more_click",
+      value: tAbout("title"),
+      category: "HomePage",
+      action: "click"
+    });
+  };
   return (
     <Fragment>
       <PageTitle title={t("title")} />
@@ -26,7 +37,7 @@ export function HomeIntro() {
 
       <MoreLink icon={Info}>
         {t("view_more")}&nbsp;
-        <Link href="/about" className="text-primary">
+        <Link href="/about" className="text-primary" onClick={handleSendGAEvent}>
           {tAbout("title")}
         </Link>
         .
