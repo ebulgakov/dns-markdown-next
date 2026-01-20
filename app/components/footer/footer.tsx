@@ -29,7 +29,7 @@ function Footer({ locate }: FooterProps) {
         <ChangeThemeSelector />
         <ChangeLocationSelector locate={locate} />
         <Link href="/about">
-          <span className="text-blue-500 hover:underline">{t("link")}</span>
+          <span className="text-blue-500 hover:underline">{t("title")}</span>
         </Link>
       </div>
     </footer>

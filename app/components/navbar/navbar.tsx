@@ -44,7 +44,7 @@ function Navbar({ locate, isUserLoggedIn, city }: NavbarProps) {
     }
   ];
 
-  const mobileNavbar = [...linksList, { name: aboutT("link"), url: "/about" }];
+  const mobileNavbar = [...linksList, { name: aboutT("title"), url: "/about" }];
 
   return (
     <header>

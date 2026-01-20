@@ -41,7 +41,7 @@
     "menu": "Меню"
   },
   "About": {
-    "link": "О сервисе"
+    "title": "О сервисе"
   },
   "ChangeThemeSelector": {
     "light": "Светлая тема",
