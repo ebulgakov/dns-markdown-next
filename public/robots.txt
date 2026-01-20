@@ -1,11 +1,11 @@
 User-agent: *
 Allow: /
+Allow: /about
 Disallow: /catalog
 Disallow: /archive
 Disallow: /updates
 Disallow: /favorites
 Disallow: /profile
-Disallow: /disclaimer
 Disallow: /api
 Disallow: /sign-in
 Disallow: /sign-up

@@ -105,7 +105,7 @@ export default function HomeUpdates({
 
       <div className="mt-4 border-t border-gray-200 pt-4 text-lg font-bold text-gray-600 dark:text-gray-400">
         <ChartBar className="text-accent mr-2 inline" />
-        {t("view_analysis")}&nbsp;
+        {t("view_more")}&nbsp;
         <Link href="/analysis" className="text-primary">
           {tNav("analysis")}
         </Link>

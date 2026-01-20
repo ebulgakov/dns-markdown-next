@@ -11,7 +11,7 @@ type FooterProps = {
 };
 
 function Footer({ locate }: FooterProps) {
-  const t = useTranslations("Footer");
+  const t = useTranslations("About");
   return (
     <footer className="mt-auto flex h-13 items-center justify-between border-t border-neutral-300">
       <div className="text-sm text-gray-500">
@@ -28,8 +28,8 @@ function Footer({ locate }: FooterProps) {
       <div className="hidden gap-4 text-sm text-gray-500 md:flex">
         <ChangeThemeSelector />
         <ChangeLocationSelector locate={locate} />
-        <Link href="/disclaimer">
-          <span className="text-blue-500 hover:underline">{t("disclaimer")}</span>
+        <Link href="/about">
+          <span className="text-blue-500 hover:underline">{t("link")}</span>
         </Link>
       </div>
     </footer>
