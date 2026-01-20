@@ -7,6 +7,6 @@ type SearchStore = {
 export const useSearchStore = create<SearchStore>(set => ({
   searchTerm: "",
   updateSearchTerm: (term: string) => {
-    set(state => ({ ...state, searchTerm: term.trim() }));
+    set(state => ({ ...state, searchTerm: term }));
   }
 }));

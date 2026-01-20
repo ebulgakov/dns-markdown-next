@@ -36,7 +36,7 @@ function PriceListPage({
 }: PriceListPageProps) {
   const sortGoods = useSortGoodsStore(state => state.sortGoods);
   const searchTerm = useSearchStore(state => state.searchTerm);
-  const debouncedSearch = useDebounce<string>(searchTerm, 100);
+  const debouncedSearch = useDebounce<string>(searchTerm.trim(), 100);
   const filteredList = useFilteredGoods(debouncedSearch, priceList);
   const isHiddenDefaultList = debouncedSearch.length > 1 || sortGoods !== "default";
   const priceListPositions =
