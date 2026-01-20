@@ -3,7 +3,7 @@ Allow: /
 Allow: /about
 Disallow: /catalog
 Disallow: /archive
-Disallow: /updates
+Disallow: /today
 Disallow: /favorites
 Disallow: /profile
 Disallow: /api
