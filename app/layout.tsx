@@ -78,7 +78,7 @@ export default async function RootLayout({
   return (
     <StrictMode>
       <NextIntlClientProvider>
-        <ClerkProvider>
+        <ClerkProvider redirectUrl={process.env.CLERK_REDIRECT_URL || "/"}>
           <html lang={locale} suppressHydrationWarning>
             <body
               className={cn(["font-sans antialiased", robotoSans.variable, robotoMono.variable])}
