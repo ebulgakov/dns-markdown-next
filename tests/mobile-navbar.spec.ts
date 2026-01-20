@@ -30,12 +30,12 @@ test.describe("Mobile Navbar", () => {
     const catalogLink = getDialog(page).getByRole("link", { name: "Прайслист" });
     const archiveLink = getDialog(page).getByRole("link", { name: "Архив" });
     const updatesLink = getDialog(page).getByRole("link", { name: "Обновления" });
-    const disclaimerLink = getDialog(page).getByRole("link", { name: "Отказ от ответственности" });
+    const aboutLink = getDialog(page).getByRole("link", { name: "О сервисе" });
 
     await expect(catalogLink).toBeVisible();
     await expect(archiveLink).toBeVisible();
     await expect(updatesLink).toBeVisible();
-    await expect(disclaimerLink).toBeVisible();
+    await expect(aboutLink).toBeVisible();
   });
 
   test("should display navbar auth buttons", async ({ page }) => {
