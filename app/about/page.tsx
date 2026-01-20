@@ -100,6 +100,14 @@ export default function DisclaimerPage() {
           </em>
         </p>
 
+        <p>
+          Если у вас есть идеи по улучшению сервиса, вы можете связаться со мной через почту{" "}
+          <a href="mailto:me@ebulgakov.com" className="text-primary underline">
+            me@ebulgakov.com
+          </a>
+          .
+        </p>
+
         <Title variant="h2">Поддержка сервиса</Title>
 
         <p>
