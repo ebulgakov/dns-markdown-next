@@ -26,7 +26,7 @@ export function HomeIntro() {
 
       <MoreLink icon={Info}>
         {t("view_more")}&nbsp;
-        <Link href="/analysis" className="text-primary">
+        <Link href="/about" className="text-primary">
           {tAbout("title")}
         </Link>
         .
