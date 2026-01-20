@@ -1,11 +1,11 @@
 "use client";
 
-import { sendGAEvent } from "@next/third-parties/google";
 import clsx from "clsx";
 import { Search, X } from "lucide-react";
 import { useState } from "react";
 
 import { Input } from "@/app/components/ui/input";
+import { sendGAEvent } from "@/app/lib/sendGAEvent";
 import { useSearchStore } from "@/app/stores/search-store";
 
 function SearchInput() {
@@ -19,7 +19,7 @@ function SearchInput() {
 
     sendGAEvent({
       event: "toggle_click",
-      value: !hidden,
+      value: !hidden ? "show" : "hide",
       category: "SearchInput",
       action: "click"
     });

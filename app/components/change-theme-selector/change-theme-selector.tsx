@@ -1,9 +1,10 @@
 "use client";
 
-import { sendGAEvent } from "@next/third-parties/google";
 import { useTranslations } from "next-intl";
 import { useTheme } from "next-themes";
 import { useState, useEffect } from "react";
+
+import { sendGAEvent } from "@/app/lib/sendGAEvent";
 
 function ChangeThemeSelector() {
   const { theme, setTheme } = useTheme();

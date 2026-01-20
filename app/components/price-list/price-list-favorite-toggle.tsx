@@ -1,10 +1,10 @@
 "use client";
 
-import { sendGAEvent } from "@next/third-parties/google";
 import { Star } from "lucide-react";
 import { useState, useTransition, useOptimistic } from "react";
 
 import { Tooltip, TooltipContent, TooltipTrigger } from "@/app/components/ui/tooltip";
+import { sendGAEvent } from "@/app/lib/sendGAEvent";
 import { addToFavorites } from "@/db/user/mutations/add-to-favorites";
 import { removeFromFavorites } from "@/db/user/mutations/remove-from-favorites";
 

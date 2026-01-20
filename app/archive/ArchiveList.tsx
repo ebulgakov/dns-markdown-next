@@ -1,9 +1,9 @@
 "use client";
 
-import { sendGAEvent } from "@next/third-parties/google";
 import Link from "next/link";
 
 import { formatDate } from "@/app/helpers/format";
+import { sendGAEvent } from "@/app/lib/sendGAEvent";
 
 import type { PriceListDate } from "@/types/pricelist";
 
