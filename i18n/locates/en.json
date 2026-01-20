@@ -15,7 +15,7 @@
   },
   "HomePage": {
     "title": "DNS Markdown",
-    "text": "<lead>This is an unofficial DNS fan site designed to help you browse discounted goods from the city of Samara.</lead> \n\nThis service allows you to add items to your favorites to track updates such as price changes or store availability.\n\n<border>One of the main features of the site is price analysis. For each item from each city, a snapshot of price/benefit/original price is created and presented to the user in a convenient graph format. Price analysis clearly shows when your desired item has dropped in price and is worth purchasing.</border>\n\n**The service is completely free and does not require mandatory registration.**",
+    "text": "<lead>This is an unofficial DNS fan site designed to help you browse discounted goods from the city of Samara.</lead> \n\nThis service allows you to add items to your favorites to track updates such as price changes or store availability.\n\nOne of the main features of the site is price analysis. For each item from each city, a snapshot of price/benefit/original price is created and presented to the user in a convenient graph format. Price analysis clearly shows when your desired item has dropped in price and is worth purchasing.\n\n**The service is completely free and does not require mandatory registration.**",
     "error_title": "Error loading updates",
     "error_text": "Insufficient data to display updates",
     "most_title": "Top picks from the DNS catalog in your city",
