@@ -15,7 +15,7 @@
   },
   "HomePage": {
     "title": "DNS Markdown",
-    "text": "<lead>This is an unofficial website of the DNS company. This site helps you browse discounted goods from various cities listed on the DNS website.</lead>\n\nThe service provides a convenient way to browse products from Samara for now. You can add items to your favorites to track updates, such as price changes or store availability.\n\nThe service offers the option to subscribe via email for daily price list updates for your city of interest, as well as receive email notifications regarding changes to your favorite items.\n\n<border>One of the main features of the site is price analysis. For every product in every city, a snapshot of the price/benefit/initial price is created and presented to the user in a convenient graph. The price analysis clearly shows when the item you are interested in has dropped in price and is ready to be purchased.</border>\n\nAnother important feature is the ability to add items from several different cities to your favorites and track their updates; if you or any of your friends or relatives happen to be in that city, they can purchase the item for you.\n\nYou can also select categories that do not interest you, and they will be collapsed while browsing the price list so they dont interfere with your viewing experience.\n\nAnd of course, the main reason for all of this is the ability to view the entire price list without a \"Show more\" button. All products are displayed at once with \"Live Search.\" This means you dont need to reload the page to see search results; products will appear as soon as you start typing your query.\n\nThe next handy feature is a daily archive for each city. This can be very useful when you need to see which products were available yesterday or a week ago.\n\nFinally, one of the key capabilities is hourly updates. This is a convenient way to track new arrivals, price changes, and deals for the current day as of the latest hour.",
+    "text": "<lead>This is an unofficial DNS fan site designed to help you browse discounted goods from the city of Samara.</lead> \n\nThis service allows you to add items to your favorites to track updates such as price changes or store availability.\n\nOne of the main features of the site is price analysis. For each item from each city, a snapshot of price/benefit/original price is created and presented to the user in a convenient graph format. Price analysis clearly shows when your desired item has dropped in price and is worth purchasing.\n\n**The service is completely free and does not require mandatory registration.**",
     "error_title": "Error loading updates",
     "error_text": "Insufficient data to display updates",
     "most_title": "Top picks from the DNS catalog in your city",
@@ -25,7 +25,7 @@
     "most_discount_text": "item with the largest discount in the catalog",
     "most_profit": "Most Profitable",
     "most_profit_text": "this is how much money you can save",
-    "view_analysis": "More detailed information can be found in the"
+    "view_more": "More detailed information can be found in the"
   },
   "Navbar": {
     "logo": "DNS Markdown",
@@ -40,8 +40,8 @@
     "signout": "Sign Out",
     "menu": "Menu"
   },
-  "Footer": {
-    "disclaimer": "Disclaimer"
+  "About": {
+    "title": "About"
   },
   "ChangeThemeSelector": {
     "light": "Light Theme",

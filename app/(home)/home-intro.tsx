@@ -1,15 +1,19 @@
+import { Info } from "lucide-react";
+import Link from "next/link";
 import { useTranslations } from "next-intl";
 import { Fragment } from "react";
 import ReactMarkdown from "react-markdown";
 import rehypeRaw from "rehype-raw";
 
+import { MoreLink } from "@/app/components/more-link";
+import { PageTitle } from "@/app/components/ui/page-title";
+
 export function HomeIntro() {
   const t = useTranslations("HomePage");
+  const tAbout = useTranslations("About");
   return (
     <Fragment>
-      <h1 className="mt-2 mb-5 border-b border-gray-200 pb-2 text-5xl tracking-tight sm:text-6xl">
-        {t("title")}
-      </h1>
+      <PageTitle title={t("title")} />
       <div className="space-y-4">
         <ReactMarkdown rehypePlugins={[rehypeRaw]}>
           {t.markup("text", {
@@ -19,6 +23,14 @@ export function HomeIntro() {
           })}
         </ReactMarkdown>
       </div>
+
+      <MoreLink icon={Info}>
+        {t("view_more")}&nbsp;
+        <Link href="/about" className="text-primary">
+          {tAbout("title")}
+        </Link>
+        .
+      </MoreLink>
     </Fragment>
   );
 }

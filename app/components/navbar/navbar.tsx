@@ -13,8 +13,7 @@ type NavbarProps = {
 
 function Navbar({ locate, isUserLoggedIn, city }: NavbarProps) {
   const t = useTranslations("Navbar");
-  // TODO: add in the future a new section and name it Disclaimer
-  const disclaimerT = useTranslations("Footer");
+  const aboutT = useTranslations("About");
   const linksList: NavbarLinks = [
     {
       name: t("catalog"),
@@ -45,7 +44,7 @@ function Navbar({ locate, isUserLoggedIn, city }: NavbarProps) {
     }
   ];
 
-  const mobileNavbar = [...linksList, { name: disclaimerT("disclaimer"), url: "/disclaimer" }];
+  const mobileNavbar = [...linksList, { name: aboutT("title"), url: "/about" }];
 
   return (
     <header>

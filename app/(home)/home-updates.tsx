@@ -4,6 +4,7 @@ import { useTranslations } from "next-intl";
 import { Fragment } from "react";
 
 import { HotOffer } from "@/app/components/hot-offer";
+import { MoreLink } from "@/app/components/more-link";
 import { Alert, AlertDescription, AlertTitle } from "@/app/components/ui/alert";
 import { Title } from "@/app/components/ui/title";
 
@@ -103,14 +104,13 @@ export default function HomeUpdates({
         </div>
       </div>
 
-      <div className="mt-4 border-t border-gray-200 pt-4 text-lg font-bold text-gray-600 dark:text-gray-400">
-        <ChartBar className="text-accent mr-2 inline" />
-        {t("view_analysis")}&nbsp;
+      <MoreLink icon={ChartBar}>
+        {t("view_more")}&nbsp;
         <Link href="/analysis" className="text-primary">
           {tNav("analysis")}
         </Link>
         .
-      </div>
+      </MoreLink>
     </Fragment>
   );
 }
