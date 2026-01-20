@@ -1,9 +1,10 @@
 "use client";
 
-import { sendGAEvent } from "@next/third-parties/google";
 import Image from "next/image";
 import Link from "next/link";
 import { NumericFormat } from "react-number-format";
+
+import { sendGAEvent } from "@/app/lib/sendGAEvent";
 
 import type { Goods } from "@/types/pricelist";
 

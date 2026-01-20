@@ -1,8 +1,9 @@
 "use client";
 
-import { sendGAEvent } from "@next/third-parties/google";
 import { Plus, Minus } from "lucide-react";
 import { useState } from "react";
+
+import { sendGAEvent } from "@/app/lib/sendGAEvent";
 
 import { PriceListGoods } from "./price-list-goods";
 
@@ -30,7 +31,7 @@ function PriceListSection({
     setIsOpen(!isOpen);
     sendGAEvent({
       event: "pricelist_section_toggle",
-      value: !isOpen,
+      value: !isOpen ? "close" : "open",
       category: "PriceListGoods",
       action: "click"
     });

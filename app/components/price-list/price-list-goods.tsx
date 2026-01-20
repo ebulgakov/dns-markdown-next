@@ -1,11 +1,11 @@
 "use client";
-import { sendGAEvent } from "@next/third-parties/google";
 import clsx from "clsx";
 import Image from "next/image";
 import Link from "next/link";
 import { NumericFormat } from "react-number-format";
 
 import { formatDate, formatDateShort } from "@/app/helpers/format";
+import { sendGAEvent } from "@/app/lib/sendGAEvent";
 
 import { PriceListFavoriteToggle } from "./price-list-favorite-toggle";
 import { PriceListGoodsDiff } from "./price-list-goods-diff";

@@ -1,7 +1,6 @@
 "use client";
 
 import { SignedIn, SignInButton, SignUpButton, UserButton } from "@clerk/nextjs";
-import { sendGAEvent } from "@next/third-parties/google";
 import Link from "next/link";
 import { useTranslations } from "next-intl";
 import { Fragment } from "react";
@@ -13,6 +12,7 @@ import {
   NavigationMenuItem,
   NavigationMenuList
 } from "@/app/components/ui/navigation-menu";
+import { sendGAEvent } from "@/app/lib/sendGAEvent";
 
 import type { NavbarLinks } from "@/types/common";
 

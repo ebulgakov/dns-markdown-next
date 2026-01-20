@@ -1,12 +1,12 @@
 "use client";
 
-import { sendGAEvent } from "@next/third-parties/google";
 import { Github } from "lucide-react";
 import Link from "next/link";
 import { useTranslations } from "next-intl";
 
 import { ChangeLocationSelector } from "@/app/components/change-location-selector";
 import { ChangeThemeSelector } from "@/app/components/change-theme-selector";
+import { sendGAEvent } from "@/app/lib/sendGAEvent";
 import { version } from "@/lib/version";
 
 type FooterProps = {

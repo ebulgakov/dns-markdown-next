@@ -1,7 +1,6 @@
 "use client";
 
 import { SignInButton, SignUpButton, SignOutButton } from "@clerk/nextjs";
-import { sendGAEvent } from "@next/third-parties/google";
 import { Menu } from "lucide-react";
 import Link from "next/link";
 import { useTranslations } from "next-intl";
@@ -18,6 +17,7 @@ import {
   DialogTitle,
   DialogTrigger
 } from "@/app/components/ui/dialog";
+import { sendGAEvent } from "@/app/lib/sendGAEvent";
 
 import type { NavbarLinks } from "@/types/common";
 

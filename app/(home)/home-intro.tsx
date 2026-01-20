@@ -1,6 +1,5 @@
 "use client";
 
-import { sendGAEvent } from "@next/third-parties/google";
 import { Info } from "lucide-react";
 import Link from "next/link";
 import { useTranslations } from "next-intl";
@@ -10,6 +9,7 @@ import rehypeRaw from "rehype-raw";
 
 import { MoreLink } from "@/app/components/more-link";
 import { PageTitle } from "@/app/components/ui/page-title";
+import { sendGAEvent } from "@/app/lib/sendGAEvent";
 
 export function HomeIntro() {
   const t = useTranslations("HomePage");

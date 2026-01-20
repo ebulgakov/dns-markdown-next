@@ -1,6 +1,5 @@
 "use client";
 
-import { sendGAEvent } from "@next/third-parties/google";
 import { ChartBar } from "lucide-react";
 import Link from "next/link";
 import { useTranslations } from "next-intl";
@@ -10,6 +9,7 @@ import { HotOffer } from "@/app/components/hot-offer";
 import { MoreLink } from "@/app/components/more-link";
 import { Alert, AlertDescription, AlertTitle } from "@/app/components/ui/alert";
 import { Title } from "@/app/components/ui/title";
+import { sendGAEvent } from "@/app/lib/sendGAEvent";
 
 import type { CustomDate } from "@/types/common";
 import type { Goods } from "@/types/pricelist";
