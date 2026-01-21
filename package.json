@@ -62,6 +62,7 @@
     "@storybook/addon-themes": "^10.1.11",
     "@storybook/addon-vitest": "^10.1.11",
     "@storybook/nextjs-vite": "^10.1.11",
+    "@storybook/react": "^10.1.11",
     "@tailwindcss/postcss": "^4",
     "@testing-library/dom": "^10.4.1",
     "@testing-library/jest-dom": "^6.9.1",
