@@ -1,4 +1,4 @@
-import type { Goods } from "#types/pricelist.js";
+import type { Goods } from "#types/pricelist.ts";
 
 export type AnalysisData = Goods & {
   city: string;

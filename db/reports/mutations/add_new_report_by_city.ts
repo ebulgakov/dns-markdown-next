@@ -1,4 +1,4 @@
-import { Reports } from "#db/models/reports_model.js";
+import { Reports } from "#db/models/reports_model.ts";
 
 type NewReportByCityType = {
   city: string;

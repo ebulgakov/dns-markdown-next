@@ -1,5 +1,5 @@
 import type { Mongoose } from "mongoose";
-import { AbortController } from "node/web-globals/abortcontroller.js";
+import { AbortController } from "node/web-globals/abortcontroller.ts";
 import { ChildProcess } from "child_process";
 
 declare global {

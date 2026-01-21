@@ -1,5 +1,5 @@
-import { Pricelist } from "#db/models/pricelist_model.js";
-import type { Position } from "#types/pricelist.js";
+import { Pricelist } from "#db/models/pricelist_model.ts";
+import type { Position } from "#types/pricelist.ts";
 
 export const savePriceList = async (city: string, positions: Position[]) => {
   const priceList = new Pricelist({
