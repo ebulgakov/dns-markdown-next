@@ -8,10 +8,10 @@
     "start": "next start",
     "lint:fix": "eslint --fix .",
     "lint": "eslint",
-    "test": "TZ=UTC jest",
     "type-check": "tsc --noEmit",
-    "test:watch": "npm run test -- --watch",
-    "test:coverage": "npm run test -- --coverage",
+    "test": "TZ=UTC jest",
+    "test:watch": "TZ=UTC jest --watch",
+    "test:coverage": "TZ=UTC jest --coverage",
     "gv": "genversion -e lib/version.js",
     "storybook": "storybook dev -p 6006",
     "build-storybook": "storybook build"
