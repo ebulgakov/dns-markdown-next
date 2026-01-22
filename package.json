@@ -18,7 +18,7 @@
     "build": "bunx tsc -p tsconfig.build.json",
     "type-check": "bunx tsc --noEmit",
     "crawler": "bun ./parser/crawler.ts",
-    "downloader": "bash parser/dns_shop_downloader.sh && npm run crawler && bash parser/dns_shop_downloader_prices.sh",
+    "downloader": "bash parser/dns_shop_downloader.sh && bun run crawler && bash parser/dns_shop_downloader_prices.sh",
     "add:list": "bun ./add_price_list",
     "add:analysis-report": "bun ./add_report",
     "add:analysis-data:full": "WRITE_STRATEGY=replace bun ./add_analysis_data",
@@ -27,7 +27,7 @@
     "add:analysis-diff": "WRITE_STRATEGY=insert bun ./add_analysis_diff",
     "check:favorites": "bun ./check_favorites",
     "cache:clear": "bun ./cache_clear",
-    "parse": "npm run downloader && npm run add:list && npm run add:analysis-data && npm run add:analysis-diff && npm run check:favorites && npm run cache:clear",
+    "parse": "bun run downloader && bun run add:list && bun run add:analysis-data && bun run add:analysis-diff && bun run check:favorites && bun run cache:clear",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "dependencies": {
