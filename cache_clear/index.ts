@@ -1,5 +1,5 @@
-import redis from "#cache/index.js";
-import getPerformance from "#helpers/get_performance.js";
+import redis from "#cache/index.ts";
+import getPerformance from "#helpers/get_performance.ts";
 
 async function clearCache() {
   const keys = await redis.keys("*");

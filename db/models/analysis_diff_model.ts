@@ -1,5 +1,5 @@
 import mongoose from "mongoose";
-import { analysisDataSchema } from "./analysis_data_model.js";
+import { analysisDataSchema } from "./analysis_data_model.ts";
 
 const analysisDiffSchema = new mongoose.Schema({
   city: { type: String, required: true, index: true },

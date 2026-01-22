@@ -1,13 +1,13 @@
-import getPerformance from "#helpers/get_performance.js";
-import { dbConnect, dbDisconnect } from "#db/database.js";
-import { getAllPriceLists } from "#db/pricelist/queries/get_all_price_lists.js";
-import type { PriceList } from "#types/pricelist.js";
-import makeDiff from "#add_analysis_diff/helpers/make_diff.js";
-import { getAnalysisGoodsByParam } from "#db/analysis_data/queries/get-analysis-goods-by-param.js";
-import { addManyAnalysisDiff } from "#db/analysis_diff/mutations/add_many_analysis_diff.js";
-import { removeAllAnalysisDiff } from "#db/analysis_diff/mutations/remove_all_analysis_diff.js";
-import { removeAnalysisByDateDiff } from "#db/analysis_diff/mutations/remove_analysis_by_date_diff.js";
-import type { AnalysisData } from "#types/analysis_data.js";
+import getPerformance from "#helpers/get_performance.ts";
+import { dbConnect, dbDisconnect } from "#db/database.ts";
+import { getAllPriceLists } from "#db/pricelist/queries/get_all_price_lists.ts";
+import type { PriceList } from "#types/pricelist.ts";
+import makeDiff from "#add_analysis_diff/helpers/make_diff.ts";
+import { getAnalysisGoodsByParam } from "#db/analysis_data/queries/get-analysis-goods-by-param.ts";
+import { addManyAnalysisDiff } from "#db/analysis_diff/mutations/add_many_analysis_diff.ts";
+import { removeAllAnalysisDiff } from "#db/analysis_diff/mutations/remove_all_analysis_diff.ts";
+import { removeAnalysisByDateDiff } from "#db/analysis_diff/mutations/remove_analysis_by_date_diff.ts";
+import type { AnalysisData } from "#types/analysis_data.ts";
 
 async function addAnalysisDiff() {
   const writeStrategy = process.env.WRITE_STRATEGY || "insert";

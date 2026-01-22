@@ -1,12 +1,12 @@
 import "dotenv/config";
 import { ObjectId } from "mongodb";
-import { dbConnect, dbDisconnect } from "#db/database.js";
-import createData from "./helpers/create_data.js";
-import { savePriceList } from "#db/pricelist/mutations/save_price_list.js";
-import { deleteLastPriceList } from "#db/pricelist/mutations/delete_last_price_list.js";
-import { getLastPriceList } from "#db/pricelist/queries/get_last_price_list.js";
-import isSameDay from "./helpers/is_same_day.js";
-import getPerformance from "#helpers/get_performance.js";
+import { dbConnect, dbDisconnect } from "#db/database.ts";
+import createData from "./helpers/create_data.ts";
+import { savePriceList } from "#db/pricelist/mutations/save_price_list.ts";
+import { deleteLastPriceList } from "#db/pricelist/mutations/delete_last_price_list.ts";
+import { getLastPriceList } from "#db/pricelist/queries/get_last_price_list.ts";
+import isSameDay from "./helpers/is_same_day.ts";
+import getPerformance from "#helpers/get_performance.ts";
 import { readFileSync } from "node:fs";
 import { join, resolve } from "node:path";
 

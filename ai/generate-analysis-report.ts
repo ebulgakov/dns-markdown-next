@@ -1,4 +1,4 @@
-import { openai } from "./ai.js";
+import { openai } from "./ai.ts";
 
 export const generateAnalysisReport = async (data: string) => {
   const prompt = `Проанализируйте приведенные ниже данные уценённых товаров и составьте краткий отчет, 

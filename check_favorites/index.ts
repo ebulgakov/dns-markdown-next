@@ -1,10 +1,10 @@
-import { dbConnect, dbDisconnect } from "#db/database.js";
-import getPerformance from "#helpers/get_performance.js";
-import { getAllUsers } from "#db/user/queries/get_all_users.js";
-import updateFavorites from "./helpers/update_favorites.js";
-import { updateUsers } from "#db/user/mutations/update_users.js";
-import { getLastPriceList } from "#db/pricelist/queries/get_last_price_list.js";
-import { getAnalysisGoodsByParam } from "#db/analysis_data/queries/get-analysis-goods-by-param.js";
+import { dbConnect, dbDisconnect } from "#db/database.ts";
+import getPerformance from "#helpers/get_performance.ts";
+import { getAllUsers } from "#db/user/queries/get_all_users.ts";
+import updateFavorites from "./helpers/update_favorites.ts";
+import { updateUsers } from "#db/user/mutations/update_users.ts";
+import { getLastPriceList } from "#db/pricelist/queries/get_last_price_list.ts";
+import { getAnalysisGoodsByParam } from "#db/analysis_data/queries/get-analysis-goods-by-param.ts";
 
 async function checkFavorites() {
   const city = process.env.CITY || 'samara';

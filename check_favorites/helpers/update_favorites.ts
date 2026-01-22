@@ -1,6 +1,6 @@
-import { type User } from "#types/user.js";
+import { type User } from "#types/user.ts";
 import { ObjectId } from "mongodb";
-import type { AnalysisData } from "#types/analysis_data.js";
+import type { AnalysisData } from "#types/analysis_data.ts";
 
 export default function updateFavorites(users: User[], history: AnalysisData[]) {
   return users.map(user => {

@@ -1,1 +1,1 @@
-export { generateAnalysisReport } from "./generate-analysis-report.js";
+export { generateAnalysisReport } from "./generate-analysis-report.ts";

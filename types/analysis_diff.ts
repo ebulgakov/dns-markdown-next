@@ -1,4 +1,4 @@
-import type { AnalysisData } from "#types/analysis_data.js";
+import type { AnalysisData } from "#types/analysis_data.ts";
 
 type DiffDetail = {
   item: AnalysisData;
