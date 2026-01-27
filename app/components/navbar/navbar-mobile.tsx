@@ -1,6 +1,6 @@
 "use client";
 
-import { SignInButton, SignUpButton, SignOutButton } from "@clerk/nextjs";
+import { SignInButton, SignUpButton, SignOutButton, ClerkLoaded } from "@clerk/nextjs";
 import { Menu } from "lucide-react";
 import Link from "next/link";
 import { useTranslations } from "next-intl";
@@ -114,7 +114,7 @@ function NavbarMobile({ linksList, userLinks, isUserLoggedIn, locate, city }: Na
                   </div>
                 </Fragment>
               ) : (
-                <Fragment>
+                <ClerkLoaded>
                   <div>
                     <SignInButton>
                       <DialogClose asChild>
@@ -150,7 +150,7 @@ function NavbarMobile({ linksList, userLinks, isUserLoggedIn, locate, city }: Na
                       </DialogClose>
                     </SignUpButton>
                   </div>
-                </Fragment>
+                </ClerkLoaded>
               )}
             </div>
 

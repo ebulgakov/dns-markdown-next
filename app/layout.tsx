@@ -10,6 +10,7 @@ import { StrictMode, type ReactNode } from "react";
 
 import "./globals.css";
 
+import { ClerkError } from "@/app/components/clerk-error";
 import { Footer } from "@/app/components/footer";
 import { Navbar } from "@/app/components/navbar";
 import { cn } from "@/app/lib/utils";
@@ -78,7 +79,7 @@ export default async function RootLayout({
   return (
     <StrictMode>
       <NextIntlClientProvider>
-        <ClerkProvider>
+        <ClerkProvider proxyUrl={process.env.NEXT_PUBLIC_CLERK_PROXY_URL}>
           <html lang={locale} suppressHydrationWarning>
             <body
               className={cn(["font-sans antialiased", robotoSans.variable, robotoMono.variable])}
@@ -87,6 +88,8 @@ export default async function RootLayout({
                 <div className="px-4">
                   <div className="mx-auto grid min-h-screen md:container">
                     <div className="mb-10">
+                      <ClerkError />
+
                       <div className="mt-4 mb-5">
                         <Navbar locate={locale} isUserLoggedIn={!!userId} city={city} />
                       </div>
