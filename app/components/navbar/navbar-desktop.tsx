@@ -1,9 +1,8 @@
 "use client";
 
-import { SignedIn, SignInButton, SignUpButton, UserButton } from "@clerk/nextjs";
+import { SignedIn, SignInButton, SignUpButton, UserButton, ClerkLoaded } from "@clerk/nextjs";
 import Link from "next/link";
 import { useTranslations } from "next-intl";
-import { Fragment } from "react";
 
 import { Button } from "@/app/components/ui/button";
 import {
@@ -75,7 +74,7 @@ function NavbarDesktop({ linksList, isUserLoggedIn, userLinks, city }: NavbarDes
             </div>
           </SignedIn>
         ) : (
-          <Fragment>
+          <ClerkLoaded>
             <div className="flex items-center gap-2">
               <SignInButton>
                 <Button
@@ -107,7 +106,7 @@ function NavbarDesktop({ linksList, isUserLoggedIn, userLinks, city }: NavbarDes
                 </Button>
               </SignUpButton>
             </div>
-          </Fragment>
+          </ClerkLoaded>
         )}
       </NavigationMenu>
     </div>

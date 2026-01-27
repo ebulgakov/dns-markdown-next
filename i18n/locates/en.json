@@ -46,5 +46,9 @@
   "ChangeThemeSelector": {
     "light": "Light Theme",
     "dark": "Dark Theme"
+  },
+  "errors": {
+    "clerk_auth_title": "Unable to connect Clerk auth",
+    "clerk_auth_description": "Authentication failed again due to blocking. Try turning on your VPN and refreshing the page. The authentication buttons should appear."
   }
 }
