@@ -1,31 +1,20 @@
 import type { Goods } from "./pricelist.ts";
 
+export type FavoriteUpdate = "availability" | "price";
+
 export type FavoriteStatus = {
   city: string;
   updatedAt: string;
   createdAt: string;
   deleted: boolean;
-  updates: string[];
+  updates?: FavoriteUpdate[];
 };
-
-export type AvailableUpdateSectionNames = "hiddenSections" | "favoriteSections";
 
 export type UserSections = string[];
 
 export type UserNotifications = {
   updates: {
-    interval: string;
-    fields: {
-      new: boolean;
-      prices: boolean;
-      profit: boolean;
-    };
-  };
-  favorites: {
-    interval: string;
-  };
-  favoriteSections: {
-    interval: string;
+    enabled: boolean;
   };
 };
 
@@ -37,9 +26,11 @@ export interface Favorite {
 
 export interface User {
   _id: string;
-  id: string;
   userId: string;
+  username?: string;
+  email: string;
   city: string;
+  shownBoughtFavorites: boolean;
   hiddenSections: UserSections;
   favoriteSections: UserSections;
   notifications: UserNotifications;
