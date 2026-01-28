@@ -5,7 +5,6 @@ export type FavoriteStatus = {
   updatedAt: string;
   createdAt: string;
   deleted: boolean;
-  updates: string[];
 };
 
 export type AvailableUpdateSectionNames = "hiddenSections" | "favoriteSections" | "notifications";

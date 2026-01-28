@@ -43,8 +43,7 @@ const schema = new mongoose.Schema(
           city: String,
           updatedAt: String,
           createdAt: String,
-          deleted: Boolean,
-          updates: Array
+          deleted: Boolean
         },
         item: Goods
       }
