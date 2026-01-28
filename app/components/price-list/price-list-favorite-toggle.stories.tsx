@@ -39,8 +39,7 @@ export const InFavorites: Story = {
           city: "",
           updatedAt: "",
           createdAt: "",
-          deleted: false,
-          updates: []
+          deleted: false
         }
       }
     ]

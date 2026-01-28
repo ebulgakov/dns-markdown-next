@@ -26,6 +26,7 @@ export default async function ProfilePage() {
       notifications={profile.notifications}
       hiddenSections={profile.hiddenSections}
       favoriteSections={profile.favoriteSections}
+      email={profile.email}
       allSections={allSections}
     />
   );

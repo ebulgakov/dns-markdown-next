@@ -48,7 +48,7 @@ function ProfileUpdateSections({
       setSelectedSections([]);
       try {
         const newSections = await updateUserSection(sections, sectionName);
-        setRealActiveSections(newSections);
+        setRealActiveSections(newSections as UserSectionsType);
         setErrorMessage(null);
       } catch (error) {
         setErrorMessage(error as Error);

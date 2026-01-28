@@ -5,18 +5,7 @@ import type { Meta, StoryObj } from "@storybook/react";
 
 const mockNotifications: UserNotifications = {
   updates: {
-    interval: "daily",
-    fields: {
-      new: true,
-      prices: true,
-      profit: false
-    }
-  },
-  favorites: {
-    interval: "weekly"
-  },
-  favoriteSections: {
-    interval: "daily"
+    enabled: false
   }
 };
 
@@ -42,6 +31,7 @@ export const Default: Story = {
     notifications: mockNotifications,
     favoriteSections: mockFavoriteSections,
     hiddenSections: mockHiddenSections,
-    allSections: mockAllSections
+    allSections: mockAllSections,
+    email: "test@example.com"
   }
 };

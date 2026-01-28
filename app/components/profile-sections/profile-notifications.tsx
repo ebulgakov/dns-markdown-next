@@ -1,23 +1,66 @@
 "use client";
 
+import { useState, useTransition } from "react";
+
+import { Button } from "@/app/components/ui/button";
+import { CheckboxWithLabel } from "@/app/components/ui/control-with-label";
+import { Input } from "@/app/components/ui/input";
 import { Title } from "@/app/components/ui/title";
+import { updateUserSection } from "@/db/user/mutations/update-user-section";
 
 import type { UserNotifications } from "@/types/user";
 
 type ProfileNotificationsProps = {
   notifications: UserNotifications;
+  email: string;
 };
 
-function ProfileNotifications({ notifications }: ProfileNotificationsProps) {
+function ProfileNotifications({ notifications, email }: ProfileNotificationsProps) {
+  const [enabledUpdate, setEnabledUpdate] = useState(notifications.updates.enabled);
+  const [isPending, startTransition] = useTransition();
+
+  const handleSave = () => {
+    startTransition(async () => {
+      try {
+        await updateUserSection(
+          {
+            updates: {
+              enabled: enabledUpdate
+            }
+          },
+          "notifications"
+        );
+      } catch (error) {
+        console.error("Failed to update notifications:", error);
+      }
+    });
+  };
+
   return (
-    <div>
+    <div className="max-w-2xl">
       <Title variant="h2">Уведомления</Title>
-      <details>
-        <summary>
-          <p>Раздел пока в разработке</p>
-        </summary>
-        <pre>{JSON.stringify(notifications, null, 2)}</pre>
-      </details>
+      <div className="space-y-7">
+        <div className="flex items-center gap-4">
+          <div>E-mail</div>
+          <div className="flex-1">
+            <Input value={email} disabled={true} />
+          </div>
+        </div>
+
+        <div className="flex items-center gap-4">
+          <div>Уведомления</div>
+          <div className="flex-1">
+            <CheckboxWithLabel
+              label="Получать уведомления об изменении цены и наличии товаров в избранном"
+              checked={enabledUpdate}
+              onCheckedChange={checked => setEnabledUpdate(!!checked)}
+            />
+          </div>
+        </div>
+        <Button disabled={isPending} onClick={handleSave}>
+          Сохранить настройки уведомлений
+        </Button>
+      </div>
     </div>
   );
 }
