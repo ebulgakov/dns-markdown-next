@@ -2,10 +2,10 @@ import { Goods } from "./pricelist";
 
 export type FavoriteStatus = {
   city: string;
-  updatedAt: Date | string;
-  createdAt: Date | string;
+  updatedAt: string;
+  createdAt: string;
   deleted: boolean;
-  updates: [];
+  updates: string[];
 };
 
 export type AvailableUpdateSectionNames = "hiddenSections" | "favoriteSections" | "notifications";

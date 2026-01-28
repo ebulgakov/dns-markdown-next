@@ -42,8 +42,8 @@ describe("getCatalogData", () => {
           id: "g1",
           status: {
             city: "",
-            updatedAt: new Date(),
-            createdAt: new Date(),
+            updatedAt: `${new Date()}`,
+            createdAt: `${new Date()}`,
             deleted: false,
             updates: []
           },
