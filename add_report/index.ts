@@ -15,25 +15,18 @@ async function addReport() {
 
   if (!lastPriceList) throw new Error("No price list found for city");
 
-  const priceListData = (JSON.parse(JSON.stringify(lastPriceList))) as any;
+  let priceListData = JSON.parse(JSON.stringify(lastPriceList)) as any;
 
-  delete priceListData._id;
-
-  priceListData.positions.forEach((position: any) => {
-    delete position._id;
-
-    position.items.forEach((item: any) => {
-      delete item._id;
-      delete item.code;
-      delete item.description;
-      delete item.available;
-      delete item.image;
-
-      item.defects = [];
-      item.reasons.forEach((reason: any) =>  item.defects.push(`${reason.label}: ${reason.text}`));
-      delete item.reasons;
-    });
-  });
+  priceListData = priceListData.positions.flatMap((position: any) =>
+    position.items.map((item: any) => ({
+      title: item.title,
+      link: item.link,
+      price: item.price,
+      priceOld: item.priceOld || "-",
+      profit: item.profit || "-",
+      defects: item.reasons.map((reason: any) => `${reason.label}: ${reason.text}`).join("; ")
+    }))
+  );
 
   await removeReportByCityDate({ city, dateAdded: lastPriceList.createdAt });
 
