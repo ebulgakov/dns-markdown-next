@@ -20,16 +20,16 @@ function Navbar({ locate, isUserLoggedIn, city }: NavbarProps) {
       url: "/catalog"
     },
     {
-      name: t("archive"),
-      url: "/archive"
-    },
-    {
       name: t("updates"),
       url: "/today"
     },
     {
       name: t("analysis"),
       url: "/analysis"
+    },
+    {
+      name: t("archive"),
+      url: "/archive"
     }
   ];
 
