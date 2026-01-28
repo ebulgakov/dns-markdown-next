@@ -11,6 +11,7 @@ type ProfileSectionsProps = {
   notifications: UserNotifications;
   favoriteSections: UserSections;
   hiddenSections: UserSections;
+  email: string;
   allSections: string[];
 };
 
@@ -18,6 +19,7 @@ function ProfileSections({
   notifications,
   favoriteSections,
   hiddenSections,
+  email,
   allSections
 }: ProfileSectionsProps) {
   return (
@@ -52,7 +54,7 @@ function ProfileSections({
         </TabsContent>
 
         <TabsContent value="notifications">
-          <ProfileNotifications notifications={notifications} />
+          <ProfileNotifications notifications={notifications} email={email} />
         </TabsContent>
       </Tabs>
     </div>

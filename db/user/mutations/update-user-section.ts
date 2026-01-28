@@ -2,12 +2,16 @@
 import { dbConnect } from "@/db/database";
 import { updateUser } from "@/db/user/mutations/update-user";
 
-import type { UserSections, AvailableUpdateSectionNames } from "@/types/user";
+import type { UserSections, AvailableUpdateSectionNames, UserNotifications } from "@/types/user";
 
-const availableSections: AvailableUpdateSectionNames[] = ["hiddenSections", "favoriteSections"];
+const availableSections: AvailableUpdateSectionNames[] = [
+  "hiddenSections",
+  "favoriteSections",
+  "notifications"
+];
 
 export const updateUserSection = async (
-  sections: UserSections,
+  sections: UserSections | UserNotifications,
   sectionName: AvailableUpdateSectionNames
 ) => {
   // Validate section name

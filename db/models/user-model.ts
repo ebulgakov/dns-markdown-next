@@ -15,8 +15,8 @@ const schema = new mongoose.Schema(
     },
     email: {
       type: String,
-      required: false,
-      default: ""
+      required: true,
+      unique: true
     },
     username: {
       type: String,
@@ -31,35 +31,9 @@ const schema = new mongoose.Schema(
     favoriteSections: [String],
     notifications: {
       updates: {
-        interval: {
-          type: String,
-          default: "never"
-        },
-        fields: {
-          new: {
-            type: Boolean,
-            default: false
-          },
-          prices: {
-            type: Boolean,
-            default: false
-          },
-          profit: {
-            type: Boolean,
-            default: false
-          }
-        }
-      },
-      favorites: {
-        interval: {
-          type: String,
-          default: "never"
-        }
-      },
-      favoriteSections: {
-        interval: {
-          type: String,
-          default: "never"
+        enabled: {
+          type: Boolean,
+          default: false
         }
       }
     },

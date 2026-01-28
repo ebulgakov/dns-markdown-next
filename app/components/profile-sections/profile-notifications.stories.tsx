@@ -18,19 +18,9 @@ export const Default: Story = {
   args: {
     notifications: {
       updates: {
-        interval: "daily",
-        fields: {
-          new: true,
-          prices: true,
-          profit: false
-        }
-      },
-      favorites: {
-        interval: "weekly"
-      },
-      favoriteSections: {
-        interval: "monthly"
+        enabled: false
       }
-    }
+    },
+    email: "test@emample.com"
   }
 };

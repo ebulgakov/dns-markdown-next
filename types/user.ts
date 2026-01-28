@@ -8,24 +8,13 @@ export type FavoriteStatus = {
   updates: [];
 };
 
-export type AvailableUpdateSectionNames = "hiddenSections" | "favoriteSections";
+export type AvailableUpdateSectionNames = "hiddenSections" | "favoriteSections" | "notifications";
 
 export type UserSections = string[];
 
 export type UserNotifications = {
   updates: {
-    interval: string;
-    fields: {
-      new: boolean;
-      prices: boolean;
-      profit: boolean;
-    };
-  };
-  favorites: {
-    interval: string;
-  };
-  favoriteSections: {
-    interval: string;
+    enabled: boolean;
   };
 };
 
@@ -39,7 +28,7 @@ export interface User {
   _id: string;
   userId: string;
   username?: string;
-  email?: string;
+  email: string;
   city: string;
   shownBoughtFavorites: boolean;
   hiddenSections: UserSections;

@@ -11,18 +11,7 @@ export const mockUser: User = {
   favoriteSections: [],
   notifications: {
     updates: {
-      interval: "daily",
-      fields: {
-        new: true,
-        prices: true,
-        profit: true
-      }
-    },
-    favorites: {
-      interval: "weekly"
-    },
-    favoriteSections: {
-      interval: "monthly"
+      enabled: false
     }
   },
   favorites: []
