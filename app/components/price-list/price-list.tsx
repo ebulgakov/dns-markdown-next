@@ -32,11 +32,15 @@ function PriceList({ positions, favorites, hiddenSections = [], isUserLoggedIn }
       const updatedSections = realHiddenSections.includes(title)
         ? realHiddenSections.filter(section => section !== title)
         : [...realHiddenSections, title];
-      try {
-        const list = await updateUserSection(updatedSections, "hiddenSections");
-        setRealHiddenSections(list as UserSections);
-      } catch (error) {
-        console.error("Failed to update hidden sections:", error);
+      if (isUserLoggedIn) {
+        try {
+          const list = await updateUserSection(updatedSections, "hiddenSections");
+          setRealHiddenSections(list as UserSections);
+        } catch (error) {
+          console.error("Failed to update hidden sections:", error);
+        }
+      } else {
+        setRealHiddenSections(updatedSections);
       }
     });
   };
