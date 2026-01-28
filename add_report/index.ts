@@ -25,6 +25,7 @@ async function addReport() {
     position.items.forEach((item: any) => {
       delete item._id;
       delete item.code;
+      delete item.description;
       delete item.available;
       delete item.image;
 
