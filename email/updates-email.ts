@@ -57,7 +57,7 @@ async function sendUpdatesEmail(users: User[]) {
       delete favorite.status.updates; // Clear updates after sending email
     });
 
-    body += `\n\nСпасибо, что пользуетесь сервисом!`;
+    body += `\n\nСпасибо, что пользуетесь сервисом! Отключить уведомления можно в <a href="https://dns.ebulgakov.com/profile#notifications">настройках вашего аккаунта</a> на сайте.`;
 
     emails.push({
       from: "Днс Уценка Обновления <noreply@dns.ebulgakov.com>",
