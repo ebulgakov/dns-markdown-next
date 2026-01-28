@@ -44,8 +44,7 @@ describe("getCatalogData", () => {
             city: "",
             updatedAt: `${new Date()}`,
             createdAt: `${new Date()}`,
-            deleted: false,
-            updates: []
+            deleted: false
           },
           item: mockGoods[0]
         }

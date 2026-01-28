@@ -56,8 +56,7 @@ export const Bought: Story = {
       updatedAt: new Date("2024-06-01T10:00:00Z").toISOString(),
       city: "",
       createdAt: new Date("2024-05-25T10:00:00Z").toISOString(),
-      deleted: true,
-      updates: []
+      deleted: true
     },
     favorites: mockFavorites
   }
