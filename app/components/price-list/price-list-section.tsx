@@ -10,7 +10,7 @@ import type { Favorite } from "@/types/user";
 
 type PriceListProps = {
   position: PositionType;
-  loading: boolean;
+  loading?: boolean;
   favorites?: Favorite[];
   diffs?: DiffsType;
   isOpen?: boolean;
