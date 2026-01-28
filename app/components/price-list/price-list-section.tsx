@@ -1,9 +1,6 @@
 "use client";
 
 import { Plus, Minus } from "lucide-react";
-import { useState } from "react";
-
-import { sendGAEvent } from "@/app/lib/sendGAEvent";
 
 import { PriceListGoods } from "./price-list-goods";
 
@@ -17,29 +14,21 @@ type PriceListProps = {
   diffs?: DiffsType;
   isOpen?: boolean;
   isUserLoggedIn?: boolean;
+  onUpdate: (title: string) => void;
 };
 
 function PriceListSection({
+  onUpdate,
   isUserLoggedIn,
   position,
   favorites,
   diffs,
-  isOpen: isOpenDefault
+  isOpen
 }: PriceListProps) {
-  const [isOpen, setIsOpen] = useState(isOpenDefault);
-  const toggleVisibility = () => {
-    setIsOpen(!isOpen);
-    sendGAEvent({
-      event: "pricelist_section_toggle",
-      value: !isOpen ? "close" : "open",
-      category: "PriceListGoods",
-      action: "click"
-    });
-  };
   return (
     <div className="mb-3">
       <button
-        onClick={toggleVisibility}
+        onClick={() => onUpdate(position.title)}
         className="bg-background sticky top-0 z-10 flex w-full cursor-pointer items-center justify-start border-b border-solid border-b-neutral-300 text-left"
       >
         {isOpen ? <Minus className="text-accent" /> : <Plus className="text-accent" />}
