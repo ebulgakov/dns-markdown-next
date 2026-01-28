@@ -1,5 +1,5 @@
 "use client";
-import { startTransition, useEffect, useOptimistic, useState } from "react";
+import { useTransition, useState } from "react";
 
 import { updateUserSection } from "@/db/user/mutations/update-user-section";
 
@@ -15,32 +15,32 @@ type CatalogProps = {
   isUserLoggedIn?: boolean;
 };
 
-function PriceList({ positions, favorites, hiddenSections = [], isUserLoggedIn }: CatalogProps) {
-  const [realHiddenSections, setRealHiddenSections] = useState<UserSections>(hiddenSections);
-
-  const [stateHiddenSections, toggleOptimisticHiddenSection] = useOptimistic<UserSections, string>(
-    realHiddenSections,
-    (state, newSection) =>
-      state.includes(newSection)
-        ? state.filter(section => section !== newSection)
-        : [...state, newSection]
-  );
+function PriceList({
+  positions,
+  favorites,
+  hiddenSections: hSections = [],
+  isUserLoggedIn
+}: CatalogProps) {
+  const [currentSave, setCurrentSave] = useState<string | null>(null);
+  const [hiddenSections, setHiddenSections] = useState<UserSections>(hSections);
+  const [isPending, startTransition] = useTransition();
 
   const onUpdate = (title: string) => {
+    setCurrentSave(title);
+
     startTransition(async () => {
-      toggleOptimisticHiddenSection(title);
-      const updatedSections = realHiddenSections.includes(title)
-        ? realHiddenSections.filter(section => section !== title)
-        : [...realHiddenSections, title];
+      const updatedSections = hiddenSections.includes(title)
+        ? hiddenSections.filter(section => section !== title)
+        : [...hiddenSections, title];
       if (isUserLoggedIn) {
         try {
           const list = await updateUserSection(updatedSections, "hiddenSections");
-          setRealHiddenSections(list as UserSections);
+          setHiddenSections(list as UserSections);
         } catch (error) {
           console.error("Failed to update hidden sections:", error);
         }
       } else {
-        setRealHiddenSections(updatedSections);
+        setHiddenSections(updatedSections);
       }
     });
   };
@@ -50,7 +50,8 @@ function PriceList({ positions, favorites, hiddenSections = [], isUserLoggedIn }
       key={position._id}
       position={position}
       favorites={favorites}
-      isOpen={!stateHiddenSections?.includes(position.title)}
+      isOpen={!hiddenSections?.includes(position.title)}
+      loading={isPending && currentSave === position.title}
       onUpdate={onUpdate}
       isUserLoggedIn={isUserLoggedIn}
     />
