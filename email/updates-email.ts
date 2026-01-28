@@ -13,13 +13,13 @@ function addStatusInfo(status: FavoriteStatus, link: string) {
     .map(update => {
       let myStr = "";
       if (update === "price") {
-        myStr += `<p>Статус: <a href="https://dns.ebulgakov.com${link}">Изменилась цена товара</a></p>`;
+        myStr += `<p><b>Статус: <a href="https://dns.ebulgakov.com${link}">Изменилась цена товара</a></b></p>`;
       }
       if (update === "availability") {
         if (status.deleted) {
-          myStr += `<p>Статус: <a href="https://dns.ebulgakov.com${link}">Товар был удалён</a></p>`;
+          myStr += `<p><b>Статус: <a href="https://dns.ebulgakov.com${link}">Товар был удалён</a></b></p>`;
         } else {
-          myStr += `<p>Статус: <a href="https://dns.ebulgakov.com${link}">Товар появился на складе</a></p>`;
+          myStr += `<p><b>Статус: <a href="https://dns.ebulgakov.com${link}">Товар появился на складе</a></b></p>`;
         }
       }
       return myStr;
