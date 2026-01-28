@@ -51,7 +51,7 @@ function ProfileNotifications({ notifications, email }: ProfileNotificationsProp
           <div>Уведомления</div>
           <div className="flex-1">
             <CheckboxWithLabel
-              label="Получать уведомления об изменении цены и наличии  товаров в избранном"
+              label="Получать уведомления об изменении цены и наличии товаров в избранном"
               checked={enabledUpdate}
               onCheckedChange={checked => setEnabledUpdate(!!checked)}
             />

@@ -32,6 +32,6 @@ export const Default: Story = {
     favoriteSections: mockFavoriteSections,
     hiddenSections: mockHiddenSections,
     allSections: mockAllSections,
-    email: "test@emample.com"
+    email: "test@example.com"
   }
 };

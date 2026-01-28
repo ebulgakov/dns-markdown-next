@@ -21,6 +21,6 @@ export const Default: Story = {
         enabled: false
       }
     },
-    email: "test@emample.com"
+    email: "test@example.com"
   }
 };
