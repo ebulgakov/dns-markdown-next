@@ -1,7 +1,7 @@
 "use client";
 
 import { Star } from "lucide-react";
-import { useState, useTransition, useOptimistic } from "react";
+import { useState, useOptimistic, startTransition } from "react";
 
 import { Tooltip, TooltipContent, TooltipTrigger } from "@/app/components/ui/tooltip";
 import { sendGAEvent } from "@/app/lib/sendGAEvent";
@@ -29,7 +29,6 @@ function PriceListFavoriteToggle({
     inFavorites,
     (_, newInFavorites) => newInFavorites
   );
-  const [, startTransition] = useTransition();
 
   const handleRemoveFromFavorites = () => {
     startTransition(async () => {

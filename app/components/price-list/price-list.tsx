@@ -1,5 +1,5 @@
 "use client";
-import { useTransition, useOptimistic, useState } from "react";
+import { useOptimistic, useState, startTransition } from "react";
 
 import { updateUserSection } from "@/db/user/mutations/update-user-section";
 
@@ -11,6 +11,7 @@ import type { Favorite, UserSections as UserSectionsType, UserSections } from "@
 type CatalogProps = {
   positions: PositionType[];
   hiddenSections?: UserSections;
+  favoriteSections?: UserSections;
   favorites?: Favorite[];
   isUserLoggedIn?: boolean;
 };
@@ -18,20 +19,25 @@ type CatalogProps = {
 function PriceList({
   positions,
   favorites,
+  favoriteSections: fSections = [],
   hiddenSections: hSections = [],
   isUserLoggedIn
 }: CatalogProps) {
-  const [currentSave, setCurrentSave] = useState<string | null>(null);
+  // Hidden sections state management
   const [realHiddenSections, setRealHiddenSections] = useState<UserSectionsType>(hSections);
   const [hiddenSections, setHiddenSections] = useOptimistic<UserSections, UserSections>(
     realHiddenSections,
     (_, newSections) => newSections
   );
-  const [isPending, startTransition] = useTransition();
 
-  const onUpdate = (title: string) => {
-    setCurrentSave(title);
+  // Favorite sections state management
+  const [realFavoriteSections, setRealFavoriteSections] = useState<UserSectionsType>(fSections);
+  const [favoriteSections, setFavoriteSections] = useOptimistic<UserSections, UserSections>(
+    realFavoriteSections,
+    (_, newSections) => newSections
+  );
 
+  const onHidden = (title: string) => {
     const updatedSections = hiddenSections.includes(title)
       ? hiddenSections.filter(section => section !== title)
       : [...hiddenSections, title];
@@ -51,14 +57,33 @@ function PriceList({
     }
   };
 
+  const onFavorite = (title: string) => {
+    const updatedSections = favoriteSections.includes(title)
+      ? favoriteSections.filter(section => section !== title)
+      : [...favoriteSections, title];
+
+    if (isUserLoggedIn) {
+      startTransition(async () => {
+        setFavoriteSections(updatedSections);
+        try {
+          const list = await updateUserSection(updatedSections, "favoriteSections");
+          setRealFavoriteSections(list as UserSections);
+        } catch (error) {
+          console.error("Failed to update favorite sections:", error);
+        }
+      });
+    }
+  };
+
   return positions.map(position => (
     <PriceListSection
       key={position._id}
       position={position}
       favorites={favorites}
-      isOpen={!hiddenSections?.includes(position.title)}
-      loading={isPending && currentSave === position.title}
-      onUpdate={onUpdate}
+      isOpen={!hiddenSections.includes(position.title)}
+      isFavoriteSection={favoriteSections.includes(position.title)}
+      onHidden={onHidden}
+      onFavorite={onFavorite}
       isUserLoggedIn={isUserLoggedIn}
     />
   ));

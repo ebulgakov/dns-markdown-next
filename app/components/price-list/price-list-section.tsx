@@ -1,6 +1,8 @@
 "use client";
 
-import { Plus, Minus } from "lucide-react";
+import { Plus, Minus, Heart } from "lucide-react";
+
+import { cn } from "@/app/lib/utils";
 
 import { PriceListGoods } from "./price-list-goods";
 
@@ -10,35 +12,55 @@ import type { Favorite } from "@/types/user";
 
 type PriceListProps = {
   position: PositionType;
-  loading?: boolean;
   favorites?: Favorite[];
   diffs?: DiffsType;
   isOpen?: boolean;
+  isFavoriteSection?: boolean;
   isUserLoggedIn?: boolean;
-  onUpdate: (title: string) => void;
+  onHidden: (title: string) => void;
+  onFavorite?: (title: string) => void;
 };
 
 function PriceListSection({
-  onUpdate,
+  onHidden,
+  onFavorite,
   isUserLoggedIn,
   position,
   favorites,
-  loading,
   diffs,
-  isOpen
+  isOpen,
+  isFavoriteSection
 }: PriceListProps) {
   return (
     <div className="mb-3">
-      <button
-        disabled={loading}
-        type="button"
-        onClick={() => onUpdate(position.title)}
-        className="bg-background sticky top-0 z-10 flex w-full cursor-pointer items-center justify-start border-b border-solid border-b-neutral-300 text-left disabled:cursor-not-allowed disabled:opacity-50"
-      >
-        {isOpen ? <Minus className="text-accent" /> : <Plus className="text-accent" />}
-        <span className="mr-2.5 ml-2 text-lg font-bold uppercase md:text-xl">{position.title}</span>
-        <span className="ml-auto block text-base font-bold">{position.items.length}</span>
-      </button>
+      <div className="bg-background sticky top-0 z-10 flex w-full items-center justify-start gap-2 border-b border-solid border-b-neutral-300 text-left">
+        <button
+          type="button"
+          onClick={() => onHidden(position.title)}
+          className="cursor-pointer after:absolute after:inset-0"
+        >
+          {isOpen ? <Minus className="text-accent" /> : <Plus className="text-accent" />}
+        </button>
+
+        <span className="text-lg font-bold uppercase md:text-xl">
+          {position.title} &ndash; {position.items.length}
+        </span>
+
+        {isUserLoggedIn && onFavorite && (
+          <button
+            type="button"
+            className="relative ml-auto cursor-pointer"
+            onClick={() => onFavorite(position.title)}
+          >
+            <Heart
+              className={cn("text-red-500", {
+                "fill-red-500": isFavoriteSection
+              })}
+            />
+          </button>
+        )}
+      </div>
+
       <div className="divide-y divide-gray-200">
         {isOpen &&
           position.items.map(item => (

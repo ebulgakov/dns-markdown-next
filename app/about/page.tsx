@@ -85,7 +85,6 @@ export default function DisclaimerPage() {
         </p>
 
         <ul className="list-disc space-y-2 pl-5">
-          <li>Добавление избранных категорий прямо из каталога, а не из профиля</li>
           <li>Вынести работу с базой данных в отдельный API</li>
           <li>Поверх API развернуть полноценное мобильное приложение</li>
         </ul>

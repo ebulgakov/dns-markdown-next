@@ -1,6 +1,7 @@
 "use client";
 import { PageTitle } from "@/app/components/ui/page-title";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/app/components/ui/tabs";
+import { Title } from "@/app/components/ui/title";
 
 import { ProfileNotifications } from "./profile-notifications";
 import { ProfileUpdateSections } from "./profile-update-sections";
@@ -26,14 +27,17 @@ function ProfileSections({
     <div>
       <PageTitle title="Профиль" />
 
-      <Tabs defaultValue="favoriteSections">
+      <Tabs defaultValue="notifications">
         <TabsList className="flex w-full flex-1 flex-col items-stretch md:flex-auto md:flex-row md:items-center">
-          <TabsTrigger value="favoriteSections">Избранные категории</TabsTrigger>
-          <TabsTrigger value="hiddenSections">Скрытые категории</TabsTrigger>
           <TabsTrigger value="notifications">Уведомления</TabsTrigger>
+          <TabsTrigger value="mySections">Мои категории</TabsTrigger>
         </TabsList>
 
-        <TabsContent value="favoriteSections">
+        <TabsContent value="mySections">
+          <Title variant="h3" className="mb-4">
+            Избранные категории
+          </Title>
+
           <ProfileUpdateSections
             allSections={allSections}
             userSections={favoriteSections}
@@ -41,9 +45,13 @@ function ProfileSections({
             placeholder="Добавьте из левой колонки интересующие вас секции и они всегда будут показываться в верху списка"
             buttonLabel="Добавить в избранные"
           />
-        </TabsContent>
 
-        <TabsContent value="hiddenSections">
+          <hr className="my-6" />
+
+          <Title variant="h3" className="mb-4">
+            Скрытые категории
+          </Title>
+
           <ProfileUpdateSections
             allSections={allSections}
             userSections={hiddenSections}

@@ -47,7 +47,7 @@ function Updates({
       <PageTitle title="Обновления с начала дня" />
       {diffNew && (
         <PriceListSection
-          onUpdate={onToggleSection}
+          onHidden={onToggleSection}
           isUserLoggedIn={isUserLoggedIn}
           isOpen={shownSections.includes(diffNew.title)}
           position={diffNew}
@@ -56,7 +56,7 @@ function Updates({
       )}
       {diffChangesPrice && (
         <PriceListSection
-          onUpdate={onToggleSection}
+          onHidden={onToggleSection}
           isUserLoggedIn={isUserLoggedIn}
           isOpen={shownSections.includes(diffChangesPrice.title)}
           position={diffChangesPrice}
@@ -66,14 +66,14 @@ function Updates({
       )}
       {diffRemoved && (
         <PriceListSection
-          onUpdate={onToggleSection}
+          onHidden={onToggleSection}
           isOpen={shownSections.includes(diffRemoved.title)}
           position={diffRemoved}
         />
       )}
       {diffChangesProfit && (
         <PriceListSection
-          onUpdate={onToggleSection}
+          onHidden={onToggleSection}
           isUserLoggedIn={isUserLoggedIn}
           isOpen={shownSections.includes(diffChangesProfit.title)}
           position={diffChangesProfit}
