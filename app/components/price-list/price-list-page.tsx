@@ -44,6 +44,10 @@ function PriceListPage({
       ? nonFavoriteSections
       : priceList.positions;
 
+  const favoriteSectionsTitles: UserSectionsType = favoriteSections
+    ? favoriteSections.map(section => section.title)
+    : [];
+
   return (
     <>
       {filteredList.map(item => (
@@ -61,6 +65,7 @@ function PriceListPage({
                   positions={favoriteSections}
                   favorites={userFavoritesGoods}
                   hiddenSections={hiddenSectionsTitles}
+                  favoriteSections={favoriteSectionsTitles}
                   isUserLoggedIn={isUserLoggedIn}
                 />
 
@@ -76,6 +81,7 @@ function PriceListPage({
           positions={priceListPositions}
           favorites={userFavoritesGoods}
           hiddenSections={hiddenSectionsTitles}
+          favoriteSections={favoriteSectionsTitles}
           isUserLoggedIn={isUserLoggedIn}
         />
       </div>
