@@ -1,9 +1,6 @@
 "use client";
 
 import { Plus, Minus } from "lucide-react";
-import { useState } from "react";
-
-import { sendGAEvent } from "@/app/lib/sendGAEvent";
 
 import { PriceListGoods } from "./price-list-goods";
 
@@ -13,34 +10,30 @@ import type { Favorite } from "@/types/user";
 
 type PriceListProps = {
   position: PositionType;
+  loading?: boolean;
   favorites?: Favorite[];
   diffs?: DiffsType;
   isOpen?: boolean;
   isUserLoggedIn?: boolean;
+  onUpdate: (title: string) => void;
 };
 
 function PriceListSection({
+  onUpdate,
   isUserLoggedIn,
   position,
   favorites,
+  loading,
   diffs,
-  isOpen: isOpenDefault
+  isOpen
 }: PriceListProps) {
-  const [isOpen, setIsOpen] = useState(isOpenDefault);
-  const toggleVisibility = () => {
-    setIsOpen(!isOpen);
-    sendGAEvent({
-      event: "pricelist_section_toggle",
-      value: !isOpen ? "close" : "open",
-      category: "PriceListGoods",
-      action: "click"
-    });
-  };
   return (
     <div className="mb-3">
       <button
-        onClick={toggleVisibility}
-        className="bg-background sticky top-0 z-10 flex w-full cursor-pointer items-center justify-start border-b border-solid border-b-neutral-300 text-left"
+        disabled={loading}
+        type="button"
+        onClick={() => onUpdate(position.title)}
+        className="bg-background sticky top-0 z-10 flex w-full cursor-pointer items-center justify-start border-b border-solid border-b-neutral-300 text-left disabled:cursor-not-allowed disabled:opacity-50"
       >
         {isOpen ? <Minus className="text-accent" /> : <Plus className="text-accent" />}
         <span className="mr-2.5 ml-2 text-lg font-bold uppercase md:text-xl">{position.title}</span>

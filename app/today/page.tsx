@@ -1,9 +1,8 @@
 import { auth } from "@clerk/nextjs/server";
 import { getTranslations } from "next-intl/server";
 
-import { PriceListSection } from "@/app/components/price-list";
 import { Alert, AlertDescription, AlertTitle } from "@/app/components/ui/alert";
-import { PageTitle } from "@/app/components/ui/page-title";
+import { Updates } from "@/app/components/updates";
 import { getLastDiffByCity } from "@/db/analysis-diff/queries";
 import { getLastPriceListDate, getPriceListCity } from "@/db/pricelist/queries";
 import { getUser } from "@/db/user/queries";
@@ -93,34 +92,15 @@ export default async function UpdatesPage() {
   }
 
   return (
-    <div>
-      <PageTitle title="Обновления с начала дня" />
-      {diffNew && (
-        <PriceListSection
-          isUserLoggedIn={isUserLoggedIn}
-          isOpen={true}
-          position={diffNew}
-          favorites={userFavoritesGoods}
-        />
-      )}
-      {diffChangesPrice && (
-        <PriceListSection
-          isUserLoggedIn={isUserLoggedIn}
-          isOpen={true}
-          position={diffChangesPrice}
-          favorites={userFavoritesGoods}
-          diffs={changePriceDiff}
-        />
-      )}
-      {diffRemoved && <PriceListSection isOpen={true} position={diffRemoved} />}
-      {diffChangesProfit && (
-        <PriceListSection
-          isUserLoggedIn={isUserLoggedIn}
-          position={diffChangesProfit}
-          diffs={changeProfitDiff}
-          favorites={userFavoritesGoods}
-        />
-      )}
-    </div>
+    <Updates
+      diffNew={diffNew}
+      isUserLoggedIn={isUserLoggedIn}
+      userFavoritesGoods={userFavoritesGoods}
+      diffChangesPrice={diffChangesPrice}
+      changePriceDiff={changePriceDiff}
+      diffRemoved={diffRemoved}
+      diffChangesProfit={diffChangesProfit}
+      changeProfitDiff={changeProfitDiff}
+    />
   );
 }
