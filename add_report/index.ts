@@ -36,7 +36,7 @@ async function addReport() {
 
   await removeReportByCityDate({ city, dateAdded: lastPriceList.createdAt });
 
-  const report = await generateAnalysisReport(JSON.stringify(lastPriceList));
+  const report = await generateAnalysisReport(JSON.stringify(priceListData));
   await addNewReportByCity({ city, report, dateAdded: lastPriceList.createdAt });
 
   const key = `analytics-reports:all:${String(city)}-${priceListData.createdAt}`;
