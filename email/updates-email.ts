@@ -38,6 +38,7 @@ async function sendUpdatesEmail(users: User[]) {
     if (!email || !notifications.updates.enabled) continue;
 
     let body = "Здравствуйте!\n\n У нас есть для вас обновления по вашим избранным товарам.\n\n";
+    let count = 0;
     favorites.forEach(favorite => {
       if (favorite.status.updates?.length === 0) return;
       body += `${addTitle(favorite.item.title, favorite.item.link)} произошли следующие изменения: ${addStatusInfo(favorite.status, favorite.item.link)}`;
@@ -55,7 +56,11 @@ async function sendUpdatesEmail(users: User[]) {
       body += "\n-----------------------\n";
 
       delete favorite.status.updates; // Clear updates after sending email
+
+      count += 1;
     });
+
+    if (count === 0) continue; // Skip if no updates
 
     body += `\n\nСпасибо, что пользуетесь сервисом! Отключить уведомления можно в <a href="https://dns.ebulgakov.com/profile#notifications">настройках вашего аккаунта</a> на сайте.`;
 
