@@ -27,7 +27,7 @@ bun dev
 Open [http://localhost:3000](http://localhost:3000) with your browser to see the local site.
 
 ## .env file
-Rename the `.env.example` file to `.env` and fill in the required variables.
+Rename the `.env-example` file to `.env` and fill in the required variables.
 
 ## Storybook
 Chromatic Storybook is set up for this project: https://www.chromatic.com/library?appId=695938b24c4c7f59436c970b
