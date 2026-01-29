@@ -85,7 +85,18 @@ export default function DisclaimerPage() {
         </p>
 
         <ul className="list-disc space-y-2 pl-5">
-          <li>Вынести работу с базой данных в отдельный API</li>
+          <li>
+            Вынести работу с базой данных в отдельный API -{" "}
+            <abbr title="Work in Progress">WIP</abbr>:&nbsp;
+            <a
+              href="https://github.com/ebulgakov/dns-markdown-api"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-primary underline"
+            >
+              github.com/ebulgakov/dns-markdown-api
+            </a>
+          </li>
           <li>Поверх API развернуть полноценное мобильное приложение</li>
         </ul>
 
