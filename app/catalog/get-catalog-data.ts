@@ -1,4 +1,5 @@
-import { getLastPriceList, getPriceListCity } from "@/db/pricelist/queries";
+import { getLastPriceList } from "@/api";
+import { getPriceListCity } from "@/db/pricelist/queries";
 import { getUser } from "@/db/user/queries";
 
 import type { Position as PositionType, PriceList as PriceListType } from "@/types/pricelist";

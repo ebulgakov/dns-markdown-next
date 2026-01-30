@@ -1,6 +1,7 @@
 import { auth } from "@clerk/nextjs/server";
 import { getTranslations } from "next-intl/server";
 
+import { getLastPriceList } from "@/api";
 import { getCatalogData } from "@/app/catalog/get-catalog-data";
 import { PriceListPage } from "@/app/components/price-list";
 import { SortGoods } from "@/app/components/sort-goods";
@@ -24,6 +25,15 @@ export async function generateMetadata({ params }: CatalogPage): Promise<Metadat
 
 export default async function CatalogPage() {
   let priceList, userFavoritesGoods, hiddenSectionsTitles, favoriteSections, nonFavoriteSections;
+
+  try {
+    const pl = await getLastPriceList();
+
+    console.log(pl);
+  } catch (e) {
+    console.error(e);
+  }
+
   try {
     const data = await getCatalogData();
     priceList = data.priceList;
