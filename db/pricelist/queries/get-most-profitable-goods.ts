@@ -1,7 +1,7 @@
+import { getLastPriceList } from "@/api";
 import { getFlatPriceList } from "@/app/helpers/pricelist";
 import { add as cacheAdd, get as cacheGet } from "@/cache";
 import { dbConnect } from "@/db/database";
-import { getLastPriceList } from "@/db/pricelist/queries/get-last-price-list";
 
 import type { Goods } from "@/types/pricelist";
 

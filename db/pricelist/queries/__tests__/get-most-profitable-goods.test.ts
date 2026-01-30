@@ -1,13 +1,13 @@
+import { getLastPriceList } from "@/api";
 import { add, get } from "@/cache";
 import { dbConnect } from "@/db/database";
-import { getLastPriceList } from "@/db/pricelist/queries/get-last-price-list";
 
 import { mockPriceList, sortedByProfit, brokenPosition } from "../__mocks__/profitable_sort_list";
 import { getMostProfitableGoods } from "../get-most-profitable-goods";
 
 import type { PriceList } from "@/types/pricelist";
 
-jest.mock("@/db/pricelist/queries/get-last-price-list", () => ({
+jest.mock("@/api", () => ({
   getLastPriceList: jest.fn()
 }));
 

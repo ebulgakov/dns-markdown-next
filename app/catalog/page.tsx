@@ -1,7 +1,6 @@
 import { auth } from "@clerk/nextjs/server";
 import { getTranslations } from "next-intl/server";
 
-import { getLastPriceList } from "@/api";
 import { getCatalogData } from "@/app/catalog/get-catalog-data";
 import { PriceListPage } from "@/app/components/price-list";
 import { SortGoods } from "@/app/components/sort-goods";
