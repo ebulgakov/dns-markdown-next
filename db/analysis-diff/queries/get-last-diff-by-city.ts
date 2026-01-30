@@ -3,10 +3,10 @@ import { dbConnect } from "@/db/database";
 import { AnalysisDiff } from "@/db/models/analysis-diff-model";
 import { AnalysisDiff as AnalysisDiffType } from "@/types/analysis-diff";
 
-export const getLastDiffByCity = async (city: string, date: string) => {
-  if (!city || !date) throw new Error("city|date is required");
+export const getLastDiffByCity = async (city: string) => {
+  if (!city) throw new Error("city is required");
 
-  const key = `analysisdiff:last:${String(city)}-${date}`;
+  const key = `analysisdiff:last:${String(city)}`;
   const cached = await cacheGet<AnalysisDiffType>(key);
   if (cached) return cached;
 

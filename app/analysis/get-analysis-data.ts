@@ -1,10 +1,6 @@
 import { getUniqueAnalysisGoodsCount } from "@/db/analysis-data/queries";
 import { getAllDiffsReportByCity } from "@/db/analysis-diff/queries";
-import {
-  getPriceListCity,
-  getArchiveGoodsCount,
-  getLastPriceListDate
-} from "@/db/pricelist/queries";
+import { getPriceListCity, getArchiveGoodsCount } from "@/db/pricelist/queries";
 import { getAllReportsByCity } from "@/db/reports/queries";
 
 import type { AnalysisDiffReport as AnalysisDiffReportType } from "@/types/analysis-diff";
@@ -22,19 +18,9 @@ export async function getAnalysisData() {
     throw new Error("City not found", { cause: e });
   }
 
-  let lastPriceListDate: string;
-  try {
-    lastPriceListDate = await getLastPriceListDate(city);
-    if (!lastPriceListDate) throw new Error();
-  } catch (error) {
-    const e = error as Error;
-    console.error(e);
-    throw new Error("Price list not found", { cause: e });
-  }
-
   let goodsCountByDates: PriceListsArchiveCount[];
   try {
-    goodsCountByDates = await getArchiveGoodsCount(city, lastPriceListDate);
+    goodsCountByDates = await getArchiveGoodsCount(city);
     if (!goodsCountByDates) throw new Error();
   } catch (error) {
     const e = error as Error;
@@ -44,7 +30,7 @@ export async function getAnalysisData() {
 
   let goodsChangesByDates: AnalysisDiffReportType[];
   try {
-    goodsChangesByDates = await getAllDiffsReportByCity(city, lastPriceListDate);
+    goodsChangesByDates = await getAllDiffsReportByCity(city);
     goodsChangesByDates.reverse();
   } catch (error) {
     const e = error as Error;
@@ -54,7 +40,7 @@ export async function getAnalysisData() {
 
   let reports: ReportsResponse;
   try {
-    reports = await getAllReportsByCity(city, lastPriceListDate);
+    reports = await getAllReportsByCity(city);
   } catch (error) {
     const e = error as Error;
     console.error(e);
@@ -63,7 +49,7 @@ export async function getAnalysisData() {
 
   let countUniqueGoods: number;
   try {
-    countUniqueGoods = await getUniqueAnalysisGoodsCount(city, lastPriceListDate);
+    countUniqueGoods = await getUniqueAnalysisGoodsCount(city);
     if (countUniqueGoods == null) throw new Error(); // allow zero count
   } catch (error) {
     const e = error as Error;

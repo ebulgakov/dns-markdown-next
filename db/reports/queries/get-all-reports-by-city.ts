@@ -3,10 +3,10 @@ import { dbConnect } from "@/db/database";
 import { Reports } from "@/db/models/reports-model";
 import { ReportsResponse } from "@/types/reports";
 
-export const getAllReportsByCity = async (city: string, date: string) => {
-  if (!city || !date) throw new Error("city|date is required");
+export const getAllReportsByCity = async (city: string) => {
+  if (!city) throw new Error("city is required");
 
-  const key = `analytics-reports:all:${String(city)}-${date}`;
+  const key = `analytics-reports:all:${String(city)}`;
   const cached = await cacheGet<ReportsResponse>(key);
   if (cached) return cached;
 

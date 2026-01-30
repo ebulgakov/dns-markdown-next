@@ -6,10 +6,10 @@ import { Pricelist } from "@/db/models/pricelist-model";
 
 import type { PriceList, PriceListsArchiveCount } from "@/types/pricelist";
 
-export const getArchiveGoodsCount = async (city: string, date: string) => {
-  if (!city || !date) throw new Error("city|date is required");
+export const getArchiveGoodsCount = async (city: string) => {
+  if (!city) throw new Error("city is required");
 
-  const key = `pricelist:archive-goods-count:${String(city)}-${date}`;
+  const key = `pricelist:archive-goods-count:${String(city)}`;
   const cached = await cacheGet<PriceListsArchiveCount[]>(key);
   if (cached) return cached;
 

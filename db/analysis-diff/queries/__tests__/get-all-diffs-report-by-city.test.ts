@@ -47,23 +47,19 @@ describe("getAllDiffsReportByCity", () => {
     jest.clearAllMocks();
   });
 
-  it("should throw an error if city or date is not provided", async () => {
-    await expect(getAllDiffsReportByCity("", "2024-01-01")).rejects.toThrow(
-      "city|date is required"
-    );
-    await expect(getAllDiffsReportByCity("TestCity", "")).rejects.toThrow("city|date is required");
+  it("should throw an error if city is not provided", async () => {
+    await expect(getAllDiffsReportByCity("")).rejects.toThrow("city is required");
   });
 
   it("should return diffs from cache when available", async () => {
     const city = "TestCity";
-    const date = "2024-01-01";
-    const cacheKey = `analysisdiffreport:all:${city}-${date}`;
+    const cacheKey = `analysisdiffreport:all:${city}`;
     const cachedData = [
       { ...mockAnalysisDiff[0], newItems: 1, removedItems: 1, changesPrice: 1, changesProfit: 1 }
     ];
     (cacheGet as jest.Mock).mockResolvedValue(cachedData);
 
-    const result = await getAllDiffsReportByCity(city, date);
+    const result = await getAllDiffsReportByCity(city);
 
     expect(cacheGet).toHaveBeenCalledWith(cacheKey);
     expect(dbConnect).not.toHaveBeenCalled();
@@ -72,12 +68,11 @@ describe("getAllDiffsReportByCity", () => {
 
   it("should return diffs from DB when cache is empty and create a report", async () => {
     const city = "TestCity";
-    const date = "2024-01-01";
-    const cacheKey = `analysisdiffreport:all:${city}-${date}`;
+    const cacheKey = `analysisdiffreport:all:${city}`;
     (cacheGet as jest.Mock).mockResolvedValue(null);
     (AnalysisDiff.find as jest.Mock).mockResolvedValue(mockAnalysisDiff);
 
-    const result = await getAllDiffsReportByCity(city, date);
+    const result = await getAllDiffsReportByCity(city);
 
     const expectedReport = [
       {
@@ -99,12 +94,11 @@ describe("getAllDiffsReportByCity", () => {
 
   it("should return an empty array when db returns an empty array", async () => {
     const city = "AnotherCity";
-    const date = "2024-01-01";
-    const cacheKey = `analysisdiffreport:all:${city}-${date}`;
+    const cacheKey = `analysisdiffreport:all:${city}`;
     (cacheGet as jest.Mock).mockResolvedValue(null);
     (AnalysisDiff.find as jest.Mock).mockResolvedValue([]);
 
-    const result = await getAllDiffsReportByCity(city, date);
+    const result = await getAllDiffsReportByCity(city);
 
     expect(result).toEqual([]);
     expect(cacheAdd).toHaveBeenCalledWith(cacheKey, "[]", { ex: 60 * 60 * 24 });
