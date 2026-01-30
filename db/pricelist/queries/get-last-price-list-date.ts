@@ -1,6 +1,6 @@
+import { getLastPriceList } from "@/api";
 import { get as cacheGet, add as cacheAdd } from "@/cache";
 import { dbConnect } from "@/db/database";
-import { getLastPriceList } from "@/db/pricelist/queries/get-last-price-list";
 
 export const getLastPriceListDate = async (city: string) => {
   if (!city) throw new Error("city is required");

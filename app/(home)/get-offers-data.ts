@@ -1,9 +1,9 @@
+import { getLastPriceList } from "@/api";
 import {
   getMostProfitableGoods,
   getMostCheapGoods,
   getMostDiscountedGoods,
   getPriceListCity,
-  getLastPriceList,
   getLastPriceListDate
 } from "@/db/pricelist/queries";
 

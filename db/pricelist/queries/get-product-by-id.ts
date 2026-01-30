@@ -1,8 +1,8 @@
+import { getLastPriceList } from "@/api";
 import { getFlatPriceList } from "@/app/helpers/pricelist";
 import { get as cacheGet, add as cacheAdd } from "@/cache";
 import { getAnalysisGoodsByParam } from "@/db/analysis-data/queries";
 import { dbConnect } from "@/db/database";
-import { getLastPriceList } from "@/db/pricelist/queries/get-last-price-list";
 
 import type { AnalysisData } from "@/types/analysis-data";
 import type { DiffHistory } from "@/types/analysis-diff";

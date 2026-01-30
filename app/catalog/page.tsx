@@ -24,6 +24,7 @@ export async function generateMetadata({ params }: CatalogPage): Promise<Metadat
 
 export default async function CatalogPage() {
   let priceList, userFavoritesGoods, hiddenSectionsTitles, favoriteSections, nonFavoriteSections;
+
   try {
     const data = await getCatalogData();
     priceList = data.priceList;

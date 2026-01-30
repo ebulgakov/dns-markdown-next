@@ -1,6 +1,6 @@
+import { getLastPriceList } from "@/api";
 import { ProfileSections } from "@/app/components/profile-sections";
 import { Alert, AlertDescription, AlertTitle } from "@/app/components/ui/alert";
-import { getLastPriceList } from "@/db/pricelist/queries";
 import { getUser } from "@/db/user/queries";
 
 export default async function ProfilePage() {
