@@ -1,11 +1,11 @@
+import { getUser } from "@/api";
 import { dbConnect } from "@/db/database";
 import { updateUser } from "@/db/user/mutations/update-user";
-import { getUser } from "@/db/user/queries";
 
 import { removeFromFavorites } from "../remove-from-favorites";
 
 jest.mock("@/db/database", () => ({ dbConnect: jest.fn() }));
-jest.mock("@/db/user/queries", () => ({ getUser: jest.fn() }));
+jest.mock("@/api", () => ({ getUser: jest.fn() }));
 jest.mock("@/db/user/mutations/update-user", () => ({ updateUser: jest.fn() }));
 
 const mockGetUser = getUser as jest.Mock;

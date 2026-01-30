@@ -1,11 +1,11 @@
+import { getUser } from "@/api";
 import { mockUser } from "@/db/user/__mocks__/user";
 import { updateUser } from "@/db/user/mutations/update-user";
-import { getUser } from "@/db/user/queries";
 
 import { toggleBoughtVisibilityFavorites } from "../toggle-bought-visibility-favorites";
 
 jest.mock("@/db/database", () => ({ dbConnect: jest.fn() }));
-jest.mock("@/db/user/queries", () => ({ getUser: jest.fn() }));
+jest.mock("@/api", () => ({ getUser: jest.fn() }));
 jest.mock("@/db/user/mutations/update-user", () => ({ updateUser: jest.fn() }));
 
 const mockedGetUser = getUser as jest.Mock;

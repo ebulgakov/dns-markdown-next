@@ -1,7 +1,7 @@
 "use server";
+import { getUser } from "@/api";
 import { dbConnect } from "@/db/database";
 import { updateUser } from "@/db/user/mutations/update-user";
-import { getUser } from "@/db/user/queries";
 
 import type { Goods } from "@/types/pricelist";
 

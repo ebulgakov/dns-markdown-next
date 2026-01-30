@@ -1,7 +1,7 @@
 import { getLastPriceList } from "@/api";
+import { getUser } from "@/api";
 import { getPriceListCity } from "@/db/pricelist/queries";
 import { mockGoods } from "@/db/user/__mocks__/pricelist";
-import { getUser } from "@/db/user/queries";
 
 import { getCatalogData } from "../get-catalog-data";
 
@@ -9,14 +9,11 @@ import type { PriceList as PriceListType } from "@/types/pricelist";
 import type { User as UserType } from "@/types/user";
 
 jest.mock("@/api", () => ({
-  getLastPriceList: jest.fn()
+  getLastPriceList: jest.fn(),
+  getUser: jest.fn()
 }));
 jest.mock("@/db/pricelist/queries", () => ({
   getPriceListCity: jest.fn()
-}));
-
-jest.mock("@/db/user/queries", () => ({
-  getUser: jest.fn()
 }));
 
 const mockedGetLastPriceList = getLastPriceList as jest.Mock;

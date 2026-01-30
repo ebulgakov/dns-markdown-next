@@ -1,7 +1,7 @@
 import { getLastPriceList } from "@/api";
+import { getUser } from "@/api";
 import { ProfileSections } from "@/app/components/profile-sections";
 import { Alert, AlertDescription, AlertTitle } from "@/app/components/ui/alert";
-import { getUser } from "@/db/user/queries";
 
 export default async function ProfilePage() {
   let profile;
