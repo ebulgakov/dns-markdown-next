@@ -1,9 +1,8 @@
-import { getLastPriceList } from "@/api";
+import { getLastPriceList, getPriceListCity } from "@/api";
 import {
   getMostProfitableGoods,
   getMostCheapGoods,
-  getMostDiscountedGoods,
-  getPriceListCity
+  getMostDiscountedGoods
 } from "@/db/pricelist/queries";
 
 import type { CustomDate } from "@/types/common";

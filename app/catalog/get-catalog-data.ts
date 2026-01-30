@@ -1,25 +1,15 @@
-import { getLastPriceList, getUser } from "@/api";
-import { getPriceListCity } from "@/db/pricelist/queries";
+import { getLastPriceList, getUser, getPriceListCity } from "@/api";
 
 import type { Position as PositionType, PriceList as PriceListType } from "@/types/pricelist";
 import type { Favorite as FavoriteType, UserSections as UserSectionsType } from "@/types/user";
 
 export async function getCatalogData() {
+  const city = await getPriceListCity();
   const favoriteSections: PositionType[] = [];
   const nonFavoriteSections: PositionType[] = [];
   let priceList: PriceListType | undefined;
   let userFavoritesGoods: FavoriteType[] | undefined;
   let hiddenSectionsTitles: UserSectionsType | undefined;
-  let city: string | undefined;
-
-  try {
-    city = await getPriceListCity();
-    if (!city) throw new Error();
-  } catch (error) {
-    const e = error as Error;
-    console.error(e);
-    throw new Error("City not found", { cause: e });
-  }
 
   try {
     priceList = await getLastPriceList(city);

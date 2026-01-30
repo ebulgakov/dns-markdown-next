@@ -1,13 +1,13 @@
 import { auth } from "@clerk/nextjs/server";
 import { getTranslations } from "next-intl/server";
 
-import { getUser } from "@/api";
+import { getUser, getPriceListCity } from "@/api";
 import { ChartPrices } from "@/app/components/chart-prices";
 import { PriceListGoods } from "@/app/components/price-list";
 import { Alert, AlertDescription, AlertTitle } from "@/app/components/ui/alert";
 import { PageTitle } from "@/app/components/ui/page-title";
 import { Title } from "@/app/components/ui/title";
-import { getPriceListCity, getProductById } from "@/db/pricelist/queries";
+import { getProductById } from "@/db/pricelist/queries";
 
 import type { Favorite } from "@/types/user";
 import type { Metadata } from "next";

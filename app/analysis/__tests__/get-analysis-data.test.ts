@@ -1,6 +1,7 @@
+import { getPriceListCity } from "@/api";
 import { getUniqueAnalysisGoodsCount } from "@/db/analysis-data/queries";
 import { getAllDiffsReportByCity } from "@/db/analysis-diff/queries";
-import { getArchiveGoodsCount, getPriceListCity } from "@/db/pricelist/queries";
+import { getArchiveGoodsCount } from "@/db/pricelist/queries";
 import { getAllReportsByCity } from "@/db/reports/queries";
 
 import { getAnalysisData } from "../get-analysis-data";
@@ -26,9 +27,12 @@ jest.mock("@/db/reports/queries", () => ({
   getAllReportsByCity: jest.fn()
 }));
 
-jest.mock("@/db/pricelist/queries", () => ({
-  getArchiveGoodsCount: jest.fn(),
+jest.mock("@/api", () => ({
   getPriceListCity: jest.fn()
+}));
+
+jest.mock("@/db/pricelist/queries", () => ({
+  getArchiveGoodsCount: jest.fn()
 }));
 
 const mockedGetPriceListCity = getPriceListCity as jest.Mock;
