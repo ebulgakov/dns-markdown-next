@@ -1,8 +1,8 @@
-import { getUser } from "@/db/user/queries";
+import { getUser } from "@/api";
 
 import { getPriceListCity } from "../get-price-list-city";
 
-jest.mock("@/db/user/queries", () => ({
+jest.mock("@/api", () => ({
   getUser: jest.fn()
 }));
 

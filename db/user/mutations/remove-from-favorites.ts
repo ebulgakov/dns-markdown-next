@@ -1,7 +1,7 @@
 "use server";
+import { getUser } from "@/api";
 import { dbConnect } from "@/db/database";
 import { updateUser } from "@/db/user/mutations/update-user";
-import { getUser } from "@/db/user/queries";
 
 export const removeFromFavorites = async (link: string) => {
   if (!link) throw new Error("No link provided");

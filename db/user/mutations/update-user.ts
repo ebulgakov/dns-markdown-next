@@ -1,7 +1,7 @@
 "use server";
+import { getUser } from "@/api";
 import { dbConnect } from "@/db/database";
 import { User } from "@/db/models/user-model";
-import { getUser } from "@/db/user/queries";
 
 import type { User as UserType } from "@/types/user";
 

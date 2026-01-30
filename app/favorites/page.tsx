@@ -1,6 +1,6 @@
+import { getUser } from "@/api";
 import { FavoritesPageClient, FavoritesEmpty } from "@/app/components/favorites";
 import { Alert, AlertTitle, AlertDescription } from "@/app/components/ui/alert";
-import { getUser } from "@/db/user/queries";
 
 export default async function FavoritesPage() {
   let favorites;

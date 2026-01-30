@@ -1,6 +1,8 @@
+import { currentUser } from "@clerk/nextjs/server";
 import axios from "axios";
 
 import type { PriceList, PriceListDate } from "@/types/pricelist";
+import type { User } from "@/types/user";
 
 const API_BASE_URL = process.env.API_URL!;
 
@@ -22,9 +24,16 @@ export const getLastPriceList = async (city: string): Promise<PriceList> => {
 };
 
 export const getArchiveListDates = async (city: string): Promise<PriceListDate[]> => {
-  return await wrapApiCall("/api/archive", { params: { city } });
+  return await wrapApiCall("/api/archive/list", { params: { city } });
 };
 
 export const getPriceListById = async (id: string): Promise<PriceList> => {
-  return await wrapApiCall(`/api/archive/${id}`);
+  return await wrapApiCall(`/api/archive/id/${id}`);
+};
+
+export const getUser = async (): Promise<User> => {
+  const clerkUser = await currentUser();
+
+  if (!clerkUser) throw new Error("User not authenticated");
+  return await wrapApiCall(`/api/user/id/${clerkUser.id}`);
 };
