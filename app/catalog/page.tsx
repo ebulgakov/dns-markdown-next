@@ -27,14 +27,6 @@ export default async function CatalogPage() {
   let priceList, userFavoritesGoods, hiddenSectionsTitles, favoriteSections, nonFavoriteSections;
 
   try {
-    const pl = await getLastPriceList();
-
-    console.log(pl);
-  } catch (e) {
-    console.error(e);
-  }
-
-  try {
     const data = await getCatalogData();
     priceList = data.priceList;
     userFavoritesGoods = data.userFavoritesGoods;
