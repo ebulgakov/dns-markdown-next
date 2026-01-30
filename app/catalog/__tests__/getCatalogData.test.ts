@@ -1,6 +1,4 @@
-import { getLastPriceList } from "@/api";
-import { getUser } from "@/api";
-import { getPriceListCity } from "@/db/pricelist/queries";
+import { getLastPriceList, getUser, getPriceListCity } from "@/api";
 import { mockGoods } from "@/db/user/__mocks__/pricelist";
 
 import { getCatalogData } from "../get-catalog-data";
@@ -10,9 +8,7 @@ import type { User as UserType } from "@/types/user";
 
 jest.mock("@/api", () => ({
   getLastPriceList: jest.fn(),
-  getUser: jest.fn()
-}));
-jest.mock("@/db/pricelist/queries", () => ({
+  getUser: jest.fn(),
   getPriceListCity: jest.fn()
 }));
 
@@ -66,12 +62,6 @@ describe("getCatalogData", () => {
     expect(result.favoriteSections?.[0].title).toBe("Favorite Section");
     expect(result.nonFavoriteSections).toHaveLength(1);
     expect(result.nonFavoriteSections?.[0].title).toBe("Non-Favorite Section");
-  });
-
-  it("should return an error if no city is found", async () => {
-    mockedGetPriceListCity.mockResolvedValue(null);
-
-    await expect(getCatalogData()).rejects.toThrow("City not found");
   });
 
   it("should return an error if no price list is found", async () => {

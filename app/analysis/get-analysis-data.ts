@@ -1,6 +1,7 @@
+import { getPriceListCity } from "@/api";
 import { getUniqueAnalysisGoodsCount } from "@/db/analysis-data/queries";
 import { getAllDiffsReportByCity } from "@/db/analysis-diff/queries";
-import { getPriceListCity, getArchiveGoodsCount } from "@/db/pricelist/queries";
+import { getArchiveGoodsCount } from "@/db/pricelist/queries";
 import { getAllReportsByCity } from "@/db/reports/queries";
 
 import type { AnalysisDiffReport as AnalysisDiffReportType } from "@/types/analysis-diff";

@@ -37,3 +37,12 @@ export const getUser = async (): Promise<User> => {
   if (!clerkUser) throw new Error("User not authenticated");
   return await wrapApiCall(`/api/user/id/${clerkUser.id}`);
 };
+
+export const getPriceListCity = async (): Promise<string> => {
+  try {
+    const user = await getUser();
+    return user.city;
+  } catch {
+    return process.env.DEFAULT_CITY || "samara";
+  }
+};

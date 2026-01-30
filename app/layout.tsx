@@ -10,12 +10,12 @@ import { StrictMode, type ReactNode } from "react";
 
 import "./globals.css";
 
+import { getPriceListCity } from "@/api";
 import { ClerkError } from "@/app/components/clerk-error";
 import { Footer } from "@/app/components/footer";
 import { Navbar } from "@/app/components/navbar";
 import { cn } from "@/app/lib/utils";
 import { ThemeProvider } from "@/app/providers/theme-provider";
-import { getPriceListCity } from "@/db/pricelist/queries";
 
 import type { Metadata } from "next";
 

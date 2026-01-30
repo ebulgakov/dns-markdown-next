@@ -1,11 +1,10 @@
 import { auth } from "@clerk/nextjs/server";
 import { getTranslations } from "next-intl/server";
 
-import { getUser } from "@/api";
+import { getUser, getPriceListCity } from "@/api";
 import { Alert, AlertDescription, AlertTitle } from "@/app/components/ui/alert";
 import { Updates } from "@/app/components/updates";
 import { getLastDiffByCity } from "@/db/analysis-diff/queries";
-import { getPriceListCity } from "@/db/pricelist/queries";
 
 import type { DiffsCollection as DiffsType } from "@/types/analysis-diff";
 import type { Favorite as FavoriteType } from "@/types/user";

@@ -1,10 +1,9 @@
 import { getTranslations } from "next-intl/server";
 
-import { getArchiveListDates } from "@/api";
+import { getArchiveListDates, getPriceListCity } from "@/api";
 import { ArchiveList } from "@/app/archive/ArchiveList";
 import { Alert, AlertDescription, AlertTitle } from "@/app/components/ui/alert";
 import { PageTitle } from "@/app/components/ui/page-title";
-import { getPriceListCity } from "@/db/pricelist/queries";
 
 import type { Metadata } from "next";
 
