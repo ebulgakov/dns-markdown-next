@@ -1,5 +1,3 @@
-export { getArchiveListDates } from "@/db/pricelist/queries/get-archive-list-dates";
-export { getPriceListById } from "@/db/pricelist/queries/get-price-list-by-id";
 export { getProductById } from "@/db/pricelist/queries/get-product-by-id";
 export { getPriceListCity } from "@/db/pricelist/queries/get-price-list-city";
 export { getMostDiscountedGoods } from "@/db/pricelist/queries/get-most-discounted-goods";

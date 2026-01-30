@@ -1,6 +1,6 @@
 import axios from "axios";
 
-import type { PriceList } from "@/types/pricelist";
+import type { PriceList, PriceListDate } from "@/types/pricelist";
 
 const API_BASE_URL = process.env.API_URL!;
 
@@ -19,4 +19,12 @@ const wrapApiCall = async (endpoint: string, options = {}) => {
 
 export const getLastPriceList = async (city: string): Promise<PriceList> => {
   return await wrapApiCall("/api/pricelist", { params: { city } });
+};
+
+export const getArchiveListDates = async (city: string): Promise<PriceListDate[]> => {
+  return await wrapApiCall("/api/archive", { params: { city } });
+};
+
+export const getPriceListById = async (id: string): Promise<PriceList> => {
+  return await wrapApiCall(`/api/archive/${id}`);
 };
