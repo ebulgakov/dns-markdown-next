@@ -9,7 +9,6 @@ jest.mock("@/db/analysis-data/queries/get-analysis-goods-links", () => ({
   getAnalysisGoodsLinks: jest.fn()
 }));
 
-const testDate = "2023-01-01";
 const testCity = "TestCity";
 
 describe("getUniqueAnalysisGoodsCount", () => {
@@ -18,24 +17,16 @@ describe("getUniqueAnalysisGoodsCount", () => {
   });
 
   it("should throw an error if city is not provided", async () => {
-    await expect(getUniqueAnalysisGoodsCount("", testDate)).rejects.toThrow(
-      "city|date is required"
-    );
-  });
-
-  it("should throw an error if date is not provided", async () => {
-    await expect(getUniqueAnalysisGoodsCount(testCity, "")).rejects.toThrow(
-      "city|date is required"
-    );
+    await expect(getUniqueAnalysisGoodsCount("")).rejects.toThrow("city is required");
   });
 
   it("should return count from cache when available", async () => {
     const cachedCount = 10;
     (cacheGet as jest.Mock).mockResolvedValue(cachedCount);
 
-    const result = await getUniqueAnalysisGoodsCount(testCity, testDate);
+    const result = await getUniqueAnalysisGoodsCount(testCity);
 
-    expect(cacheGet).toHaveBeenCalledWith(`analysis:uniq-count:${testCity}-${testDate}`);
+    expect(cacheGet).toHaveBeenCalledWith(`analysis:uniq-count:${testCity}`);
     expect(dbConnect).not.toHaveBeenCalled();
     expect(result).toBe(cachedCount);
   });
@@ -45,12 +36,12 @@ describe("getUniqueAnalysisGoodsCount", () => {
     (cacheGet as jest.Mock).mockResolvedValue(null);
     (getAnalysisGoodsLinks as jest.Mock).mockResolvedValue(mockLinks);
 
-    const result = await getUniqueAnalysisGoodsCount(testCity, testDate);
+    const result = await getUniqueAnalysisGoodsCount(testCity);
 
     expect(dbConnect).toHaveBeenCalled();
-    expect(getAnalysisGoodsLinks).toHaveBeenCalledWith(testCity, testDate);
+    expect(getAnalysisGoodsLinks).toHaveBeenCalledWith(testCity);
     expect(cacheAdd).toHaveBeenCalledWith(
-      `analysis:uniq-count:${testCity}-${testDate}`,
+      `analysis:uniq-count:${testCity}`,
       String(mockLinks.length),
       { ex: 86400 }
     );
@@ -61,10 +52,10 @@ describe("getUniqueAnalysisGoodsCount", () => {
     (cacheGet as jest.Mock).mockResolvedValue(null);
     (getAnalysisGoodsLinks as jest.Mock).mockResolvedValue([]);
 
-    const result = await getUniqueAnalysisGoodsCount(testCity, testDate);
+    const result = await getUniqueAnalysisGoodsCount(testCity);
 
     expect(result).toBe(0);
-    expect(cacheAdd).toHaveBeenCalledWith(`analysis:uniq-count:${testCity}-${testDate}`, "0", {
+    expect(cacheAdd).toHaveBeenCalledWith(`analysis:uniq-count:${testCity}`, "0", {
       ex: 86400
     });
   });

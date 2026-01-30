@@ -4,7 +4,7 @@ import { getTranslations } from "next-intl/server";
 import { Alert, AlertDescription, AlertTitle } from "@/app/components/ui/alert";
 import { Updates } from "@/app/components/updates";
 import { getLastDiffByCity } from "@/db/analysis-diff/queries";
-import { getLastPriceListDate, getPriceListCity } from "@/db/pricelist/queries";
+import { getPriceListCity } from "@/db/pricelist/queries";
 import { getUser } from "@/db/user/queries";
 
 import type { DiffsCollection as DiffsType } from "@/types/analysis-diff";
@@ -42,8 +42,7 @@ export default async function UpdatesPage() {
 
   try {
     const city = await getPriceListCity();
-    const lastPriceListDate = await getLastPriceListDate(city);
-    const collection = await getLastDiffByCity(city, lastPriceListDate);
+    const collection = await getLastDiffByCity(city);
 
     diffNew = {
       _id: "new-items",

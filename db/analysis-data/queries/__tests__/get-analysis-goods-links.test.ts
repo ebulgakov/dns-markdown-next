@@ -12,7 +12,6 @@ jest.mock("@/db/models/analysis-data-model", () => ({
 }));
 
 const mockLinksData = [{ link: "link1" }, { link: "link2" }, { link: "link1" }];
-const testDate = "2023-01-01";
 
 describe("getAnalysisGoodsLinks", () => {
   afterEach(() => {
@@ -20,11 +19,7 @@ describe("getAnalysisGoodsLinks", () => {
   });
 
   it("should throw an error if city is not provided", async () => {
-    await expect(getAnalysisGoodsLinks("", testDate)).rejects.toThrow("city|date is required");
-  });
-
-  it("should throw an error if date is not provided", async () => {
-    await expect(getAnalysisGoodsLinks("TestCity", "")).rejects.toThrow("city|date is required");
+    await expect(getAnalysisGoodsLinks("")).rejects.toThrow("city is required");
   });
 
   it("should return links from cache when available", async () => {
@@ -32,9 +27,9 @@ describe("getAnalysisGoodsLinks", () => {
     const cachedData = ["link1", "link2"];
     (cacheGet as jest.Mock).mockResolvedValue(cachedData);
 
-    const result = await getAnalysisGoodsLinks(city, testDate);
+    const result = await getAnalysisGoodsLinks(city);
 
-    expect(cacheGet).toHaveBeenCalledWith(`analysis:links:${city}-${testDate}`);
+    expect(cacheGet).toHaveBeenCalledWith(`analysis:links:${city}`);
     expect(dbConnect).not.toHaveBeenCalled();
     expect(result).toEqual(cachedData);
   });
@@ -46,12 +41,12 @@ describe("getAnalysisGoodsLinks", () => {
       select: jest.fn().mockResolvedValue(mockLinksData)
     });
 
-    const result = await getAnalysisGoodsLinks(city, testDate);
+    const result = await getAnalysisGoodsLinks(city);
 
     expect(dbConnect).toHaveBeenCalled();
     expect(AnalysisData.find).toHaveBeenCalledWith({ city }, {}, { sort: { updatedAt: 1 } });
     expect(cacheAdd).toHaveBeenCalledWith(
-      `analysis:links:${city}-${testDate}`,
+      `analysis:links:${city}`,
       JSON.stringify(["link1", "link2"]),
       { ex: 86400 }
     );
@@ -65,10 +60,10 @@ describe("getAnalysisGoodsLinks", () => {
       select: jest.fn().mockResolvedValue([])
     });
 
-    const result = await getAnalysisGoodsLinks(city, testDate);
+    const result = await getAnalysisGoodsLinks(city);
 
     expect(result).toEqual([]);
-    expect(cacheAdd).toHaveBeenCalledWith(`analysis:links:${city}-${testDate}`, "[]", {
+    expect(cacheAdd).toHaveBeenCalledWith(`analysis:links:${city}`, "[]", {
       ex: 86400
     });
   });

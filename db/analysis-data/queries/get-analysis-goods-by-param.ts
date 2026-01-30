@@ -7,17 +7,11 @@ import type { AnalysisData as AnalysisDataType } from "@/types/analysis-data";
 type GetAnalysisGoodsByParam = {
   param: keyof typeof AnalysisData.schema.obj;
   value: Date | string | number | boolean;
-  date: string;
   city: string;
 };
 
-export const getAnalysisGoodsByParam = async ({
-  param,
-  value,
-  city,
-  date
-}: GetAnalysisGoodsByParam) => {
-  const cacheKey = `analysis-goods-by-${String(param)}-${value}-${city}-${date}`;
+export const getAnalysisGoodsByParam = async ({ param, value, city }: GetAnalysisGoodsByParam) => {
+  const cacheKey = `analysis-goods-by-${String(param)}-${value}-${city}`;
   const cachedData = await cacheGet<AnalysisDataType[]>(cacheKey);
   if (cachedData) return cachedData;
 

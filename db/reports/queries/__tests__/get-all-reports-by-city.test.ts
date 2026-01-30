@@ -15,25 +15,23 @@ const mockReports = [
   { city: "TestCity", report: "report1" },
   { city: "TestCity", report: "report2" }
 ];
-const testDate = "2024-01-01";
 
 describe("getAllReportsByCity", () => {
   afterEach(() => {
     jest.clearAllMocks();
   });
 
-  it("should throw an error if city or date is not provided", async () => {
-    await expect(getAllReportsByCity("", testDate)).rejects.toThrow("city|date is required");
-    await expect(getAllReportsByCity("TestCity", "")).rejects.toThrow("city|date is required");
+  it("should throw an error if city is not provided", async () => {
+    await expect(getAllReportsByCity("")).rejects.toThrow("city is required");
   });
 
   it("should return reports from cache when available", async () => {
     const city = "TestCity";
     (cacheGet as jest.Mock).mockResolvedValue(mockReports);
 
-    const result = await getAllReportsByCity(city, testDate);
+    const result = await getAllReportsByCity(city);
 
-    expect(cacheGet).toHaveBeenCalledWith(`analytics-reports:all:${city}-${testDate}`);
+    expect(cacheGet).toHaveBeenCalledWith(`analytics-reports:all:${city}`);
     expect(dbConnect).not.toHaveBeenCalled();
     expect(result).toEqual(mockReports);
   });
@@ -43,12 +41,12 @@ describe("getAllReportsByCity", () => {
     (cacheGet as jest.Mock).mockResolvedValue(null);
     (Reports.find as jest.Mock).mockReturnValue(mockReports);
 
-    const result = await getAllReportsByCity(city, testDate);
+    const result = await getAllReportsByCity(city);
 
     expect(dbConnect).toHaveBeenCalled();
     expect(Reports.find).toHaveBeenCalledWith({ city }, {}, { sort: { dateAdded: -1 } });
     expect(cacheAdd).toHaveBeenCalledWith(
-      `analytics-reports:all:${city}-${testDate}`,
+      `analytics-reports:all:${city}`,
       JSON.stringify(mockReports),
       { ex: 60 * 60 * 24 }
     );
@@ -60,10 +58,10 @@ describe("getAllReportsByCity", () => {
     (cacheGet as jest.Mock).mockResolvedValue(null);
     (Reports.find as jest.Mock).mockReturnValue([]);
 
-    const result = await getAllReportsByCity(city, testDate);
+    const result = await getAllReportsByCity(city);
 
     expect(result).toEqual([]);
-    expect(cacheAdd).toHaveBeenCalledWith(`analytics-reports:all:${city}-${testDate}`, "[]", {
+    expect(cacheAdd).toHaveBeenCalledWith(`analytics-reports:all:${city}`, "[]", {
       ex: 60 * 60 * 24
     });
   });

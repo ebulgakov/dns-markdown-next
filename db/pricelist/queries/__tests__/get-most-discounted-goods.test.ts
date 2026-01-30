@@ -23,25 +23,23 @@ const mockedDbConnect = dbConnect as jest.Mock;
 const mockedGetLastPriceList = getLastPriceList as jest.Mock;
 
 const city = "TestCity";
-const date = "2023-10-27";
 
 describe("getMostDiscountedGoods", () => {
   beforeEach(() => {
     jest.resetAllMocks();
   });
 
-  it("throws an error if city or date is not provided", async () => {
-    await expect(getMostDiscountedGoods("", date)).rejects.toThrow("city|date is required");
-    await expect(getMostDiscountedGoods(city, "")).rejects.toThrow("city|date is required");
+  it("throws an error if city is not provided", async () => {
+    await expect(getMostDiscountedGoods("")).rejects.toThrow("city is required");
   });
 
   it("returns cached data if available", async () => {
     mockedCacheGet.mockResolvedValue(sortedByDiscount);
 
-    const result = await getMostDiscountedGoods(city, date);
+    const result = await getMostDiscountedGoods(city);
 
     expect(result).toEqual(sortedByDiscount);
-    expect(mockedCacheGet).toHaveBeenCalledWith(`pricelist:mostdiscountedgoods:${city}-${date}`);
+    expect(mockedCacheGet).toHaveBeenCalledWith(`pricelist:mostdiscountedgoods:${city}`);
     expect(mockedDbConnect).not.toHaveBeenCalled();
   });
 
@@ -49,13 +47,13 @@ describe("getMostDiscountedGoods", () => {
     mockedCacheGet.mockResolvedValue(null);
     mockedGetLastPriceList.mockResolvedValue(mockPriceList);
 
-    const result = await getMostDiscountedGoods(city, date);
+    const result = await getMostDiscountedGoods(city);
 
     expect(result).toEqual(sortedByDiscount);
     expect(mockedDbConnect).toHaveBeenCalled();
     expect(mockedGetLastPriceList).toHaveBeenCalledWith(city);
     expect(mockedCacheAdd).toHaveBeenCalledWith(
-      `pricelist:mostdiscountedgoods:${city}-${date}`,
+      `pricelist:mostdiscountedgoods:${city}`,
       JSON.stringify(sortedByDiscount),
       { ex: 60 * 60 * 24 }
     );
@@ -65,7 +63,7 @@ describe("getMostDiscountedGoods", () => {
     mockedCacheGet.mockResolvedValue(null);
     mockedGetLastPriceList.mockResolvedValue(null);
 
-    await expect(getMostDiscountedGoods(city, date)).rejects.toThrow("Price list not found");
+    await expect(getMostDiscountedGoods(city)).rejects.toThrow("Price list not found");
   });
 
   it("places items with zero or invalid priceOld at the end", async () => {
@@ -76,7 +74,7 @@ describe("getMostDiscountedGoods", () => {
     mockedCacheGet.mockResolvedValue(null);
     mockedGetLastPriceList.mockResolvedValue(priceListWithInvalidItems);
 
-    const result = await getMostDiscountedGoods(city, date);
+    const result = await getMostDiscountedGoods(city);
 
     expect(result).toEqual([...sortedByDiscount, ...brokenPosition.items]);
   });
@@ -85,10 +83,10 @@ describe("getMostDiscountedGoods", () => {
     mockedCacheGet.mockResolvedValue(null);
     mockedGetLastPriceList.mockResolvedValue(mockPriceList);
 
-    await getMostDiscountedGoods(city, date);
+    await getMostDiscountedGoods(city);
 
     expect(mockedCacheAdd).toHaveBeenCalledWith(
-      `pricelist:mostdiscountedgoods:${city}-${date}`,
+      `pricelist:mostdiscountedgoods:${city}`,
       JSON.stringify(sortedByDiscount),
       { ex: 60 * 60 * 24 }
     );

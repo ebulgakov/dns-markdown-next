@@ -14,16 +14,16 @@ type PayloadType = {
   status: FavoriteStatus;
 };
 
-export const getProductById = async (link: string, city: string, date: string) => {
-  if (!city || !date || !link) throw new Error("link|city|date is required");
+export const getProductById = async (link: string, city: string) => {
+  if (!city || !link) throw new Error("link|city is required");
 
-  const key = `pricelist:goods:${String(link)}:${city}-${date}`;
+  const key = `pricelist:goods:${String(link)}:${city}`;
   const cached = await cacheGet<PayloadType>(key);
   if (cached) return cached;
 
   await dbConnect();
 
-  const historyList = await getAnalysisGoodsByParam({ param: "link", value: link, city, date });
+  const historyList = await getAnalysisGoodsByParam({ param: "link", value: link, city });
   if (!historyList || historyList.length === 0) throw new Error("Product not found");
 
   const product = historyList[historyList.length - 1];

@@ -5,10 +5,10 @@ import { dbConnect } from "@/db/database";
 
 import type { Goods } from "@/types/pricelist";
 
-export const getMostCheapGoods = async (city: string, date: string) => {
-  if (!city || !date) throw new Error("city|date is required");
+export const getMostCheapGoods = async (city: string) => {
+  if (!city) throw new Error("city is required");
 
-  const key = `pricelist:mostcheapgoods:${String(city)}-${date}`;
+  const key = `pricelist:mostcheapgoods:${String(city)}`;
   const cached = await cacheGet<Goods[]>(key);
   if (cached) return cached;
 

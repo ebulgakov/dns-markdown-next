@@ -21,7 +21,6 @@ describe("getAnalysisGoodsByParam", () => {
     const param = "category";
     const value = "test";
     const city = "TestCity";
-    const date = "2023-01-01";
 
     (cacheGet as jest.Mock).mockResolvedValue(null);
     (AnalysisData.find as jest.Mock).mockReturnValue({
@@ -29,7 +28,7 @@ describe("getAnalysisGoodsByParam", () => {
       exec: jest.fn().mockResolvedValue(mockAnalysisData.filter(d => d.category === value))
     });
 
-    const result = await getAnalysisGoodsByParam({ param, value, city, date });
+    const result = await getAnalysisGoodsByParam({ param, value, city });
 
     expect(dbConnect).toHaveBeenCalled();
     expect(AnalysisData.find).toHaveBeenCalledWith({ [param]: value, city });
@@ -45,14 +44,13 @@ describe("getAnalysisGoodsByParam", () => {
     const param = "category";
     const value = "test";
     const city = "TestCity";
-    const date = "2023-01-01";
     const cachedData = mockAnalysisData.filter(d => d.category === value);
 
     (cacheGet as jest.Mock).mockResolvedValue(cachedData);
 
-    const result = await getAnalysisGoodsByParam({ param, value, city, date });
+    const result = await getAnalysisGoodsByParam({ param, value, city });
 
-    expect(cacheGet).toHaveBeenCalledWith(`analysis-goods-by-${param}-${value}-${city}-${date}`);
+    expect(cacheGet).toHaveBeenCalledWith(`analysis-goods-by-${param}-${value}-${city}`);
     expect(dbConnect).not.toHaveBeenCalled();
     expect(result).toEqual(cachedData);
   });
@@ -61,7 +59,6 @@ describe("getAnalysisGoodsByParam", () => {
     const param = "inStock";
     const value = true;
     const city = "NonExistentCity";
-    const date = "2023-01-01";
 
     (cacheGet as jest.Mock).mockResolvedValue(null);
     (AnalysisData.find as jest.Mock).mockReturnValue({
@@ -69,7 +66,7 @@ describe("getAnalysisGoodsByParam", () => {
       exec: jest.fn().mockResolvedValue(null)
     });
 
-    await expect(getAnalysisGoodsByParam({ param, value, city, date })).rejects.toThrow(
+    await expect(getAnalysisGoodsByParam({ param, value, city })).rejects.toThrow(
       "No analysis goods found"
     );
   });
@@ -78,7 +75,6 @@ describe("getAnalysisGoodsByParam", () => {
     const param = "inStock";
     const value = false;
     const city = "AnotherCity";
-    const date = "2023-01-01";
 
     (cacheGet as jest.Mock).mockResolvedValue(null);
     (AnalysisData.find as jest.Mock).mockReturnValue({
@@ -86,15 +82,11 @@ describe("getAnalysisGoodsByParam", () => {
       exec: jest.fn().mockResolvedValue([])
     });
 
-    const result = await getAnalysisGoodsByParam({ param, value, city, date });
+    const result = await getAnalysisGoodsByParam({ param, value, city });
 
     expect(result).toEqual([]);
-    expect(cacheAdd).toHaveBeenCalledWith(
-      `analysis-goods-by-${param}-${value}-${city}-${date}`,
-      "[]",
-      {
-        ex: 60 * 60 * 24
-      }
-    );
+    expect(cacheAdd).toHaveBeenCalledWith(`analysis-goods-by-${param}-${value}-${city}`, "[]", {
+      ex: 60 * 60 * 24
+    });
   });
 });
