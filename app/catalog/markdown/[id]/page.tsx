@@ -1,13 +1,12 @@
 import { auth } from "@clerk/nextjs/server";
 import { getTranslations } from "next-intl/server";
 
-import { getUser, getPriceListCity } from "@/api";
+import { getUser, getProductByLink } from "@/api";
 import { ChartPrices } from "@/app/components/chart-prices";
 import { PriceListGoods } from "@/app/components/price-list";
 import { Alert, AlertDescription, AlertTitle } from "@/app/components/ui/alert";
 import { PageTitle } from "@/app/components/ui/page-title";
 import { Title } from "@/app/components/ui/title";
-import { getProductById } from "@/db/pricelist/queries";
 
 import type { Favorite } from "@/types/user";
 import type { Metadata } from "next";
@@ -22,8 +21,7 @@ export async function generateMetadata({ params }: CatalogItemPage): Promise<Met
 
   let title = "";
   try {
-    const city = await getPriceListCity();
-    const product = await getProductById(`/catalog/markdown/${id}/`, city);
+    const product = await getProductByLink(`/catalog/markdown/${id}/`);
     title = product.item.title;
   } catch {
     title = t("goods_not_found_title");
@@ -37,8 +35,7 @@ export default async function CatalogItemPage({ params }: CatalogItemPage) {
   let product;
 
   try {
-    const city = await getPriceListCity();
-    product = await getProductById(`/catalog/markdown/${id}/`, city);
+    product = await getProductByLink(`/catalog/markdown/${id}/`);
   } catch (e) {
     const { message } = e as Error;
     return (
