@@ -2,11 +2,11 @@
 
 import { startTransition, useEffect, useOptimistic, useState } from "react";
 
+import { postToggleFavoriteShownBought } from "@/api/post";
 import { PriceListGoods } from "@/app/components/price-list";
 import { Alert, AlertDescription, AlertTitle } from "@/app/components/ui/alert";
 import { CheckboxWithLabel } from "@/app/components/ui/control-with-label";
 import { PageTitle } from "@/app/components/ui/page-title";
-import { toggleBoughtVisibilityFavorites } from "@/db/user/mutations/toggle-bought-visibility-favorites";
 
 import type { Favorite } from "@/types/user";
 
@@ -36,8 +36,8 @@ function FavoritesPageClient({
       setShownBoughtFavorites(status);
 
       try {
-        const val = await toggleBoughtVisibilityFavorites(status);
-        setRealShownBoughtFavorites(val);
+        const { showBoughtFavorites } = await postToggleFavoriteShownBought(status);
+        setRealShownBoughtFavorites(showBoughtFavorites);
         setErrorMessage(null);
       } catch (error) {
         setErrorMessage(error as Error);

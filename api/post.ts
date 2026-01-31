@@ -44,6 +44,19 @@ export const postUpdateUserNotifications = async (
   });
 };
 
+export const postToggleFavoriteShownBought = async (
+  shownBoughtFavorites: boolean
+): Promise<{ message: string; showBoughtFavorites: boolean }> => {
+  const clerkUser = await currentUser();
+
+  if (!clerkUser) throw new Error("User not authenticated");
+  return await wrapApiCall("/api/user/toggle-shown-bought-favorites", {
+    userId: clerkUser.id,
+    status: shownBoughtFavorites
+  });
+};
+
+// User Favorites API
 export const postAddToFavorites = async (product: Goods): Promise<FavoritesResponse> => {
   const clerkUser = await currentUser();
 
