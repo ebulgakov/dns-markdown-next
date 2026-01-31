@@ -1,5 +1,3 @@
-import Goods from "@/db/models/goods-schema";
-
 type Reason = {
   _id: string;
   label: string;

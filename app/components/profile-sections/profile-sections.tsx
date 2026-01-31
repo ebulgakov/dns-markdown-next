@@ -1,4 +1,10 @@
 "use client";
+import {
+  postAddToFavoriteSections,
+  postAddToHiddenSections,
+  postRemoveFromFavoriteSection,
+  postRemoveFromHiddenSections
+} from "@/api/post";
 import { PageTitle } from "@/app/components/ui/page-title";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/app/components/ui/tabs";
 import { Title } from "@/app/components/ui/title";
@@ -7,12 +13,6 @@ import { ProfileNotifications } from "./profile-notifications";
 import { ProfileUpdateSections } from "./profile-update-sections";
 
 import type { UserNotifications, UserSections } from "@/types/user";
-import {
-  postAddToFavoriteSections,
-  postAddToHiddenSections,
-  postRemoveFromFavoriteSection,
-  postRemoveFromHiddenSections
-} from "@/api/post";
 
 type ProfileSectionsProps = {
   notifications: UserNotifications;

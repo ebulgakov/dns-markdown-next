@@ -20,7 +20,6 @@ const userSections = ["Section A", "Section C"];
 
 export const Default: Story = {
   args: {
-    sectionName: "favoriteSections",
     userSections: userSections,
     allSections: allSections,
     buttonLabel: "Add Sections",
