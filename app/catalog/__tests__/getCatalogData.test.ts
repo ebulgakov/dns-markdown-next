@@ -1,6 +1,6 @@
 import { getLastPriceList, getUser, getPriceListCity } from "@/api/get";
-import { mockGoods } from "@/db/user/__mocks__/pricelist";
 
+import { mockGoods } from "../__mocks__/pricelist";
 import { getCatalogData } from "../get-catalog-data";
 
 import type { PriceList as PriceListType } from "@/types/pricelist";
