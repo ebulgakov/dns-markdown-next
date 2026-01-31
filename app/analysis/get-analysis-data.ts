@@ -3,7 +3,8 @@ import {
   getLast30ArchiveProductsCount,
   getLast30DiffsReportByCity,
   getLast30ReportsByCity,
-  getTotalUniqProductsCount
+  getTotalUniqProductsCount,
+  getArchiveListDates
 } from "@/api";
 
 import type { AnalysisDiffReport as AnalysisDiffReportType } from "@/types/analysis-diff";
@@ -52,5 +53,15 @@ export async function getAnalysisData() {
     throw new Error("Analysis goods count not found", { cause: e });
   }
 
-  return { city, goodsCountByDates, goodsChangesByDates, reports, countUniqueGoods };
+  let startFrom: string;
+  try {
+    const archiveCollection = await getArchiveListDates(city);
+    startFrom = archiveCollection[0]?.createdAt;
+  } catch (error) {
+    const e = error as Error;
+    console.error(e);
+    throw new Error("Not able to get archive list dates", { cause: e });
+  }
+
+  return { city, goodsCountByDates, goodsChangesByDates, reports, countUniqueGoods, startFrom };
 }

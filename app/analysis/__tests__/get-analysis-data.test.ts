@@ -3,7 +3,8 @@ import {
   getLast30ArchiveProductsCount,
   getLast30DiffsReportByCity,
   getLast30ReportsByCity,
-  getTotalUniqProductsCount
+  getTotalUniqProductsCount,
+  getArchiveListDates
 } from "@/api";
 
 import { getAnalysisData } from "../get-analysis-data";
@@ -22,7 +23,8 @@ jest.mock("@/api", () => ({
   getLast30DiffsReportByCity: jest.fn(),
   getLast30ArchiveProductsCount: jest.fn(),
   getLast30ReportsByCity: jest.fn(),
-  getTotalUniqProductsCount: jest.fn()
+  getTotalUniqProductsCount: jest.fn(),
+  getArchiveListDates: jest.fn()
 }));
 
 const mockedGetPriceListCity = getPriceListCity as jest.Mock;
@@ -30,6 +32,7 @@ const mockedGetArchiveGoodsCount = getLast30ArchiveProductsCount as jest.Mock;
 const mockedGetAllDiffsReportByCity = getLast30DiffsReportByCity as jest.Mock;
 const mockedGetAllReportsByCity = getLast30ReportsByCity as jest.Mock;
 const mockedGetUniqueAnalysisGoodsCount = getTotalUniqProductsCount as jest.Mock;
+const mockedGetArchiveListDates = getArchiveListDates as jest.Mock;
 
 console.error = jest.fn();
 
@@ -53,6 +56,7 @@ describe("getAnalysisData", () => {
     const countUniqueGoods = 10;
 
     mockedGetPriceListCity.mockResolvedValue(city);
+    mockedGetArchiveListDates.mockResolvedValue(goodsCountByDates);
     mockedGetArchiveGoodsCount.mockResolvedValue(goodsCountByDates);
     mockedGetAllDiffsReportByCity.mockResolvedValue(diffs);
     mockedGetAllReportsByCity.mockResolvedValue(reports);
