@@ -1,7 +1,7 @@
 import { currentUser } from "@clerk/nextjs/server";
 import axios from "axios";
 
-import type { Goods, PriceList, PriceListDate } from "@/types/pricelist";
+import type { Goods, PriceList, PriceListDate, PriceListsArchiveCount } from "@/types/pricelist";
 import type { ProductPayload } from "@/types/product";
 import type { User } from "@/types/user";
 
@@ -26,6 +26,10 @@ export const getLastPriceList = async (city: string): Promise<PriceList> => {
 
 export const getArchiveListDates = async (city: string): Promise<PriceListDate[]> => {
   return await wrapApiCall("/api/pricelist/list", { params: { city } });
+};
+
+export const getArchiveProductsCount = async (city: string): Promise<PriceListsArchiveCount[]> => {
+  return await wrapApiCall("/api/pricelist/products-count", { params: { city } });
 };
 
 export const getPriceListById = async (id: string): Promise<PriceList> => {

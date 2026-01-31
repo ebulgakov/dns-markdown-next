@@ -4,6 +4,7 @@ import { Bar, BarChart, CartesianGrid, XAxis } from "recharts";
 
 import { Card, CardContent } from "@/app/components/ui/card";
 import { ChartContainer, ChartTooltip, ChartTooltipContent } from "@/app/components/ui/chart";
+import { formatDateShort } from "@/app/helpers/format";
 
 type AnalyticsGoodsChartProps = {
   chartData: {
@@ -27,7 +28,13 @@ function AnalyticsGoodsCountChart({ chartData }: AnalyticsGoodsChartProps) {
         >
           <BarChart data={chartData}>
             <CartesianGrid vertical={false} />
-            <XAxis dataKey="date" tickLine={false} tickMargin={10} axisLine={false} />
+            <XAxis
+              dataKey="date"
+              tickLine={false}
+              tickMargin={10}
+              tickFormatter={date => formatDateShort(date)}
+              axisLine={false}
+            />
             <ChartTooltip cursor={false} content={<ChartTooltipContent />} />
             <Bar dataKey="count" fill="var(--accent)" radius={8} />
           </BarChart>
