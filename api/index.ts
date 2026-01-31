@@ -29,10 +29,6 @@ export const getArchiveListDates = async (city: string): Promise<PriceListDate[]
   return await wrapApiCall("/api/pricelist/list", { params: { city } });
 };
 
-export const getArchiveProductsCount = async (city: string): Promise<PriceListsArchiveCount[]> => {
-  return await wrapApiCall("/api/pricelist/products-count", { params: { city } });
-};
-
 export const getPriceListById = async (id: string): Promise<PriceList> => {
   return await wrapApiCall(`/api/pricelist/id/${id}`);
 };
@@ -75,4 +71,8 @@ export const getLastDiffByCity = async (city: string): Promise<AnalysisDiff> => 
 
 export const getAllDiffsReportByCity = async (city: string): Promise<AnalysisDiffReport[]> => {
   return await wrapApiCall(`/api/analysis/all-diffs`, { params: { city } });
+};
+
+export const getArchiveProductsCount = async (city: string): Promise<PriceListsArchiveCount[]> => {
+  return await wrapApiCall("/api/analysis/products-count", { params: { city } });
 };
