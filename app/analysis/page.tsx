@@ -7,6 +7,7 @@ import {
 } from "@/app/components/analytics";
 import { Alert, AlertDescription, AlertTitle } from "@/app/components/ui/alert";
 import { Title } from "@/app/components/ui/title";
+import { formatDate } from "@/app/helpers/format";
 
 export default async function AnalysisPage() {
   let city,
@@ -46,7 +47,7 @@ export default async function AnalysisPage() {
 
       <div className="mt-4 text-lg">
         <p>
-          Аналитика ведётся с даты: <b>{startFrom}</b>
+          Аналитика ведётся с даты: <b>{formatDate(startFrom)}</b>
         </p>
         <p>
           C этого времени в каталог было добавлено товаров: <b>{countUniqueGoods}</b>
