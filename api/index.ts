@@ -1,7 +1,7 @@
 import { currentUser } from "@clerk/nextjs/server";
 import axios from "axios";
 
-import type { PriceList, PriceListDate } from "@/types/pricelist";
+import type { Goods, PriceList, PriceListDate } from "@/types/pricelist";
 import type { ProductPayload } from "@/types/product";
 import type { User } from "@/types/user";
 
@@ -50,4 +50,16 @@ export const getPriceListCity = async (): Promise<string> => {
 
 export const getProductByLink = async (link: string): Promise<ProductPayload> => {
   return await wrapApiCall(`/api/products/link`, { params: { link } });
+};
+
+export const getMostCheapProducts = async (city: string): Promise<Goods[]> => {
+  return await wrapApiCall(`/api/products/most-cheap-products`, { params: { city } });
+};
+
+export const getMostDiscountedProducts = async (city: string): Promise<Goods[]> => {
+  return await wrapApiCall(`/api/products/most-discounted-products`, { params: { city } });
+};
+
+export const getMostProfitableProducts = async (city: string): Promise<Goods[]> => {
+  return await wrapApiCall(`/api/products/most-profitable-products`, { params: { city } });
 };
