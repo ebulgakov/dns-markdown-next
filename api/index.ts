@@ -1,7 +1,7 @@
 import { currentUser } from "@clerk/nextjs/server";
 import axios from "axios";
 
-import type { AnalysisDiff } from "@/types/analysis-diff";
+import type { AnalysisDiff, AnalysisDiffReport } from "@/types/analysis-diff";
 import type { Goods, PriceList, PriceListDate, PriceListsArchiveCount } from "@/types/pricelist";
 import type { ProductPayload } from "@/types/product";
 import type { User } from "@/types/user";
@@ -71,4 +71,8 @@ export const getMostProfitableProducts = async (city: string): Promise<Goods[]> 
 
 export const getLastDiffByCity = async (city: string): Promise<AnalysisDiff> => {
   return await wrapApiCall(`/api/analysis/last-diff`, { params: { city } });
+};
+
+export const getAllDiffsReportByCity = async (city: string): Promise<AnalysisDiffReport[]> => {
+  return await wrapApiCall(`/api/analysis/all-diffs`, { params: { city } });
 };

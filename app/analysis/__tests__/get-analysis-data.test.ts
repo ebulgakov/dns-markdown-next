@@ -1,6 +1,5 @@
-import { getPriceListCity, getArchiveProductsCount } from "@/api";
+import { getPriceListCity, getArchiveProductsCount, getAllDiffsReportByCity } from "@/api";
 import { getUniqueAnalysisGoodsCount } from "@/db/analysis-data/queries";
-import { getAllDiffsReportByCity } from "@/db/analysis-diff/queries";
 import { getAllReportsByCity } from "@/db/reports/queries";
 
 import { getAnalysisData } from "../get-analysis-data";
@@ -18,16 +17,13 @@ jest.mock("@/db/analysis-data/queries", () => ({
   getUniqueAnalysisGoodsCount: jest.fn()
 }));
 
-jest.mock("@/db/analysis-diff/queries", () => ({
-  getAllDiffsReportByCity: jest.fn()
-}));
-
 jest.mock("@/db/reports/queries", () => ({
   getAllReportsByCity: jest.fn()
 }));
 
 jest.mock("@/api", () => ({
   getPriceListCity: jest.fn(),
+  getAllDiffsReportByCity: jest.fn(),
   getArchiveProductsCount: jest.fn()
 }));
 
@@ -71,11 +67,6 @@ describe("getAnalysisData", () => {
     expect(result.goodsChangesByDates).toEqual(diffs);
     expect(result.reports).toEqual(reports);
     expect(result.countUniqueGoods).toBe(countUniqueGoods);
-  });
-
-  it("should throw an error if city is not found", async () => {
-    mockedGetPriceListCity.mockResolvedValue(undefined);
-    await expect(getAnalysisData()).rejects.toThrow("City not found");
   });
 
   it("should throw an error if goods count by dates are not found", async () => {
