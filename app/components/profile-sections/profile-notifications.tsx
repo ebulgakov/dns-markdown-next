@@ -2,11 +2,11 @@
 
 import { useState, useTransition } from "react";
 
+import { postUpdateUserNotifications } from "@/api/post";
 import { Button } from "@/app/components/ui/button";
 import { CheckboxWithLabel } from "@/app/components/ui/control-with-label";
 import { Input } from "@/app/components/ui/input";
 import { Title } from "@/app/components/ui/title";
-import { updateUserSection } from "@/db/user/mutations/update-user-section";
 
 import type { UserNotifications } from "@/types/user";
 
@@ -22,14 +22,11 @@ function ProfileNotifications({ notifications, email }: ProfileNotificationsProp
   const handleSave = () => {
     startTransition(async () => {
       try {
-        await updateUserSection(
-          {
-            updates: {
-              enabled: enabledUpdate
-            }
-          },
-          "notifications"
-        );
+        await postUpdateUserNotifications({
+          updates: {
+            enabled: enabledUpdate
+          }
+        });
       } catch (error) {
         console.error("Failed to update notifications:", error);
       }

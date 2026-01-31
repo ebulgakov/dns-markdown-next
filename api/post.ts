@@ -4,15 +4,20 @@ import { currentUser } from "@clerk/nextjs/server";
 import axios from "axios";
 
 import type { Goods } from "@/types/pricelist";
-import type { Favorite, UserSections } from "@/types/user";
+import type { Favorite, UserNotifications, UserSections } from "@/types/user";
 
 const API_BASE_URL = process.env.API_URL!;
 
 type FavoritesResponse = { message: string; favorites: Favorite[] };
 
 export type SectionsResponse = {
-  message: "Section removed from hidden sections";
+  message: string;
   sections: UserSections;
+};
+
+export type UserNotificationsResponse = {
+  message: string;
+  notifications: UserNotifications;
 };
 
 const wrapApiCall = async (endpoint: string, data = {}) => {
@@ -25,6 +30,18 @@ const wrapApiCall = async (endpoint: string, data = {}) => {
     console.error(`Error fetching data from ${endpoint}:`, error);
     throw error;
   }
+};
+
+export const postUpdateUserNotifications = async (
+  notifications: UserNotifications
+): Promise<UserNotificationsResponse> => {
+  const clerkUser = await currentUser();
+
+  if (!clerkUser) throw new Error("User not authenticated");
+  return await wrapApiCall("/api/user/notifications/update", {
+    userId: clerkUser.id,
+    notifications
+  });
 };
 
 export const postAddToFavorites = async (product: Goods): Promise<FavoritesResponse> => {
