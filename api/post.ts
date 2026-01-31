@@ -10,7 +10,7 @@ const API_BASE_URL = process.env.API_URL!;
 
 type FavoritesResponse = { message: string; favorites: Favorite[] };
 
-type SectionsResponse = {
+export type SectionsResponse = {
   message: "Section removed from hidden sections";
   sections: UserSections;
 };
