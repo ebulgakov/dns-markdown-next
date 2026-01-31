@@ -1,6 +1,10 @@
-import { getPriceListCity, getArchiveProductsCount, getAllDiffsReportByCity } from "@/api";
+import {
+  getPriceListCity,
+  getLast30ArchiveProductsCount,
+  getLast30DiffsReportByCity,
+  getLast30ReportsByCity
+} from "@/api";
 import { getUniqueAnalysisGoodsCount } from "@/db/analysis-data/queries";
-import { getAllReportsByCity } from "@/db/reports/queries";
 
 import type { AnalysisDiffReport as AnalysisDiffReportType } from "@/types/analysis-diff";
 import type { PriceListsArchiveCount } from "@/types/pricelist";
@@ -11,7 +15,7 @@ export async function getAnalysisData() {
 
   let goodsCountByDates: PriceListsArchiveCount[];
   try {
-    goodsCountByDates = await getArchiveProductsCount(city);
+    goodsCountByDates = await getLast30ArchiveProductsCount(city);
     if (!goodsCountByDates) throw new Error();
   } catch (error) {
     const e = error as Error;
@@ -21,7 +25,7 @@ export async function getAnalysisData() {
 
   let goodsChangesByDates: AnalysisDiffReportType[];
   try {
-    goodsChangesByDates = await getAllDiffsReportByCity(city);
+    goodsChangesByDates = await getLast30DiffsReportByCity(city);
     goodsChangesByDates.reverse();
   } catch (error) {
     const e = error as Error;
@@ -31,7 +35,7 @@ export async function getAnalysisData() {
 
   let reports: ReportsResponse;
   try {
-    reports = await getAllReportsByCity(city);
+    reports = await getLast30ReportsByCity(city);
   } catch (error) {
     const e = error as Error;
     console.error(e);

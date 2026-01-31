@@ -1,6 +1,10 @@
-import { getPriceListCity, getArchiveProductsCount, getAllDiffsReportByCity } from "@/api";
+import {
+  getPriceListCity,
+  getLast30ArchiveProductsCount,
+  getLast30DiffsReportByCity,
+  getLast30ReportsByCity
+} from "@/api";
 import { getUniqueAnalysisGoodsCount } from "@/db/analysis-data/queries";
-import { getAllReportsByCity } from "@/db/reports/queries";
 
 import { getAnalysisData } from "../get-analysis-data";
 
@@ -17,20 +21,17 @@ jest.mock("@/db/analysis-data/queries", () => ({
   getUniqueAnalysisGoodsCount: jest.fn()
 }));
 
-jest.mock("@/db/reports/queries", () => ({
-  getAllReportsByCity: jest.fn()
-}));
-
 jest.mock("@/api", () => ({
   getPriceListCity: jest.fn(),
-  getAllDiffsReportByCity: jest.fn(),
-  getArchiveProductsCount: jest.fn()
+  getLast30DiffsReportByCity: jest.fn(),
+  getLast30ArchiveProductsCount: jest.fn(),
+  getLast30ReportsByCity: jest.fn()
 }));
 
 const mockedGetPriceListCity = getPriceListCity as jest.Mock;
-const mockedGetArchiveGoodsCount = getArchiveProductsCount as jest.Mock;
-const mockedGetAllDiffsReportByCity = getAllDiffsReportByCity as jest.Mock;
-const mockedGetAllReportsByCity = getAllReportsByCity as jest.Mock;
+const mockedGetArchiveGoodsCount = getLast30ArchiveProductsCount as jest.Mock;
+const mockedGetAllDiffsReportByCity = getLast30DiffsReportByCity as jest.Mock;
+const mockedGetAllReportsByCity = getLast30ReportsByCity as jest.Mock;
 const mockedGetUniqueAnalysisGoodsCount = getUniqueAnalysisGoodsCount as jest.Mock;
 
 console.error = jest.fn();

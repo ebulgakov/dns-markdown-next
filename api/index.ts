@@ -4,6 +4,7 @@ import axios from "axios";
 import type { AnalysisDiff, AnalysisDiffReport } from "@/types/analysis-diff";
 import type { Goods, PriceList, PriceListDate, PriceListsArchiveCount } from "@/types/pricelist";
 import type { ProductPayload } from "@/types/product";
+import type { ReportsResponse } from "@/types/reports";
 import type { User } from "@/types/user";
 
 const API_BASE_URL = process.env.API_URL!;
@@ -69,10 +70,16 @@ export const getLastDiffByCity = async (city: string): Promise<AnalysisDiff> => 
   return await wrapApiCall(`/api/analysis/last-diff`, { params: { city } });
 };
 
-export const getAllDiffsReportByCity = async (city: string): Promise<AnalysisDiffReport[]> => {
+export const getLast30DiffsReportByCity = async (city: string): Promise<AnalysisDiffReport[]> => {
   return await wrapApiCall(`/api/analysis/all-diffs`, { params: { city } });
 };
 
-export const getArchiveProductsCount = async (city: string): Promise<PriceListsArchiveCount[]> => {
+export const getLast30ArchiveProductsCount = async (
+  city: string
+): Promise<PriceListsArchiveCount[]> => {
   return await wrapApiCall("/api/analysis/products-count", { params: { city } });
+};
+
+export const getLast30ReportsByCity = async (city: string): Promise<ReportsResponse> => {
+  return await wrapApiCall("/api/analysis/reports", { params: { city } });
 };
