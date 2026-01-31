@@ -1,4 +1,4 @@
-import { getUser } from "@/api";
+import { getUser } from "@/api/get";
 import { dbConnect } from "@/db/database";
 import { mockGoods } from "@/db/user/__mocks__/pricelist";
 import { mockUser } from "@/db/user/__mocks__/user";
@@ -11,7 +11,7 @@ jest.mock("@/db/database", () => ({
   dbConnect: jest.fn()
 }));
 
-jest.mock("@/api", () => ({
+jest.mock("@/api/get", () => ({
   getUser: jest.fn()
 }));
 

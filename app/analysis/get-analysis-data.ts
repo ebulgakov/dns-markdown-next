@@ -5,7 +5,7 @@ import {
   getLast30ReportsByCity,
   getTotalUniqProductsCount,
   getArchiveListDates
-} from "@/api";
+} from "@/api/get";
 
 import type { AnalysisDiffReport as AnalysisDiffReportType } from "@/types/analysis-diff";
 import type { PriceListsArchiveCount } from "@/types/pricelist";

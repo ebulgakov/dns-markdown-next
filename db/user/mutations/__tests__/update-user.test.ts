@@ -1,4 +1,4 @@
-import { getUser } from "@/api";
+import { getUser } from "@/api/get";
 import { dbConnect } from "@/db/database";
 import { User } from "@/db/models/user-model";
 
@@ -7,7 +7,7 @@ import { updateUser } from "../update-user";
 // Mock dependencies
 jest.mock("@/db/database", () => ({ dbConnect: jest.fn() }));
 jest.mock("@/db/models/user-model", () => ({ User: { findByIdAndUpdate: jest.fn() } }));
-jest.mock("@/api", () => ({ getUser: jest.fn() }));
+jest.mock("@/api/get", () => ({ getUser: jest.fn() }));
 
 describe("updateUser", () => {
   afterEach(() => jest.clearAllMocks());

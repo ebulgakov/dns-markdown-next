@@ -1,4 +1,4 @@
-import { getUser } from "@/api";
+import { getUser } from "@/api/get";
 import { FavoritesPageClient, FavoritesEmpty } from "@/app/components/favorites";
 import { Alert, AlertTitle, AlertDescription } from "@/app/components/ui/alert";
 

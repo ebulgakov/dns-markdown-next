@@ -1,5 +1,5 @@
 "use server";
-import { getUser } from "@/api";
+import { getUser } from "@/api/get";
 import { dbConnect } from "@/db/database";
 import { updateUser } from "@/db/user/mutations/update-user";
 

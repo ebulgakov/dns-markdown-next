@@ -1,5 +1,4 @@
-import { getLastPriceList } from "@/api";
-import { getUser } from "@/api";
+import { getLastPriceList, getUser } from "@/api/get";
 import { ProfileSections } from "@/app/components/profile-sections";
 import { Alert, AlertDescription, AlertTitle } from "@/app/components/ui/alert";
 

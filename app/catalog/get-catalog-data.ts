@@ -1,4 +1,4 @@
-import { getLastPriceList, getUser, getPriceListCity } from "@/api";
+import { getLastPriceList, getUser, getPriceListCity } from "@/api/get";
 
 import type { Position as PositionType, PriceList as PriceListType } from "@/types/pricelist";
 import type { Favorite as FavoriteType, UserSections as UserSectionsType } from "@/types/user";
