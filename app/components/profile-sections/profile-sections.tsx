@@ -1,4 +1,10 @@
 "use client";
+import {
+  postAddToFavoriteSections,
+  postAddToHiddenSections,
+  postRemoveFromFavoriteSection,
+  postRemoveFromHiddenSections
+} from "@/api/post";
 import { PageTitle } from "@/app/components/ui/page-title";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/app/components/ui/tabs";
 import { Title } from "@/app/components/ui/title";
@@ -41,7 +47,8 @@ function ProfileSections({
           <ProfileUpdateSections
             allSections={allSections}
             userSections={favoriteSections}
-            sectionName="favoriteSections"
+            onAddSection={postAddToFavoriteSections}
+            onRemoveSection={postRemoveFromFavoriteSection}
             placeholder="Добавьте из левой колонки интересующие вас секции и они всегда будут показываться в верху списка"
             buttonLabel="Добавить в избранные"
           />
@@ -55,7 +62,8 @@ function ProfileSections({
           <ProfileUpdateSections
             allSections={allSections}
             userSections={hiddenSections}
-            sectionName="hiddenSections"
+            onAddSection={postAddToHiddenSections}
+            onRemoveSection={postRemoveFromHiddenSections}
             placeholder="Добавьте из левой колонки неинтересующие вас секции и они будут показываться в свёрнутом виде в прайслисте"
             buttonLabel="Скрывать эти секции"
           />

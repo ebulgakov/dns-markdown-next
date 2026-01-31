@@ -35,7 +35,6 @@ Chromatic Storybook настроен для этого проекта: https://w
 ## Используемые технологии
 
 * Next.js 16
-* MongoDB
 * Typescript
 * Tailwind CSS
 * Shadcn/UI
@@ -44,4 +43,3 @@ Chromatic Storybook настроен для этого проекта: https://w
 * Playwright
 * Jest
 * Sentry
-* Redis

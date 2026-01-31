@@ -10,7 +10,7 @@ import { StrictMode, type ReactNode } from "react";
 
 import "./globals.css";
 
-import { getPriceListCity } from "@/api";
+import { getPriceListCity } from "@/api/get";
 import { ClerkError } from "@/app/components/clerk-error";
 import { Footer } from "@/app/components/footer";
 import { Navbar } from "@/app/components/navbar";

@@ -3,10 +3,9 @@
 import { Star } from "lucide-react";
 import { useState, useOptimistic, startTransition } from "react";
 
+import { postAddToFavorites, postRemoveFromFavorites } from "@/api/post";
 import { Tooltip, TooltipContent, TooltipTrigger } from "@/app/components/ui/tooltip";
 import { sendGAEvent } from "@/app/lib/sendGAEvent";
-import { addToFavorites } from "@/db/user/mutations/add-to-favorites";
-import { removeFromFavorites } from "@/db/user/mutations/remove-from-favorites";
 
 import type { Goods as GoodsType } from "@/types/pricelist";
 import type { Favorite } from "@/types/user";
@@ -34,7 +33,7 @@ function PriceListFavoriteToggle({
     startTransition(async () => {
       setInFavoritesOptimistic(false);
       try {
-        const removed = await removeFromFavorites(goods.link);
+        const removed = await postRemoveFromFavorites(goods.link);
         if (removed) {
           setInFavorites(false);
           sendGAEvent({
@@ -53,7 +52,7 @@ function PriceListFavoriteToggle({
     startTransition(async () => {
       setInFavoritesOptimistic(true);
       try {
-        const added = await addToFavorites(goods);
+        const added = await postAddToFavorites(goods);
         if (added) {
           setInFavorites(true);
           sendGAEvent({

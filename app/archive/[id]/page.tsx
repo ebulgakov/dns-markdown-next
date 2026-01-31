@@ -1,6 +1,6 @@
 import { getTranslations } from "next-intl/server";
 
-import { getPriceListById } from "@/api";
+import { getPriceListById } from "@/api/get";
 import { PriceListPage } from "@/app/components/price-list";
 import { Alert, AlertDescription, AlertTitle } from "@/app/components/ui/alert";
 import { PageTitle } from "@/app/components/ui/page-title";

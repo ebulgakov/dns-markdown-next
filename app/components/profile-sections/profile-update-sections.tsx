@@ -1,38 +1,36 @@
 "use client";
 
-import { X } from "lucide-react";
+import { X, ArrowRight } from "lucide-react";
 import { useState, useTransition, useOptimistic, Fragment } from "react";
 
 import { Alert, AlertDescription, AlertTitle } from "@/app/components/ui/alert";
-import { Button } from "@/app/components/ui/button";
 import { Card } from "@/app/components/ui/card";
-import { CheckboxWithLabel } from "@/app/components/ui/control-with-label";
 import { Label } from "@/app/components/ui/label";
 import { ScrollArea } from "@/app/components/ui/scroll-area";
 import { Separator } from "@/app/components/ui/separator";
 import { uniqAbcSort } from "@/app/helpers/sort";
-import { updateUserSection } from "@/db/user/mutations/update-user-section";
 
-import type { AvailableUpdateSectionNames, UserSections as UserSectionsType } from "@/types/user";
+import type { SectionsResponse } from "@/api/post";
+import type { UserSections as UserSectionsType } from "@/types/user";
 
 type ProfileUpdateSectionsProps = {
-  sectionName: AvailableUpdateSectionNames;
   userSections: UserSectionsType;
   allSections: string[];
   buttonLabel: string;
   placeholder: string;
+  onAddSection: (title: string) => Promise<SectionsResponse>;
+  onRemoveSection: (title: string) => Promise<SectionsResponse>;
 };
 
 function ProfileUpdateSections({
   userSections,
   allSections,
-  sectionName,
-  buttonLabel,
-  placeholder
+  placeholder,
+  onAddSection,
+  onRemoveSection
 }: ProfileUpdateSectionsProps) {
   const [errorMessage, setErrorMessage] = useState<Error | null>(null);
   const [isPending, startTransition] = useTransition();
-  const [selectedSections, setSelectedSections] = useState<UserSectionsType>([]);
   const [realActiveSections, setRealActiveSections] = useState<UserSectionsType>(userSections);
   const [activeSections, setActiveSections] = useOptimistic<UserSectionsType, UserSectionsType>(
     realActiveSections,
@@ -42,13 +40,13 @@ function ProfileUpdateSections({
   const outputAllSections = uniqAbcSort(allSections).filter(str => !activeSections.includes(str));
   const outputActiveSections = uniqAbcSort(activeSections);
 
-  const updateSections = async (sections: UserSectionsType) => {
+  const handleRemoveActiveSection = async (section: string) => {
+    const sections = activeSections.filter(sec => sec !== section);
     startTransition(async () => {
       setActiveSections(sections);
-      setSelectedSections([]);
       try {
-        const newSections = await updateUserSection(sections, sectionName);
-        setRealActiveSections(newSections as UserSectionsType);
+        const list = await onRemoveSection(section);
+        setRealActiveSections(list.sections);
         setErrorMessage(null);
       } catch (error) {
         setErrorMessage(error as Error);
@@ -56,21 +54,18 @@ function ProfileUpdateSections({
     });
   };
 
-  const handleRemoveActiveSection = async (section: string) => {
-    const sections = activeSections.filter(sec => sec !== section);
-    await updateSections(sections);
-  };
-
-  const handleSaveSelectedSections = async () => {
-    if (selectedSections.length === 0) return;
-    const sections = [...activeSections, ...selectedSections];
-    await updateSections(sections);
-  };
-
-  const handleCheckboxChange = ({ section, checked }: { section: string; checked: boolean }) => {
-    setSelectedSections(prev =>
-      checked ? [...prev, section] : prev.filter(pSection => pSection !== section)
-    );
+  const handleSaveSelectedSection = async (section: string) => {
+    const sections = [...activeSections, section];
+    startTransition(async () => {
+      setActiveSections(sections);
+      try {
+        const list = await onAddSection(section);
+        setRealActiveSections(list.sections);
+        setErrorMessage(null);
+      } catch (error) {
+        setErrorMessage(error as Error);
+      }
+    });
   };
 
   return (
@@ -91,26 +86,19 @@ function ProfileUpdateSections({
                 {outputAllSections.map((section, idx) => (
                   <Fragment key={section}>
                     {idx > 0 && <Separator className="my-2" />}
-                    <CheckboxWithLabel
-                      label={section}
-                      value={section}
-                      onCheckedChange={checked =>
-                        handleCheckboxChange({ section, checked: Boolean(checked) })
-                      }
-                    />
+                    <button
+                      className="group hover:text-primary flex w-full cursor-pointer gap-1"
+                      onClick={() => handleSaveSelectedSection(section)}
+                    >
+                      <Label>{section}</Label>
+                      <ArrowRight className="ml-auto size-6" />
+                    </button>
                   </Fragment>
                 ))}
               </div>
             </ScrollArea>
           </Card>
-          <div className="mt-2 flex items-center gap-2">
-            <Button
-              disabled={selectedSections.length === 0}
-              type="button"
-              onClick={handleSaveSelectedSections}
-            >
-              {buttonLabel}
-            </Button>
+          <div className="flex h-8 items-center gap-2">
             {isPending && <span className="text-neutral-500">Сохранение...</span>}
           </div>
         </div>
@@ -123,7 +111,7 @@ function ProfileUpdateSections({
                     <Fragment key={section}>
                       {idx > 0 && <Separator className="my-2" />}
                       <button
-                        className="flex gap-1"
+                        className="group hover:text-primary flex w-full cursor-pointer gap-1"
                         onClick={() => handleRemoveActiveSection(section)}
                       >
                         <X className="size-6" />
