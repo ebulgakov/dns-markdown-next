@@ -2,9 +2,9 @@ import {
   getPriceListCity,
   getLast30ArchiveProductsCount,
   getLast30DiffsReportByCity,
-  getLast30ReportsByCity
+  getLast30ReportsByCity,
+  getTotalUniqProductsCount
 } from "@/api";
-import { getUniqueAnalysisGoodsCount } from "@/db/analysis-data/queries";
 
 import { getAnalysisData } from "../get-analysis-data";
 
@@ -17,22 +17,19 @@ jest.mock("@/app/helpers/format", () => ({
   formatDateShort: jest.fn(date => new Date(date).toLocaleDateString("ru-RU"))
 }));
 
-jest.mock("@/db/analysis-data/queries", () => ({
-  getUniqueAnalysisGoodsCount: jest.fn()
-}));
-
 jest.mock("@/api", () => ({
   getPriceListCity: jest.fn(),
   getLast30DiffsReportByCity: jest.fn(),
   getLast30ArchiveProductsCount: jest.fn(),
-  getLast30ReportsByCity: jest.fn()
+  getLast30ReportsByCity: jest.fn(),
+  getTotalUniqProductsCount: jest.fn()
 }));
 
 const mockedGetPriceListCity = getPriceListCity as jest.Mock;
 const mockedGetArchiveGoodsCount = getLast30ArchiveProductsCount as jest.Mock;
 const mockedGetAllDiffsReportByCity = getLast30DiffsReportByCity as jest.Mock;
 const mockedGetAllReportsByCity = getLast30ReportsByCity as jest.Mock;
-const mockedGetUniqueAnalysisGoodsCount = getUniqueAnalysisGoodsCount as jest.Mock;
+const mockedGetUniqueAnalysisGoodsCount = getTotalUniqProductsCount as jest.Mock;
 
 console.error = jest.fn();
 

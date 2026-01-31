@@ -83,3 +83,7 @@ export const getLast30ArchiveProductsCount = async (
 export const getLast30ReportsByCity = async (city: string): Promise<ReportsResponse> => {
   return await wrapApiCall("/api/analysis/reports", { params: { city } });
 };
+
+export const getTotalUniqProductsCount = async (city: string): Promise<number> => {
+  return await wrapApiCall("/api/analysis/total-uniq-products-count", { params: { city } });
+};

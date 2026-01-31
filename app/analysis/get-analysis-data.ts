@@ -2,9 +2,9 @@ import {
   getPriceListCity,
   getLast30ArchiveProductsCount,
   getLast30DiffsReportByCity,
-  getLast30ReportsByCity
+  getLast30ReportsByCity,
+  getTotalUniqProductsCount
 } from "@/api";
-import { getUniqueAnalysisGoodsCount } from "@/db/analysis-data/queries";
 
 import type { AnalysisDiffReport as AnalysisDiffReportType } from "@/types/analysis-diff";
 import type { PriceListsArchiveCount } from "@/types/pricelist";
@@ -44,7 +44,7 @@ export async function getAnalysisData() {
 
   let countUniqueGoods: number;
   try {
-    countUniqueGoods = await getUniqueAnalysisGoodsCount(city);
+    countUniqueGoods = await getTotalUniqProductsCount(city);
     if (countUniqueGoods == null) throw new Error(); // allow zero count
   } catch (error) {
     const e = error as Error;
