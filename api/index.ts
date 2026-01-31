@@ -1,7 +1,8 @@
 import { currentUser } from "@clerk/nextjs/server";
 import axios from "axios";
 
-import type { PriceList, PriceListDate } from "@/types/pricelist";
+import type { Goods, PriceList, PriceListDate, PriceListsArchiveCount } from "@/types/pricelist";
+import type { ProductPayload } from "@/types/product";
 import type { User } from "@/types/user";
 
 const API_BASE_URL = process.env.API_URL!;
@@ -24,11 +25,15 @@ export const getLastPriceList = async (city: string): Promise<PriceList> => {
 };
 
 export const getArchiveListDates = async (city: string): Promise<PriceListDate[]> => {
-  return await wrapApiCall("/api/archive/list", { params: { city } });
+  return await wrapApiCall("/api/pricelist/list", { params: { city } });
+};
+
+export const getArchiveProductsCount = async (city: string): Promise<PriceListsArchiveCount[]> => {
+  return await wrapApiCall("/api/pricelist/products-count", { params: { city } });
 };
 
 export const getPriceListById = async (id: string): Promise<PriceList> => {
-  return await wrapApiCall(`/api/archive/id/${id}`);
+  return await wrapApiCall(`/api/pricelist/id/${id}`);
 };
 
 export const getUser = async (): Promise<User> => {
@@ -45,4 +50,20 @@ export const getPriceListCity = async (): Promise<string> => {
   } catch {
     return process.env.DEFAULT_CITY || "samara";
   }
+};
+
+export const getProductByLink = async (link: string): Promise<ProductPayload> => {
+  return await wrapApiCall(`/api/products/link`, { params: { link } });
+};
+
+export const getMostCheapProducts = async (city: string): Promise<Goods[]> => {
+  return await wrapApiCall(`/api/products/most-cheap-products`, { params: { city } });
+};
+
+export const getMostDiscountedProducts = async (city: string): Promise<Goods[]> => {
+  return await wrapApiCall(`/api/products/most-discounted-products`, { params: { city } });
+};
+
+export const getMostProfitableProducts = async (city: string): Promise<Goods[]> => {
+  return await wrapApiCall(`/api/products/most-profitable-products`, { params: { city } });
 };

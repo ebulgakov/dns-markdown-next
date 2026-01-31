@@ -1,9 +1,10 @@
-import { getLastPriceList, getPriceListCity } from "@/api";
 import {
-  getMostProfitableGoods,
-  getMostCheapGoods,
-  getMostDiscountedGoods
-} from "@/db/pricelist/queries";
+  getLastPriceList,
+  getPriceListCity,
+  getMostCheapProducts,
+  getMostDiscountedProducts,
+  getMostProfitableProducts
+} from "@/api";
 
 import type { CustomDate } from "@/types/common";
 import type { Goods } from "@/types/pricelist";
@@ -19,9 +20,9 @@ export async function getOffersData() {
   try {
     city = await getPriceListCity();
     const priceList = await getLastPriceList(city);
-    const mostCheapArr = await getMostCheapGoods(city);
-    const mostDiscountedArr = await getMostDiscountedGoods(city);
-    const mostProfitableArr = await getMostProfitableGoods(city);
+    const mostCheapArr = await getMostCheapProducts(city);
+    const mostDiscountedArr = await getMostDiscountedProducts(city);
+    const mostProfitableArr = await getMostProfitableProducts(city);
 
     mostCheap = mostCheapArr[0];
     mostDiscounted = mostDiscountedArr[0];
