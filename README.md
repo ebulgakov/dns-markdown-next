@@ -3,9 +3,11 @@
 # Сервис по подбору уценённых товаров с магазина DNS
 
 ## Адрес сайта
+
 https://dns.ebulgakov.com/
 
 ## О сервисе
+
 Это неофициальный сайт, связанный с компанией DNS. Он помогает просматривать уценённые товары из разных городов, представленные на сайте DNS.
 
 Сервис предоставляет удобный способ просмотра товаров из Самары на данный момент. Вы можете добавлять товары в избранное, чтобы отслеживать обновления, такие как изменения цен или наличие товара в магазинах.
@@ -15,31 +17,27 @@ https://dns.ebulgakov.com/
 Запустите сервер разработки:
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
 pnpm dev
-# or
-bun dev
 ```
 
 Откройте [http://localhost:3000](http://localhost:3000) в вашем браузере, чтобы увидеть локальный сайт.
 
 ## .env файл
+
 Переименуйте `.env-example` файл в `.env` и заполните необходимые переменные.
 
 ## Storybook
+
 Chromatic Storybook настроен для этого проекта: https://www.chromatic.com/library?appId=695938b24c4c7f59436c970b
 
 ## Используемые технологии
 
-* Next.js 16
-* Typescript
-* Tailwind CSS
-* Shadcn/UI
-* I18n
-* Storybook
-* Playwright
-* Jest
-* Sentry
+- Next.js 16
+- Typescript
+- Tailwind CSS
+- Shadcn/UI
+- I18n
+- Storybook
+- Playwright
+- Jest
+- Sentry
