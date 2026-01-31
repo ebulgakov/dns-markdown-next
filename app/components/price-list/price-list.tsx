@@ -1,7 +1,12 @@
 "use client";
 import { useOptimistic, useState, startTransition } from "react";
 
-import { updateUserSection } from "@/db/user/mutations/update-user-section";
+import {
+  postAddToFavoriteSections,
+  postAddToHiddenSections,
+  postRemoveFromFavoriteSection,
+  postRemoveFromHiddenSections
+} from "@/api/post";
 
 import { PriceListSection } from "./price-list-section";
 
@@ -46,8 +51,14 @@ function PriceList({
       startTransition(async () => {
         setHiddenSections(updatedSections);
         try {
-          const list = await updateUserSection(updatedSections, "hiddenSections");
-          setRealHiddenSections(list as UserSections);
+          let list;
+
+          if (updatedSections.includes(title)) {
+            list = await postAddToHiddenSections(title);
+          } else {
+            list = await postRemoveFromHiddenSections(title);
+          }
+          setRealHiddenSections(list.sections);
         } catch (error) {
           console.error("Failed to update hidden sections:", error);
         }
@@ -66,8 +77,15 @@ function PriceList({
       startTransition(async () => {
         setFavoriteSections(updatedSections);
         try {
-          const list = await updateUserSection(updatedSections, "favoriteSections");
-          setRealFavoriteSections(list as UserSections);
+          let list;
+
+          if (updatedSections.includes(title)) {
+            list = await postAddToFavoriteSections(title);
+          } else {
+            list = await postRemoveFromFavoriteSection(title);
+          }
+
+          setRealFavoriteSections(list.sections);
         } catch (error) {
           console.error("Failed to update favorite sections:", error);
         }

@@ -4,11 +4,16 @@ import { currentUser } from "@clerk/nextjs/server";
 import axios from "axios";
 
 import type { Goods } from "@/types/pricelist";
-import type { Favorite } from "@/types/user";
+import type { Favorite, UserSections } from "@/types/user";
 
 const API_BASE_URL = process.env.API_URL!;
 
 type FavoritesResponse = { message: string; favorites: Favorite[] };
+
+type SectionsResponse = {
+  message: "Section removed from hidden sections";
+  sections: UserSections;
+};
 
 const wrapApiCall = async (endpoint: string, data = {}) => {
   try {
@@ -26,12 +31,41 @@ export const postAddToFavorites = async (product: Goods): Promise<FavoritesRespo
   const clerkUser = await currentUser();
 
   if (!clerkUser) throw new Error("User not authenticated");
-  return await wrapApiCall("/api/favorites/add", { product, userId: clerkUser.id });
+  return await wrapApiCall("/api/user/favorites/add", { product, userId: clerkUser.id });
 };
 
 export const postRemoveFromFavorites = async (link: string): Promise<FavoritesResponse> => {
   const clerkUser = await currentUser();
 
   if (!clerkUser) throw new Error("User not authenticated");
-  return await wrapApiCall("/api/favorites/remove", { link, userId: clerkUser.id });
+  return await wrapApiCall("/api/user/favorites/remove", { link, userId: clerkUser.id });
+};
+
+// User Sections API
+export const postAddToHiddenSections = async (title: string): Promise<SectionsResponse> => {
+  const clerkUser = await currentUser();
+
+  if (!clerkUser) throw new Error("User not authenticated");
+  return await wrapApiCall("/api/user/sections/hidden-add", { title, userId: clerkUser.id });
+};
+
+export const postRemoveFromHiddenSections = async (title: string): Promise<SectionsResponse> => {
+  const clerkUser = await currentUser();
+
+  if (!clerkUser) throw new Error("User not authenticated");
+  return await wrapApiCall("/api/user/sections/hidden-remove", { title, userId: clerkUser.id });
+};
+
+export const postAddToFavoriteSections = async (title: string): Promise<SectionsResponse> => {
+  const clerkUser = await currentUser();
+
+  if (!clerkUser) throw new Error("User not authenticated");
+  return await wrapApiCall("/api/user/sections/favorite-add", { title, userId: clerkUser.id });
+};
+
+export const postRemoveFromFavoriteSection = async (title: string): Promise<SectionsResponse> => {
+  const clerkUser = await currentUser();
+
+  if (!clerkUser) throw new Error("User not authenticated");
+  return await wrapApiCall("/api/user/sections/favorite-remove", { title, userId: clerkUser.id });
 };
