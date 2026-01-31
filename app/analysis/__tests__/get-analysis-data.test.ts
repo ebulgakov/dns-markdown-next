@@ -1,7 +1,11 @@
-import { getPriceListCity, getArchiveProductsCount } from "@/api";
-import { getUniqueAnalysisGoodsCount } from "@/db/analysis-data/queries";
-import { getAllDiffsReportByCity } from "@/db/analysis-diff/queries";
-import { getAllReportsByCity } from "@/db/reports/queries";
+import {
+  getPriceListCity,
+  getLast30ArchiveProductsCount,
+  getLast30DiffsReportByCity,
+  getLast30ReportsByCity,
+  getTotalUniqProductsCount,
+  getArchiveListDates
+} from "@/api";
 
 import { getAnalysisData } from "../get-analysis-data";
 
@@ -14,28 +18,21 @@ jest.mock("@/app/helpers/format", () => ({
   formatDateShort: jest.fn(date => new Date(date).toLocaleDateString("ru-RU"))
 }));
 
-jest.mock("@/db/analysis-data/queries", () => ({
-  getUniqueAnalysisGoodsCount: jest.fn()
-}));
-
-jest.mock("@/db/analysis-diff/queries", () => ({
-  getAllDiffsReportByCity: jest.fn()
-}));
-
-jest.mock("@/db/reports/queries", () => ({
-  getAllReportsByCity: jest.fn()
-}));
-
 jest.mock("@/api", () => ({
   getPriceListCity: jest.fn(),
-  getArchiveProductsCount: jest.fn()
+  getLast30DiffsReportByCity: jest.fn(),
+  getLast30ArchiveProductsCount: jest.fn(),
+  getLast30ReportsByCity: jest.fn(),
+  getTotalUniqProductsCount: jest.fn(),
+  getArchiveListDates: jest.fn()
 }));
 
 const mockedGetPriceListCity = getPriceListCity as jest.Mock;
-const mockedGetArchiveGoodsCount = getArchiveProductsCount as jest.Mock;
-const mockedGetAllDiffsReportByCity = getAllDiffsReportByCity as jest.Mock;
-const mockedGetAllReportsByCity = getAllReportsByCity as jest.Mock;
-const mockedGetUniqueAnalysisGoodsCount = getUniqueAnalysisGoodsCount as jest.Mock;
+const mockedGetArchiveGoodsCount = getLast30ArchiveProductsCount as jest.Mock;
+const mockedGetAllDiffsReportByCity = getLast30DiffsReportByCity as jest.Mock;
+const mockedGetAllReportsByCity = getLast30ReportsByCity as jest.Mock;
+const mockedGetUniqueAnalysisGoodsCount = getTotalUniqProductsCount as jest.Mock;
+const mockedGetArchiveListDates = getArchiveListDates as jest.Mock;
 
 console.error = jest.fn();
 
@@ -59,6 +56,7 @@ describe("getAnalysisData", () => {
     const countUniqueGoods = 10;
 
     mockedGetPriceListCity.mockResolvedValue(city);
+    mockedGetArchiveListDates.mockResolvedValue(goodsCountByDates);
     mockedGetArchiveGoodsCount.mockResolvedValue(goodsCountByDates);
     mockedGetAllDiffsReportByCity.mockResolvedValue(diffs);
     mockedGetAllReportsByCity.mockResolvedValue(reports);
@@ -71,11 +69,6 @@ describe("getAnalysisData", () => {
     expect(result.goodsChangesByDates).toEqual(diffs);
     expect(result.reports).toEqual(reports);
     expect(result.countUniqueGoods).toBe(countUniqueGoods);
-  });
-
-  it("should throw an error if city is not found", async () => {
-    mockedGetPriceListCity.mockResolvedValue(undefined);
-    await expect(getAnalysisData()).rejects.toThrow("City not found");
   });
 
   it("should throw an error if goods count by dates are not found", async () => {
