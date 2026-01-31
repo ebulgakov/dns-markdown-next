@@ -40,9 +40,6 @@ jobs:
           API_AUTH_SECRET: ${{ secrets.API_AUTH_SECRET }}
           API_URL: ${{ secrets.API_URL }}
           CLERK_SECRET_KEY: ${{ secrets.CLERK_SECRET_KEY }}
-          UPSTASH_REDIS_REST_URL: ${{ secrets.UPSTASH_REDIS_REST_URL }}
-          UPSTASH_REDIS_REST_TOKEN: ${{ secrets.UPSTASH_REDIS_REST_TOKEN }}
-          MONGODB_URI: ${{ secrets.MONGODB_URI }}
       - uses: actions/upload-artifact@v4
         if: ${{ !cancelled() }}
         with:
