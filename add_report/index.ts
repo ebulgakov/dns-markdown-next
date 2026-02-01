@@ -1,15 +1,10 @@
-import redis from "#cache/index.ts";
-import { dbConnect, dbDisconnect } from "#db/database.ts";
 import getPerformance from "#helpers/get_performance.ts";
-import { getLastPriceList } from "#db/pricelist/queries/get_last_price_list.ts";
-import { addNewReportByCity } from "#db/reports/mutations/add_new_report_by_city.ts";
-import { removeReportByCityDate } from "#db/reports/mutations/remove_report_by_city_date.ts";
 import { generateAnalysisReport } from "#ai/index.ts";
+import { getLastPriceList } from "#api/get.ts";
+import { addNewReportByCity, deleteReportByCityDate } from "#api/post.ts";
 
 async function addReport() {
   const city = process.env.CITY || "samara";
-
-  await dbConnect();
 
   const lastPriceList = await getLastPriceList(city);
 
@@ -28,15 +23,10 @@ async function addReport() {
     }))
   );
 
-  await removeReportByCityDate({ city, dateAdded: lastPriceList.createdAt });
+  await deleteReportByCityDate({ city, dateAdded: lastPriceList.createdAt });
 
   const report = await generateAnalysisReport(JSON.stringify(priceListData));
   await addNewReportByCity({ city, report, dateAdded: lastPriceList.createdAt });
-
-  const key = `analytics-reports:all:${String(city)}-${priceListData.createdAt}`;
-  await redis.del(key);
-
-  await dbDisconnect();
 }
 
 getPerformance(addReport).then(() => {

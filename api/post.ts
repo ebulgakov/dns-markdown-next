@@ -25,3 +25,18 @@ export const savePriceList = async (
 ): Promise<{ priceList: PriceList }> => {
   return await wrapApiCall("/service/add-new-price-list", { city, positions });
 };
+
+export const deleteReportByCityDate = async (params: {
+  city: string;
+  dateAdded: string;
+}): Promise<{ success: boolean }> => {
+  return await wrapApiCall("/service/delete-analysis-report-by-city-date", params);
+};
+
+export const addNewReportByCity = async (params: {
+  city: string;
+  report: string;
+  dateAdded: string;
+}): Promise<null> => {
+  return await wrapApiCall("/service/add-analysis-report", params);
+};
