@@ -1,13 +1,10 @@
-import type { Goods } from "./pricelist.ts";
-
-export type FavoriteUpdate = "availability" | "price";
+import type { Goods } from "./pricelist";
 
 export type FavoriteStatus = {
   city: string;
   updatedAt: string;
   createdAt: string;
   deleted: boolean;
-  updates?: FavoriteUpdate[];
 };
 
 export type UserSections = string[];
@@ -19,7 +16,7 @@ export type UserNotifications = {
 };
 
 export interface Favorite {
-  id: string;
+  _id: string;
   status: FavoriteStatus;
   item: Goods;
 }

@@ -1,7 +1,12 @@
 import * as cheerio from "cheerio";
 import { ObjectId } from "mongodb";
 import type { Goods, Position } from "#types/pricelist.ts";
-import type { PricesSet } from "#types/prices.ts";
+
+export type SourcePrice = { data: { id: string; price: { previous: number; current: number } } };
+
+export type PricesSet = {
+  states: SourcePrice[];
+};
 
 export default function createData(html: string, pricesSet: PricesSet) {
   const $ = cheerio.load(html);
@@ -38,8 +43,8 @@ export default function createData(html: string, pricesSet: PricesSet) {
       const $$title = $$product.find(".catalog-product__name").first();
       const titleWithDescriptionString = $$title.find("span").html();
       const titleWithDescription = titleWithDescriptionString?.split("<br>") || ["", ""];
-      productObj.title = titleWithDescription[0];
-      productObj.description = titleWithDescription[1];
+      productObj.title = `${titleWithDescription[0] ?? ""}`.trim();
+      productObj.description = `${titleWithDescription[1] ?? ""}`.trim();
       productObj.link = $$title.attr("href") || "";
       productObj.code = `${$$product.data("code")}`;
       productObj.image =
@@ -54,7 +59,11 @@ export default function createData(html: string, pricesSet: PricesSet) {
       $$reasons.each((_, $reason) => {
         const $$reason = $($reason);
         const [label, text] = $$reason.text().split(": ");
-        productObj.reasons.push({ _id: new ObjectId().toHexString(), label, text });
+        productObj.reasons.push({
+          _id: new ObjectId().toHexString(),
+          label: `${label}`.trim(),
+          text: `${text}`.trim()
+        });
       });
 
       // Prices

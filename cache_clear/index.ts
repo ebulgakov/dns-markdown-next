@@ -1,13 +1,10 @@
-import redis from "#cache/index.ts";
 import getPerformance from "#helpers/get_performance.ts";
+import { cleaCacheByKeys } from "#api/post.ts";
 
 async function clearCache() {
-  const keys = await redis.keys("*");
-  console.log(`Clearing ${keys.length} cache keys related to pricelist...`);
-  for (const key of keys) {
-    await redis.del(key);
-    console.log(`Deleted cache key: ${key}`);
-  }
+  const keys = process.env.KEYS || "daily:*";
+
+  await cleaCacheByKeys(keys);
 }
 
 getPerformance(clearCache).then(() => {

@@ -1,18 +1,23 @@
-import type { FavoriteUpdate, User } from "#types/user.ts";
+import type { User } from "#types/user.ts";
 import { ObjectId } from "mongodb";
-import type { AnalysisData } from "#types/analysis_data.ts";
+import type { AnalysisData } from "#types/analysis-data.ts";
+
+import type { FavoriteStatus } from "#email/updates-email.ts";
 
 export default function updateFavorites(users: User[], history: AnalysisData[]) {
-  return users.map(user => {
+  const statuses: FavoriteStatus[] = [];
+  const updatedUsers = users.map(user => {
     user.favorites = user.favorites.map(favorite => {
       const historyItem = history.find(historyItem => historyItem.link === favorite.item.link);
-
-      favorite.status.updates = [] as FavoriteUpdate[];
+      const favoriteStatus: FavoriteStatus = {
+        id: favorite._id,
+        status: []
+      };
 
       if ((!historyItem && !favorite.status.deleted) || (historyItem && favorite.status.deleted)) {
         favorite.status.deleted = !historyItem;
         favorite.status.updatedAt = `${new ObjectId().getTimestamp()}`;
-        favorite.status.updates.push("availability");
+        favoriteStatus.status.push("availability");
       }
 
       if (historyItem) {
@@ -22,7 +27,7 @@ export default function updateFavorites(users: User[], history: AnalysisData[]) 
 
         if (price !== favorite.item.price) {
           favorite.status.updatedAt = `${new ObjectId().getTimestamp()}`;
-          favorite.status.updates.push("price");
+          favoriteStatus.status.push("price");
         }
 
         favorite.item.price = price;
@@ -30,9 +35,16 @@ export default function updateFavorites(users: User[], history: AnalysisData[]) 
         favorite.item.profit = profit;
       }
 
+      statuses.push(favoriteStatus);
+
       return favorite;
     });
 
     return user;
   });
+
+  return {
+    users: updatedUsers,
+    statuses
+  };
 }

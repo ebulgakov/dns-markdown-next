@@ -21,7 +21,7 @@ configRouter.route("/").post((req, res) => {
   res.redirect("/config");
 });
 
-configRouter.route("/").get((req, res) => {
+configRouter.route("/").get((_req, res) => {
   let dns_shop_downloader, dns_shop_downloader_prices;
   try {
     dns_shop_downloader = readFileSync(join(path, "dns_shop_downloader.sh"));

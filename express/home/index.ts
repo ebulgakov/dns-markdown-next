@@ -1,8 +1,8 @@
-import { RequestHandler } from "express";
+import type { RequestHandler } from "express";
 import { resolve } from "node:path";
 import { readFileSync } from "node:fs";
 
-export const home: RequestHandler = (req, res) => {
+export const home: RequestHandler = (_req, res) => {
   let request;
   try {
     request = readFileSync(resolve("request.sh"));
