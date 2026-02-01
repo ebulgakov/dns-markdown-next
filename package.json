@@ -25,8 +25,9 @@
     "add:analysis-diff:full": "WRITE_STRATEGY=replace bun ./add_analysis_diff",
     "add:analysis-diff": "WRITE_STRATEGY=insert bun ./add_analysis_diff",
     "check:favorites": "bun ./check_favorites",
-    "cache:clear": "bun ./cache_clear",
-    "parse": "bun run downloader && bun run add:list && bun run add:analysis-data && bun run add:analysis-diff && bun run check:favorites && bun run cache:clear",
+    "cache:clear": "KEYS=daily:* bun ./cache_clear",
+    "cache:clear:all": "KEYS=* bun ./cache_clear",
+    "parse": "bun run downloader && bun run add:list && bun run add:analysis-data && bun run add:analysis-diff && bun run check:favorites && bun run cache:clear:all",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "dependencies": {
