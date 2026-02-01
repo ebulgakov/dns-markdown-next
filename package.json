@@ -30,14 +30,12 @@
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "dependencies": {
-    "@upstash/redis": "^1.36.1",
+    "axios": "^1.13.4",
     "body-parser": "^2.2.1",
     "cheerio": "^1.1.2",
     "dotenv": "^17.2.3",
     "ejs": "^3.1.10",
     "express": "^5.2.1",
-    "mongodb": "^7.0.0",
-    "mongoose": "^9.1.1",
     "openai": "^6.16.0",
     "resend": "^6.9.1"
   },
