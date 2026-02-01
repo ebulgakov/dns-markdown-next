@@ -36,7 +36,6 @@ export const InFavorites: Story = {
         item: mockGoodsList[1],
         id: "",
         status: {
-          city: "",
           updatedAt: "",
           createdAt: "",
           deleted: false
