@@ -7,6 +7,7 @@ import {
   getLastPriceList,
   getAllNotificationUsers
 } from "#api/get.ts";
+import { updateUsersFavorites } from "#api/post.ts";
 
 async function checkFavorites() {
   const city = process.env.CITY || "samara";
@@ -19,7 +20,7 @@ async function checkFavorites() {
 
   const updatedUsers = updateFavorites(users, goods);
   const sentNotificationUsers = await sendUpdatesEmail(updatedUsers);
-  //await updateUsers(sentNotificationUsers);
+  await updateUsersFavorites(sentNotificationUsers);
 }
 
 getPerformance(checkFavorites).then(() => {

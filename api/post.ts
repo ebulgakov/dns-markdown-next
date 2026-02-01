@@ -2,6 +2,7 @@ import axios from "axios";
 import { Position, PriceList } from "#types/pricelist.ts";
 import { AnalysisData } from "#types/analysis-data.ts";
 import { AnalysisDiff } from "#types/analysis-diff.js";
+import { User } from "#types/user.js";
 
 const API_BASE_URL = process.env.API_URL!;
 
@@ -65,6 +66,10 @@ export const addManyAnalysisData = async (params: {
 
 export const addManyAnalysisDiff = async (diff: AnalysisDiff[]): Promise<null> => {
   return await wrapApiCall("/service/insert-analysis-diff", { diff });
+};
+
+export const updateUsersFavorites = async (users: User[]): Promise<null> => {
+  return await wrapApiCall("/service/update-users-favorites", { users });
 };
 
 export const deleteAnalysisDiffAll = async (city: string): Promise<null> => {
