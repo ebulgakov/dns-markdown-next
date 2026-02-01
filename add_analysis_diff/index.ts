@@ -1,5 +1,4 @@
 import getPerformance from "#helpers/get_performance.ts";
-import type { PriceList } from "#types/pricelist.ts";
 import makeDiff from "#add_analysis_diff/helpers/make_diff.ts";
 import { getAllPriceLists, getAnalysisGoodsByDateAdded } from "#api/get.ts";
 import { deleteAnalysisDiffAll, deleteAnalysisDiffByDate, addManyAnalysisDiff } from "#api/post.ts";
@@ -9,24 +8,29 @@ async function addAnalysisDiff() {
   const writeStrategy = process.env.WRITE_STRATEGY || "insert";
   const city = process.env.CITY || "samara";
 
-  const priceListsCollections = await getAllPriceLists(city);
+  const options: {
+    city: string;
+    limit?: number;
+  } = {
+    city,
+    ...(writeStrategy === "insert" ? { limit: 2 } : {})
+  };
 
-  let usedPriceLists: PriceList[] = [];
+  const priceListsCollections = await getAllPriceLists(options);
 
   if (writeStrategy === "replace") {
-    usedPriceLists = priceListsCollections;
     await deleteAnalysisDiffAll(city);
   } else {
-    usedPriceLists = priceListsCollections.slice(0, 2);
-    if (usedPriceLists[0]) {
-      await deleteAnalysisDiffByDate({ date: usedPriceLists[0].createdAt, city });
+    // Avoid duplication if I run this task many times
+    if (priceListsCollections[0]) {
+      await deleteAnalysisDiffByDate({ date: priceListsCollections[0].createdAt, city });
     }
   }
 
   const diffs = [];
-  for (let i = 1; i < usedPriceLists.length; i++) {
-    const previousDateGoods = usedPriceLists[i];
-    const currentDateGoods = usedPriceLists[i - 1];
+  for (let i = 1; i < priceListsCollections.length; i++) {
+    const previousDateGoods = priceListsCollections[i];
+    const currentDateGoods = priceListsCollections[i - 1];
 
     if (previousDateGoods && currentDateGoods) {
       const prev = await getAnalysisGoodsByDateAdded({ date: previousDateGoods.createdAt, city });

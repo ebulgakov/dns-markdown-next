@@ -22,8 +22,14 @@ export const getLastPriceList = async (city: string): Promise<PriceList> => {
   return await wrapApiCall("/api/pricelist", { params: { city } });
 };
 
-export const getAllPriceLists = async (city: string): Promise<PriceList[]> => {
-  return await wrapApiCall("/service/all-price-lists", { params: { city } });
+export const getAllPriceLists = async ({
+  city,
+  limit
+}: {
+  city: string;
+  limit?: number;
+}): Promise<PriceList[]> => {
+  return await wrapApiCall("/service/all-price-lists", { params: { city, limit } });
 };
 
 export const getAllNotificationUsers = async (city: string): Promise<User[]> => {

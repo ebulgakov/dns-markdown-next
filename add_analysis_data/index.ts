@@ -7,7 +7,7 @@ async function addAnalysisData() {
   const writeStrategy = process.env.WRITE_STRATEGY || "insert";
   const city = process.env.CITY || "samara";
 
-  const priceListsCollections = await getAllPriceLists(city);
+  const priceListsCollections = await getAllPriceLists({ city });
 
   let usedPriceLists = [];
 
