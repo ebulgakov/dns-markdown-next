@@ -34,8 +34,7 @@ function addTitle(title: string, link: string) {
 async function sendUpdatesEmail(users: User[]) {
   const emails = [];
   for (const user of users) {
-    const { email, notifications, favorites } = user;
-    if (!email || !notifications.updates.enabled) continue;
+    const { email, favorites } = user;
 
     let body = "Здравствуйте!\n\n У нас есть для вас обновления по вашим избранным товарам.\n\n";
     let count = 0;
