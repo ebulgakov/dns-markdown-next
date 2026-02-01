@@ -27,9 +27,6 @@ export default async function AnalysisPage() {
     startFrom = data.startFrom;
     currentCountGoods = goodsCountByDates[goodsCountByDates.length - 1].count;
     reports = data.reports;
-
-    // Hide the first entry as it represents the initial state with new goods only
-    data.goodsChangesByDates.shift();
     goodsChangesByDates = data.goodsChangesByDates;
   } catch (e) {
     const { message } = e as Error;
@@ -59,14 +56,14 @@ export default async function AnalysisPage() {
           В текущем прайс-листе доступно товаров: <b>{currentCountGoods}</b>
         </p>
 
-        <Title variant="h2">Отчёт по каталогу</Title>
-        <AnalyticsReports reports={reports} />
-
         <Title variant="h2">Динамика количества товаров</Title>
         <AnalyticsGoodsCountChart chartData={goodsCountByDates} />
 
         <Title variant="h2">Динамика изменения состояния в каталоге</Title>
         <AnalyticsGoodsChangesChart chartData={goodsChangesByDates} />
+
+        <Title variant="h2">Отчёт по каталогу</Title>
+        <AnalyticsReports reports={reports} />
       </div>
     </div>
   );
