@@ -1,5 +1,5 @@
 import type { PriceList } from "#types/pricelist.ts";
-import type { AnalysisData } from "#types/analysis_data.ts";
+import type { AnalysisData } from "#types/analysis-data.ts";
 import { ObjectId } from "mongodb";
 
 export default function generateGoodsCollection(

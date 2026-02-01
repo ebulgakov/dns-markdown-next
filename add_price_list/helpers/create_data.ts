@@ -1,7 +1,12 @@
 import * as cheerio from "cheerio";
 import { ObjectId } from "mongodb";
 import type { Goods, Position } from "#types/pricelist.ts";
-import type { PricesSet } from "#types/prices.ts";
+
+export type SourcePrice = { data: { id: string; price: { previous: number; current: number } } };
+
+export type PricesSet = {
+  states: SourcePrice[];
+};
 
 export default function createData(html: string, pricesSet: PricesSet) {
   const $ = cheerio.load(html);
