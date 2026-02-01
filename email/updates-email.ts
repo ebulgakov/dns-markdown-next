@@ -1,25 +1,27 @@
 import resend from "#email/index.ts";
-import { FavoriteStatus, User } from "#types/user.ts";
+import type { Favorite, User } from "#types/user.ts";
 
-type Goods = {
-  priceChanges: [];
-  deletedGoods: [];
+export type FavoriteUpdatesStatus = "availability" | "price";
+
+export type FavoriteStatus = {
+  id: string;
+  status: FavoriteUpdatesStatus[];
 };
 
-function addStatusInfo(status: FavoriteStatus, link: string) {
-  if (!status || !status.updates) return "";
+function addStatusInfo(statuses: FavoriteUpdatesStatus[], favorite: Favorite) {
+  if (!statuses) return "";
 
-  return status.updates
+  return statuses
     .map(update => {
       let myStr = "";
       if (update === "price") {
-        myStr += `<p><b>Статус: <a href="https://dns.ebulgakov.com${link}">Изменилась цена товара</a></b></p>`;
+        myStr += `<p><b>Статус: <a href="https://dns.ebulgakov.com${favorite.item.link}">Изменилась цена товара</a></b></p>`;
       }
       if (update === "availability") {
-        if (status.deleted) {
-          myStr += `<p><b>Статус: <a href="https://dns.ebulgakov.com${link}">Товар был удалён</a></b></p>`;
+        if (favorite.status.deleted) {
+          myStr += `<p><b>Статус: <a href="https://dns.ebulgakov.com${favorite.item.link}">Товар был удалён</a></b></p>`;
         } else {
-          myStr += `<p><b>Статус: <a href="https://dns.ebulgakov.com${link}">Товар появился на складе</a></b></p>`;
+          myStr += `<p><b>Статус: <a href="https://dns.ebulgakov.com${favorite.item.link}">Товар появился на складе</a></b></p>`;
         }
       }
       return myStr;
@@ -31,7 +33,7 @@ function addTitle(title: string, link: string) {
   return `<h2><a href="https://www.dns-shop.ru${link}">${title}</a></h2>`;
 }
 
-async function sendUpdatesEmail(users: User[]) {
+async function sendUpdatesEmail(users: User[], statuses: FavoriteStatus[]) {
   const emails = [];
   for (const user of users) {
     const { email, favorites } = user;
@@ -39,10 +41,12 @@ async function sendUpdatesEmail(users: User[]) {
     let body = "Здравствуйте!\n\n У нас есть для вас обновления по вашим избранным товарам.\n\n";
     let count = 0;
     favorites.forEach(favorite => {
-      if (favorite.status.updates?.length === 0) return;
-      body += `${addTitle(favorite.item.title, favorite.item.link)} произошли следующие изменения: ${addStatusInfo(favorite.status, favorite.item.link)}`;
+      const favoriteStatus = statuses.find(status => status.id === favorite._id);
+      if (!favoriteStatus || favoriteStatus.status.length === 0) return;
 
-      if (favorite.status?.updates?.includes("price")) {
+      body += `${addTitle(favorite.item.title, favorite.item.link)} произошли следующие изменения: ${addStatusInfo(favoriteStatus.status, favorite)}`;
+
+      if (favoriteStatus.status.includes("price")) {
         body += `<p>Текущая цена: ${favorite.item.price} руб.</p>`;
         if (favorite.item.priceOld) {
           body += `<p>Старая цена: ${favorite.item.priceOld} руб.</p>`;
@@ -53,8 +57,6 @@ async function sendUpdatesEmail(users: User[]) {
       }
 
       body += "\n-----------------------\n";
-
-      delete favorite.status.updates; // Clear updates after sending email
 
       count += 1;
     });

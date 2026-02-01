@@ -18,7 +18,7 @@ export type UserNotifications = {
 };
 
 export interface Favorite {
-  id: string;
+  _id: string;
   status: FavoriteStatus;
   item: Goods;
 }

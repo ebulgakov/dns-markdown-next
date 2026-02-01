@@ -18,9 +18,11 @@ async function checkFavorites() {
   const goods = await getAnalysisGoodsByDateAdded({ date: lastPriceList.createdAt, city });
   const users = await getAllNotificationUsers(city);
 
-  const updatedUsers = updateFavorites(users, goods);
-  const sentNotificationUsers = await sendUpdatesEmail(updatedUsers);
-  await updateUsersFavorites(sentNotificationUsers);
+  const { users: updatedUsers, statuses } = updateFavorites(users, goods);
+
+  console.log("statuses", statuses);
+  await sendUpdatesEmail(updatedUsers, statuses);
+  await updateUsersFavorites(updatedUsers);
 }
 
 getPerformance(checkFavorites).then(() => {
