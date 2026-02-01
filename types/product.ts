@@ -1,6 +1,6 @@
-import type { AnalysisData } from "./analysis-data.ts";
-import type { DiffHistory } from "./analysis-diff.ts";
-import type { FavoriteStatus } from "./user.ts";
+import type { AnalysisData } from "./analysis-data";
+import type { DiffHistory } from "./analysis-diff";
+import type { FavoriteStatus } from "./user";
 
 export type ProductPayload = {
   item: AnalysisData;

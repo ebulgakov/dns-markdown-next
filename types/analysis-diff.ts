@@ -1,12 +1,10 @@
-import type { AnalysisData } from "./analysis-data.ts";
+import type { AnalysisData } from "./analysis-data.js";
 
 export type Diff = {
   priceOld: string;
   price: string;
   profit: string;
 };
-
-export type DiffsCollection = { [key: string]: Diff };
 
 export type DiffDetail = {
   item: AnalysisData;

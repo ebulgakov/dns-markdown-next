@@ -1,7 +1,7 @@
 import axios from "axios";
-import { PriceList } from "#types/pricelist.ts";
-import { AnalysisData } from "#types/analysis-data.ts";
-import { User } from "#types/user.ts";
+import type { PriceList } from "#types/pricelist.ts";
+import type { AnalysisData } from "#types/analysis-data.ts";
+import type { User } from "#types/user.ts";
 
 const API_BASE_URL = process.env.API_URL!;
 

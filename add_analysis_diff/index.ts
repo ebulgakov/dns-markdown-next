@@ -3,7 +3,7 @@ import type { PriceList } from "#types/pricelist.ts";
 import makeDiff from "#add_analysis_diff/helpers/make_diff.ts";
 import { getAllPriceLists, getAnalysisGoodsByDateAdded } from "#api/get.ts";
 import { deleteAnalysisDiffAll, deleteAnalysisDiffByDate, addManyAnalysisDiff } from "#api/post.ts";
-import { AnalysisData } from "#types/analysis-data.ts";
+import type { AnalysisData } from "#types/analysis-data.ts";
 
 async function addAnalysisDiff() {
   const writeStrategy = process.env.WRITE_STRATEGY || "insert";
@@ -17,8 +17,9 @@ async function addAnalysisDiff() {
     usedPriceLists = priceListsCollections;
     await deleteAnalysisDiffAll(city);
   } else {
-    usedPriceLists = [priceListsCollections[0], priceListsCollections[1]];
-    await deleteAnalysisDiffByDate({ date: priceListsCollections[1].createdAt, city });
+    usedPriceLists = priceListsCollections.slice(0, 2);
+    if (usedPriceLists[1])
+      await deleteAnalysisDiffByDate({ date: usedPriceLists[1].createdAt, city });
   }
 
   const diffs = [];
@@ -26,18 +27,22 @@ async function addAnalysisDiff() {
     const previousDateGoods = usedPriceLists[i];
     const currentDateGoods = usedPriceLists[i - 1];
 
-    const prev = await getAnalysisGoodsByDateAdded({ date: previousDateGoods.createdAt, city });
-    const current = await getAnalysisGoodsByDateAdded({ date: currentDateGoods.createdAt, city });
+    if (previousDateGoods && currentDateGoods) {
+      const prev = await getAnalysisGoodsByDateAdded({ date: previousDateGoods.createdAt, city });
+      const current = await getAnalysisGoodsByDateAdded({ date: currentDateGoods.createdAt, city });
 
-    diffs.push(makeDiff(current, prev, { city, dateAdded: currentDateGoods.createdAt }));
+      diffs.push(makeDiff(current, prev, { city, dateAdded: currentDateGoods.createdAt }));
+    }
   }
 
   // Add diff for the very first price list against an empty previous state
   if (writeStrategy === "replace") {
     const currentDateGoods = priceListsCollections[priceListsCollections.length - 1];
-    const current = await getAnalysisGoodsByDateAdded({ date: currentDateGoods.createdAt, city });
-    const prev: AnalysisData[] = [];
-    diffs.push(makeDiff(current, prev, { city, dateAdded: currentDateGoods.createdAt }));
+    if (currentDateGoods) {
+      const current = await getAnalysisGoodsByDateAdded({ date: currentDateGoods.createdAt, city });
+      const prev: AnalysisData[] = [];
+      diffs.push(makeDiff(current, prev, { city, dateAdded: currentDateGoods.createdAt }));
+    }
   }
 
   await addManyAnalysisDiff(diffs);

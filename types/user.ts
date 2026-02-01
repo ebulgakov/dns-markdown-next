@@ -1,4 +1,4 @@
-import type { Goods } from "./pricelist.ts";
+import type { Goods } from "./pricelist";
 
 export type FavoriteStatus = {
   city: string;
@@ -6,8 +6,6 @@ export type FavoriteStatus = {
   createdAt: string;
   deleted: boolean;
 };
-
-export type AvailableUpdateSectionNames = "hiddenSections" | "favoriteSections" | "notifications";
 
 export type UserSections = string[];
 

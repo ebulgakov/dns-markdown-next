@@ -15,8 +15,9 @@ async function addAnalysisData() {
     usedPriceLists = priceListsCollections;
     await deleteAllAnalysisData(city);
   } else {
-    usedPriceLists = [priceListsCollections[0]];
-    await deleteAnalysisByDateData({ date: priceListsCollections[0].createdAt, city });
+    usedPriceLists = priceListsCollections.slice(0, 1);
+    if (usedPriceLists[0])
+      await deleteAnalysisByDateData({ date: usedPriceLists[0].createdAt, city });
   }
 
   const data = generateGoodsCollection(usedPriceLists, city);

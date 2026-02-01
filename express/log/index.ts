@@ -55,7 +55,7 @@ logRequest.route("/").post((req, res) => {
   res.redirect("/log");
 });
 
-logRequest.route("/stop").get((req, res) => {
+logRequest.route("/stop").get((_req, res) => {
   const file = resolve("parselog.txt");
 
   if (global.npmProcess && global.npmProcess.pid) {
@@ -72,7 +72,7 @@ logRequest.route("/stop").get((req, res) => {
   res.redirect("/log");
 });
 
-logRequest.route("/").get((req, res) => {
+logRequest.route("/").get((_req, res) => {
   const file = resolve("parselog.txt");
   let log = "No logs available.";
   if (existsSync(file)) {
