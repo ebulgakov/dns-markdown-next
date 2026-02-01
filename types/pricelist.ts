@@ -1,5 +1,3 @@
-import Goods from "#db/models/goods_schema.ts";
-
 type Reason = {
   _id: string;
   label: string;
@@ -41,3 +39,10 @@ export interface PriceList {
   positions: Position[];
   createdAt: string;
 }
+
+export type PriceListDate = {
+  _id: string;
+  createdAt: string;
+};
+
+export type PriceListsArchiveCount = { date: string; count: number };
