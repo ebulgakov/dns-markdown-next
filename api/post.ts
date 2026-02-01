@@ -1,6 +1,6 @@
 "use server";
 
-import { currentUser } from "@clerk/nextjs/server";
+import { auth } from "@clerk/nextjs/server";
 import axios from "axios";
 
 import type { Goods } from "@/types/pricelist";
@@ -22,8 +22,13 @@ export type UserNotificationsResponse = {
 
 const wrapApiCall = async (endpoint: string, data = {}) => {
   try {
+    const { getToken } = await auth();
+    const sessionToken = await getToken();
+
+    if (!sessionToken) throw new Error("User session token not found");
+
     const response = await axios.post(`${API_BASE_URL}${endpoint}`, data, {
-      headers: { Authorization: `Bearer ${process.env.API_AUTH_SECRET}` }
+      headers: { Authorization: `Bearer ${sessionToken}` }
     });
     return response.data;
   } catch (error) {
@@ -35,67 +40,39 @@ const wrapApiCall = async (endpoint: string, data = {}) => {
 export const postUpdateUserNotifications = async (
   notifications: UserNotifications
 ): Promise<UserNotificationsResponse> => {
-  const clerkUser = await currentUser();
-
-  if (!clerkUser) throw new Error("User not authenticated");
-  return await wrapApiCall("/api/user/notifications/update", {
-    userId: clerkUser.id,
-    notifications
-  });
+  return await wrapApiCall("/user-actions/notifications-update", { notifications });
 };
 
 export const postToggleFavoriteShownBought = async (
   shownBoughtFavorites: boolean
 ): Promise<{ message: string; showBoughtFavorites: boolean }> => {
-  const clerkUser = await currentUser();
-
-  if (!clerkUser) throw new Error("User not authenticated");
-  return await wrapApiCall("/api/user/toggle-shown-bought-favorites", {
-    userId: clerkUser.id,
+  return await wrapApiCall("/user-actions/toggle-shown-bought-favorites", {
     status: shownBoughtFavorites
   });
 };
 
 // User Favorites API
 export const postAddToFavorites = async (product: Goods): Promise<FavoritesResponse> => {
-  const clerkUser = await currentUser();
-
-  if (!clerkUser) throw new Error("User not authenticated");
-  return await wrapApiCall("/api/user/favorites/add", { product, userId: clerkUser.id });
+  return await wrapApiCall("/user-actions/favorite-add", { product });
 };
 
 export const postRemoveFromFavorites = async (link: string): Promise<FavoritesResponse> => {
-  const clerkUser = await currentUser();
-
-  if (!clerkUser) throw new Error("User not authenticated");
-  return await wrapApiCall("/api/user/favorites/remove", { link, userId: clerkUser.id });
+  return await wrapApiCall("/user-actions/favorite-remove", { link });
 };
 
 // User Sections API
 export const postAddToHiddenSections = async (title: string): Promise<SectionsResponse> => {
-  const clerkUser = await currentUser();
-
-  if (!clerkUser) throw new Error("User not authenticated");
-  return await wrapApiCall("/api/user/sections/hidden-add", { title, userId: clerkUser.id });
+  return await wrapApiCall("/user-actions/hidden-section-add", { title });
 };
 
 export const postRemoveFromHiddenSections = async (title: string): Promise<SectionsResponse> => {
-  const clerkUser = await currentUser();
-
-  if (!clerkUser) throw new Error("User not authenticated");
-  return await wrapApiCall("/api/user/sections/hidden-remove", { title, userId: clerkUser.id });
+  return await wrapApiCall("/user-actions/hidden-section-remove", { title });
 };
 
 export const postAddToFavoriteSections = async (title: string): Promise<SectionsResponse> => {
-  const clerkUser = await currentUser();
-
-  if (!clerkUser) throw new Error("User not authenticated");
-  return await wrapApiCall("/api/user/sections/favorite-add", { title, userId: clerkUser.id });
+  return await wrapApiCall("/user-actions/favorite-section-add", { title });
 };
 
 export const postRemoveFromFavoriteSection = async (title: string): Promise<SectionsResponse> => {
-  const clerkUser = await currentUser();
-
-  if (!clerkUser) throw new Error("User not authenticated");
-  return await wrapApiCall("/api/user/sections/favorite-remove", { title, userId: clerkUser.id });
+  return await wrapApiCall("/user-actions/favorite-section-remove", { title });
 };
