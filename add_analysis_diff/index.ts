@@ -1,19 +1,12 @@
 import getPerformance from "#helpers/get_performance.ts";
-import { dbConnect, dbDisconnect } from "#db/database.ts";
-import { getAllPriceLists } from "#db/pricelist/queries/get_all_price_lists.ts";
 import type { PriceList } from "#types/pricelist.ts";
 import makeDiff from "#add_analysis_diff/helpers/make_diff.ts";
-import { getAnalysisGoodsByParam } from "#db/analysis_data/queries/get-analysis-goods-by-param.ts";
-import { addManyAnalysisDiff } from "#db/analysis_diff/mutations/add_many_analysis_diff.ts";
-import { removeAllAnalysisDiff } from "#db/analysis_diff/mutations/remove_all_analysis_diff.ts";
-import { removeAnalysisByDateDiff } from "#db/analysis_diff/mutations/remove_analysis_by_date_diff.ts";
-import type { AnalysisData } from "#types/analysis_data.ts";
+import { getAllPriceLists } from "#api/get.js";
+import { deleteAnalysisDiffAll, deleteAnalysisDiffByDate } from "#api/post.js";
 
 async function addAnalysisDiff() {
   const writeStrategy = process.env.WRITE_STRATEGY || "insert";
   const city = process.env.CITY || "samara";
-
-  await dbConnect();
 
   const priceListsCollections = await getAllPriceLists(city);
 
@@ -21,10 +14,10 @@ async function addAnalysisDiff() {
 
   if (writeStrategy === "replace") {
     usedPriceLists = priceListsCollections;
-    await removeAllAnalysisDiff(city);
+    await deleteAnalysisDiffAll(city);
   } else {
     usedPriceLists = [priceListsCollections[0], priceListsCollections[1]];
-    await removeAnalysisByDateDiff(priceListsCollections[1].createdAt, city);
+    await deleteAnalysisDiffByDate({ date: priceListsCollections[1].createdAt, city });
   }
 
   const diffs = [];
@@ -59,8 +52,6 @@ async function addAnalysisDiff() {
   }
 
   await addManyAnalysisDiff(diffs);
-
-  await dbDisconnect();
 }
 
 getPerformance(addAnalysisDiff).then(() => {

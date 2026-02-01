@@ -61,3 +61,17 @@ export const addManyAnalysisData = async (params: {
 }): Promise<null> => {
   return await wrapApiCall("/service/insert-analysis-data", params);
 };
+
+export const deleteAnalysisDiffAll = async (city: string): Promise<null> => {
+  return await wrapApiCall("/service/delete-analysis-diff", { city });
+};
+
+export const deleteAnalysisDiffByDate = async ({
+  city,
+  date
+}: {
+  city: string;
+  date: string;
+}): Promise<null> => {
+  return await wrapApiCall("/service/delete-analysis-diff-by-date", { city, date });
+};
