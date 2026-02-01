@@ -18,8 +18,9 @@ async function addAnalysisDiff() {
     await deleteAnalysisDiffAll(city);
   } else {
     usedPriceLists = priceListsCollections.slice(0, 2);
-    if (usedPriceLists[1])
-      await deleteAnalysisDiffByDate({ date: usedPriceLists[1].createdAt, city });
+    if (usedPriceLists[0]) {
+      await deleteAnalysisDiffByDate({ date: usedPriceLists[0].createdAt, city });
+    }
   }
 
   const diffs = [];
