@@ -55,7 +55,7 @@ export const deleteAnalysisByDateData = async ({
   city: string;
   date: string;
 }): Promise<null> => {
-  return await wrapApiCall("/service/delete-analysis-data-by-date", { city, date });
+  return await wrapApiCall("/service/delete-analysis-data-by-date", { city, dateAdded: date });
 };
 
 export const addManyAnalysisData = async (params: {

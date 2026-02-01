@@ -19,8 +19,6 @@ async function checkFavorites() {
   const users = await getAllNotificationUsers(city);
 
   const { users: updatedUsers, statuses } = updateFavorites(users, goods);
-
-  console.log("statuses", statuses);
   await sendUpdatesEmail(updatedUsers, statuses);
   await updateUsersFavorites(updatedUsers);
 }
