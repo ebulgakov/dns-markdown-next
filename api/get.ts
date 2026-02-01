@@ -1,3 +1,4 @@
+import "dotenv/config";
 import axios from "axios";
 import type { PriceList } from "#types/pricelist.ts";
 import type { AnalysisData } from "#types/analysis-data.ts";
