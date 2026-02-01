@@ -19,3 +19,7 @@ const wrapApiCall = async (endpoint: string, options = {}) => {
 export const getLastPriceList = async (city: string): Promise<PriceList> => {
   return await wrapApiCall("/api/pricelist", { params: { city } });
 };
+
+export const getAllPriceLists = async (city: string): Promise<PriceList[]> => {
+  return await wrapApiCall("/service/all-price-lists", { params: { city } });
+};

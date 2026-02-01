@@ -1,5 +1,6 @@
 import axios from "axios";
 import { Position, PriceList } from "#types/pricelist.ts";
+import { AnalysisData } from "#types/analysis-data.ts";
 
 const API_BASE_URL = process.env.API_URL!;
 
@@ -39,4 +40,24 @@ export const addNewReportByCity = async (params: {
   dateAdded: string;
 }): Promise<null> => {
   return await wrapApiCall("/service/add-analysis-report", params);
+};
+
+export const deleteAllAnalysisData = async (city: string): Promise<null> => {
+  return await wrapApiCall("/service/delete-analysis-data", { city });
+};
+
+export const deleteAnalysisByDateData = async ({
+  city,
+  date
+}: {
+  city: string;
+  date: string;
+}): Promise<null> => {
+  return await wrapApiCall("/service/delete-analysis-data-by-date", { city, date });
+};
+
+export const addManyAnalysisData = async (params: {
+  analysisData: AnalysisData[];
+}): Promise<null> => {
+  return await wrapApiCall("/service/insert-analysis-data", params);
 };
