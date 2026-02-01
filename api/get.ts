@@ -1,5 +1,6 @@
 import axios from "axios";
 import { PriceList } from "#types/pricelist.ts";
+import { AnalysisData } from "#types/analysis-data.js";
 
 const API_BASE_URL = process.env.API_URL!;
 
@@ -22,4 +23,19 @@ export const getLastPriceList = async (city: string): Promise<PriceList> => {
 
 export const getAllPriceLists = async (city: string): Promise<PriceList[]> => {
   return await wrapApiCall("/service/all-price-lists", { params: { city } });
+};
+
+export const getAnalysisGoodsByDateAdded = async ({
+  city,
+  date
+}: {
+  city: string;
+  date: string;
+}): Promise<AnalysisData[]> => {
+  return await wrapApiCall("/api/analysis/all-analysis-goods-by-date-added", {
+    params: {
+      city,
+      dateAdded: date
+    }
+  });
 };

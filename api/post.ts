@@ -1,6 +1,7 @@
 import axios from "axios";
 import { Position, PriceList } from "#types/pricelist.ts";
 import { AnalysisData } from "#types/analysis-data.ts";
+import { AnalysisDiff } from "#types/analysis-diff.js";
 
 const API_BASE_URL = process.env.API_URL!;
 
@@ -62,6 +63,10 @@ export const addManyAnalysisData = async (params: {
   return await wrapApiCall("/service/insert-analysis-data", params);
 };
 
+export const addManyAnalysisDiff = async (diff: AnalysisDiff[]): Promise<null> => {
+  return await wrapApiCall("/service/insert-analysis-diff", { diff });
+};
+
 export const deleteAnalysisDiffAll = async (city: string): Promise<null> => {
   return await wrapApiCall("/service/delete-analysis-diff", { city });
 };
@@ -73,5 +78,5 @@ export const deleteAnalysisDiffByDate = async ({
   city: string;
   date: string;
 }): Promise<null> => {
-  return await wrapApiCall("/service/delete-analysis-diff-by-date", { city, date });
+  return await wrapApiCall("/service/delete-analysis-diff-by-date", { city, dateAdded: date });
 };

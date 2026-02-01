@@ -1,8 +1,9 @@
 import getPerformance from "#helpers/get_performance.ts";
 import type { PriceList } from "#types/pricelist.ts";
 import makeDiff from "#add_analysis_diff/helpers/make_diff.ts";
-import { getAllPriceLists } from "#api/get.js";
-import { deleteAnalysisDiffAll, deleteAnalysisDiffByDate } from "#api/post.js";
+import { getAllPriceLists, getAnalysisGoodsByDateAdded } from "#api/get.ts";
+import { deleteAnalysisDiffAll, deleteAnalysisDiffByDate, addManyAnalysisDiff } from "#api/post.ts";
+import { AnalysisData } from "#types/analysis-data.ts";
 
 async function addAnalysisDiff() {
   const writeStrategy = process.env.WRITE_STRATEGY || "insert";
@@ -25,16 +26,8 @@ async function addAnalysisDiff() {
     const previousDateGoods = usedPriceLists[i];
     const currentDateGoods = usedPriceLists[i - 1];
 
-    const prev = await getAnalysisGoodsByParam({
-      param: "dateAdded",
-      value: previousDateGoods.createdAt,
-      city
-    });
-    const current = await getAnalysisGoodsByParam({
-      param: "dateAdded",
-      value: currentDateGoods.createdAt,
-      city
-    });
+    const prev = await getAnalysisGoodsByDateAdded({ date: previousDateGoods.createdAt, city });
+    const current = await getAnalysisGoodsByDateAdded({ date: currentDateGoods.createdAt, city });
 
     diffs.push(makeDiff(current, prev, { city, dateAdded: currentDateGoods.createdAt }));
   }
@@ -42,11 +35,7 @@ async function addAnalysisDiff() {
   // Add diff for the very first price list against an empty previous state
   if (writeStrategy === "replace") {
     const currentDateGoods = priceListsCollections[priceListsCollections.length - 1];
-    const current = await getAnalysisGoodsByParam({
-      param: "dateAdded",
-      value: currentDateGoods.createdAt,
-      city
-    });
+    const current = await getAnalysisGoodsByDateAdded({ date: currentDateGoods.createdAt, city });
     const prev: AnalysisData[] = [];
     diffs.push(makeDiff(current, prev, { city, dateAdded: currentDateGoods.createdAt }));
   }
