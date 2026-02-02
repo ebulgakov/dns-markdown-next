@@ -1,7 +1,8 @@
 import { auth } from "@clerk/nextjs/server";
 import { getTranslations } from "next-intl/server";
 
-import { getUser, getPriceListCity, getLastDiffByCity } from "@/api/get";
+import { getPriceListCity, getLastDiffByCity } from "@/api/get";
+import { getUser } from "@/api/post";
 import { Alert, AlertDescription, AlertTitle } from "@/app/components/ui/alert";
 import { Updates } from "@/app/components/updates";
 
@@ -83,6 +84,8 @@ export default async function UpdatesPage() {
 
   try {
     const user = await getUser();
+    if (!user) throw new Error("User not found");
+
     userFavoritesGoods = user.favorites;
   } catch {
     userFavoritesGoods = [];

@@ -1,4 +1,4 @@
-import { getUser } from "@/api/get";
+import { getUser } from "@/api/post";
 import { FavoritesPageClient, FavoritesEmpty } from "@/app/components/favorites";
 import { Alert, AlertTitle, AlertDescription } from "@/app/components/ui/alert";
 
@@ -8,6 +8,8 @@ export default async function FavoritesPage() {
 
   try {
     const user = await getUser();
+    if (!user) throw new Error("User not found");
+
     shownBoughtFavorites = user.shownBoughtFavorites;
     favorites = user.favorites.reverse();
   } catch (e) {

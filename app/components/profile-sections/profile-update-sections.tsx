@@ -18,8 +18,8 @@ type ProfileUpdateSectionsProps = {
   allSections: string[];
   buttonLabel: string;
   placeholder: string;
-  onAddSection: (title: string) => Promise<SectionsResponse>;
-  onRemoveSection: (title: string) => Promise<SectionsResponse>;
+  onAddSection: (title: string) => Promise<SectionsResponse | null>;
+  onRemoveSection: (title: string) => Promise<SectionsResponse | null>;
 };
 
 function ProfileUpdateSections({
@@ -46,6 +46,8 @@ function ProfileUpdateSections({
       setActiveSections(sections);
       try {
         const list = await onRemoveSection(section);
+        if (!list) throw new Error("No data returned from server");
+
         setRealActiveSections(list.sections);
         setErrorMessage(null);
       } catch (error) {
@@ -60,6 +62,8 @@ function ProfileUpdateSections({
       setActiveSections(sections);
       try {
         const list = await onAddSection(section);
+        if (!list) throw new Error("No data returned from server");
+
         setRealActiveSections(list.sections);
         setErrorMessage(null);
       } catch (error) {

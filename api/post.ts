@@ -4,7 +4,7 @@ import { auth } from "@clerk/nextjs/server";
 import axios from "axios";
 
 import type { Goods } from "@/types/pricelist";
-import type { Favorite, UserNotifications, UserSections } from "@/types/user";
+import type { Favorite, User, UserNotifications, UserSections } from "@/types/user";
 
 const API_BASE_URL = process.env.API_URL!;
 
@@ -25,7 +25,7 @@ const wrapApiCall = async (endpoint: string, data = {}) => {
     const { getToken } = await auth();
     const sessionToken = await getToken();
 
-    if (!sessionToken) throw new Error("User session token not found");
+    if (!sessionToken) return null;
 
     const response = await axios.post(`${API_BASE_URL}${endpoint}`, data, {
       headers: { Authorization: `Bearer ${sessionToken}` }
@@ -39,40 +39,50 @@ const wrapApiCall = async (endpoint: string, data = {}) => {
 
 export const postUpdateUserNotifications = async (
   notifications: UserNotifications
-): Promise<UserNotificationsResponse> => {
-  return await wrapApiCall("/user-actions/notifications-update", { notifications });
+): Promise<UserNotificationsResponse | null> => {
+  return await wrapApiCall("/api/user/notifications-update", { notifications });
 };
 
 export const postToggleFavoriteShownBought = async (
   shownBoughtFavorites: boolean
-): Promise<{ message: string; showBoughtFavorites: boolean }> => {
-  return await wrapApiCall("/user-actions/toggle-shown-bought-favorites", {
+): Promise<{ message: string; showBoughtFavorites: boolean } | null> => {
+  return await wrapApiCall("/api/user/toggle-shown-bought-favorites", {
     status: shownBoughtFavorites
   });
 };
 
 // User Favorites API
-export const postAddToFavorites = async (product: Goods): Promise<FavoritesResponse> => {
-  return await wrapApiCall("/user-actions/favorite-add", { product });
+export const postAddToFavorites = async (product: Goods): Promise<FavoritesResponse | null> => {
+  return await wrapApiCall("/api/user/favorite-add", { product });
 };
 
-export const postRemoveFromFavorites = async (link: string): Promise<FavoritesResponse> => {
-  return await wrapApiCall("/user-actions/favorite-remove", { link });
+export const postRemoveFromFavorites = async (link: string): Promise<FavoritesResponse | null> => {
+  return await wrapApiCall("/api/user/favorite-remove", { link });
 };
 
 // User Sections API
-export const postAddToHiddenSections = async (title: string): Promise<SectionsResponse> => {
-  return await wrapApiCall("/user-actions/hidden-section-add", { title });
+export const postAddToHiddenSections = async (title: string): Promise<SectionsResponse | null> => {
+  return await wrapApiCall("/api/user/hidden-section-add", { title });
 };
 
-export const postRemoveFromHiddenSections = async (title: string): Promise<SectionsResponse> => {
-  return await wrapApiCall("/user-actions/hidden-section-remove", { title });
+export const postRemoveFromHiddenSections = async (
+  title: string
+): Promise<SectionsResponse | null> => {
+  return await wrapApiCall("/api/user/hidden-section-remove", { title });
 };
 
-export const postAddToFavoriteSections = async (title: string): Promise<SectionsResponse> => {
-  return await wrapApiCall("/user-actions/favorite-section-add", { title });
+export const postAddToFavoriteSections = async (
+  title: string
+): Promise<SectionsResponse | null> => {
+  return await wrapApiCall("/api/user/favorite-section-add", { title });
 };
 
-export const postRemoveFromFavoriteSection = async (title: string): Promise<SectionsResponse> => {
-  return await wrapApiCall("/user-actions/favorite-section-remove", { title });
+export const postRemoveFromFavoriteSection = async (
+  title: string
+): Promise<SectionsResponse | null> => {
+  return await wrapApiCall("/api/user/favorite-section-remove", { title });
+};
+
+export const getUser = async (): Promise<User | null> => {
+  return await wrapApiCall(`/api/user`);
 };

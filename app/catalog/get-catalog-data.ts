@@ -1,4 +1,5 @@
-import { getLastPriceList, getUser, getPriceListCity } from "@/api/get";
+import { getLastPriceList, getPriceListCity } from "@/api/get";
+import { getUser } from "@/api/post";
 
 import type { Position as PositionType, PriceList as PriceListType } from "@/types/pricelist";
 import type { Favorite as FavoriteType, UserSections as UserSectionsType } from "@/types/user";
@@ -22,6 +23,7 @@ export async function getCatalogData() {
 
   try {
     const user = await getUser();
+    if (!user) throw new Error("User not found");
 
     userFavoritesGoods = user.favorites;
     hiddenSectionsTitles = user.hiddenSections;

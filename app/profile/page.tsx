@@ -1,14 +1,17 @@
-import { getLastPriceList, getUser } from "@/api/get";
+import { getLastPriceList } from "@/api/get";
+import { getUser } from "@/api/post";
 import { ProfileSections } from "@/app/components/profile-sections";
 import { Alert, AlertDescription, AlertTitle } from "@/app/components/ui/alert";
 
 export default async function ProfilePage() {
-  let profile;
+  let user;
   let allSections;
 
   try {
-    profile = await getUser();
-    const lastPriceList = await getLastPriceList(profile.city);
+    user = await getUser();
+    if (!user) throw new Error("User not found");
+
+    const lastPriceList = await getLastPriceList(user.city);
     allSections = lastPriceList.positions.map(position => position.title);
   } catch (e) {
     const { message } = e as Error;
@@ -22,10 +25,10 @@ export default async function ProfilePage() {
 
   return (
     <ProfileSections
-      notifications={profile.notifications}
-      hiddenSections={profile.hiddenSections}
-      favoriteSections={profile.favoriteSections}
-      email={profile.email}
+      notifications={user.notifications}
+      hiddenSections={user.hiddenSections}
+      favoriteSections={user.favoriteSections}
+      email={user.email}
       allSections={allSections}
     />
   );

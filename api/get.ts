@@ -1,22 +1,19 @@
 "use server";
 
-import { currentUser } from "@clerk/nextjs/server";
 import axios from "axios";
+
+import { getUser } from "./post";
 
 import type { AnalysisDiff, AnalysisDiffReport } from "@/types/analysis-diff";
 import type { Goods, PriceList, PriceListDate, PriceListsArchiveCount } from "@/types/pricelist";
 import type { ProductPayload } from "@/types/product";
 import type { ReportsResponse } from "@/types/reports";
-import type { User } from "@/types/user";
 
 const API_BASE_URL = process.env.API_URL!;
 
 const wrapApiCall = async (endpoint: string, options = {}) => {
   try {
-    const response = await axios.get(`${API_BASE_URL}${endpoint}`, {
-      ...options,
-      headers: { Authorization: `Bearer ${process.env.API_AUTH_SECRET}` }
-    });
+    const response = await axios.get(`${API_BASE_URL}${endpoint}`, options);
     return response.data;
   } catch (error) {
     console.error(`Error fetching data from ${endpoint}:`, error);
@@ -36,20 +33,9 @@ export const getPriceListById = async (id: string): Promise<PriceList> => {
   return await wrapApiCall(`/api/pricelist/id/${id}`);
 };
 
-export const getUser = async (): Promise<User> => {
-  const clerkUser = await currentUser();
-
-  if (!clerkUser) throw new Error("User not authenticated");
-  return await wrapApiCall(`/api/user/id/${clerkUser.id}`);
-};
-
 export const getPriceListCity = async (): Promise<string> => {
-  try {
-    const user = await getUser();
-    return user.city;
-  } catch {
-    return process.env.DEFAULT_CITY || "samara";
-  }
+  const user = await getUser();
+  return user?.city || process.env.DEFAULT_CITY!;
 };
 
 export const getProductByLink = async (link: string): Promise<ProductPayload> => {
