@@ -1,7 +1,8 @@
 import { auth } from "@clerk/nextjs/server";
 import { getTranslations } from "next-intl/server";
 
-import { getUser, getProductByLink } from "@/api/get";
+import { getProductByLink } from "@/api/get";
+import { getUser } from "@/api/post";
 import { ChartPrices } from "@/app/components/chart-prices";
 import { PriceListGoods } from "@/app/components/price-list";
 import { Alert, AlertDescription, AlertTitle } from "@/app/components/ui/alert";
