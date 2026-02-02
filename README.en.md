@@ -41,3 +41,4 @@ Chromatic Storybook is set up for this project: https://www.chromatic.com/librar
 - Playwright
 - Jest
 - Sentry
+- Clerk Auth

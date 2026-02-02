@@ -41,3 +41,4 @@ Chromatic Storybook настроен для этого проекта: https://w
 - Playwright
 - Jest
 - Sentry
+- Clerk Auth
