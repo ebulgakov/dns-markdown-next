@@ -36,8 +36,9 @@ function FavoritesPageClient({
       setShownBoughtFavorites(status);
 
       try {
-        const { showBoughtFavorites } = await postToggleFavoriteShownBought(status);
-        setRealShownBoughtFavorites(showBoughtFavorites);
+        const data = await postToggleFavoriteShownBought(status);
+        if (!data) throw new Error("No data returned from server");
+        setRealShownBoughtFavorites(data.showBoughtFavorites);
         setErrorMessage(null);
       } catch (error) {
         setErrorMessage(error as Error);

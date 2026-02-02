@@ -58,6 +58,8 @@ function PriceList({
           } else {
             list = await postRemoveFromHiddenSections(title);
           }
+          if (!list) throw new Error("No data returned from server");
+
           setRealHiddenSections(list.sections);
         } catch (error) {
           console.error("Failed to update hidden sections:", error);
@@ -84,6 +86,8 @@ function PriceList({
           } else {
             list = await postRemoveFromFavoriteSection(title);
           }
+
+          if (!list) throw new Error("No data returned from server");
 
           setRealFavoriteSections(list.sections);
         } catch (error) {

@@ -39,41 +39,47 @@ const wrapApiCall = async (endpoint: string, data = {}) => {
 
 export const postUpdateUserNotifications = async (
   notifications: UserNotifications
-): Promise<UserNotificationsResponse> => {
+): Promise<UserNotificationsResponse | null> => {
   return await wrapApiCall("/user/notifications-update", { notifications });
 };
 
 export const postToggleFavoriteShownBought = async (
   shownBoughtFavorites: boolean
-): Promise<{ message: string; showBoughtFavorites: boolean }> => {
+): Promise<{ message: string; showBoughtFavorites: boolean } | null> => {
   return await wrapApiCall("/user/toggle-shown-bought-favorites", {
     status: shownBoughtFavorites
   });
 };
 
 // User Favorites API
-export const postAddToFavorites = async (product: Goods): Promise<FavoritesResponse> => {
+export const postAddToFavorites = async (product: Goods): Promise<FavoritesResponse | null> => {
   return await wrapApiCall("/user/favorite-add", { product });
 };
 
-export const postRemoveFromFavorites = async (link: string): Promise<FavoritesResponse> => {
+export const postRemoveFromFavorites = async (link: string): Promise<FavoritesResponse | null> => {
   return await wrapApiCall("/user/favorite-remove", { link });
 };
 
 // User Sections API
-export const postAddToHiddenSections = async (title: string): Promise<SectionsResponse> => {
+export const postAddToHiddenSections = async (title: string): Promise<SectionsResponse | null> => {
   return await wrapApiCall("/user/hidden-section-add", { title });
 };
 
-export const postRemoveFromHiddenSections = async (title: string): Promise<SectionsResponse> => {
+export const postRemoveFromHiddenSections = async (
+  title: string
+): Promise<SectionsResponse | null> => {
   return await wrapApiCall("/user/hidden-section-remove", { title });
 };
 
-export const postAddToFavoriteSections = async (title: string): Promise<SectionsResponse> => {
+export const postAddToFavoriteSections = async (
+  title: string
+): Promise<SectionsResponse | null> => {
   return await wrapApiCall("/user/favorite-section-add", { title });
 };
 
-export const postRemoveFromFavoriteSection = async (title: string): Promise<SectionsResponse> => {
+export const postRemoveFromFavoriteSection = async (
+  title: string
+): Promise<SectionsResponse | null> => {
   return await wrapApiCall("/user/favorite-section-remove", { title });
 };
 
