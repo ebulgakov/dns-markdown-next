@@ -40,49 +40,49 @@ const wrapApiCall = async (endpoint: string, data = {}) => {
 export const postUpdateUserNotifications = async (
   notifications: UserNotifications
 ): Promise<UserNotificationsResponse | null> => {
-  return await wrapApiCall("/user/notifications-update", { notifications });
+  return await wrapApiCall("/api/user/notifications-update", { notifications });
 };
 
 export const postToggleFavoriteShownBought = async (
   shownBoughtFavorites: boolean
 ): Promise<{ message: string; showBoughtFavorites: boolean } | null> => {
-  return await wrapApiCall("/user/toggle-shown-bought-favorites", {
+  return await wrapApiCall("/api/user/toggle-shown-bought-favorites", {
     status: shownBoughtFavorites
   });
 };
 
 // User Favorites API
 export const postAddToFavorites = async (product: Goods): Promise<FavoritesResponse | null> => {
-  return await wrapApiCall("/user/favorite-add", { product });
+  return await wrapApiCall("/api/user/favorite-add", { product });
 };
 
 export const postRemoveFromFavorites = async (link: string): Promise<FavoritesResponse | null> => {
-  return await wrapApiCall("/user/favorite-remove", { link });
+  return await wrapApiCall("/api/user/favorite-remove", { link });
 };
 
 // User Sections API
 export const postAddToHiddenSections = async (title: string): Promise<SectionsResponse | null> => {
-  return await wrapApiCall("/user/hidden-section-add", { title });
+  return await wrapApiCall("/api/user/hidden-section-add", { title });
 };
 
 export const postRemoveFromHiddenSections = async (
   title: string
 ): Promise<SectionsResponse | null> => {
-  return await wrapApiCall("/user/hidden-section-remove", { title });
+  return await wrapApiCall("/api/user/hidden-section-remove", { title });
 };
 
 export const postAddToFavoriteSections = async (
   title: string
 ): Promise<SectionsResponse | null> => {
-  return await wrapApiCall("/user/favorite-section-add", { title });
+  return await wrapApiCall("/api/user/favorite-section-add", { title });
 };
 
 export const postRemoveFromFavoriteSection = async (
   title: string
 ): Promise<SectionsResponse | null> => {
-  return await wrapApiCall("/user/favorite-section-remove", { title });
+  return await wrapApiCall("/api/user/favorite-section-remove", { title });
 };
 
 export const getUser = async (): Promise<User | null> => {
-  return await wrapApiCall(`/user`);
+  return await wrapApiCall(`/api/user`);
 };
