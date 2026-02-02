@@ -23,6 +23,7 @@ export async function getCatalogData() {
 
   try {
     const user = await getUser();
+    if (!user) throw new Error("User not found");
 
     userFavoritesGoods = user.favorites;
     hiddenSectionsTitles = user.hiddenSections;

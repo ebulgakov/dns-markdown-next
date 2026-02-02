@@ -84,6 +84,8 @@ export default async function UpdatesPage() {
 
   try {
     const user = await getUser();
+    if (!user) throw new Error("User not found");
+
     userFavoritesGoods = user.favorites;
   } catch {
     userFavoritesGoods = [];

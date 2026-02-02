@@ -51,6 +51,8 @@ export default async function CatalogItemPage({ params }: CatalogItemPage) {
   if (!product.status.deleted) {
     try {
       const user = await getUser();
+      if (!user) throw new Error("User not found");
+
       favorites = user.favorites;
     } catch {
       favorites = [];
