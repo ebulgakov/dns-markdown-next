@@ -1,6 +1,6 @@
 "use server";
 
-import axios from "axios";
+import { apiClient } from "@/api/client";
 
 import { getUser } from "./post";
 
@@ -9,11 +9,9 @@ import type { Goods, PriceList, PriceListDate, PriceListsArchiveCount } from "@/
 import type { ProductPayload } from "@/types/product";
 import type { ReportsResponse } from "@/types/reports";
 
-const API_BASE_URL = process.env.API_URL!;
-
 const wrapApiCall = async (endpoint: string, options = {}) => {
   try {
-    const response = await axios.get(`${API_BASE_URL}${endpoint}`, options);
+    const response = await apiClient.get(endpoint, options);
     return response.data;
   } catch (error) {
     console.error(`Error fetching data from ${endpoint}:`, error);
@@ -30,7 +28,7 @@ export const getArchiveListDates = async (city: string): Promise<PriceListDate[]
 };
 
 export const getPriceListById = async (id: string): Promise<PriceList> => {
-  return await wrapApiCall(`/api/pricelist/id/${id}`);
+  return await wrapApiCall(`/pricelist/id/${id}`);
 };
 
 export const getPriceListCity = async (): Promise<string> => {
@@ -39,27 +37,27 @@ export const getPriceListCity = async (): Promise<string> => {
 };
 
 export const getProductByLink = async (link: string): Promise<ProductPayload> => {
-  return await wrapApiCall(`/api/products/link`, { params: { link } });
+  return await wrapApiCall("/api/products/link", { params: { link } });
 };
 
 export const getMostCheapProducts = async (city: string): Promise<Goods[]> => {
-  return await wrapApiCall(`/api/products/most-cheap-products`, { params: { city } });
+  return await wrapApiCall("/api/products/most-cheap-products", { params: { city } });
 };
 
 export const getMostDiscountedProducts = async (city: string): Promise<Goods[]> => {
-  return await wrapApiCall(`/api/products/most-discounted-products`, { params: { city } });
+  return await wrapApiCall("/api/products/most-discounted-products", { params: { city } });
 };
 
 export const getMostProfitableProducts = async (city: string): Promise<Goods[]> => {
-  return await wrapApiCall(`/api/products/most-profitable-products`, { params: { city } });
+  return await wrapApiCall("/api/products/most-profitable-products", { params: { city } });
 };
 
 export const getLastDiffByCity = async (city: string): Promise<AnalysisDiff> => {
-  return await wrapApiCall(`/api/analysis/last-diff`, { params: { city } });
+  return await wrapApiCall("/api/analysis/last-diff", { params: { city } });
 };
 
 export const getLast30DiffsReportByCity = async (city: string): Promise<AnalysisDiffReport[]> => {
-  return await wrapApiCall(`/api/analysis/all-diffs`, { params: { city } });
+  return await wrapApiCall("/api/analysis/all-diffs", { params: { city } });
 };
 
 export const getLast30ArchiveProductsCount = async (
