@@ -1,17 +1,13 @@
 import "dotenv/config";
-import axios from "axios";
 import type { Position, PriceList } from "#types/pricelist.ts";
 import type { AnalysisData } from "#types/analysis-data.ts";
 import type { AnalysisDiff } from "#types/analysis-diff.js";
 import type { User } from "#types/user.js";
-
-const API_BASE_URL = process.env.API_URL!;
+import { apiClient } from "#api/client.ts";
 
 const wrapApiCall = async (endpoint: string, data = {}) => {
   try {
-    const response = await axios.post(`${API_BASE_URL}${endpoint}`, data, {
-      headers: { Authorization: `Bearer ${process.env.API_SERVICE_SECRET}` }
-    });
+    const response = await apiClient.post(endpoint, data);
     return response.data;
   } catch (error) {
     console.error(`Error fetching data from ${endpoint}:`, error);

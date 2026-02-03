@@ -1,17 +1,12 @@
 import "dotenv/config";
-import axios from "axios";
 import type { PriceList } from "#types/pricelist.ts";
 import type { AnalysisData } from "#types/analysis-data.ts";
 import type { User } from "#types/user.ts";
-
-const API_BASE_URL = process.env.API_URL!;
+import { apiClient } from "#api/client.ts";
 
 const wrapApiCall = async (endpoint: string, options = {}) => {
   try {
-    const response = await axios.get(`${API_BASE_URL}${endpoint}`, {
-      ...options,
-      headers: { Authorization: `Bearer ${process.env.API_SERVICE_SECRET}` }
-    });
+    const response = await apiClient.get(endpoint, options);
     return response.data;
   } catch (error) {
     console.error(`Error fetching data from ${endpoint}:`, error);
