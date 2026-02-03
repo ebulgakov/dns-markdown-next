@@ -1,12 +1,11 @@
 "use server";
 
 import { auth } from "@clerk/nextjs/server";
-import axios from "axios";
+
+import { apiClient } from "@/api/client";
 
 import type { Goods } from "@/types/pricelist";
 import type { Favorite, User, UserNotifications, UserSections } from "@/types/user";
-
-const API_BASE_URL = process.env.API_URL!;
 
 type FavoritesResponse = { message: string; favorites: Favorite[] };
 
@@ -27,7 +26,7 @@ const wrapApiCall = async (endpoint: string, data = {}) => {
 
     if (!sessionToken) return null;
 
-    const response = await axios.post(`${API_BASE_URL}${endpoint}`, data, {
+    const response = await apiClient.post(endpoint, data, {
       headers: { Authorization: `Bearer ${sessionToken}` }
     });
     return response.data;
@@ -84,5 +83,5 @@ export const postRemoveFromFavoriteSection = async (
 };
 
 export const getUser = async (): Promise<User | null> => {
-  return await wrapApiCall(`/api/user`);
+  return await wrapApiCall("/api/user");
 };
