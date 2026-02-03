@@ -44,7 +44,7 @@ export const postUpdateUserNotifications = async (
 
 export const postToggleFavoriteShownBought = async (
   shownBoughtFavorites: boolean
-): Promise<{ message: string; showBoughtFavorites: boolean } | null> => {
+): Promise<{ message: string; shownBoughtFavorites: boolean } | null> => {
   return await wrapApiCall("/api/user/toggle-shown-bought-favorites", {
     status: shownBoughtFavorites
   });
