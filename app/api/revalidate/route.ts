@@ -4,9 +4,10 @@ import { type NextRequest, NextResponse } from "next/server";
 
 export async function POST(request: NextRequest) {
   const headersList = await headers();
-  const secret = headersList.get("authorization");
+  const authHeader = headersList.get("authorization");
+  const secret = authHeader?.split(" ")[1] || "";
 
-  if (secret !== process.env.REVALIDATE_SECRET_KEY) {
+  if (secret !== process.env.WEBHOOK_SECRET_KEY) {
     return NextResponse.json({ message: "Invalid secret" }, { status: 401 });
   }
 
@@ -18,7 +19,7 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ message: "Tag is required" }, { status: 400 });
     }
 
-    revalidateTag(tag, {});
+    revalidateTag(tag, { expire: 0 });
 
     return NextResponse.json({ revalidated: true, tag, now: Date.now() });
   } catch (error) {

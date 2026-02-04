@@ -35,7 +35,8 @@ const wrapApiCall = async (endpoint: string, token: string | null, data = {}) =>
   }
 };
 
-const getSessionToken = cache(async () => {
+// Just for performance optimization. Avoid calling auth() multiple times in the same request.
+const getSessionInfo = cache(async () => {
   const { getToken, userId } = await auth();
   const token = await getToken();
   return { token, userId };
@@ -44,16 +45,16 @@ const getSessionToken = cache(async () => {
 export const postUpdateUserNotifications = async (
   notifications: UserNotifications
 ): Promise<UserNotificationsResponse | null> => {
-  const { token, userId } = await getSessionToken();
-  revalidateTag(`user-${userId}`, { expire: Date.now() });
+  const { token, userId } = await getSessionInfo();
+  revalidateTag(`user-${userId}`, { expire: 0 });
   return await wrapApiCall("/api/user/notifications-update", token, { notifications });
 };
 
 export const postToggleFavoriteShownBought = async (
   shownBoughtFavorites: boolean
 ): Promise<{ message: string; shownBoughtFavorites: boolean } | null> => {
-  const { token, userId } = await getSessionToken();
-  revalidateTag(`user-${userId}`, { expire: Date.now() });
+  const { token, userId } = await getSessionInfo();
+  revalidateTag(`user-${userId}`, { expire: 0 });
   return await wrapApiCall("/api/user/toggle-shown-bought-favorites", token, {
     status: shownBoughtFavorites
   });
@@ -61,56 +62,55 @@ export const postToggleFavoriteShownBought = async (
 
 // User Favorites API
 export const postAddToFavorites = async (product: Goods): Promise<FavoritesResponse | null> => {
-  const { token, userId } = await getSessionToken();
-  revalidateTag(`user-${userId}`, { expire: Date.now() });
+  const { token, userId } = await getSessionInfo();
+  revalidateTag(`user-${userId}`, { expire: 0 });
   return await wrapApiCall("/api/user/favorite-add", token, { product });
 };
 
 export const postRemoveFromFavorites = async (link: string): Promise<FavoritesResponse | null> => {
-  const { token, userId } = await getSessionToken();
-  revalidateTag(`user-${userId}`, { expire: Date.now() });
+  const { token, userId } = await getSessionInfo();
+  revalidateTag(`user-${userId}`, { expire: 0 });
   return await wrapApiCall("/api/user/favorite-remove", token, { link });
 };
 
 // User Sections API
 export const postAddToHiddenSections = async (title: string): Promise<SectionsResponse | null> => {
-  const { token, userId } = await getSessionToken();
-  revalidateTag(`user-${userId}`, { expire: Date.now() });
+  const { token, userId } = await getSessionInfo();
+  revalidateTag(`user-${userId}`, { expire: 0 });
   return await wrapApiCall("/api/user/hidden-section-add", token, { title });
 };
 
 export const postRemoveFromHiddenSections = async (
   title: string
 ): Promise<SectionsResponse | null> => {
-  const { token, userId } = await getSessionToken();
-  revalidateTag(`user-${userId}`, { expire: Date.now() });
+  const { token, userId } = await getSessionInfo();
+  revalidateTag(`user-${userId}`, { expire: 0 });
   return await wrapApiCall("/api/user/hidden-section-remove", token, { title });
 };
 
 export const postAddToFavoriteSections = async (
   title: string
 ): Promise<SectionsResponse | null> => {
-  const { token, userId } = await getSessionToken();
-  revalidateTag(`user-${userId}`, { expire: Date.now() });
+  const { token, userId } = await getSessionInfo();
+  revalidateTag(`user-${userId}`, { expire: 0 });
   return await wrapApiCall("/api/user/favorite-section-add", token, { title });
 };
 
 export const postRemoveFromFavoriteSection = async (
   title: string
 ): Promise<SectionsResponse | null> => {
-  const { token, userId } = await getSessionToken();
-  revalidateTag(`user-${userId}`, { expire: Date.now() });
+  const { token, userId } = await getSessionInfo();
+  revalidateTag(`user-${userId}`, { expire: 0 });
   return await wrapApiCall("/api/user/favorite-section-remove", token, { title });
 };
 
+// User Data API. Used pattern "Memoized Factor". Fabricated with caching.
+const fetchUser = async (token: string) => wrapApiCall("/api/user", token);
+const getCachedUserForId = (userId: string, token: string) =>
+  cacheToken(async () => fetchUser(token), ["user-profile", userId], { tags: [`user-${userId}`] });
 export const getUser = async (): Promise<User | null> => {
-  const { token, userId } = await getSessionToken();
+  const { token, userId } = await getSessionInfo();
+  if (!userId || !token) return null;
 
-  const getCachedUserForId = cacheToken(
-    (token: string | null) => wrapApiCall("/api/user", token),
-    ["user", `${userId}`], // Cache key includes userId to differentiate users
-    { tags: [`user-${userId}`] } // Tag for cache invalidation
-  );
-
-  return getCachedUserForId(token);
+  return getCachedUserForId(userId, token)();
 };
