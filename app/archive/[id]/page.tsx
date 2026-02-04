@@ -52,7 +52,7 @@ export default async function ArchiveItemPage({ params }: ArchiveItemPage) {
       <PageTitle title={pageTitle}>
         <div className="mt-4 flex items-center justify-between gap-4 md:mt-0">
           <div>
-            Количество: <b>{count}</b>
+            Количество: <b data-testid="archive-price-list-count">{count}</b>
           </div>
         </div>
       </PageTitle>

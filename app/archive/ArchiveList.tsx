@@ -26,6 +26,7 @@ export function ArchiveList({ archiveCollection }: ArchiveListProps) {
         <li key={item._id}>
           <Link
             href={`/archive/${item._id}`}
+            data-testid="archive-list-item-link"
             onClick={() => handleSendGAEvent(formatDate(item.createdAt))}
           >
             <span className="text-blue-500 hover:underline">{formatDate(item.createdAt)}</span>

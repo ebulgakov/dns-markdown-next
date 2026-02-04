@@ -49,7 +49,7 @@ function PriceListPage({
     : [];
 
   return (
-    <>
+    <div data-testid="price-list-page">
       {filteredList.map(item => (
         <PriceListGoods key={item._id} item={item} favorites={userFavoritesGoods} />
       ))}
@@ -87,7 +87,7 @@ function PriceListPage({
       </div>
 
       <SearchInput />
-    </>
+    </div>
   );
 }
 
