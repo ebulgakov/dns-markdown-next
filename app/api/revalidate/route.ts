@@ -4,9 +4,10 @@ import { type NextRequest, NextResponse } from "next/server";
 
 export async function POST(request: NextRequest) {
   const headersList = await headers();
-  const secret = headersList.get("authorization");
+  const authHeader = headersList.get("authorization");
+  const secret = authHeader?.split(" ")[1] || "";
 
-  if (secret !== process.env.REVALIDATE_SECRET_KEY) {
+  if (secret !== process.env.WEBHOOK_SECRET_KEY) {
     return NextResponse.json({ message: "Invalid secret" }, { status: 401 });
   }
 
