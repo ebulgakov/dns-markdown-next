@@ -19,7 +19,7 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ message: "Tag is required" }, { status: 400 });
     }
 
-    revalidateTag(tag, {});
+    revalidateTag(tag, { expire: 0 });
 
     return NextResponse.json({ revalidated: true, tag, now: Date.now() });
   } catch (error) {
