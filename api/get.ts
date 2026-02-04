@@ -28,7 +28,7 @@ export const getArchiveListDates = async (city: string): Promise<PriceListDate[]
 };
 
 export const getPriceListById = async (id: string): Promise<PriceList> => {
-  return await wrapApiCall(`/pricelist/id/${id}`);
+  return await wrapApiCall(`/api/pricelist/id/${id}`);
 };
 
 export const getPriceListCity = async (): Promise<string> => {
