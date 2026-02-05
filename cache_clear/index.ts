@@ -1,10 +1,11 @@
 import getPerformance from "#helpers/get_performance.ts";
-import { cleaCacheByKeys } from "#api/post.ts";
+import { clearCacheByKeys, clearWebCache } from "#api/post.ts";
 
 async function clearCache() {
   const keys = process.env.KEYS || "daily:*";
 
-  await cleaCacheByKeys(keys);
+  await clearCacheByKeys(keys);
+  await clearWebCache("daily-data");
 }
 
 getPerformance(clearCache).then(() => {

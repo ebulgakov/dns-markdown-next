@@ -3,7 +3,7 @@ import type { Position, PriceList } from "#types/pricelist.ts";
 import type { AnalysisData } from "#types/analysis-data.ts";
 import type { AnalysisDiff } from "#types/analysis-diff.js";
 import type { User } from "#types/user.js";
-import { apiClient } from "#api/client.ts";
+import { apiClient, webClient } from "#api/client.ts";
 
 const wrapApiCall = async (endpoint: string, data = {}) => {
   try {
@@ -83,6 +83,10 @@ export const deleteAnalysisDiffByDate = async ({
   return await wrapApiCall("/service/delete-analysis-diff-by-date", { city, dateAdded: date });
 };
 
-export const cleaCacheByKeys = async (keys: string): Promise<null> => {
+export const clearCacheByKeys = async (keys: string): Promise<null> => {
   return await wrapApiCall("/service/clear-cache-by-key", { keys });
+};
+
+export const clearWebCache = async (tag: string): Promise<null> => {
+  return await webClient.post("/api/revalidate", { tag });
 };

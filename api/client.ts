@@ -7,3 +7,10 @@ export const apiClient = axios.create({
     Authorization: `Bearer ${process.env.API_SERVICE_SECRET}`
   }
 });
+
+export const webClient = axios.create({
+  baseURL: process.env.WEB_URL,
+  headers: {
+    Authorization: `Bearer ${process.env.WEBHOOK_SECRET_KEY}`
+  }
+});
