@@ -61,7 +61,7 @@ function PriceListPage({
             <Title variant="h2">Избранные категории</Title>
 
             <PriceList
-              positions={favoriteSectionsPositions}
+              positions={favoriteSectionsPositions.sort((a, b) => a.title.localeCompare(b.title))}
               favorites={userFavorites}
               hiddenSections={hiddenSections}
               favoriteSections={favoriteSections}
@@ -75,7 +75,7 @@ function PriceListPage({
         )}
 
         <PriceList
-          positions={nonFavoritesSectionsPositions}
+          positions={nonFavoritesSectionsPositions.sort((a, b) => a.title.localeCompare(b.title))}
           favorites={userFavorites}
           hiddenSections={hiddenSections}
           favoriteSections={favoriteSections}

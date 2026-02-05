@@ -18,21 +18,25 @@ type CatalogListProps = {
 
 function CatalogList({
   priceList,
-  userHiddenSections,
-  userFavoriteSections,
+  userHiddenSections = [],
+  userFavoriteSections = [],
   isUserLoggedIn,
-  userFavorites
+  userFavorites = []
 }: CatalogListProps) {
-  const { getGuestData } = useGuestData();
+  const { guestData } = useGuestData();
 
   const favoriteSections: UserSections = isUserLoggedIn
     ? userFavoriteSections
-    : getGuestData().favoriteSections;
+    : guestData?.favoriteSections;
   const hiddenSections: UserSections = isUserLoggedIn
     ? userHiddenSections
-    : getGuestData()?.hiddenSections;
+    : guestData?.hiddenSections || [];
 
   const count = priceList.positions.reduce((acc, cur) => acc + cur.items.length, 0);
+
+  if (!isUserLoggedIn && !guestData) {
+    return null;
+  }
 
   return (
     <div>

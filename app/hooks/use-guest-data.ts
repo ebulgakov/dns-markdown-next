@@ -1,50 +1,33 @@
 "use client";
 
+import useLocalStorage from "use-local-storage";
+
 import type { User, UserSections } from "@/types/user";
 
 export const useGuestData = () => {
-  const userLocalStorage = typeof window !== "undefined" ? window.localStorage : null;
-  const collectionName = "dns-markdown-guest-data";
-
-  const setGuestData = (data: User) => {
-    userLocalStorage?.setItem(collectionName, JSON.stringify(data));
+  const newGuest: User = {
+    _id: "0",
+    userId: "0",
+    email: "",
+    city: "samara",
+    favorites: [],
+    notifications: { updates: { enabled: false } },
+    hiddenSections: [],
+    favoriteSections: [],
+    shownBoughtFavorites: true
   };
 
-  const getGuestData = () => {
-    const guestData = userLocalStorage?.getItem(collectionName);
-
-    if (guestData) {
-      return JSON.parse(guestData);
-    } else {
-      const newUser: User = {
-        _id: "0",
-        userId: "0",
-        email: "",
-        city: "Sample City",
-        favorites: [],
-        notifications: { updates: { enabled: false } },
-        hiddenSections: [],
-        favoriteSections: [],
-        shownBoughtFavorites: true
-      };
-      setGuestData(newUser);
-      return newUser;
-    }
-  };
+  const [guestData, setGuestData] = useLocalStorage("dns-markdown-guest-data", newGuest);
 
   const setGuestFavoriteSections = (sections: UserSections) => {
-    const guestData = getGuestData();
-
     const updatedData = { ...guestData, favoriteSections: sections };
     setGuestData(updatedData);
   };
 
   const setGuestHiddenSections = (sections: UserSections) => {
-    const guestData = getGuestData();
-
     const updatedData = { ...guestData, hiddenSections: sections };
     setGuestData(updatedData);
   };
 
-  return { getGuestData, setGuestFavoriteSections, setGuestHiddenSections };
+  return { guestData, setGuestFavoriteSections, setGuestHiddenSections };
 };
