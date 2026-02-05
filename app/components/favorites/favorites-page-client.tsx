@@ -12,8 +12,8 @@ import { Favorite } from "@/types/user";
 import { FavoritesEmpty } from "./favorites-empty";
 
 type FavoritesPageClientProps = {
-  favorites?: Favorite[];
-  shownBoughtFavorites?: boolean;
+  favorites: Favorite[];
+  shownBoughtFavorites: boolean;
 };
 
 function FavoritesPageClient({
