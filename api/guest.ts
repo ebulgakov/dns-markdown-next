@@ -152,3 +152,19 @@ export const removeFromFavorites = async (link: string) => {
     sections: guest.favorites
   };
 };
+
+export const toggleShownBoughtFavorites = async (
+  shownBoughtFavorites: boolean
+): Promise<{
+  message: string;
+  shownBoughtFavorites: boolean;
+}> => {
+  const guest = await getGuest();
+  guest.shownBoughtFavorites = shownBoughtFavorites;
+  await setGuest(guest);
+
+  return {
+    message: "OK",
+    shownBoughtFavorites: guest.shownBoughtFavorites
+  };
+};

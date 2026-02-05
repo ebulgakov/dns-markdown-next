@@ -7,7 +7,8 @@ import {
   addToFavoriteSections as addToFavoriteSectionsGuest,
   removeFromFavoriteSections as removeFromFavoriteSectionsGuest,
   addToFavorites as addToFavoritesGuest,
-  removeFromFavorites as removeFromFavoritesGuest
+  removeFromFavorites as removeFromFavoritesGuest,
+  toggleShownBoughtFavorites as toggleShownBoughtFavoritesGuest
 } from "@/api/guest";
 
 import {
@@ -42,7 +43,7 @@ export const postToggleFavoriteShownBought = async (shownBoughtFavorites: boolea
   if (userId) {
     return await postToggleFavoriteShownBoughtUser(shownBoughtFavorites);
   } else {
-    return null;
+    return toggleShownBoughtFavoritesGuest(shownBoughtFavorites);
   }
 };
 
