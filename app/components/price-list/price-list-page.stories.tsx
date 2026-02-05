@@ -14,7 +14,7 @@ const meta: Meta<typeof PriceListPage> = {
 export default meta;
 type Story = StoryObj<typeof PriceListPage>;
 
-const mockFavoriteSections: Position[] = [mockPositions[0]];
+const mockFavoriteSections: UserSections = [mockPositions[0].title];
 
 const mockUserFavoritesGoods: Favorite[] = [];
 
@@ -33,7 +33,7 @@ export const WithFavorites: Story = {
     priceList: mockPriceList,
     isUserLoggedIn: true,
     favoriteSections: mockFavoriteSections,
-    userFavoritesGoods: mockUserFavoritesGoods
+    userFavorites: mockUserFavoritesGoods
   }
 };
 
@@ -42,8 +42,7 @@ export const WithHiddenSections: Story = {
     priceList: mockPriceList,
     isUserLoggedIn: true,
     favoriteSections: [],
-    hiddenSectionsTitles: mockHiddenSectionsTitles,
-    nonFavoriteSections: nonFavoriteSections
+    hiddenSections: mockHiddenSectionsTitles
   }
 };
 
@@ -52,8 +51,7 @@ export const WithFavoritesAndHiddenSections: Story = {
     priceList: mockPriceList,
     isUserLoggedIn: true,
     favoriteSections: mockFavoriteSections,
-    userFavoritesGoods: mockUserFavoritesGoods,
-    hiddenSectionsTitles: mockHiddenSectionsTitles,
-    nonFavoriteSections: nonFavoriteSections
+    userFavorites: mockUserFavoritesGoods,
+    hiddenSections: mockHiddenSectionsTitles
   }
 };

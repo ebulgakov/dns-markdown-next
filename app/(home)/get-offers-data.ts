@@ -27,7 +27,7 @@ export async function getOffersData() {
     mostCheap = mostCheapArr[0];
     mostDiscounted = mostDiscountedArr[0];
     mostProfitable = mostProfitableArr[0];
-    catalogDate = priceList.createdAt;
+    catalogDate = priceList?.createdAt;
   } catch (e) {
     error = e as Error;
   }
