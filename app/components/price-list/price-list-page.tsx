@@ -7,6 +7,7 @@ import { SearchInput } from "@/app/components/search-input";
 import { Title } from "@/app/components/ui/title";
 import { useDebounce } from "@/app/hooks/use-debounce";
 import { useFilteredGoods } from "@/app/hooks/use-filtered-goods";
+import { useGuestData } from "@/app/hooks/use-guest-data";
 import { useSearchStore } from "@/app/stores/search-store";
 import { useSortGoodsStore } from "@/app/stores/sort-goods-store";
 
@@ -34,6 +35,7 @@ function PriceListPage({
   isUserLoggedIn,
   priceList
 }: PriceListPageProps) {
+  const { getGuestData } = useGuestData();
   const sortGoods = useSortGoodsStore(state => state.sortGoods);
   const searchTerm = useSearchStore(state => state.searchTerm);
   const debouncedSearch = useDebounce<string>(searchTerm.trim(), 100);
@@ -47,6 +49,8 @@ function PriceListPage({
   const favoriteSectionsTitles: UserSectionsType = favoriteSections
     ? favoriteSections.map(section => section.title)
     : [];
+
+  console.log(getGuestData());
 
   return (
     <div data-testid="price-list-page">
