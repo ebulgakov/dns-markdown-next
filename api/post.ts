@@ -22,7 +22,7 @@ export const postUpdateUserNotifications = async (notifications: UserNotificatio
   if (userId) {
     return await postUpdateUserNotificationsUser(notifications);
   } else {
-    return Promise.resolve();
+    return null;
   }
 };
 
@@ -32,7 +32,7 @@ export const postToggleFavoriteShownBought = async (shownBoughtFavorites: boolea
   if (userId) {
     return await postToggleFavoriteShownBoughtUser(shownBoughtFavorites);
   } else {
-    return Promise.resolve();
+    return null;
   }
 };
 
@@ -42,7 +42,7 @@ export const postAddToFavorites = async (product: Goods) => {
   if (userId) {
     return await postAddToFavoritesUser(product);
   } else {
-    return Promise.resolve();
+    return null;
   }
 };
 
@@ -52,7 +52,7 @@ export const postRemoveFromFavorites = async (link: string) => {
   if (userId) {
     return await postRemoveFromFavoritesUser(link);
   } else {
-    return Promise.resolve();
+    return null;
   }
 };
 
@@ -62,7 +62,7 @@ export const postAddToHiddenSections = async (title: string) => {
   if (userId) {
     return await postAddToHiddenSectionsUser(title);
   } else {
-    return Promise.resolve();
+    return null;
   }
 };
 
@@ -72,7 +72,7 @@ export const postRemoveFromHiddenSections = async (title: string) => {
   if (userId) {
     return await postRemoveFromHiddenSectionsUser(title);
   } else {
-    return Promise.resolve();
+    return null;
   }
 };
 
@@ -82,7 +82,7 @@ export const postAddToFavoriteSections = async (title: string) => {
   if (userId) {
     return await postAddToFavoriteSectionsUser(title);
   } else {
-    return Promise.resolve();
+    return null;
   }
 };
 
@@ -92,7 +92,7 @@ export const postRemoveFromFavoriteSection = async (title: string) => {
   if (userId) {
     return await postRemoveFromFavoriteSectionUser(title);
   } else {
-    return Promise.resolve();
+    return null;
   }
 };
 
@@ -102,6 +102,8 @@ export const getUser = async () => {
   if (userId) {
     return await getUserUser();
   } else {
-    return Promise.resolve();
+    return null;
   }
 };
+
+export type { SectionsResponse } from "@/api/user";
