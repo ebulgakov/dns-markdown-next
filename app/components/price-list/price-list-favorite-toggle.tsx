@@ -3,7 +3,7 @@
 import { Star } from "lucide-react";
 import { useState, useOptimistic, startTransition } from "react";
 
-import { postAddToFavorites, postRemoveFromFavorites } from "@/api/post";
+import { postAddToFavorites, postRemoveFromFavorites } from "@/api/user";
 import { Tooltip, TooltipContent, TooltipTrigger } from "@/app/components/ui/tooltip";
 import { sendGAEvent } from "@/app/lib/sendGAEvent";
 

@@ -1,5 +1,5 @@
 import { getLastPriceList, getPriceListCity } from "@/api/get";
-import { getUser } from "@/api/post";
+import { getUser } from "@/api/user";
 
 import { mockGoods } from "../__mocks__/pricelist";
 import { getCatalogData } from "../get-catalog-data";
@@ -12,7 +12,7 @@ jest.mock("@/api/get", () => ({
   getPriceListCity: jest.fn()
 }));
 
-jest.mock("@/api/post", () => ({
+jest.mock("@/api/user", () => ({
   getUser: jest.fn()
 }));
 

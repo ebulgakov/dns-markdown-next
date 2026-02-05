@@ -2,7 +2,7 @@ import { auth } from "@clerk/nextjs/server";
 import { getTranslations } from "next-intl/server";
 
 import { getPriceListCity, getLastDiffByCity } from "@/api/get";
-import { getUser } from "@/api/post";
+import { getUser } from "@/api/user";
 import { Alert, AlertDescription, AlertTitle } from "@/app/components/ui/alert";
 import { Updates } from "@/app/components/updates";
 

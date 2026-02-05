@@ -2,7 +2,7 @@
 
 import { startTransition, useEffect, useOptimistic, useState } from "react";
 
-import { postToggleFavoriteShownBought } from "@/api/post";
+import { postToggleFavoriteShownBought } from "@/api/user";
 import { PriceListGoods } from "@/app/components/price-list";
 import { Alert, AlertDescription, AlertTitle } from "@/app/components/ui/alert";
 import { CheckboxWithLabel } from "@/app/components/ui/control-with-label";

@@ -1,5 +1,5 @@
 import { getLastPriceList, getPriceListCity } from "@/api/get";
-import { getUser } from "@/api/post";
+import { getUser } from "@/api/user";
 
 import type { Position as PositionType, PriceList as PriceListType } from "@/types/pricelist";
 import type { Favorite as FavoriteType, UserSections as UserSectionsType } from "@/types/user";

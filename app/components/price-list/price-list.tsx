@@ -6,7 +6,7 @@ import {
   postAddToHiddenSections,
   postRemoveFromFavoriteSection,
   postRemoveFromHiddenSections
-} from "@/api/post";
+} from "@/api/user";
 
 import { PriceListSection } from "./price-list-section";
 
