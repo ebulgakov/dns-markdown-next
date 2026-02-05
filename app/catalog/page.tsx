@@ -7,6 +7,7 @@ import { SortGoods } from "@/app/components/sort-goods";
 import { Alert, AlertDescription, AlertTitle } from "@/app/components/ui/alert";
 import { PageTitle } from "@/app/components/ui/page-title";
 import { formatDate, formatTime } from "@/app/helpers/format";
+import { User } from "@/types/user";
 
 import type { PriceList } from "@/types/pricelist";
 import type { Metadata } from "next";
@@ -24,13 +25,25 @@ export async function generateMetadata({ params }: CatalogPage): Promise<Metadat
 }
 
 export default async function CatalogPage() {
-  const genericUser = await getGenericUser();
+  let genericUser: User | null = null;
+
+  try {
+    genericUser = await getGenericUser();
+  } catch (error) {
+    const e = error as Error;
+    return (
+      <Alert variant="destructive">
+        <AlertTitle>Ошибка загрузки пользователя</AlertTitle>
+        <AlertDescription>{e.message}</AlertDescription>
+      </Alert>
+    );
+  }
 
   let priceList: PriceList | null = null;
   try {
     const city = await getPriceListCity();
     priceList = await getLastPriceList(city);
-    if (!priceList) throw new Error();
+    if (!priceList) throw new Error("Price list not found");
   } catch (error) {
     const e = error as Error;
     return (

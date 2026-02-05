@@ -43,7 +43,7 @@ export const postToggleFavoriteShownBought = async (shownBoughtFavorites: boolea
   if (userId) {
     return await postToggleFavoriteShownBoughtUser(shownBoughtFavorites);
   } else {
-    return toggleShownBoughtFavoritesGuest(shownBoughtFavorites);
+    return await toggleShownBoughtFavoritesGuest(shownBoughtFavorites);
   }
 };
 

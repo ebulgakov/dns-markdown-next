@@ -51,7 +51,12 @@ export const setGuest = async (guest: User) => {
     await redis.set(`guest:${guestId}`, guest, { ex: GUEST_TTL_SECONDS });
   } else {
     const newGuestId = crypto.randomUUID();
-    cookieStore.set("guestId", newGuestId);
+    cookieStore.set("guestId", newGuestId, {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === "production",
+      sameSite: "lax",
+      maxAge: GUEST_TTL_SECONDS
+    });
 
     await redis.set(`guest:${newGuestId}`, guest, { ex: GUEST_TTL_SECONDS });
   }
@@ -109,7 +114,7 @@ export const addToFavorites = async (product: Goods): Promise<FavoritesResponse>
   const guest = await getGuest();
   if (!guest.favorites.some(fav => fav.item.link === product.link)) {
     const newFavorite: Favorite = {
-      id: `${Date.now()}`,
+      id: crypto.randomUUID(),
       item: product,
       status: { deleted: false, createdAt: `${new Date()}`, updatedAt: `${new Date()}` }
     };
