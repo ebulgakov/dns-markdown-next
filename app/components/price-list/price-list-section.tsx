@@ -15,9 +15,9 @@ type PriceListProps = {
   favorites?: Favorite[];
   diffs?: DiffsType;
   isOpen?: boolean;
-  isFavoriteSection?: boolean;
+  isFavoriteSection: boolean;
   onHidden: (title: string) => void;
-  onFavorite?: (title: string) => void;
+  onFavorite: (title: string) => void;
 };
 
 function PriceListSection({
@@ -44,19 +44,17 @@ function PriceListSection({
           {position.title} &ndash; {position.items.length}
         </span>
 
-        {onFavorite && (
-          <button
-            type="button"
-            className="relative ml-auto cursor-pointer"
-            onClick={() => onFavorite(position.title)}
-          >
-            <Heart
-              className={cn("text-red-500", {
-                "fill-red-500": isFavoriteSection
-              })}
-            />
-          </button>
-        )}
+        <button
+          type="button"
+          className="relative ml-auto cursor-pointer"
+          onClick={() => onFavorite(position.title)}
+        >
+          <Heart
+            className={cn("text-red-500", {
+              "fill-red-500": isFavoriteSection
+            })}
+          />
+        </button>
       </div>
 
       <div className="divide-y divide-gray-200">
