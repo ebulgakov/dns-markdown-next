@@ -1,6 +1,6 @@
 "use client";
 
-import { useOptimistic, useState, startTransition } from "react";
+import { useOptimistic, startTransition } from "react";
 
 import {
   postAddToFavoriteSections,

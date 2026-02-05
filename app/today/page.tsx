@@ -1,4 +1,3 @@
-import { auth } from "@clerk/nextjs/server";
 import { getTranslations } from "next-intl/server";
 
 import { getPriceListCity, getLastDiffByCity } from "@/api/get";
@@ -23,14 +22,6 @@ export async function generateMetadata({ params }: UpdatesPageProps): Promise<Me
 }
 
 export default async function UpdatesPage() {
-  let isUserLoggedIn;
-  try {
-    const { userId } = await auth();
-    isUserLoggedIn = !!userId;
-  } catch {
-    isUserLoggedIn = false;
-  }
-
   let diffNew;
   let diffRemoved;
   let diffChangesPrice;
@@ -94,7 +85,6 @@ export default async function UpdatesPage() {
   return (
     <Updates
       diffNew={diffNew}
-      isUserLoggedIn={isUserLoggedIn}
       userFavoritesGoods={userFavoritesGoods}
       diffChangesPrice={diffChangesPrice}
       changePriceDiff={changePriceDiff}
