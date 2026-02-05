@@ -8,6 +8,8 @@ import { Goods } from "@/types/pricelist";
 import type { FavoritesResponse, FavoritesStatusResponse, SectionsResponse } from "@/api/user";
 import type { Favorite, User } from "@/types/user";
 
+const GUEST_TTL_SECONDS = 60 * 60 * 24 * 30; // 30 days
+
 const redis = new Redis({
   url: process.env.UPSTASH_REDIS_REST_URL,
   token: process.env.UPSTASH_REDIS_REST_TOKEN
@@ -46,12 +48,12 @@ export const setGuest = async (guest: User) => {
   const guestId = cookieStore.get("guestId")?.value;
 
   if (guestId) {
-    await redis.set(`guest:${guestId}`, guest);
+    await redis.set(`guest:${guestId}`, guest, { ex: GUEST_TTL_SECONDS });
   } else {
     const newGuestId = crypto.randomUUID();
     cookieStore.set("guestId", newGuestId);
 
-    await redis.set(`guest:${newGuestId}`, guest);
+    await redis.set(`guest:${newGuestId}`, guest, { ex: GUEST_TTL_SECONDS });
   }
 };
 
