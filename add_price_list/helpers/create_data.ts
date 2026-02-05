@@ -86,5 +86,13 @@ export default function createData(html: string, pricesSet: PricesSet) {
     list.push(obj);
   });
 
-  return list;
+  return list.reduce((acc, current) => {
+    const existing = acc.find(item => item.title === current.title);
+    if (existing) {
+      existing.items.push(...current.items);
+    } else {
+      acc.push(current);
+    }
+    return acc;
+  }, [] as Position[]);
 }
