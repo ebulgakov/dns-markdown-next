@@ -49,7 +49,6 @@
     "recharts": "^2.15.4",
     "rehype-raw": "^7.0.0",
     "tailwind-merge": "^3.4.0",
-    "use-local-storage": "^3.0.0",
     "zustand": "^5.0.9"
   },
   "devDependencies": {
