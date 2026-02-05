@@ -2,23 +2,16 @@ import { Fragment } from "react";
 
 import { Alert, AlertDescription, AlertTitle } from "@/app/components/ui/alert";
 
-type PriceListFavoritesEmptyAlertProps = {
-  isUserLoggedIn?: boolean;
-};
-function PriceListFavoritesEmptyAlert({ isUserLoggedIn }: PriceListFavoritesEmptyAlertProps) {
+function PriceListFavoritesEmptyAlert() {
   return (
     <div className="mb-10">
       <Alert variant="success">
         <AlertTitle>У вас нет избранных категорий</AlertTitle>
         <AlertDescription>
-          {isUserLoggedIn ? (
-            <Fragment>
-              Добавьте избранные категории в вашем профиле и они всегда будут закреплены вверху
-              списка
-            </Fragment>
-          ) : (
-            <Fragment>Войдите в свой аккаунт, чтобы добавлять категории в избранное.</Fragment>
-          )}
+          <Fragment>
+            Добавьте избранные категории в вашем профиле или нажав на сердечко напротив заголовка и
+            они всегда будут закреплены вверху списка
+          </Fragment>
         </AlertDescription>
       </Alert>
     </div>

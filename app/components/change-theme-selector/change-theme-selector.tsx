@@ -14,7 +14,7 @@ function ChangeThemeSelector() {
 
   useEffect(() => {
     // https://react.dev/reference/react-dom/client/hydrateRoot#handling-different-client-and-server-content
-    setIsClient(true); // eslint-disable-line react-hooks/set-state-in-effect
+    setIsClient(true);  
   }, []);
 
   const handleSendGAEvent = (theme: string) => {

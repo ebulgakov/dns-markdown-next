@@ -11,7 +11,7 @@ import {
 import { PriceListSection } from "./price-list-section";
 
 import type { Position as PositionType } from "@/types/pricelist";
-import type { Favorite, UserSections as UserSectionsType, UserSections } from "@/types/user";
+import type { Favorite, UserSections } from "@/types/user";
 
 type CatalogProps = {
   positions: PositionType[];
@@ -29,14 +29,14 @@ function PriceList({
   isUserLoggedIn
 }: CatalogProps) {
   // Hidden sections state management
-  const [realHiddenSections, setRealHiddenSections] = useState<UserSectionsType>(hSections);
+  const [realHiddenSections, setRealHiddenSections] = useState<UserSections>(hSections);
   const [hiddenSections, setHiddenSections] = useOptimistic<UserSections, UserSections>(
     realHiddenSections,
     (_, newSections) => newSections
   );
 
   // Favorite sections state management
-  const [realFavoriteSections, setRealFavoriteSections] = useState<UserSectionsType>(fSections);
+  const [realFavoriteSections, setRealFavoriteSections] = useState<UserSections>(fSections);
   const [favoriteSections, setFavoriteSections] = useOptimistic<UserSections, UserSections>(
     realFavoriteSections,
     (_, newSections) => newSections

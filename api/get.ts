@@ -22,7 +22,7 @@ const wrapApiCall = async (endpoint: string, options = {}) => {
 };
 
 const getCachedPriceList = cacheToken(
-  async (city: string): Promise<PriceList> => {
+  async (city: string): Promise<PriceList | null> => {
     return wrapApiCall("/api/pricelist", { params: { city } });
   },
   ["last-pricelist"],
