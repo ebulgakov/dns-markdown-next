@@ -27,17 +27,12 @@ function PriceList({
   favoriteSections: fSections = [],
   hiddenSections: hSections = []
 }: CatalogProps) {
-  // Hidden sections state management
-  const [realHiddenSections, setRealHiddenSections] = useState<UserSections>(hSections);
   const [hiddenSections, setHiddenSections] = useOptimistic<UserSections, UserSections>(
-    realHiddenSections,
+    hSections,
     (_, newSections) => newSections
   );
-
-  // Favorite sections state management
-  const [realFavoriteSections, setRealFavoriteSections] = useState<UserSections>(fSections);
   const [favoriteSections, setFavoriteSections] = useOptimistic<UserSections, UserSections>(
-    realFavoriteSections,
+    fSections,
     (_, newSections) => newSections
   );
 
@@ -57,8 +52,6 @@ function PriceList({
           list = await postRemoveFromHiddenSections(title);
         }
         if (!list) throw new Error("No data returned from server");
-
-        setRealHiddenSections(list.sections);
       } catch (error) {
         console.error("Failed to update hidden sections:", error);
       }
@@ -82,8 +75,6 @@ function PriceList({
         }
 
         if (!list) throw new Error("No data returned from server");
-
-        setRealFavoriteSections(list.sections);
       } catch (error) {
         console.error("Failed to update favorite sections:", error);
       }
