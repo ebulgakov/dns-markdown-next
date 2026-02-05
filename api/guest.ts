@@ -115,12 +115,22 @@ export const addToFavoriteSections = async (title: string) => {
     guest.favoriteSections.push(title);
     await setGuest(guest);
   }
+
+  return {
+    message: "OK",
+    sections: guest.favoriteSections
+  };
 };
 
 export const removeFromFavoriteSections = async (title: string) => {
   const guest = await getGuest();
   guest.favoriteSections = guest.favoriteSections.filter(section => section !== title);
   await setGuest(guest);
+
+  return {
+    message: "OK",
+    sections: guest.favoriteSections
+  };
 };
 
 export const addToFavorites = async (product: z.infer<typeof goodsSchema>) => {
