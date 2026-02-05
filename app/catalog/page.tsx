@@ -1,13 +1,15 @@
-import { auth } from "@clerk/nextjs/server";
 import { getTranslations } from "next-intl/server";
 
-import { getCatalogData } from "@/app/catalog/get-catalog-data";
+import { getLastPriceList, getPriceListCity } from "@/api/get";
+import { getUser as getGenericUser } from "@/api/post";
 import { PriceListPage } from "@/app/components/price-list";
 import { SortGoods } from "@/app/components/sort-goods";
 import { Alert, AlertDescription, AlertTitle } from "@/app/components/ui/alert";
 import { PageTitle } from "@/app/components/ui/page-title";
 import { formatDate, formatTime } from "@/app/helpers/format";
+import { User } from "@/types/user";
 
+import type { PriceList } from "@/types/pricelist";
 import type { Metadata } from "next";
 
 type CatalogPage = {
@@ -23,32 +25,33 @@ export async function generateMetadata({ params }: CatalogPage): Promise<Metadat
 }
 
 export default async function CatalogPage() {
-  let priceList, userFavoritesGoods, hiddenSectionsTitles, favoriteSections, nonFavoriteSections;
+  let genericUser: User | null = null;
 
   try {
-    const data = await getCatalogData();
-    priceList = data.priceList;
-    userFavoritesGoods = data.userFavoritesGoods;
-    hiddenSectionsTitles = data.hiddenSectionsTitles;
-    favoriteSections = data.favoriteSections;
-    nonFavoriteSections = data.nonFavoriteSections;
+    genericUser = await getGenericUser();
   } catch (error) {
     const e = error as Error;
-    console.error(e);
+    return (
+      <Alert variant="destructive">
+        <AlertTitle>Ошибка загрузки пользователя</AlertTitle>
+        <AlertDescription>{e.message}</AlertDescription>
+      </Alert>
+    );
+  }
+
+  let priceList: PriceList | null = null;
+  try {
+    const city = await getPriceListCity();
+    priceList = await getLastPriceList(city);
+    if (!priceList) throw new Error("Price list not found");
+  } catch (error) {
+    const e = error as Error;
     return (
       <Alert variant="destructive">
         <AlertTitle>Ошибка загрузки каталога</AlertTitle>
         <AlertDescription>{e.message}</AlertDescription>
       </Alert>
     );
-  }
-
-  let isUserLoggedIn;
-  try {
-    const { userId } = await auth();
-    isUserLoggedIn = !!userId;
-  } catch {
-    isUserLoggedIn = false;
   }
 
   const count = priceList.positions.reduce((acc, cur) => acc + cur.items.length, 0);
@@ -66,12 +69,10 @@ export default async function CatalogPage() {
       </PageTitle>
 
       <PriceListPage
-        favoriteSections={favoriteSections}
-        userFavoritesGoods={userFavoritesGoods}
-        hiddenSectionsTitles={hiddenSectionsTitles}
-        nonFavoriteSections={nonFavoriteSections}
+        favoriteSections={genericUser?.favoriteSections}
+        hiddenSections={genericUser?.hiddenSections}
+        userFavorites={genericUser?.favorites}
         priceList={priceList}
-        isUserLoggedIn={isUserLoggedIn}
       />
     </div>
   );

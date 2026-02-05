@@ -4,7 +4,6 @@ import { Star } from "lucide-react";
 import { useState, useOptimistic, startTransition } from "react";
 
 import { postAddToFavorites, postRemoveFromFavorites } from "@/api/post";
-import { Tooltip, TooltipContent, TooltipTrigger } from "@/app/components/ui/tooltip";
 import { sendGAEvent } from "@/app/lib/sendGAEvent";
 
 import type { Goods as GoodsType } from "@/types/pricelist";
@@ -13,14 +12,9 @@ import type { Favorite } from "@/types/user";
 type PriceListFavoriteToggleProps = {
   favorites: Favorite[];
   goods: GoodsType;
-  isUserLoggedIn?: boolean;
 };
 
-function PriceListFavoriteToggle({
-  favorites,
-  goods,
-  isUserLoggedIn
-}: PriceListFavoriteToggleProps) {
+function PriceListFavoriteToggle({ favorites, goods }: PriceListFavoriteToggleProps) {
   const [inFavorites, setInFavorites] = useState<boolean>(
     favorites.some(fav => fav.item.link === goods.link)
   );
@@ -67,23 +61,6 @@ function PriceListFavoriteToggle({
       }
     });
   };
-
-  if (!isUserLoggedIn) {
-    return (
-      <Tooltip>
-        <TooltipTrigger>
-          <div className="text-favorite text-xl opacity-50">
-            <Star />
-          </div>
-        </TooltipTrigger>
-        <TooltipContent>
-          <p>
-            Чтобы добавлять товары в избранное, <br /> нужно авторизоваться
-          </p>
-        </TooltipContent>
-      </Tooltip>
-    );
-  }
 
   return inFavoritesOptimistic ? (
     <button

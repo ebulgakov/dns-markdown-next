@@ -9,7 +9,8 @@ import { apiClient } from "@/api/client";
 import type { Goods } from "@/types/pricelist";
 import type { Favorite, User, UserNotifications, UserSections } from "@/types/user";
 
-type FavoritesResponse = { message: string; favorites: Favorite[] };
+export type FavoritesResponse = { message: string; favorites: Favorite[] };
+export type FavoritesStatusResponse = { message: string; shownBoughtFavorites: boolean };
 
 export type SectionsResponse = {
   message: string;
@@ -52,7 +53,7 @@ export const postUpdateUserNotifications = async (
 
 export const postToggleFavoriteShownBought = async (
   shownBoughtFavorites: boolean
-): Promise<{ message: string; shownBoughtFavorites: boolean } | null> => {
+): Promise<FavoritesStatusResponse | null> => {
   const { token, userId } = await getSessionInfo();
   revalidateTag(`user-${userId}`, { expire: 0 });
   return await wrapApiCall("/api/user/toggle-shown-bought-favorites", token, {

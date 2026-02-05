@@ -1,8 +1,7 @@
-import { auth } from "@clerk/nextjs/server";
 import { getTranslations } from "next-intl/server";
 
 import { getPriceListCity, getLastDiffByCity } from "@/api/get";
-import { getUser } from "@/api/post";
+import { getUser as getGenericUser } from "@/api/post";
 import { Alert, AlertDescription, AlertTitle } from "@/app/components/ui/alert";
 import { Updates } from "@/app/components/updates";
 
@@ -23,14 +22,6 @@ export async function generateMetadata({ params }: UpdatesPageProps): Promise<Me
 }
 
 export default async function UpdatesPage() {
-  let isUserLoggedIn;
-  try {
-    const { userId } = await auth();
-    isUserLoggedIn = !!userId;
-  } catch {
-    isUserLoggedIn = false;
-  }
-
   let diffNew;
   let diffRemoved;
   let diffChangesPrice;
@@ -82,19 +73,12 @@ export default async function UpdatesPage() {
     );
   }
 
-  try {
-    const user = await getUser();
-    if (!user) throw new Error("User not found");
-
-    userFavoritesGoods = user.favorites;
-  } catch {
-    userFavoritesGoods = [];
-  }
+  const genericUser = await getGenericUser();
+  userFavoritesGoods = genericUser?.favorites || [];
 
   return (
     <Updates
       diffNew={diffNew}
-      isUserLoggedIn={isUserLoggedIn}
       userFavoritesGoods={userFavoritesGoods}
       diffChangesPrice={diffChangesPrice}
       changePriceDiff={changePriceDiff}

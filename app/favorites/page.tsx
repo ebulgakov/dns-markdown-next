@@ -1,29 +1,44 @@
-import { getUser } from "@/api/post";
-import { FavoritesPageClient, FavoritesEmpty } from "@/app/components/favorites";
-import { Alert, AlertTitle, AlertDescription } from "@/app/components/ui/alert";
+import { getLastPriceList } from "@/api/get";
+import { getGuest } from "@/api/guest";
+import { getUser } from "@/api/user";
+import { getSessionInfo } from "@/api/user";
+import { FavoritesPageClient } from "@/app/components/favorites";
+import { getFlatPriceList } from "@/app/helpers/pricelist";
+
+import type { Favorite } from "@/types/user";
 
 export default async function FavoritesPage() {
-  let favorites;
-  let shownBoughtFavorites;
+  const { userId } = await getSessionInfo();
 
-  try {
-    const user = await getUser();
-    if (!user) throw new Error("User not found");
+  let favorites: Favorite[] = [];
+  let shownBoughtFavorites: boolean = false;
 
-    shownBoughtFavorites = user.shownBoughtFavorites;
-    favorites = user.favorites.reverse();
-  } catch (e) {
-    const { message } = e as Error;
-    return (
-      <Alert variant="destructive">
-        <AlertTitle>Ошибка загрузки избранного</AlertTitle>
-        <AlertDescription>{message}</AlertDescription>
-      </Alert>
-    );
-  }
+  if (userId) {
+    try {
+      const user = await getUser();
+      if (user) {
+        favorites = user.favorites;
+        shownBoughtFavorites = user.shownBoughtFavorites;
+      }
+    } catch {
+      // silently ignore errors, as favorites are not critical for the page to function
+    }
+  } else {
+    try {
+      const guest = await getGuest();
+      const lastPriceList = await getLastPriceList(guest.city);
+      if (!lastPriceList) throw new Error("Price list not found for guests's city");
 
-  if (favorites.length === 0) {
-    return <FavoritesEmpty />;
+      const flatCatalog = getFlatPriceList(lastPriceList);
+      favorites = guest.favorites.map(fav => {
+        const found = flatCatalog.find(i => i.link === fav.item.link);
+        fav.status.deleted = !found;
+        return fav;
+      });
+      shownBoughtFavorites = guest.shownBoughtFavorites;
+    } catch {
+      // silently ignore errors, as favorites are not critical for the page to function
+    }
   }
 
   return <FavoritesPageClient favorites={favorites} shownBoughtFavorites={shownBoughtFavorites} />;

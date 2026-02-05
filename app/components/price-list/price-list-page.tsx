@@ -14,24 +14,20 @@ import { PriceList } from "./price-list";
 import { PriceListFavoritesEmptyAlert } from "./price-list-favorites-empty-alert";
 import { PriceListGoods } from "./price-list-goods";
 
-import type { Position as PositionType, PriceList as PriceListType } from "@/types/pricelist";
-import type { Favorite as FavoriteType, UserSections as UserSectionsType } from "@/types/user";
+import type { Position, PriceList as PriceListType } from "@/types/pricelist";
+import type { Favorite, UserSections } from "@/types/user";
 
 type PriceListPageProps = {
-  favoriteSections?: PositionType[];
-  userFavoritesGoods?: FavoriteType[];
-  hiddenSectionsTitles?: UserSectionsType;
-  nonFavoriteSections?: PositionType[];
+  favoriteSections?: UserSections;
+  hiddenSections?: UserSections;
+  userFavorites?: Favorite[];
   priceList: PriceListType;
-  isUserLoggedIn?: boolean;
 };
 
 function PriceListPage({
-  favoriteSections,
-  userFavoritesGoods,
-  hiddenSectionsTitles,
-  nonFavoriteSections,
-  isUserLoggedIn,
+  favoriteSections = [],
+  hiddenSections = [],
+  userFavorites = [],
   priceList
 }: PriceListPageProps) {
   const sortGoods = useSortGoodsStore(state => state.sortGoods);
@@ -39,50 +35,47 @@ function PriceListPage({
   const debouncedSearch = useDebounce<string>(searchTerm.trim(), 100);
   const filteredList = useFilteredGoods(debouncedSearch, priceList);
   const isHiddenDefaultList = debouncedSearch.length > 1 || sortGoods !== "default";
-  const priceListPositions =
-    nonFavoriteSections && nonFavoriteSections.length > 0
-      ? nonFavoriteSections
-      : priceList.positions;
 
-  const favoriteSectionsTitles: UserSectionsType = favoriteSections
-    ? favoriteSections.map(section => section.title)
-    : [];
+  const favoriteSectionsPositions: Position[] = [];
+  const nonFavoritesSectionsPositions: Position[] = [];
+
+  priceList.positions.forEach(section => {
+    if (favoriteSections?.includes(section.title)) {
+      favoriteSectionsPositions.push(section);
+    } else {
+      nonFavoritesSectionsPositions.push(section);
+    }
+  });
 
   return (
     <div data-testid="price-list-page">
       {filteredList.map(item => (
-        <PriceListGoods key={item._id} item={item} favorites={userFavoritesGoods} />
+        <PriceListGoods key={item._id} item={item} favorites={userFavorites} />
       ))}
 
       <div className={clsx({ hidden: isHiddenDefaultList })}>
-        {favoriteSections && (
+        {favoriteSections.length > 0 ? (
           <Fragment>
-            {isUserLoggedIn && favoriteSections.length > 0 ? (
-              <Fragment>
-                <Title variant="h2">Избранные категории</Title>
+            <Title variant="h2">Избранные категории</Title>
 
-                <PriceList
-                  positions={favoriteSections}
-                  favorites={userFavoritesGoods}
-                  hiddenSections={hiddenSectionsTitles}
-                  favoriteSections={favoriteSectionsTitles}
-                  isUserLoggedIn={isUserLoggedIn}
-                />
+            <PriceList
+              positions={favoriteSectionsPositions.sort((a, b) => a.title.localeCompare(b.title))}
+              favorites={userFavorites}
+              hiddenSections={hiddenSections}
+              favoriteSections={favoriteSections}
+            />
 
-                <Title variant="h2">Все категории</Title>
-              </Fragment>
-            ) : (
-              <PriceListFavoritesEmptyAlert isUserLoggedIn={isUserLoggedIn} />
-            )}
+            <Title variant="h2">Все категории</Title>
           </Fragment>
+        ) : (
+          <PriceListFavoritesEmptyAlert />
         )}
 
         <PriceList
-          positions={priceListPositions}
-          favorites={userFavoritesGoods}
-          hiddenSections={hiddenSectionsTitles}
-          favoriteSections={favoriteSectionsTitles}
-          isUserLoggedIn={isUserLoggedIn}
+          positions={nonFavoritesSectionsPositions.sort((a, b) => a.title.localeCompare(b.title))}
+          favorites={userFavorites}
+          hiddenSections={hiddenSections}
+          favoriteSections={favoriteSections}
         />
       </div>
 

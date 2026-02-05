@@ -1,6 +1,17 @@
 "use server";
 
 import {
+  getGuest,
+  addToHiddenSections as addToHiddenSectionsGuest,
+  removeFromHiddenSections as removeFromHiddenSectionsGuest,
+  addToFavoriteSections as addToFavoriteSectionsGuest,
+  removeFromFavoriteSections as removeFromFavoriteSectionsGuest,
+  addToFavorites as addToFavoritesGuest,
+  removeFromFavorites as removeFromFavoritesGuest,
+  toggleShownBoughtFavorites as toggleShownBoughtFavoritesGuest
+} from "@/api/guest";
+
+import {
   postUpdateUserNotifications as postUpdateUserNotificationsUser,
   postToggleFavoriteShownBought as postToggleFavoriteShownBoughtUser,
   postAddToFavorites as postAddToFavoritesUser,
@@ -32,7 +43,7 @@ export const postToggleFavoriteShownBought = async (shownBoughtFavorites: boolea
   if (userId) {
     return await postToggleFavoriteShownBoughtUser(shownBoughtFavorites);
   } else {
-    return null;
+    return await toggleShownBoughtFavoritesGuest(shownBoughtFavorites);
   }
 };
 
@@ -42,7 +53,7 @@ export const postAddToFavorites = async (product: Goods) => {
   if (userId) {
     return await postAddToFavoritesUser(product);
   } else {
-    return null;
+    return await addToFavoritesGuest(product);
   }
 };
 
@@ -52,7 +63,7 @@ export const postRemoveFromFavorites = async (link: string) => {
   if (userId) {
     return await postRemoveFromFavoritesUser(link);
   } else {
-    return null;
+    return await removeFromFavoritesGuest(link);
   }
 };
 
@@ -62,7 +73,7 @@ export const postAddToHiddenSections = async (title: string) => {
   if (userId) {
     return await postAddToHiddenSectionsUser(title);
   } else {
-    return null;
+    return await addToHiddenSectionsGuest(title);
   }
 };
 
@@ -72,7 +83,7 @@ export const postRemoveFromHiddenSections = async (title: string) => {
   if (userId) {
     return await postRemoveFromHiddenSectionsUser(title);
   } else {
-    return null;
+    return await removeFromHiddenSectionsGuest(title);
   }
 };
 
@@ -82,7 +93,7 @@ export const postAddToFavoriteSections = async (title: string) => {
   if (userId) {
     return await postAddToFavoriteSectionsUser(title);
   } else {
-    return null;
+    return await addToFavoriteSectionsGuest(title);
   }
 };
 
@@ -92,7 +103,7 @@ export const postRemoveFromFavoriteSection = async (title: string) => {
   if (userId) {
     return await postRemoveFromFavoriteSectionUser(title);
   } else {
-    return null;
+    return await removeFromFavoriteSectionsGuest(title);
   }
 };
 
@@ -102,7 +113,7 @@ export const getUser = async () => {
   if (userId) {
     return await getUserUser();
   } else {
-    return null;
+    return await getGuest();
   }
 };
 

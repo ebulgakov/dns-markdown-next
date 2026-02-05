@@ -30,14 +30,14 @@ function Navbar({ locate, isUserLoggedIn, city }: NavbarProps) {
     {
       name: t("archive"),
       url: "/archive"
+    },
+    {
+      name: t("favorites"),
+      url: "/favorites"
     }
   ];
 
   const userLinks: NavbarLinks = [
-    {
-      name: t("favorites"),
-      url: "/favorites"
-    },
     {
       name: t("profile"),
       url: "/profile"

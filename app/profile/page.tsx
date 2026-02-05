@@ -1,5 +1,5 @@
 import { getLastPriceList } from "@/api/get";
-import { getUser } from "@/api/post";
+import { getUser } from "@/api/user"; // I need exactly the real user, not the guest
 import { ProfileSections } from "@/app/components/profile-sections";
 import { Alert, AlertDescription, AlertTitle } from "@/app/components/ui/alert";
 
@@ -12,6 +12,7 @@ export default async function ProfilePage() {
     if (!user) throw new Error("User not found");
 
     const lastPriceList = await getLastPriceList(user.city);
+    if (!lastPriceList) throw new Error("Price list not found for user's city");
     allSections = lastPriceList.positions.map(position => position.title);
   } catch (e) {
     const { message } = e as Error;

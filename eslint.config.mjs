@@ -44,7 +44,9 @@ const eslintConfig = defineConfig([
             caseInsensitive: true
           }
         }
-      ]
+      ],
+      // Allow setState in useEffect for hydration handling
+      "react-hooks/set-state-in-effect": "off"
     }
   }
 ]);

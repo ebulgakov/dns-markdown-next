@@ -4,7 +4,7 @@ import { unstable_cache as cacheToken } from "next/cache";
 
 import { apiClient } from "@/api/client";
 
-import { getUser } from "./post";
+import { getUser } from "./user";
 
 import type { AnalysisDiff, AnalysisDiffReport } from "@/types/analysis-diff";
 import type { Goods, PriceList, PriceListDate, PriceListsArchiveCount } from "@/types/pricelist";
@@ -22,7 +22,7 @@ const wrapApiCall = async (endpoint: string, options = {}) => {
 };
 
 const getCachedPriceList = cacheToken(
-  async (city: string): Promise<PriceList> => {
+  async (city: string): Promise<PriceList | null> => {
     return wrapApiCall("/api/pricelist", { params: { city } });
   },
   ["last-pricelist"],

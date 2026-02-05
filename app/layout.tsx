@@ -1,5 +1,4 @@
 import { ClerkProvider } from "@clerk/nextjs";
-import { auth } from "@clerk/nextjs/server";
 import { GoogleAnalytics } from "@next/third-parties/google";
 import { SpeedInsights } from "@vercel/speed-insights/next";
 import { Roboto, Roboto_Mono } from "next/font/google";
@@ -11,6 +10,7 @@ import { StrictMode, type ReactNode } from "react";
 import "./globals.css";
 
 import { getPriceListCity } from "@/api/get";
+import { getSessionInfo } from "@/api/user";
 import { ClerkError } from "@/app/components/clerk-error";
 import { Footer } from "@/app/components/footer";
 import { Navbar } from "@/app/components/navbar";
@@ -70,7 +70,7 @@ export default async function RootLayout({
 
   let userId;
   try {
-    const authData = await auth();
+    const authData = await getSessionInfo();
     userId = authData.userId;
   } catch {
     userId = null;

@@ -24,7 +24,6 @@ type PriceListProps = {
 function PriceListSection({
   onHidden,
   onFavorite,
-  isUserLoggedIn,
   position,
   favorites,
   diffs,
@@ -46,7 +45,7 @@ function PriceListSection({
           {position.title} &ndash; {position.items.length}
         </span>
 
-        {isUserLoggedIn && onFavorite && (
+        {onFavorite && (
           <button
             type="button"
             className="relative ml-auto cursor-pointer"
@@ -69,7 +68,6 @@ function PriceListSection({
               item={item}
               favorites={favorites}
               diff={diffs && diffs[item._id]}
-              isUserLoggedIn={isUserLoggedIn}
             />
           ))}
       </div>

@@ -14,14 +14,12 @@ type UpdatesProps = {
   diffChangesPrice?: PositionType;
   diffRemoved?: PositionType;
   diffChangesProfit?: PositionType;
-  isUserLoggedIn: boolean;
   userFavoritesGoods: Favorite[];
   changePriceDiff: DiffsType;
   changeProfitDiff: DiffsType;
 };
 function Updates({
   diffNew,
-  isUserLoggedIn,
   userFavoritesGoods,
   diffChangesPrice,
   changePriceDiff,
@@ -48,7 +46,6 @@ function Updates({
       {diffNew && (
         <PriceListSection
           onHidden={onToggleSection}
-          isUserLoggedIn={isUserLoggedIn}
           isOpen={shownSections.includes(diffNew.title)}
           position={diffNew}
           favorites={userFavoritesGoods}
@@ -57,7 +54,6 @@ function Updates({
       {diffChangesPrice && (
         <PriceListSection
           onHidden={onToggleSection}
-          isUserLoggedIn={isUserLoggedIn}
           isOpen={shownSections.includes(diffChangesPrice.title)}
           position={diffChangesPrice}
           favorites={userFavoritesGoods}
@@ -74,7 +70,6 @@ function Updates({
       {diffChangesProfit && (
         <PriceListSection
           onHidden={onToggleSection}
-          isUserLoggedIn={isUserLoggedIn}
           isOpen={shownSections.includes(diffChangesProfit.title)}
           position={diffChangesProfit}
           diffs={changeProfitDiff}

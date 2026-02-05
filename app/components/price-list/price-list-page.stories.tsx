@@ -1,7 +1,6 @@
 import { mockPriceList, mockPositions } from "./__mocks__/goods";
 import { PriceListPage } from "./price-list-page";
 
-import type { Position } from "@/types/pricelist";
 import type { Favorite, UserSections } from "@/types/user";
 import type { Meta, StoryObj } from "@storybook/react";
 
@@ -14,13 +13,11 @@ const meta: Meta<typeof PriceListPage> = {
 export default meta;
 type Story = StoryObj<typeof PriceListPage>;
 
-const mockFavoriteSections: Position[] = [mockPositions[0]];
+const mockFavoriteSections: UserSections = [mockPositions[0].title];
 
 const mockUserFavoritesGoods: Favorite[] = [];
 
 const mockHiddenSectionsTitles: UserSections = [mockPriceList.positions[1].title];
-
-const nonFavoriteSections = mockPriceList.positions.filter(p => p.title !== mockPositions[0].title);
 
 export const Default: Story = {
   args: {
@@ -31,29 +28,24 @@ export const Default: Story = {
 export const WithFavorites: Story = {
   args: {
     priceList: mockPriceList,
-    isUserLoggedIn: true,
     favoriteSections: mockFavoriteSections,
-    userFavoritesGoods: mockUserFavoritesGoods
+    userFavorites: mockUserFavoritesGoods
   }
 };
 
 export const WithHiddenSections: Story = {
   args: {
     priceList: mockPriceList,
-    isUserLoggedIn: true,
     favoriteSections: [],
-    hiddenSectionsTitles: mockHiddenSectionsTitles,
-    nonFavoriteSections: nonFavoriteSections
+    hiddenSections: mockHiddenSectionsTitles
   }
 };
 
 export const WithFavoritesAndHiddenSections: Story = {
   args: {
     priceList: mockPriceList,
-    isUserLoggedIn: true,
     favoriteSections: mockFavoriteSections,
-    userFavoritesGoods: mockUserFavoritesGoods,
-    hiddenSectionsTitles: mockHiddenSectionsTitles,
-    nonFavoriteSections: nonFavoriteSections
+    userFavorites: mockUserFavoritesGoods,
+    hiddenSections: mockHiddenSectionsTitles
   }
 };

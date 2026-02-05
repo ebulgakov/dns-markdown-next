@@ -6,4 +6,11 @@ const defValue = {
   }
 };
 
-export { currentUser, defValue as default };
+const auth = async () => {
+  return {
+    getToken: async () => "mock-token",
+    userId: "mock-user-id"
+  };
+};
+
+export { currentUser, auth, defValue as default };
