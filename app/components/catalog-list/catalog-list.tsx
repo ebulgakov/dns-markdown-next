@@ -1,8 +1,11 @@
 "use client";
 
+import { useEffect, useState } from "react";
+
 import { PriceListPage } from "@/app/components/price-list";
 import { SortGoods } from "@/app/components/sort-goods";
 import { PageTitle } from "@/app/components/ui/page-title";
+import { Spinner } from "@/app/components/ui/spinner";
 import { formatDate, formatTime } from "@/app/helpers/format";
 import { useGuestData } from "@/app/hooks/use-guest-data";
 import { PriceList } from "@/types/pricelist";
@@ -23,6 +26,7 @@ function CatalogList({
   isUserLoggedIn,
   userFavorites = []
 }: CatalogListProps) {
+  const [isClient, setIsClient] = useState(false);
   const { guestData } = useGuestData();
 
   const favoriteSections: UserSections = isUserLoggedIn
@@ -34,8 +38,17 @@ function CatalogList({
 
   const count = priceList.positions.reduce((acc, cur) => acc + cur.items.length, 0);
 
-  if (!isUserLoggedIn && !guestData) {
-    return null;
+  useEffect(() => {
+    // https://react.dev/reference/react-dom/client/hydrateRoot#handling-different-client-and-server-content
+    setIsClient(true);
+  }, []);
+
+  if (!isClient && !isUserLoggedIn) {
+    return (
+      <div className="flex h-full items-center justify-center">
+        <Spinner className="size-20" />
+      </div>
+    );
   }
 
   return (
