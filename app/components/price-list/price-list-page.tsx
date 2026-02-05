@@ -22,14 +22,12 @@ type PriceListPageProps = {
   hiddenSections?: UserSections;
   userFavorites?: Favorite[];
   priceList: PriceListType;
-  isUserLoggedIn?: boolean;
 };
 
 function PriceListPage({
   favoriteSections = [],
   hiddenSections = [],
   userFavorites = [],
-  isUserLoggedIn,
   priceList
 }: PriceListPageProps) {
   const sortGoods = useSortGoodsStore(state => state.sortGoods);
@@ -65,13 +63,12 @@ function PriceListPage({
               favorites={userFavorites}
               hiddenSections={hiddenSections}
               favoriteSections={favoriteSections}
-              isUserLoggedIn={isUserLoggedIn}
             />
 
             <Title variant="h2">Все категории</Title>
           </Fragment>
         ) : (
-          <PriceListFavoritesEmptyAlert isUserLoggedIn={isUserLoggedIn} />
+          <PriceListFavoritesEmptyAlert />
         )}
 
         <PriceList
@@ -79,7 +76,6 @@ function PriceListPage({
           favorites={userFavorites}
           hiddenSections={hiddenSections}
           favoriteSections={favoriteSections}
-          isUserLoggedIn={isUserLoggedIn}
         />
       </div>
 

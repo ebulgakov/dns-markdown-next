@@ -45,7 +45,6 @@ export default async function CatalogPage() {
 
   const guest = await getGuest();
   const user = await getUser();
-
   const genericUser = user || guest;
 
   return (
@@ -65,7 +64,6 @@ export default async function CatalogPage() {
         hiddenSections={genericUser.hiddenSections}
         userFavorites={genericUser.favorites}
         priceList={priceList}
-        isUserLoggedIn={!!user}
       />
     </div>
   );

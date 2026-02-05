@@ -16,7 +16,6 @@ type PriceListProps = {
   diffs?: DiffsType;
   isOpen?: boolean;
   isFavoriteSection?: boolean;
-  isUserLoggedIn?: boolean;
   onHidden: (title: string) => void;
   onFavorite?: (title: string) => void;
 };
@@ -24,7 +23,6 @@ type PriceListProps = {
 function PriceListSection({
   onHidden,
   onFavorite,
-  isUserLoggedIn,
   position,
   favorites,
   diffs,
@@ -69,7 +67,6 @@ function PriceListSection({
               item={item}
               favorites={favorites}
               diff={diffs && diffs[item._id]}
-              isUserLoggedIn={isUserLoggedIn}
             />
           ))}
       </div>

@@ -28,7 +28,6 @@ export const Default: Story = {
 export const WithFavorites: Story = {
   args: {
     priceList: mockPriceList,
-    isUserLoggedIn: true,
     favoriteSections: mockFavoriteSections,
     userFavorites: mockUserFavoritesGoods
   }
@@ -37,7 +36,6 @@ export const WithFavorites: Story = {
 export const WithHiddenSections: Story = {
   args: {
     priceList: mockPriceList,
-    isUserLoggedIn: true,
     favoriteSections: [],
     hiddenSections: mockHiddenSectionsTitles
   }
@@ -46,7 +44,6 @@ export const WithHiddenSections: Story = {
 export const WithFavoritesAndHiddenSections: Story = {
   args: {
     priceList: mockPriceList,
-    isUserLoggedIn: true,
     favoriteSections: mockFavoriteSections,
     userFavorites: mockUserFavoritesGoods,
     hiddenSections: mockHiddenSectionsTitles

@@ -19,15 +19,13 @@ type CatalogProps = {
   hiddenSections?: UserSections;
   favoriteSections?: UserSections;
   favorites?: Favorite[];
-  isUserLoggedIn?: boolean;
 };
 
 function PriceList({
   positions,
   favorites,
   favoriteSections: fSections = [],
-  hiddenSections: hSections = [],
-  isUserLoggedIn
+  hiddenSections: hSections = []
 }: CatalogProps) {
   // Hidden sections state management
   const [realHiddenSections, setRealHiddenSections] = useState<UserSections>(hSections);
@@ -101,7 +99,6 @@ function PriceList({
       isFavoriteSection={favoriteSections.includes(position.title)}
       onHidden={onHidden}
       onFavorite={onFavorite}
-      isUserLoggedIn={isUserLoggedIn}
     />
   ));
 }

@@ -1,7 +1,7 @@
-import { auth } from "@clerk/nextjs/server";
 import { getTranslations } from "next-intl/server";
 
 import { getProductByLink } from "@/api/get";
+import { getGuest } from "@/api/guest";
 import { getUser } from "@/api/user";
 import { ChartPrices } from "@/app/components/chart-prices";
 import { PriceListGoods } from "@/app/components/price-list";
@@ -49,34 +49,17 @@ export default async function CatalogItemPage({ params }: CatalogItemPage) {
 
   let favorites: Favorite[] | undefined;
   if (!product.status.deleted) {
-    try {
-      const user = await getUser();
-      if (!user) throw new Error("User not found");
-
-      favorites = user.favorites;
-    } catch {
-      favorites = [];
-    }
-  }
-
-  let isUserLoggedIn;
-  try {
-    const { userId } = await auth();
-    isUserLoggedIn = !!userId;
-  } catch {
-    isUserLoggedIn = false;
+    const guest = await getGuest();
+    const user = await getUser();
+    const genericUser = user || guest;
+    favorites = genericUser.favorites;
   }
 
   return (
     <div>
       <PageTitle title={product.item.title} />
 
-      <PriceListGoods
-        isUserLoggedIn={isUserLoggedIn}
-        item={product.item}
-        favorites={favorites}
-        status={product.status}
-      />
+      <PriceListGoods item={product.item} favorites={favorites} status={product.status} />
 
       <Title variant="h2">Сравнение цен</Title>
 

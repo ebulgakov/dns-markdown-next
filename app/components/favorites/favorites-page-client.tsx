@@ -7,25 +7,20 @@ import { PriceListGoods } from "@/app/components/price-list";
 import { Alert, AlertDescription, AlertTitle } from "@/app/components/ui/alert";
 import { CheckboxWithLabel } from "@/app/components/ui/control-with-label";
 import { PageTitle } from "@/app/components/ui/page-title";
-import { useGuestData } from "@/app/hooks/use-guest-data";
 import { Favorite } from "@/types/user";
 
 import { FavoritesEmpty } from "./favorites-empty";
 
 type FavoritesPageClientProps = {
-  isUserLoggedIn: boolean;
-  userFavorites?: Favorite[];
+  favorites?: Favorite[];
   shownBoughtFavorites?: boolean;
 };
 
 function FavoritesPageClient({
-  isUserLoggedIn,
-  userFavorites = [],
+  favorites = [],
+
   shownBoughtFavorites: defaultVisibility = false
 }: FavoritesPageClientProps) {
-  const { guestData } = useGuestData();
-  const favorites = isUserLoggedIn ? userFavorites : guestData?.favorites;
-
   const [errorMessage, setErrorMessage] = useState<Error | null>(null);
   const [realShownBoughtFavorites, setRealShownBoughtFavorites] =
     useState<boolean>(defaultVisibility);
@@ -84,7 +79,6 @@ function FavoritesPageClient({
             item={favorite.item}
             status={favorite.status}
             favorites={!favorite.status.deleted ? favorites : undefined}
-            isUserLoggedIn={true}
           />
         ))}
       </div>
