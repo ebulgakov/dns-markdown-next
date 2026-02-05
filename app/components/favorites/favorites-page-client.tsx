@@ -1,25 +1,31 @@
 "use client";
 
-import { startTransition, useEffect, useOptimistic, useState } from "react";
+import { startTransition, useOptimistic, useState } from "react";
 
 import { postToggleFavoriteShownBought } from "@/api/user";
 import { PriceListGoods } from "@/app/components/price-list";
 import { Alert, AlertDescription, AlertTitle } from "@/app/components/ui/alert";
 import { CheckboxWithLabel } from "@/app/components/ui/control-with-label";
 import { PageTitle } from "@/app/components/ui/page-title";
+import { useGuestData } from "@/app/hooks/use-guest-data";
+import { Favorite } from "@/types/user";
 
-import type { Favorite } from "@/types/user";
+import { FavoritesEmpty } from "./favorites-empty";
 
 type FavoritesPageClientProps = {
-  favorites: Favorite[];
-  shownBoughtFavorites: boolean;
+  isUserLoggedIn: boolean;
+  userFavorites?: Favorite[];
+  shownBoughtFavorites?: boolean;
 };
 
 function FavoritesPageClient({
-  favorites,
-  shownBoughtFavorites: defaultVisibility
+  isUserLoggedIn,
+  userFavorites = [],
+  shownBoughtFavorites: defaultVisibility = false
 }: FavoritesPageClientProps) {
-  const [isClient, setIsClient] = useState(false);
+  const { guestData } = useGuestData();
+  const favorites = isUserLoggedIn ? userFavorites : guestData?.favorites;
+
   const [errorMessage, setErrorMessage] = useState<Error | null>(null);
   const [realShownBoughtFavorites, setRealShownBoughtFavorites] =
     useState<boolean>(defaultVisibility);
@@ -46,11 +52,11 @@ function FavoritesPageClient({
     });
   };
 
-  useEffect(() => {
-    // https://react.dev/reference/react-dom/client/hydrateRoot#handling-different-client-and-server-content
-    setIsClient(true);  
-  }, []);
-  return isClient ? (
+  if (favorites.length === 0) {
+    return <FavoritesEmpty />;
+  }
+
+  return (
     <div>
       <PageTitle title="Избранное">
         <div className="mt-2 md:mt-0">
@@ -83,7 +89,7 @@ function FavoritesPageClient({
         ))}
       </div>
     </div>
-  ) : null;
+  );
 }
 
 export { FavoritesPageClient };
