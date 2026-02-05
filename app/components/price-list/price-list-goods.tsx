@@ -19,9 +19,8 @@ type PriceListGoodsProps = {
   diff?: DiffType;
   favorites?: Favorite[];
   status?: FavoriteStatus;
-  isUserLoggedIn?: boolean;
 };
-function PriceListGoods({ item, status, diff, favorites, isUserLoggedIn }: PriceListGoodsProps) {
+function PriceListGoods({ item, status, diff, favorites }: PriceListGoodsProps) {
   const handleSendGAEvent = (event: string) => {
     sendGAEvent({
       event,
@@ -139,13 +138,7 @@ function PriceListGoods({ item, status, diff, favorites, isUserLoggedIn }: Price
       <div className="text-center [grid-area:store]">{item.available}</div>
 
       <div className="[grid-area:image] lg:[grid-area:favorites]">
-        {favorites && (
-          <PriceListFavoriteToggle
-            isUserLoggedIn={isUserLoggedIn}
-            favorites={favorites}
-            goods={item}
-          />
-        )}
+        {favorites && <PriceListFavoriteToggle favorites={favorites} goods={item} />}
       </div>
     </div>
   );

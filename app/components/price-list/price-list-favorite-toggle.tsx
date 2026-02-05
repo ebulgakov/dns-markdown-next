@@ -3,8 +3,7 @@
 import { Star } from "lucide-react";
 import { useState, useOptimistic, startTransition } from "react";
 
-import { postAddToFavorites, postRemoveFromFavorites } from "@/api/user";
-import { useGuestData } from "@/app/hooks/use-guest-data";
+import { postAddToFavorites, postRemoveFromFavorites } from "@/api/post";
 import { sendGAEvent } from "@/app/lib/sendGAEvent";
 
 import type { Goods as GoodsType } from "@/types/pricelist";
@@ -13,18 +12,11 @@ import type { Favorite } from "@/types/user";
 type PriceListFavoriteToggleProps = {
   favorites: Favorite[];
   goods: GoodsType;
-  isUserLoggedIn?: boolean;
 };
 
-function PriceListFavoriteToggle({
-  favorites,
-  goods,
-  isUserLoggedIn
-}: PriceListFavoriteToggleProps) {
-  const { addToGuestFavorites, removeFromGuestFavorites, guestData } = useGuestData();
-  const baseFavorites = isUserLoggedIn ? favorites : guestData.favorites;
+function PriceListFavoriteToggle({ favorites, goods }: PriceListFavoriteToggleProps) {
   const [inFavorites, setInFavorites] = useState<boolean>(
-    baseFavorites.some(fav => fav.item.link === goods.link)
+    favorites.some(fav => fav.item.link === goods.link)
   );
   const [inFavoritesOptimistic, setInFavoritesOptimistic] = useOptimistic<boolean, boolean>(
     inFavorites,
@@ -32,54 +24,42 @@ function PriceListFavoriteToggle({
   );
 
   const handleRemoveFromFavorites = () => {
-    if (isUserLoggedIn) {
-      startTransition(async () => {
-        setInFavoritesOptimistic(false);
-        try {
-          const removed = await postRemoveFromFavorites(goods.link);
-          if (removed) {
-            setInFavorites(false);
-            sendGAEvent({
-              event: "pricelist_goods_remove_from_favorites",
-              value: goods.title,
-              category: "PriceListGoods",
-              action: "click"
-            });
-          }
-        } catch (error) {
-          window.alert(error);
-        }
-      });
-    } else {
+    startTransition(async () => {
       setInFavoritesOptimistic(false);
-      setInFavorites(false);
-      removeFromGuestFavorites(goods.link);
-    }
+      try {
+        const removed = await postRemoveFromFavorites(goods.link);
+        if (removed) {
+          setInFavorites(false);
+          sendGAEvent({
+            event: "pricelist_goods_remove_from_favorites",
+            value: goods.title,
+            category: "PriceListGoods",
+            action: "click"
+          });
+        }
+      } catch (error) {
+        window.alert(error);
+      }
+    });
   };
   const handleAddToFavorites = () => {
-    if (isUserLoggedIn) {
-      startTransition(async () => {
-        setInFavoritesOptimistic(true);
-        try {
-          const added = await postAddToFavorites(goods);
-          if (added) {
-            setInFavorites(true);
-            sendGAEvent({
-              event: "pricelist_goods_add_to_favorites",
-              value: goods.title,
-              category: "PriceListGoods",
-              action: "click"
-            });
-          }
-        } catch (error) {
-          window.alert(error);
-        }
-      });
-    } else {
+    startTransition(async () => {
       setInFavoritesOptimistic(true);
-      setInFavorites(true);
-      addToGuestFavorites(goods);
-    }
+      try {
+        const added = await postAddToFavorites(goods);
+        if (added) {
+          setInFavorites(true);
+          sendGAEvent({
+            event: "pricelist_goods_add_to_favorites",
+            value: goods.title,
+            category: "PriceListGoods",
+            action: "click"
+          });
+        }
+      } catch (error) {
+        window.alert(error);
+      }
+    });
   };
 
   return inFavoritesOptimistic ? (

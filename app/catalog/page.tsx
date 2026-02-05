@@ -1,9 +1,13 @@
 import { getTranslations } from "next-intl/server";
 
 import { getLastPriceList, getPriceListCity } from "@/api/get";
+import { getGuest } from "@/api/guest";
 import { getUser } from "@/api/user";
-import { CatalogList } from "@/app/components/catalog-list";
+import { PriceListPage } from "@/app/components/price-list";
+import { SortGoods } from "@/app/components/sort-goods";
 import { Alert, AlertDescription, AlertTitle } from "@/app/components/ui/alert";
+import { PageTitle } from "@/app/components/ui/page-title";
+import { formatDate, formatTime } from "@/app/helpers/format";
 
 import type { PriceList } from "@/types/pricelist";
 import type { Metadata } from "next";
@@ -21,11 +25,10 @@ export async function generateMetadata({ params }: CatalogPage): Promise<Metadat
 }
 
 export default async function CatalogPage() {
-  const city = await getPriceListCity();
-  const user = await getUser();
   let priceList: PriceList | null = null;
 
   try {
+    const city = await getPriceListCity();
     priceList = await getLastPriceList(city);
     if (!priceList) throw new Error();
   } catch (error) {
@@ -38,13 +41,32 @@ export default async function CatalogPage() {
     );
   }
 
+  const count = priceList.positions.reduce((acc, cur) => acc + cur.items.length, 0);
+
+  const guest = await getGuest();
+  const user = await getUser();
+
+  const genericUser = user || guest;
+
   return (
-    <CatalogList
-      userFavoriteSections={user?.favoriteSections}
-      userHiddenSections={user?.hiddenSections}
-      userFavorites={user?.favorites}
-      priceList={priceList}
-      isUserLoggedIn={!!user}
-    />
+    <div>
+      <PageTitle title={formatDate(priceList.createdAt)} subTitle={formatTime(priceList.createdAt)}>
+        <div className="mt-4 flex items-center justify-between gap-4 md:mt-0">
+          <div>
+            Количество: <b>{count}</b>
+          </div>
+
+          <SortGoods />
+        </div>
+      </PageTitle>
+
+      <PriceListPage
+        favoriteSections={genericUser.favoriteSections}
+        hiddenSections={genericUser.hiddenSections}
+        userFavorites={genericUser.favorites}
+        priceList={priceList}
+        isUserLoggedIn={!!user}
+      />
+    </div>
   );
 }

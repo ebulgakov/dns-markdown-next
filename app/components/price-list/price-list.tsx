@@ -7,8 +7,7 @@ import {
   postAddToHiddenSections,
   postRemoveFromFavoriteSection,
   postRemoveFromHiddenSections
-} from "@/api/user";
-import { useGuestData } from "@/app/hooks/use-guest-data";
+} from "@/api/post";
 
 import { PriceListSection } from "./price-list-section";
 
@@ -30,7 +29,6 @@ function PriceList({
   hiddenSections: hSections = [],
   isUserLoggedIn
 }: CatalogProps) {
-  const { setGuestFavoriteSections, setGuestHiddenSections } = useGuestData();
   // Hidden sections state management
   const [realHiddenSections, setRealHiddenSections] = useState<UserSections>(hSections);
   const [hiddenSections, setHiddenSections] = useOptimistic<UserSections, UserSections>(
@@ -50,28 +48,23 @@ function PriceList({
       ? hiddenSections.filter(section => section !== title)
       : [...hiddenSections, title];
 
-    if (isUserLoggedIn) {
-      startTransition(async () => {
-        setHiddenSections(updatedSections);
-        try {
-          let list;
+    startTransition(async () => {
+      setHiddenSections(updatedSections);
+      try {
+        let list;
 
-          if (updatedSections.includes(title)) {
-            list = await postAddToHiddenSections(title);
-          } else {
-            list = await postRemoveFromHiddenSections(title);
-          }
-          if (!list) throw new Error("No data returned from server");
-
-          setRealHiddenSections(list.sections);
-        } catch (error) {
-          console.error("Failed to update hidden sections:", error);
+        if (updatedSections.includes(title)) {
+          list = await postAddToHiddenSections(title);
+        } else {
+          list = await postRemoveFromHiddenSections(title);
         }
-      });
-    } else {
-      setGuestHiddenSections(updatedSections);
-      setRealHiddenSections(updatedSections);
-    }
+        if (!list) throw new Error("No data returned from server");
+
+        setRealHiddenSections(list.sections);
+      } catch (error) {
+        console.error("Failed to update hidden sections:", error);
+      }
+    });
   };
 
   const onFavorite = (title: string) => {
@@ -79,29 +72,24 @@ function PriceList({
       ? favoriteSections.filter(section => section !== title)
       : [...favoriteSections, title].sort();
 
-    if (isUserLoggedIn) {
-      startTransition(async () => {
-        setFavoriteSections(updatedSections);
-        try {
-          let list;
+    startTransition(async () => {
+      setFavoriteSections(updatedSections);
+      try {
+        let list;
 
-          if (updatedSections.includes(title)) {
-            list = await postAddToFavoriteSections(title);
-          } else {
-            list = await postRemoveFromFavoriteSection(title);
-          }
-
-          if (!list) throw new Error("No data returned from server");
-
-          setRealFavoriteSections(list.sections);
-        } catch (error) {
-          console.error("Failed to update favorite sections:", error);
+        if (updatedSections.includes(title)) {
+          list = await postAddToFavoriteSections(title);
+        } else {
+          list = await postRemoveFromFavoriteSection(title);
         }
-      });
-    } else {
-      setGuestFavoriteSections(updatedSections);
-      setRealFavoriteSections(updatedSections);
-    }
+
+        if (!list) throw new Error("No data returned from server");
+
+        setRealFavoriteSections(list.sections);
+      } catch (error) {
+        console.error("Failed to update favorite sections:", error);
+      }
+    });
   };
 
   return positions.map(position => (
