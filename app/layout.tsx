@@ -83,6 +83,7 @@ export default async function RootLayout({
           <html lang={locale} suppressHydrationWarning>
             <body
               className={cn(["font-sans antialiased", robotoSans.variable, robotoMono.variable])}
+              suppressHydrationWarning
             >
               <ThemeProvider attribute="class" defaultTheme="light" enableSystem>
                 <div className="px-4">

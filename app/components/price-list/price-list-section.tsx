@@ -46,7 +46,7 @@ function PriceListSection({
           {position.title} &ndash; {position.items.length}
         </span>
 
-        {isUserLoggedIn && onFavorite && (
+        {onFavorite && (
           <button
             type="button"
             className="relative ml-auto cursor-pointer"

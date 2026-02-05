@@ -1,4 +1,5 @@
 "use client";
+
 import { useOptimistic, useState, startTransition } from "react";
 
 import {
@@ -7,6 +8,7 @@ import {
   postRemoveFromFavoriteSection,
   postRemoveFromHiddenSections
 } from "@/api/user";
+import { useGuestData } from "@/app/hooks/use-guest-data";
 
 import { PriceListSection } from "./price-list-section";
 
@@ -28,6 +30,7 @@ function PriceList({
   hiddenSections: hSections = [],
   isUserLoggedIn
 }: CatalogProps) {
+  const { setGuestFavoriteSections, setGuestHiddenSections } = useGuestData();
   // Hidden sections state management
   const [realHiddenSections, setRealHiddenSections] = useState<UserSections>(hSections);
   const [hiddenSections, setHiddenSections] = useOptimistic<UserSections, UserSections>(
@@ -66,6 +69,7 @@ function PriceList({
         }
       });
     } else {
+      setGuestHiddenSections(updatedSections);
       setRealHiddenSections(updatedSections);
     }
   };
@@ -73,7 +77,7 @@ function PriceList({
   const onFavorite = (title: string) => {
     const updatedSections = favoriteSections.includes(title)
       ? favoriteSections.filter(section => section !== title)
-      : [...favoriteSections, title];
+      : [...favoriteSections, title].sort();
 
     if (isUserLoggedIn) {
       startTransition(async () => {
@@ -94,6 +98,9 @@ function PriceList({
           console.error("Failed to update favorite sections:", error);
         }
       });
+    } else {
+      setGuestFavoriteSections(updatedSections);
+      setRealFavoriteSections(updatedSections);
     }
   };
 

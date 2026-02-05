@@ -40,8 +40,8 @@ export default async function CatalogPage() {
 
   return (
     <CatalogList
-      favoriteSections={user?.favoriteSections}
-      hiddenSections={user?.hiddenSections}
+      userFavoriteSections={user?.favoriteSections}
+      userHiddenSections={user?.hiddenSections}
       userFavorites={user?.favorites}
       priceList={priceList}
       isUserLoggedIn={!!user}

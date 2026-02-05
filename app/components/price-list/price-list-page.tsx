@@ -7,7 +7,6 @@ import { SearchInput } from "@/app/components/search-input";
 import { Title } from "@/app/components/ui/title";
 import { useDebounce } from "@/app/hooks/use-debounce";
 import { useFilteredGoods } from "@/app/hooks/use-filtered-goods";
-import { useGuestData } from "@/app/hooks/use-guest-data";
 import { useSearchStore } from "@/app/stores/search-store";
 import { useSortGoodsStore } from "@/app/stores/sort-goods-store";
 
@@ -33,7 +32,6 @@ function PriceListPage({
   isUserLoggedIn,
   priceList
 }: PriceListPageProps) {
-  const { getGuestData } = useGuestData();
   const sortGoods = useSortGoodsStore(state => state.sortGoods);
   const searchTerm = useSearchStore(state => state.searchTerm);
   const debouncedSearch = useDebounce<string>(searchTerm.trim(), 100);
@@ -58,7 +56,7 @@ function PriceListPage({
       ))}
 
       <div className={clsx({ hidden: isHiddenDefaultList })}>
-        {isUserLoggedIn && favoriteSections.length > 0 ? (
+        {favoriteSections.length > 0 ? (
           <Fragment>
             <Title variant="h2">Избранные категории</Title>
 
@@ -73,7 +71,7 @@ function PriceListPage({
             <Title variant="h2">Все категории</Title>
           </Fragment>
         ) : (
-          <PriceListFavoritesEmptyAlert />
+          <PriceListFavoritesEmptyAlert isUserLoggedIn={isUserLoggedIn} />
         )}
 
         <PriceList

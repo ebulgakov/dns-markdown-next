@@ -1,25 +1,37 @@
+"use client";
+
 import { PriceListPage } from "@/app/components/price-list";
 import { SortGoods } from "@/app/components/sort-goods";
 import { PageTitle } from "@/app/components/ui/page-title";
 import { formatDate, formatTime } from "@/app/helpers/format";
+import { useGuestData } from "@/app/hooks/use-guest-data";
 import { PriceList } from "@/types/pricelist";
 import { Favorite, UserSections } from "@/types/user";
 
 type CatalogListProps = {
   priceList: PriceList;
   userFavorites?: Favorite[];
-  hiddenSections?: UserSections;
-  favoriteSections?: UserSections;
+  userHiddenSections?: UserSections;
+  userFavoriteSections?: UserSections;
   isUserLoggedIn?: boolean;
 };
 
 function CatalogList({
   priceList,
-  hiddenSections,
-  favoriteSections,
+  userHiddenSections,
+  userFavoriteSections,
   isUserLoggedIn,
   userFavorites
 }: CatalogListProps) {
+  const { getGuestData } = useGuestData();
+
+  const favoriteSections: UserSections = isUserLoggedIn
+    ? userFavoriteSections
+    : getGuestData().favoriteSections;
+  const hiddenSections: UserSections = isUserLoggedIn
+    ? userHiddenSections
+    : getGuestData()?.hiddenSections;
+
   const count = priceList.positions.reduce((acc, cur) => acc + cur.items.length, 0);
 
   return (
