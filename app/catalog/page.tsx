@@ -1,8 +1,7 @@
 import { getTranslations } from "next-intl/server";
 
 import { getLastPriceList, getPriceListCity } from "@/api/get";
-import { getGuest } from "@/api/guest";
-import { getUser } from "@/api/user";
+import { getUser as getGenericUser } from "@/api/post";
 import { PriceListPage } from "@/app/components/price-list";
 import { SortGoods } from "@/app/components/sort-goods";
 import { Alert, AlertDescription, AlertTitle } from "@/app/components/ui/alert";
@@ -25,8 +24,9 @@ export async function generateMetadata({ params }: CatalogPage): Promise<Metadat
 }
 
 export default async function CatalogPage() {
-  let priceList: PriceList | null = null;
+  const genericUser = await getGenericUser();
 
+  let priceList: PriceList | null = null;
   try {
     const city = await getPriceListCity();
     priceList = await getLastPriceList(city);
@@ -43,10 +43,6 @@ export default async function CatalogPage() {
 
   const count = priceList.positions.reduce((acc, cur) => acc + cur.items.length, 0);
 
-  const guest = await getGuest();
-  const user = await getUser();
-  const genericUser = user || guest;
-
   return (
     <div>
       <PageTitle title={formatDate(priceList.createdAt)} subTitle={formatTime(priceList.createdAt)}>
@@ -60,9 +56,9 @@ export default async function CatalogPage() {
       </PageTitle>
 
       <PriceListPage
-        favoriteSections={genericUser.favoriteSections}
-        hiddenSections={genericUser.hiddenSections}
-        userFavorites={genericUser.favorites}
+        favoriteSections={genericUser?.favoriteSections}
+        hiddenSections={genericUser?.hiddenSections}
+        userFavorites={genericUser?.favorites}
         priceList={priceList}
       />
     </div>

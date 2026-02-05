@@ -1,16 +1,13 @@
-import { getGuest } from "@/api/guest";
-import { getUser } from "@/api/user";
+import { getUser as getGenericUser } from "@/api/post";
 import { FavoritesPageClient } from "@/app/components/favorites";
 
 export default async function FavoritesPage() {
-  const guest = await getGuest();
-  const user = await getUser();
-  const genericUser = user || guest;
+  const genericUser = await getGenericUser();
 
   return (
     <FavoritesPageClient
-      favorites={genericUser.favorites}
-      shownBoughtFavorites={genericUser.shownBoughtFavorites}
+      favorites={genericUser?.favorites}
+      shownBoughtFavorites={genericUser?.shownBoughtFavorites}
     />
   );
 }
