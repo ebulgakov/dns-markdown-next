@@ -1,6 +1,6 @@
 "use client";
 
-import { useOptimistic, startTransition } from "react";
+import { useOptimistic, startTransition, useState } from "react";
 
 import {
   postAddToFavoriteSections,
@@ -27,12 +27,14 @@ function PriceList({
   favoriteSections: fSections = [],
   hiddenSections: hSections = []
 }: CatalogProps) {
+  const [realHiddenSections, setRealHiddenSections] = useState<UserSections>(hSections);
   const [hiddenSections, setHiddenSections] = useOptimistic<UserSections, UserSections>(
-    hSections,
+    realHiddenSections,
     (_, newSections) => newSections
   );
+  const [realFavoriteSections, setRealFavoriteSections] = useState<UserSections>(fSections);
   const [favoriteSections, setFavoriteSections] = useOptimistic<UserSections, UserSections>(
-    fSections,
+    realFavoriteSections,
     (_, newSections) => newSections
   );
 
@@ -44,14 +46,15 @@ function PriceList({
     startTransition(async () => {
       setHiddenSections(updatedSections);
       try {
-        let list;
-
+        let result;
         if (updatedSections.includes(title)) {
-          list = await postAddToHiddenSections(title);
+          result = await postAddToHiddenSections(title);
         } else {
-          list = await postRemoveFromHiddenSections(title);
+          result = await postRemoveFromHiddenSections(title);
         }
-        if (!list) throw new Error("No data returned from server");
+
+        if (!result) throw new Error("No data returned from server");
+        setRealHiddenSections(result.sections);
       } catch (error) {
         console.error("Failed to update hidden sections:", error);
       }
@@ -66,15 +69,15 @@ function PriceList({
     startTransition(async () => {
       setFavoriteSections(updatedSections);
       try {
-        let list;
-
+        let result;
         if (updatedSections.includes(title)) {
-          list = await postAddToFavoriteSections(title);
+          result = await postAddToFavoriteSections(title);
         } else {
-          list = await postRemoveFromFavoriteSection(title);
+          result = await postRemoveFromFavoriteSection(title);
         }
 
-        if (!list) throw new Error("No data returned from server");
+        if (!result) throw new Error("No data returned from server");
+        setRealFavoriteSections(result.sections);
       } catch (error) {
         console.error("Failed to update favorite sections:", error);
       }
