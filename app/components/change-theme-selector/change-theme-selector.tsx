@@ -8,13 +8,13 @@ import { sendGAEvent } from "@/app/lib/sendGAEvent";
 
 function ChangeThemeSelector() {
   const { theme, setTheme } = useTheme();
-  const [isClient, setIsClient] = useState(false);
+  const [mounted, setMounted] = useState(false);
   const t = useTranslations("ChangeThemeSelector");
   const altTheme = theme === "light" ? "dark" : "light";
 
   useEffect(() => {
     // https://react.dev/reference/react-dom/client/hydrateRoot#handling-different-client-and-server-content
-    setIsClient(true);  
+    setMounted(true);
   }, []);
 
   const handleSendGAEvent = (theme: string) => {
@@ -26,7 +26,9 @@ function ChangeThemeSelector() {
     });
   };
 
-  return isClient ? (
+  if (!mounted) return null;
+
+  return (
     <button
       suppressHydrationWarning={false}
       className="flex cursor-pointer items-center"
@@ -37,7 +39,7 @@ function ChangeThemeSelector() {
     >
       {t(altTheme)} {altTheme === "light" ? "🌞" : "🌜"}
     </button>
-  ) : null;
+  );
 }
 
 export { ChangeThemeSelector };
