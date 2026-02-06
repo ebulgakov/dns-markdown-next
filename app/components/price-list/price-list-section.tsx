@@ -31,7 +31,8 @@ function PriceListSection({
   isFavoriteSection
 }: PriceListProps) {
   return (
-    <section className="border-b border-b-neutral-300">
+    <section className="relative border-b border-b-neutral-300">
+      <a id={`${position.title}`} className="absolute -top-[var(--nav-bar-offset)] left-0" />
       <div className="bg-background sticky top-[var(--nav-bar-offset)] z-10 -mb-[1px] flex w-full items-center justify-start gap-2 border-b border-solid border-b-neutral-300 py-3 text-left">
         <button
           type="button"

@@ -3,7 +3,7 @@
 import clsx from "clsx";
 import { Fragment } from "react";
 
-import { SearchInput } from "@/app/components/search-input";
+import { Filter } from "@/app/components/filter";
 import { Title } from "@/app/components/ui/title";
 import { useDebounce } from "@/app/hooks/use-debounce";
 import { useFilteredGoods } from "@/app/hooks/use-filtered-goods";
@@ -79,7 +79,7 @@ function PriceListPage({
         />
       </div>
 
-      <SearchInput />
+      <Filter priceList={priceList} hiddenSections={hiddenSections} />
     </div>
   );
 }
