@@ -18,7 +18,7 @@ type FilterProps = {
 
 function Filter({ priceList, hiddenSections, foundCount = 0 }: FilterProps) {
   const containerRef = useRef<HTMLDivElement>(null);
-  const [isShownFilter, setIsShownFilter] = useState<boolean>(true);
+  const [isShownFilter, setIsShownFilter] = useState<boolean>(false);
 
   const sections = priceList.positions
     .map(position => position.title)
