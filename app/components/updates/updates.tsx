@@ -3,38 +3,35 @@
 import { useState } from "react";
 
 import { PriceListSection } from "@/app/components/price-list";
+import { ScrollToTop } from "@/app/components/scroll-to-top";
 import { PageTitle } from "@/app/components/ui/page-title";
+import { UserSections } from "@/types/user";
 
 import type { DiffsCollection as DiffsType } from "@/types/analysis-diff";
 import type { Position as PositionType } from "@/types/pricelist";
-import type { Favorite } from "@/types/user";
 
 type UpdatesProps = {
   diffNew?: PositionType;
   diffChangesPrice?: PositionType;
   diffRemoved?: PositionType;
   diffChangesProfit?: PositionType;
-  userFavoritesGoods: Favorite[];
   changePriceDiff: DiffsType;
   changeProfitDiff: DiffsType;
 };
 function Updates({
   diffNew,
-  userFavoritesGoods,
   diffChangesPrice,
   changePriceDiff,
   diffRemoved,
   diffChangesProfit,
   changeProfitDiff
 }: UpdatesProps) {
-  const [shownSections, setShownSections] = useState<string[]>([
-    diffNew?.title || "",
-    diffChangesPrice?.title || "",
-    diffRemoved?.title || ""
+  const [hiddenSections, setHiddenSections] = useState<UserSections>([
+    diffChangesProfit?.title || ""
   ]);
 
   const onToggleSection = (sectionId: string) => {
-    setShownSections(prevState =>
+    setHiddenSections(prevState =>
       prevState.includes(sectionId)
         ? prevState.filter(id => id !== sectionId)
         : [...prevState, sectionId]
@@ -45,37 +42,40 @@ function Updates({
       <PageTitle title="Обновления с начала дня" />
       {diffNew && (
         <PriceListSection
-          onHidden={onToggleSection}
-          isOpen={shownSections.includes(diffNew.title)}
+          shownAddingToFavorites
+          outerHiddenSections={hiddenSections}
+          onOuterToggleHiddenSection={onToggleSection}
           position={diffNew}
-          favorites={userFavoritesGoods}
         />
       )}
       {diffChangesPrice && (
         <PriceListSection
-          onHidden={onToggleSection}
-          isOpen={shownSections.includes(diffChangesPrice.title)}
+          shownAddingToFavorites
+          outerHiddenSections={hiddenSections}
+          onOuterToggleHiddenSection={onToggleSection}
           position={diffChangesPrice}
-          favorites={userFavoritesGoods}
           diffs={changePriceDiff}
         />
       )}
       {diffRemoved && (
         <PriceListSection
-          onHidden={onToggleSection}
-          isOpen={shownSections.includes(diffRemoved.title)}
+          shownAddingToFavorites
+          outerHiddenSections={hiddenSections}
+          onOuterToggleHiddenSection={onToggleSection}
           position={diffRemoved}
         />
       )}
       {diffChangesProfit && (
         <PriceListSection
-          onHidden={onToggleSection}
-          isOpen={shownSections.includes(diffChangesProfit.title)}
+          shownAddingToFavorites
+          outerHiddenSections={hiddenSections}
+          onOuterToggleHiddenSection={onToggleSection}
           position={diffChangesProfit}
           diffs={changeProfitDiff}
-          favorites={userFavoritesGoods}
         />
       )}
+
+      <ScrollToTop />
     </div>
   );
 }

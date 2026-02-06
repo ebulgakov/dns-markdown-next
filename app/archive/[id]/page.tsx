@@ -30,8 +30,8 @@ export async function generateMetadata({ params }: ArchiveItemPage): Promise<Met
 
 export default async function ArchiveItemPage({ params }: ArchiveItemPage) {
   const { id } = await params;
-  let priceList;
 
+  let priceList;
   try {
     priceList = await getPriceListById(id);
   } catch (e) {
@@ -56,7 +56,7 @@ export default async function ArchiveItemPage({ params }: ArchiveItemPage) {
           </div>
         </div>
       </PageTitle>
-      <PriceListPage priceList={priceList} />
+      <PriceListPage variant="archive" priceList={priceList} />
     </div>
   );
 }

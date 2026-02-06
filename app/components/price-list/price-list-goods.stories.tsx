@@ -1,4 +1,6 @@
-import { mockFavorites } from "./__mocks__/favorites";
+import { defaultContext } from "@/app/components/price-list/__mocks__/context";
+import { UserProvider } from "@/app/contexts/user-context";
+
 import { mockGoodsList } from "./__mocks__/goods";
 import { PriceListGoods } from "./price-list-goods";
 
@@ -12,7 +14,6 @@ const meta: Meta<typeof PriceListGoods> = {
   argTypes: {
     item: { control: "object" },
     diff: { control: "object" },
-    favorites: { control: "object" },
     status: { control: "object" }
   }
 };
@@ -27,35 +28,48 @@ const mockDiff: DiffType = {
 };
 
 export const Default: Story = {
+  render: args => (
+    <UserProvider value={defaultContext}>
+      <PriceListGoods {...args} />
+    </UserProvider>
+  ),
   args: {
-    item: mockGoodsList[0],
-    favorites: mockFavorites
+    item: mockGoodsList[0]
   }
 };
 
-export const AuthUser: Story = {
+export const WithStar: Story = {
+  render: args => (
+    <UserProvider value={defaultContext}>
+      <PriceListGoods {...args} />
+    </UserProvider>
+  ),
   args: {
     item: mockGoodsList[0],
-    favorites: mockFavorites
+    shownFavorites: true
   }
 };
 
 export const WithDiff: Story = {
+  render: args => (
+    <UserProvider value={defaultContext}>
+      <PriceListGoods {...args} />
+    </UserProvider>
+  ),
   args: {
     item: mockGoodsList[0],
     diff: mockDiff,
-    favorites: mockFavorites
+    shownFavorites: true
   }
 };
 
-export const Bought: Story = {
+export const WithStatus: Story = {
   args: {
     item: mockGoodsList[0],
     status: {
       updatedAt: new Date("2024-06-01T10:00:00Z").toISOString(),
       createdAt: new Date("2024-05-25T10:00:00Z").toISOString(),
       deleted: true
-    },
-    favorites: mockFavorites
+    }
   }
 };

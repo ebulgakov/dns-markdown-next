@@ -28,9 +28,13 @@ function FavoritesPageClient({
     realShownBoughtFavorites,
     (_, newSections) => newSections
   );
-  const filteredFavorites = favorites.filter(favorite =>
-    shownBoughtFavorites ? true : !favorite.status.deleted
-  );
+  const filteredFavorites = favorites
+    .filter(favorite => (shownBoughtFavorites ? true : !favorite.status.deleted))
+    .sort((a, b) => {
+      const deletedA = a.status.deleted ? 1 : 0;
+      const deletedB = b.status.deleted ? 1 : 0;
+      return deletedB - deletedA; // first show deleted, then non-deleted, because if non-deleted list is very long,  user may not  see them first
+    });
 
   const handleFavoritesVisibility = (status: boolean) => {
     startTransition(async () => {
@@ -78,7 +82,7 @@ function FavoritesPageClient({
             key={favorite.item._id}
             item={favorite.item}
             status={favorite.status}
-            favorites={!favorite.status.deleted ? favorites : undefined}
+            shownFavorites={!favorite.status.deleted}
           />
         ))}
       </div>

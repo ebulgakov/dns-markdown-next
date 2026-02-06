@@ -10,12 +10,15 @@ import { StrictMode, type ReactNode } from "react";
 import "./globals.css";
 
 import { getPriceListCity } from "@/api/get";
+import { getUser as getGenericUser } from "@/api/post";
 import { getSessionInfo } from "@/api/user";
 import { ClerkError } from "@/app/components/clerk-error";
 import { Footer } from "@/app/components/footer";
 import { Navbar } from "@/app/components/navbar";
+import { UserProvider } from "@/app/contexts/user-context";
 import { cn } from "@/app/lib/utils";
 import { ThemeProvider } from "@/app/providers/theme-provider";
+import { User } from "@/types/user";
 
 import type { Metadata } from "next";
 
@@ -76,6 +79,13 @@ export default async function RootLayout({
     userId = null;
   }
 
+  let genericUser: User | null = null;
+  try {
+    genericUser = await getGenericUser();
+  } catch {
+    genericUser = null;
+  }
+
   return (
     <StrictMode>
       <NextIntlClientProvider>
@@ -84,22 +94,29 @@ export default async function RootLayout({
             <body
               className={cn(["font-sans antialiased", robotoSans.variable, robotoMono.variable])}
             >
-              <ThemeProvider attribute="class" defaultTheme="light" enableSystem>
-                <div className="px-4">
-                  <div className="mx-auto grid min-h-screen md:container">
-                    <div className="mb-10">
-                      <ClerkError />
+              <UserProvider
+                value={{
+                  hiddenSections: genericUser?.hiddenSections || [],
+                  favoriteSections: genericUser?.favoriteSections || [],
+                  favorites: genericUser?.favorites || []
+                }}
+              >
+                <ThemeProvider attribute="class" defaultTheme="light" enableSystem>
+                  <div className="px-4">
+                    <div className="mx-auto grid min-h-screen md:container">
+                      <div className="mb-10">
+                        <ClerkError />
 
-                      <div className="mt-4 mb-5">
                         <Navbar locate={locale} isUserLoggedIn={!!userId} city={city} />
+
+                        {children}
                       </div>
-                      {children}
+                      <Footer locate={locale} />
                     </div>
-                    <Footer locate={locale} />
                   </div>
-                </div>
-              </ThemeProvider>
-              <SpeedInsights />
+                </ThemeProvider>
+                <SpeedInsights />
+              </UserProvider>
             </body>
             {process.env.GA_ID && <GoogleAnalytics gaId={process.env.GA_ID} />}
           </html>

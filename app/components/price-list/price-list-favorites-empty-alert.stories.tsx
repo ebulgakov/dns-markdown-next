@@ -14,14 +14,4 @@ const meta = {
 export default meta;
 type Story = StoryObj<typeof meta>;
 
-export const LoggedIn: Story = {
-  args: {
-    isUserLoggedIn: true
-  }
-};
-
-export const LoggedOut: Story = {
-  args: {
-    isUserLoggedIn: false
-  }
-};
+export const Default: Story = {};

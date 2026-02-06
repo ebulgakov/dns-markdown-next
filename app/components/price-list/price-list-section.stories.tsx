@@ -1,4 +1,9 @@
-import { mockFavorites } from "./__mocks__/favorites";
+import {
+  defaultContext,
+  filledWithFavoritesContext
+} from "@/app/components/price-list/__mocks__/context";
+import { UserProvider } from "@/app/contexts/user-context";
+
 import { mockDiff, mockGoodsList } from "./__mocks__/goods";
 import { PriceListSection } from "./price-list-section";
 
@@ -11,9 +16,7 @@ const meta: Meta<typeof PriceListSection> = {
   tags: ["autodocs"],
   argTypes: {
     position: { control: "object" },
-    favorites: { control: "object" },
-    diffs: { control: "object" },
-    isOpen: { control: "boolean" }
+    diffs: { control: "object" }
   }
 };
 
@@ -31,29 +34,48 @@ const mockPosition: Position = {
 };
 
 export const Default: Story = {
+  render: args => (
+    <UserProvider value={defaultContext}>
+      <PriceListSection {...args} />
+    </UserProvider>
+  ),
   args: {
-    position: mockPosition,
-    isOpen: true
+    position: mockPosition
   }
 };
 
 export const WithFavorites: Story = {
+  render: args => (
+    <UserProvider value={filledWithFavoritesContext}>
+      <PriceListSection {...args} />
+    </UserProvider>
+  ),
   args: {
     ...Default.args,
-    favorites: mockFavorites
+    shownHeart: true
   }
 };
 
 export const WithDiffs: Story = {
+  render: args => (
+    <UserProvider value={defaultContext}>
+      <PriceListSection {...args} />
+    </UserProvider>
+  ),
   args: {
     ...Default.args,
-    diffs: { "1": mockDiff }
+    diffs: { g1: mockDiff, g3: mockDiff }
   }
 };
 
-export const Closed: Story = {
+export const WithOuterHiddenSections: Story = {
+  render: args => (
+    <UserProvider value={defaultContext}>
+      <PriceListSection {...args} />
+    </UserProvider>
+  ),
   args: {
     ...Default.args,
-    isOpen: false
+    outerHiddenSections: ["Apple"]
   }
 };

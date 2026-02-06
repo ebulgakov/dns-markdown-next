@@ -1,13 +1,11 @@
 import { getTranslations } from "next-intl/server";
 
 import { getLastPriceList, getPriceListCity } from "@/api/get";
-import { getUser as getGenericUser } from "@/api/post";
 import { PriceListPage } from "@/app/components/price-list";
 import { SortGoods } from "@/app/components/sort-goods";
 import { Alert, AlertDescription, AlertTitle } from "@/app/components/ui/alert";
 import { PageTitle } from "@/app/components/ui/page-title";
 import { formatDate, formatTime } from "@/app/helpers/format";
-import { User } from "@/types/user";
 
 import type { PriceList } from "@/types/pricelist";
 import type { Metadata } from "next";
@@ -25,20 +23,6 @@ export async function generateMetadata({ params }: CatalogPage): Promise<Metadat
 }
 
 export default async function CatalogPage() {
-  let genericUser: User | null = null;
-
-  try {
-    genericUser = await getGenericUser();
-  } catch (error) {
-    const e = error as Error;
-    return (
-      <Alert variant="destructive">
-        <AlertTitle>Ошибка загрузки пользователя</AlertTitle>
-        <AlertDescription>{e.message}</AlertDescription>
-      </Alert>
-    );
-  }
-
   let priceList: PriceList | null = null;
   try {
     const city = await getPriceListCity();
@@ -57,7 +41,7 @@ export default async function CatalogPage() {
   const count = priceList.positions.reduce((acc, cur) => acc + cur.items.length, 0);
 
   return (
-    <div>
+    <>
       <PageTitle title={formatDate(priceList.createdAt)} subTitle={formatTime(priceList.createdAt)}>
         <div className="mt-4 flex items-center justify-between gap-4 md:mt-0">
           <div>
@@ -68,12 +52,7 @@ export default async function CatalogPage() {
         </div>
       </PageTitle>
 
-      <PriceListPage
-        favoriteSections={genericUser?.favoriteSections}
-        hiddenSections={genericUser?.hiddenSections}
-        userFavorites={genericUser?.favorites}
-        priceList={priceList}
-      />
-    </div>
+      <PriceListPage priceList={priceList} />
+    </>
   );
 }

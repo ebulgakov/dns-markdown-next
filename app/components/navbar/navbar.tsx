@@ -47,7 +47,7 @@ function Navbar({ locate, isUserLoggedIn, city }: NavbarProps) {
   const mobileNavbar = [...linksList, { name: aboutT("title"), url: "/about" }];
 
   return (
-    <header>
+    <header className="bg-background sticky top-0 z-11 mt-4 mb-5">
       <div className="md:hidden">
         <NavbarMobile
           isUserLoggedIn={isUserLoggedIn}

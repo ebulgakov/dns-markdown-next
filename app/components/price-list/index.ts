@@ -1,4 +1,3 @@
-export { PriceList } from "./price-list";
 export { PriceListFavoriteToggle } from "./price-list-favorite-toggle";
 export { PriceListGoods } from "./price-list-goods";
 export { PriceListGoodsDiff } from "./price-list-goods-diff";
