@@ -1,6 +1,7 @@
 import { Search } from "lucide-react";
 import Link from "next/link";
 
+import { postRemoveFromHiddenSections } from "@/api/post";
 import { Button } from "@/app/components/ui/button";
 import { Input } from "@/app/components/ui/input";
 import { Separator } from "@/app/components/ui/separator";
@@ -27,6 +28,17 @@ function FilterContainer({
   const onChange = useSearchStore(state => state.updateSearchTerm);
   const searchTerm = useSearchStore(state => state.searchTerm);
 
+  const handleScrollToLink = async (title: string) => {
+    onChange("");
+    onClose();
+
+    try {
+      await postRemoveFromHiddenSections(title);
+    } catch {
+      // If the request fails, we still want to scroll to the section, so we don't handle the error.
+    }
+  };
+
   return (
     <div className="flex h-full flex-col justify-between gap-4 p-4">
       <div className="flex flex-1 flex-col overflow-hidden">
@@ -42,9 +54,8 @@ function FilterContainer({
                 })}
               >
                 <Link
-                  onClick={() => {
-                    onChange("");
-                    onClose();
+                  onClick={async () => {
+                    await handleScrollToLink(section);
                   }}
                   href={`#${section}`}
                 >
