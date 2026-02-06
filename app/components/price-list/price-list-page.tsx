@@ -1,9 +1,9 @@
 "use client";
 
+import { useWindowVirtualizer } from "@tanstack/react-virtual";
 import { useDebounce } from "@uidotdev/usehooks";
-import clsx from "clsx";
 import { X } from "lucide-react";
-import { Fragment, useContext } from "react";
+import { useContext, useRef } from "react";
 
 import { Filter } from "@/app/components/filter";
 import { PriceListSection } from "@/app/components/price-list/price-list-section";
@@ -12,12 +12,16 @@ import { Title } from "@/app/components/ui/title";
 import { UserContext } from "@/app/contexts/user-context";
 import { useFilteredGoods } from "@/app/hooks/use-filtered-goods";
 import { useSearchStore } from "@/app/stores/search-store";
-import { useSortGoodsStore } from "@/app/stores/sort-goods-store";
+import {
+  VisualizationGoods,
+  VisualizationHeader,
+  VisualizationSectionTitle
+} from "@/types/visualization";
 
 import { PriceListFavoritesEmptyAlert } from "./price-list-favorites-empty-alert";
 import { PriceListGoods } from "./price-list-goods";
 
-import type { Position, PriceList as PriceListType } from "@/types/pricelist";
+import type { PriceList as PriceListType } from "@/types/pricelist";
 
 type PriceListPageProps = {
   variant?: "archive";
@@ -26,89 +30,94 @@ type PriceListPageProps = {
 
 function PriceListPage({ priceList, variant }: PriceListPageProps) {
   const { favoriteSections } = useContext(UserContext);
-  const sortGoods = useSortGoodsStore(state => state.sortGoods);
   const onChangeSearch = useSearchStore(state => state.updateSearchTerm);
   const searchTerm = useSearchStore(state => state.searchTerm);
   const debouncedSearch = useDebounce<string>(searchTerm.trim(), 100);
   const filteredList = useFilteredGoods(debouncedSearch, priceList);
-  const isHiddenDefaultList = debouncedSearch.length > 2 || sortGoods !== "default";
+  const isSearchMode = debouncedSearch.length > 2;
 
-  const favoriteSectionsPositions: Position[] = [];
-  const nonFavoritesSectionsPositions: Position[] = [];
-
-  priceList.positions.forEach(section => {
-    if (favoriteSections.includes(section.title)) {
-      favoriteSectionsPositions.push(section);
-    } else {
-      nonFavoritesSectionsPositions.push(section);
-    }
+  // Virtualization setup
+  const listRef = useRef<HTMLDivElement>(null);
+  const virtualizer = useWindowVirtualizer({
+    count: filteredList.length,
+    estimateSize: index => {
+      if (filteredList[index].type === "header") return 60;
+      return 220;
+    },
+    overscan: 5,
+    scrollMargin: listRef.current?.offsetTop ?? 0
   });
+  const virtualItems = virtualizer.getVirtualItems();
 
   return (
-    <div data-testid="price-list-page">
-      {debouncedSearch.length > 2 && (
-        <>
-          <div className="mb-4">
-            <Title variant="h2">
-              Поиск по названию товара:&nbsp;
-              <span className="font-normal">{searchTerm.trim()}</span>&nbsp;
-              <button
-                className="text-destructive relative top-2 ml-1 cursor-pointer p-1 md:top-1"
-                onClick={() => onChangeSearch("")}
-              >
-                <span className="sr-only">Очистить поиск</span>
-                <X />
-              </button>
-            </Title>
-            <div>
-              Найдено товаров: <b>{filteredList.length}</b>
-            </div>
+    <div data-testid="price-list-page" ref={listRef}>
+      {isSearchMode && (
+        <div className="mb-4">
+          <Title variant="h2">
+            Поиск по названию товара:&nbsp;
+            <span className="font-normal">{searchTerm.trim()}</span>&nbsp;
+            <button
+              className="text-destructive relative top-2 ml-1 cursor-pointer p-1 md:top-1"
+              onClick={() => onChangeSearch("")}
+            >
+              <span className="sr-only">Очистить поиск</span>
+              <X />
+            </button>
+          </Title>
+          <div>
+            Найдено товаров: <b>{filteredList.length}</b>
           </div>
-          <div className="divide-y divide-neutral-300">
-            {filteredList.map(item => (
-              <PriceListGoods shownFavorites={variant !== "archive"} key={item._id} item={item} />
-            ))}
-          </div>
-        </>
+        </div>
       )}
 
-      {sortGoods !== "default" &&
-        filteredList.map(item => (
-          <PriceListGoods shownFavorites={variant !== "archive"} key={item._id} item={item} />
-        ))}
+      {!isSearchMode && favoriteSections.length === 0 && <PriceListFavoritesEmptyAlert />}
 
-      <div className={clsx({ hidden: isHiddenDefaultList })}>
-        {favoriteSections.length > 0 ? (
-          <Fragment>
-            <Title variant="h2">Избранные категории</Title>
+      <div
+        style={{
+          height: `${virtualizer.getTotalSize()}px`,
+          width: "100%",
+          position: "relative"
+        }}
+      >
+        {virtualItems.map(virtualItem => {
+          const item = filteredList[virtualItem.index];
+          return (
+            <div
+              key={virtualItem.key}
+              data-index={virtualItem.index}
+              ref={virtualizer.measureElement}
+              style={{
+                position: "absolute",
+                top: 0,
+                left: 0,
+                width: "100%",
+                transform: `translateY(${virtualItem.start}px)`
+              }}
+            >
+              {item.type === "header" && (
+                <PriceListSection shownHeart header={item as VisualizationHeader} />
+              )}
 
-            {favoriteSectionsPositions
-              .sort((a, b) => a.title.localeCompare(b.title))
-              .map(position => (
-                <PriceListSection
-                  shownAddingToFavorites={variant !== "archive"}
-                  shownHeart
-                  key={position._id}
-                  position={position}
-                />
-              ))}
+              {item.type === "goods" && (
+                <div className="border-b border-neutral-300">
+                  <PriceListGoods
+                    shownFavorites={variant !== "archive"}
+                    item={item as VisualizationGoods}
+                    // diff={...}
+                  />
+                </div>
+              )}
 
-            <Title variant="h2">Все категории</Title>
-          </Fragment>
-        ) : (
-          <PriceListFavoritesEmptyAlert />
-        )}
-
-        {nonFavoritesSectionsPositions
-          .sort((a, b) => a.title.localeCompare(b.title))
-          .map(position => (
-            <PriceListSection
-              shownAddingToFavorites={variant !== "archive"}
-              shownHeart
-              key={position._id}
-              position={position}
-            />
-          ))}
+              {item.type === "title" && (
+                <Title variant="h2" className="mb-2">
+                  {(item as VisualizationSectionTitle).category === "favorite"
+                    ? "Избранные категории"
+                    : "Все категории"}
+                </Title>
+              )}
+            </div>
+          );
+        })}
       </div>
 
       <ScrollToTop variant="filter" />
