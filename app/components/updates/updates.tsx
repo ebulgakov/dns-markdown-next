@@ -3,6 +3,7 @@
 import { useState } from "react";
 
 import { PriceListSection } from "@/app/components/price-list";
+import { ScrollToTop } from "@/app/components/scroll-to-top";
 import { PageTitle } from "@/app/components/ui/page-title";
 
 import type { DiffsCollection as DiffsType } from "@/types/analysis-diff";
@@ -76,6 +77,8 @@ function Updates({
           favorites={userFavoritesGoods}
         />
       )}
+
+      <ScrollToTop />
     </div>
   );
 }
