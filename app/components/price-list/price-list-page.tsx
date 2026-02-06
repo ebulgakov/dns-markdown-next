@@ -4,6 +4,7 @@ import clsx from "clsx";
 import { Fragment } from "react";
 
 import { Filter } from "@/app/components/filter";
+import { ScrollToTop } from "@/app/components/scroll-to-top";
 import { Title } from "@/app/components/ui/title";
 import { useDebounce } from "@/app/hooks/use-debounce";
 import { useFilteredGoods } from "@/app/hooks/use-filtered-goods";
@@ -94,6 +95,7 @@ function PriceListPage({
         />
       </div>
 
+      <ScrollToTop variant="filter" />
       <Filter
         priceList={priceList}
         hiddenSections={hiddenSections}

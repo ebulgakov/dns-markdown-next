@@ -46,6 +46,7 @@
     "react-dom": "19.2.3",
     "react-markdown": "^10.1.0",
     "react-number-format": "^5.4.4",
+    "react-scroll-up": "^1.4.0",
     "recharts": "^2.15.4",
     "rehype-raw": "^7.0.0",
     "tailwind-merge": "^3.4.0",
