@@ -48,7 +48,7 @@ export default async function CatalogItemPage({ params }: CatalogItemPage) {
     <div>
       <PageTitle title={product.item.title} />
 
-      <PriceListGoods item={product.item} shownFavorites={false} status={product.status} />
+      <PriceListGoods item={product.item} shownFavorites status={product.status} />
 
       <Title variant="h2">Сравнение цен</Title>
 

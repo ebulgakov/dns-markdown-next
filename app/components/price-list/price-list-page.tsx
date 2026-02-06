@@ -65,7 +65,7 @@ function PriceListPage({ priceList }: PriceListPageProps) {
           </div>
           <div className="divide-y divide-neutral-300">
             {filteredList.map(item => (
-              <PriceListGoods shownFavorites={true} key={item._id} item={item} />
+              <PriceListGoods shownFavorites key={item._id} item={item} />
             ))}
           </div>
         </>

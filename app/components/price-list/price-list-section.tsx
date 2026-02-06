@@ -141,7 +141,7 @@ function PriceListSection({
           position.items.map(item => (
             <PriceListGoods
               key={item._id}
-              shownFavorites={true}
+              shownFavorites
               item={item}
               diff={diffs && diffs[item._id]}
             />
