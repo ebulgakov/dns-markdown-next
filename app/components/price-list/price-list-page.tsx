@@ -37,7 +37,7 @@ function PriceListPage({ priceList, variant }: PriceListPageProps) {
   const nonFavoritesSectionsPositions: Position[] = [];
 
   priceList.positions.forEach(section => {
-    if (favoriteSections?.includes(section.title)) {
+    if (favoriteSections.includes(section.title)) {
       favoriteSectionsPositions.push(section);
     } else {
       nonFavoritesSectionsPositions.push(section);
