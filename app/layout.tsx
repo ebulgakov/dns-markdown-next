@@ -15,7 +15,6 @@ import { getSessionInfo } from "@/api/user";
 import { ClerkError } from "@/app/components/clerk-error";
 import { Footer } from "@/app/components/footer";
 import { Navbar } from "@/app/components/navbar";
-import { Alert, AlertDescription, AlertTitle } from "@/app/components/ui/alert";
 import { UserProvider } from "@/app/contexts/user-context";
 import { cn } from "@/app/lib/utils";
 import { ThemeProvider } from "@/app/providers/theme-provider";
@@ -83,14 +82,8 @@ export default async function RootLayout({
   let genericUser: User | null = null;
   try {
     genericUser = await getGenericUser();
-  } catch (error) {
-    const e = error as Error;
-    return (
-      <Alert variant="destructive">
-        <AlertTitle>Ошибка загрузки пользователя</AlertTitle>
-        <AlertDescription>{e.message}</AlertDescription>
-      </Alert>
-    );
+  } catch {
+    genericUser = null;
   }
 
   return (
