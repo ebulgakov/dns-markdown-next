@@ -13,10 +13,11 @@ import type { UserSections } from "@/types/user";
 type FilterProps = {
   priceList: PriceList;
   hiddenSections: UserSections;
+  favoriteSections: UserSections;
   foundCount?: number;
 };
 
-function Filter({ priceList, hiddenSections, foundCount = 0 }: FilterProps) {
+function Filter({ priceList, hiddenSections, favoriteSections, foundCount = 0 }: FilterProps) {
   const containerRef = useRef<HTMLDivElement>(null);
   const [isShownFilter, setIsShownFilter] = useState<boolean>(false);
 
@@ -25,9 +26,14 @@ function Filter({ priceList, hiddenSections, foundCount = 0 }: FilterProps) {
     .sort((a, b) => {
       const isHiddenA = hiddenSections.includes(a);
       const isHiddenB = hiddenSections.includes(b);
+      const isFavoriteA = favoriteSections.includes(a);
+      const isFavoriteB = favoriteSections.includes(b);
 
       if (isHiddenA && !isHiddenB) return 1;
       if (!isHiddenA && isHiddenB) return -1;
+
+      if (isFavoriteA && !isFavoriteB) return -1;
+      if (!isFavoriteA && isFavoriteB) return 1;
 
       return a.localeCompare(b);
     });
@@ -63,6 +69,7 @@ function Filter({ priceList, hiddenSections, foundCount = 0 }: FilterProps) {
         <FilterContainer
           onClose={handleClose}
           hiddenSections={hiddenSections}
+          favoriteSections={favoriteSections}
           sections={sections}
           foundCount={foundCount}
         />

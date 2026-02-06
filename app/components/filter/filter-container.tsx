@@ -12,6 +12,7 @@ import type { UserSections } from "@/types/user";
 type FilterContainerProps = {
   sections?: string[];
   hiddenSections: UserSections;
+  favoriteSections: UserSections;
   onClose: () => void;
   foundCount?: number;
 };
@@ -19,6 +20,7 @@ type FilterContainerProps = {
 function FilterContainer({
   sections,
   hiddenSections,
+  favoriteSections,
   onClose,
   foundCount = 0
 }: FilterContainerProps) {
@@ -34,7 +36,10 @@ function FilterContainer({
             {sections?.map(section => (
               <div
                 key={section}
-                className={cn("py-1", hiddenSections.includes(section) && "text-muted-foreground")}
+                className={cn("py-1", {
+                  "text-muted-foreground": hiddenSections.includes(section),
+                  "text-red-500": favoriteSections.includes(section)
+                })}
               >
                 <Link
                   onClick={() => {

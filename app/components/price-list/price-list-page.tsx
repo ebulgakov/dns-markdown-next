@@ -108,6 +108,7 @@ function PriceListPage({
       <Filter
         priceList={priceList}
         hiddenSections={hiddenSections}
+        favoriteSections={favoriteSections}
         foundCount={filteredList.length}
       />
     </div>
