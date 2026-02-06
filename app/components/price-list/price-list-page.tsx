@@ -72,6 +72,11 @@ function PriceListPage({ priceList, variant }: PriceListPageProps) {
         </>
       )}
 
+      {sortGoods !== "default" &&
+        filteredList.map(item => (
+          <PriceListGoods shownFavorites={variant !== "archive"} key={item._id} item={item} />
+        ))}
+
       <div className={clsx({ hidden: isHiddenDefaultList })}>
         {favoriteSections.length > 0 ? (
           <Fragment>
