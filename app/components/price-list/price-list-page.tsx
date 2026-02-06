@@ -31,7 +31,7 @@ function PriceListPage({ priceList, variant }: PriceListPageProps) {
   const searchTerm = useSearchStore(state => state.searchTerm);
   const debouncedSearch = useDebounce<string>(searchTerm.trim(), 100);
   const filteredList = useFilteredGoods(debouncedSearch, priceList);
-  const isHiddenDefaultList = debouncedSearch.length > 1 || sortGoods !== "default";
+  const isHiddenDefaultList = debouncedSearch.length > 2 || sortGoods !== "default";
 
   const favoriteSectionsPositions: Position[] = [];
   const nonFavoritesSectionsPositions: Position[] = [];
@@ -46,7 +46,7 @@ function PriceListPage({ priceList, variant }: PriceListPageProps) {
 
   return (
     <div data-testid="price-list-page">
-      {debouncedSearch.length > 1 && (
+      {debouncedSearch.length > 2 && (
         <>
           <div className="mb-4">
             <Title variant="h2">

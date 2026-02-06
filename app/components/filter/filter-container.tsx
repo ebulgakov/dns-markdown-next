@@ -26,6 +26,11 @@ function FilterContainer({ sections, onClose, foundCount = 0 }: FilterContainerP
 
     onChange("");
     onClose();
+
+    requestAnimationFrame(() => {
+      const element = document.getElementById(encodeURIComponent(section));
+      element?.scrollIntoView({ block: "start" });
+    });
   };
 
   return (
@@ -35,20 +40,16 @@ function FilterContainer({ sections, onClose, foundCount = 0 }: FilterContainerP
         <div className="overflow-auto">
           <div>
             {sections?.map(section => (
-              <div
+              <button
                 key={section}
-                className={cn("py-1", {
+                className={cn("hover:text-primary block w-full cursor-pointer py-1 text-left", {
                   "text-muted-foreground": hiddenSections.includes(section),
                   "text-favorite-section": favoriteSections.includes(section)
                 })}
+                onClick={() => handleScrollToLink(section)}
               >
-                <a
-                  onClick={() => handleScrollToLink(section)}
-                  href={`#${encodeURIComponent(section)}`}
-                >
-                  {section}
-                </a>
-              </div>
+                {section}
+              </button>
             ))}
           </div>
         </div>
@@ -77,7 +78,7 @@ function FilterContainer({ sections, onClose, foundCount = 0 }: FilterContainerP
         </div>
 
         <div className="h-6">
-          {searchTerm.length >= 3 && <div className="italic">Найдено товаров: {foundCount}</div>}
+          {searchTerm.length > 2 && <div className="italic">Найдено товаров: {foundCount}</div>}
         </div>
       </div>
     </div>
