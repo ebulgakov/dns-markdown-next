@@ -22,7 +22,15 @@ function Filter({ priceList, hiddenSections, foundCount = 0 }: FilterProps) {
 
   const sections = priceList.positions
     .map(position => position.title)
-    .sort((a, b) => a.localeCompare(b));
+    .sort((a, b) => {
+      const isHiddenA = hiddenSections.includes(a);
+      const isHiddenB = hiddenSections.includes(b);
+
+      if (isHiddenA && !isHiddenB) return 1;
+      if (!isHiddenA && isHiddenB) return -1;
+
+      return a.localeCompare(b);
+    });
 
   const handleClose = useCallback(() => {
     setIsShownFilter(false);
