@@ -14,6 +14,7 @@ import type { Meta, StoryObj } from "@storybook/react";
 
 const meta: Meta<typeof PriceListPage> = {
   title: "Components/PriceList/PriceListPage",
+  component: PriceListPage,
   tags: ["autodocs"]
 };
 

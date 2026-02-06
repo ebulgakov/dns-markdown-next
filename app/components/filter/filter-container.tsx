@@ -44,10 +44,8 @@ function FilterContainer({ sections, onClose, foundCount = 0 }: FilterContainerP
                 })}
               >
                 <Link
-                  onClick={async () => {
-                    await handleScrollToLink(section);
-                  }}
-                  href={`#${section}`}
+                  onClick={() => handleScrollToLink(section)}
+                  href={`#${encodeURIComponent(section)}`}
                 >
                   {section}
                 </Link>

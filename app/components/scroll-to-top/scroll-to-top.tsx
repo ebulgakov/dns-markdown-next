@@ -18,8 +18,8 @@ function ScrollToTop({ variant }: ScrollToTopProps) {
       <ReactScrollUp showUnder={160} style={{ position: "static" }}>
         <Button
           type="button"
-          aria-label="Toggle filter visibility"
-          name="toggle-visibility"
+          aria-label="Scroll to top"
+          name="scroll-to-top"
           variant="secondary"
           size="flex"
           className="cursor-pointer rounded-full p-2 md:p-3"

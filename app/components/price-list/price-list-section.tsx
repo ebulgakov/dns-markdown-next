@@ -63,7 +63,10 @@ function PriceListSection({
 
   return (
     <section className="relative border-b border-b-neutral-300">
-      <a id={`${position.title}`} className="absolute -top-[var(--nav-bar-offset)] left-0" />
+      <a
+        id={encodeURIComponent(position.title)}
+        className="absolute -top-[var(--nav-bar-offset)] left-0"
+      />
       <div className="bg-background sticky top-[var(--nav-bar-offset)] z-10 -mb-[1px] flex w-full items-center justify-start gap-2 border-b border-solid border-b-neutral-300 py-3 text-left">
         <button
           type="button"
@@ -91,7 +94,7 @@ function PriceListSection({
                   title="Получить ссылку на эту категорию"
                   onClick={() =>
                     copyToClipboard(
-                      `${window.location.origin}${window.location.pathname}#${position.title}`
+                      `${window.location.origin}${window.location.pathname}#${encodeURIComponent(position.title)}`
                     )
                   }
                   className={cn("relative hidden cursor-pointer text-gray-300 md:block", {

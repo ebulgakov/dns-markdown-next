@@ -124,7 +124,8 @@ export function UserProvider({
     hiddenSections: optimisticHiddenSections,
     favoriteSections: optimisticFavoriteSections,
     onToggleHiddenSection,
-    onToggleFavoriteSection
+    onToggleFavoriteSection,
+    onFavorite: value.onFavorite ?? (() => {})
   };
 
   return <UserContext.Provider value={contextValue}>{children}</UserContext.Provider>;
