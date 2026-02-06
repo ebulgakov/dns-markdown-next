@@ -15,7 +15,7 @@ function FilterToggle({ isActive, onToggle }: FilterToggleProps) {
       name="toggle-visibility"
       variant="secondary"
       size="flex"
-      className="rounded-full p-4"
+      className="rounded-full p-2 md:p-4"
     >
       {isActive ? <X className="size-full" /> : <Funnel className="size-full" />}
     </Button>

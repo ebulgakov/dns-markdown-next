@@ -2,6 +2,8 @@
 
 import { useState } from "react";
 
+import { cn } from "@/app/lib/utils";
+
 import { FilterContainer } from "./filter-container";
 import { FilterToggle } from "./filter-toggle";
 
@@ -22,17 +24,26 @@ function Filter({ priceList, hiddenSections, foundCount = 0 }: FilterProps) {
     .sort((a, b) => a.localeCompare(b));
   return (
     <>
-      {isShownFilter && (
-        <div className="bg-background fixed inset-0 bottom-22 left-auto z-20 w-full max-w-[370px] items-center justify-center rounded-bl-lg shadow-lg">
-          <FilterContainer
-            onConfirm={() => setIsShownFilter(false)}
-            hiddenSections={hiddenSections}
-            sections={sections}
-            foundCount={foundCount}
-          />
-        </div>
-      )}
-      <div className="fixed right-3 bottom-3 z-20 size-14">
+      <div
+        className={cn(
+          "bg-background fixed inset-0 left-auto z-20 w-full items-center justify-center shadow-lg md:bottom-22 md:max-w-[370px] md:rounded-bl-lg",
+          {
+            hidden: !isShownFilter
+          }
+        )}
+      >
+        <FilterContainer
+          onConfirm={() => setIsShownFilter(false)}
+          hiddenSections={hiddenSections}
+          sections={sections}
+          foundCount={foundCount}
+        />
+      </div>
+      <div
+        className={cn("fixed right-3 bottom-3 z-20 size-10 md:size-14", {
+          "top-3 md:top-auto": isShownFilter
+        })}
+      >
         <FilterToggle isActive={isShownFilter} onToggle={() => setIsShownFilter(prev => !prev)} />
       </div>
     </>

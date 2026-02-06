@@ -36,7 +36,15 @@ function FilterContainer({
                 key={section}
                 className={cn("py-1", hiddenSections.includes(section) && "text-muted-foreground")}
               >
-                <Link href={`#${section}`}>{section}</Link>
+                <Link
+                  onClick={() => {
+                    onChange("");
+                    onConfirm();
+                  }}
+                  href={`#${section}`}
+                >
+                  {section}
+                </Link>
               </div>
             ))}
           </div>
@@ -62,7 +70,9 @@ function FilterContainer({
           </Button>
         </div>
 
-        {searchTerm.length >= 3 && <div className="italic">Найдено товаров: {foundCount}</div>}
+        <div className="h-6">
+          {searchTerm.length >= 3 && <div className="italic">Найдено товаров: {foundCount}</div>}
+        </div>
       </div>
     </div>
   );
