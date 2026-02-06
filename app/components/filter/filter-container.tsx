@@ -1,5 +1,4 @@
 import { Search } from "lucide-react";
-import Link from "next/link";
 import { useContext } from "react";
 
 import { Button } from "@/app/components/ui/button";
@@ -21,12 +20,12 @@ function FilterContainer({ sections, onClose, foundCount = 0 }: FilterContainerP
   const searchTerm = useSearchStore(state => state.searchTerm);
 
   const handleScrollToLink = (section: string) => {
-    onChange("");
-    onClose();
-
     if (hiddenSections.includes(section)) {
       onToggleHiddenSection?.(section);
     }
+
+    onChange("");
+    onClose();
   };
 
   return (
@@ -43,12 +42,12 @@ function FilterContainer({ sections, onClose, foundCount = 0 }: FilterContainerP
                   "text-favorite-section": favoriteSections.includes(section)
                 })}
               >
-                <Link
+                <a
                   onClick={() => handleScrollToLink(section)}
                   href={`#${encodeURIComponent(section)}`}
                 >
                   {section}
-                </Link>
+                </a>
               </div>
             ))}
           </div>
