@@ -61,7 +61,10 @@ function FilterContainer({
             role="search"
             type="search"
             value={searchTerm}
-            onChange={e => onChange(e.target.value)}
+            onChange={e => {
+              window.scrollTo({ top: 0 });
+              onChange(e.target.value);
+            }}
             placeholder="Минимум 3 буквы"
           />
 
