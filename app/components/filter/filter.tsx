@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 
 import { cn } from "@/app/lib/utils";
 
@@ -17,13 +17,32 @@ type FilterProps = {
 };
 
 function Filter({ priceList, hiddenSections, foundCount = 0 }: FilterProps) {
+  const containerRef = useRef<HTMLDivElement>(null);
   const [isShownFilter, setIsShownFilter] = useState<boolean>(true);
 
   const sections = priceList.positions
     .map(position => position.title)
     .sort((a, b) => a.localeCompare(b));
+
+  const handleClose = useCallback(() => {
+    setIsShownFilter(false);
+  }, []);
+
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (containerRef.current && !containerRef.current.contains(event.target as Node)) {
+        handleClose();
+      }
+    };
+
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, [handleClose]);
+
   return (
-    <>
+    <div ref={containerRef}>
       <div
         className={cn(
           "bg-background fixed inset-0 left-auto z-20 w-full items-center justify-center shadow-lg md:bottom-22 md:max-w-[370px] md:rounded-bl-lg",
@@ -33,7 +52,7 @@ function Filter({ priceList, hiddenSections, foundCount = 0 }: FilterProps) {
         )}
       >
         <FilterContainer
-          onConfirm={() => setIsShownFilter(false)}
+          onClose={handleClose}
           hiddenSections={hiddenSections}
           sections={sections}
           foundCount={foundCount}
@@ -46,7 +65,7 @@ function Filter({ priceList, hiddenSections, foundCount = 0 }: FilterProps) {
       >
         <FilterToggle isActive={isShownFilter} onToggle={() => setIsShownFilter(prev => !prev)} />
       </div>
-    </>
+    </div>
   );
 }
 

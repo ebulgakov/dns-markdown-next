@@ -12,14 +12,14 @@ import type { UserSections } from "@/types/user";
 type FilterContainerProps = {
   sections?: string[];
   hiddenSections: UserSections;
-  onConfirm: () => void;
+  onClose: () => void;
   foundCount?: number;
 };
 
 function FilterContainer({
   sections,
   hiddenSections,
-  onConfirm,
+  onClose,
   foundCount = 0
 }: FilterContainerProps) {
   const onChange = useSearchStore(state => state.updateSearchTerm);
@@ -39,7 +39,7 @@ function FilterContainer({
                 <Link
                   onClick={() => {
                     onChange("");
-                    onConfirm();
+                    onClose();
                   }}
                   href={`#${section}`}
                 >
@@ -65,7 +65,7 @@ function FilterContainer({
             placeholder="Минимум 3 буквы"
           />
 
-          <Button type="button" variant="secondary" size="lg" onClick={onConfirm}>
+          <Button type="button" variant="secondary" size="lg" onClick={onClose}>
             <Search />
           </Button>
         </div>
