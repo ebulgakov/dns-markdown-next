@@ -49,9 +49,24 @@ function PriceListPage({
 
   return (
     <div data-testid="price-list-page">
-      {filteredList.map(item => (
-        <PriceListGoods key={item._id} item={item} favorites={userFavorites} />
-      ))}
+      {debouncedSearch.length > 1 && (
+        <>
+          <div className="mb-4">
+            <Title variant="h2">
+              Поиск по названию товара:&nbsp;
+              <span className="font-normal">{searchTerm.trim()}</span>
+            </Title>
+            <div>
+              Найдено товаров: <b>{filteredList.length}</b>
+            </div>
+          </div>
+          <div className="divide-y divide-neutral-300">
+            {filteredList.map(item => (
+              <PriceListGoods key={item._id} item={item} favorites={userFavorites} />
+            ))}
+          </div>
+        </>
+      )}
 
       <div className={clsx({ hidden: isHiddenDefaultList })}>
         {favoriteSections.length > 0 ? (
