@@ -78,7 +78,7 @@ function FavoritesPageClient({
             key={favorite.item._id}
             item={favorite.item}
             status={favorite.status}
-            favorites={!favorite.status.deleted ? favorites : undefined}
+            shownFavorites={!favorite.status.deleted}
           />
         ))}
       </div>

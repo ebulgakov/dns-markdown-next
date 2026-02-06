@@ -2,36 +2,29 @@
 
 import clsx from "clsx";
 import { X } from "lucide-react";
-import { Fragment } from "react";
+import { Fragment, useContext } from "react";
 
 import { Filter } from "@/app/components/filter";
+import { PriceListSection } from "@/app/components/price-list/price-list-section";
 import { ScrollToTop } from "@/app/components/scroll-to-top";
 import { Title } from "@/app/components/ui/title";
+import { UserContext } from "@/app/contexts/user-context";
 import { useDebounce } from "@/app/hooks/use-debounce";
 import { useFilteredGoods } from "@/app/hooks/use-filtered-goods";
 import { useSearchStore } from "@/app/stores/search-store";
 import { useSortGoodsStore } from "@/app/stores/sort-goods-store";
 
-import { PriceList } from "./price-list";
 import { PriceListFavoritesEmptyAlert } from "./price-list-favorites-empty-alert";
 import { PriceListGoods } from "./price-list-goods";
 
 import type { Position, PriceList as PriceListType } from "@/types/pricelist";
-import type { Favorite, UserSections } from "@/types/user";
 
 type PriceListPageProps = {
-  favoriteSections?: UserSections;
-  hiddenSections?: UserSections;
-  userFavorites?: Favorite[];
   priceList: PriceListType;
 };
 
-function PriceListPage({
-  favoriteSections = [],
-  hiddenSections = [],
-  userFavorites,
-  priceList
-}: PriceListPageProps) {
+function PriceListPage({ priceList }: PriceListPageProps) {
+  const { favoriteSections } = useContext(UserContext);
   const sortGoods = useSortGoodsStore(state => state.sortGoods);
   const onChangeSearch = useSearchStore(state => state.updateSearchTerm);
   const searchTerm = useSearchStore(state => state.searchTerm);
@@ -72,7 +65,7 @@ function PriceListPage({
           </div>
           <div className="divide-y divide-neutral-300">
             {filteredList.map(item => (
-              <PriceListGoods key={item._id} item={item} favorites={userFavorites} />
+              <PriceListGoods shownFavorites={true} key={item._id} item={item} />
             ))}
           </div>
         </>
@@ -83,12 +76,11 @@ function PriceListPage({
           <Fragment>
             <Title variant="h2">Избранные категории</Title>
 
-            <PriceList
-              positions={favoriteSectionsPositions.sort((a, b) => a.title.localeCompare(b.title))}
-              favorites={userFavorites}
-              hiddenSections={hiddenSections}
-              favoriteSections={favoriteSections}
-            />
+            {favoriteSectionsPositions
+              .sort((a, b) => a.title.localeCompare(b.title))
+              .map(position => (
+                <PriceListSection key={position._id} position={position} />
+              ))}
 
             <Title variant="h2">Все категории</Title>
           </Fragment>
@@ -96,21 +88,15 @@ function PriceListPage({
           <PriceListFavoritesEmptyAlert />
         )}
 
-        <PriceList
-          positions={nonFavoritesSectionsPositions.sort((a, b) => a.title.localeCompare(b.title))}
-          favorites={userFavorites}
-          hiddenSections={hiddenSections}
-          favoriteSections={favoriteSections}
-        />
+        {nonFavoritesSectionsPositions
+          .sort((a, b) => a.title.localeCompare(b.title))
+          .map(position => (
+            <PriceListSection key={position._id} position={position} />
+          ))}
       </div>
 
       <ScrollToTop variant="filter" />
-      <Filter
-        priceList={priceList}
-        hiddenSections={hiddenSections}
-        favoriteSections={favoriteSections}
-        foundCount={filteredList.length}
-      />
+      <Filter priceList={priceList} foundCount={filteredList.length} />
     </div>
   );
 }

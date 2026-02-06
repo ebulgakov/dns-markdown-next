@@ -1,23 +1,22 @@
 "use client";
 
-import { useCallback, useEffect, useRef, useState } from "react";
+import { useCallback, useContext, useEffect, useRef, useState } from "react";
 
+import { UserContext } from "@/app/contexts/user-context";
 import { cn } from "@/app/lib/utils";
 
 import { FilterContainer } from "./filter-container";
 import { FilterToggle } from "./filter-toggle";
 
 import type { PriceList } from "@/types/pricelist";
-import type { UserSections } from "@/types/user";
 
 type FilterProps = {
   priceList: PriceList;
-  hiddenSections: UserSections;
-  favoriteSections: UserSections;
   foundCount?: number;
 };
 
-function Filter({ priceList, hiddenSections, favoriteSections, foundCount = 0 }: FilterProps) {
+function Filter({ priceList, foundCount = 0 }: FilterProps) {
+  const { favoriteSections, hiddenSections } = useContext(UserContext);
   const containerRef = useRef<HTMLDivElement>(null);
   const [isShownFilter, setIsShownFilter] = useState<boolean>(false);
 
@@ -66,13 +65,7 @@ function Filter({ priceList, hiddenSections, favoriteSections, foundCount = 0 }:
           }
         )}
       >
-        <FilterContainer
-          onClose={handleClose}
-          hiddenSections={hiddenSections}
-          favoriteSections={favoriteSections}
-          sections={sections}
-          foundCount={foundCount}
-        />
+        <FilterContainer onClose={handleClose} sections={sections} foundCount={foundCount} />
       </div>
       <div
         className={cn("fixed right-3 bottom-3 z-20 size-10 md:size-14", {

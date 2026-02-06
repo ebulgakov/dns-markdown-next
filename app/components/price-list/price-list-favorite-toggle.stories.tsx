@@ -24,23 +24,9 @@ export default meta;
 type Story = StoryObj<typeof PriceListFavoriteToggle>;
 
 export const Default: Story = {
-  args: {
-    favorites: []
-  }
+  args: {}
 };
 
 export const InFavorites: Story = {
-  args: {
-    favorites: [
-      {
-        item: mockGoodsList[1],
-        id: "",
-        status: {
-          updatedAt: "",
-          createdAt: "",
-          deleted: false
-        }
-      }
-    ]
-  }
+  args: {}
 };

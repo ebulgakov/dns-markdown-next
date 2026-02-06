@@ -1,4 +1,3 @@
-import { mockFavorites } from "./__mocks__/favorites";
 import { mockDiff, mockGoodsList } from "./__mocks__/goods";
 import { PriceListSection } from "./price-list-section";
 
@@ -11,9 +10,7 @@ const meta: Meta<typeof PriceListSection> = {
   tags: ["autodocs"],
   argTypes: {
     position: { control: "object" },
-    favorites: { control: "object" },
-    diffs: { control: "object" },
-    isOpen: { control: "boolean" }
+    diffs: { control: "object" }
   }
 };
 
@@ -32,15 +29,13 @@ const mockPosition: Position = {
 
 export const Default: Story = {
   args: {
-    position: mockPosition,
-    isOpen: true
+    position: mockPosition
   }
 };
 
 export const WithFavorites: Story = {
   args: {
-    ...Default.args,
-    favorites: mockFavorites
+    ...Default.args
   }
 };
 
@@ -53,7 +48,6 @@ export const WithDiffs: Story = {
 
 export const Closed: Story = {
   args: {
-    ...Default.args,
-    isOpen: false
+    ...Default.args
   }
 };

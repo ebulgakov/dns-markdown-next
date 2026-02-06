@@ -10,12 +10,16 @@ import { StrictMode, type ReactNode } from "react";
 import "./globals.css";
 
 import { getPriceListCity } from "@/api/get";
+import { getUser as getGenericUser } from "@/api/post";
 import { getSessionInfo } from "@/api/user";
 import { ClerkError } from "@/app/components/clerk-error";
 import { Footer } from "@/app/components/footer";
 import { Navbar } from "@/app/components/navbar";
+import { Alert, AlertDescription, AlertTitle } from "@/app/components/ui/alert";
+import { UserProvider } from "@/app/contexts/user-context";
 import { cn } from "@/app/lib/utils";
 import { ThemeProvider } from "@/app/providers/theme-provider";
+import { User } from "@/types/user";
 
 import type { Metadata } from "next";
 
@@ -76,6 +80,19 @@ export default async function RootLayout({
     userId = null;
   }
 
+  let genericUser: User | null = null;
+  try {
+    genericUser = await getGenericUser();
+  } catch (error) {
+    const e = error as Error;
+    return (
+      <Alert variant="destructive">
+        <AlertTitle>Ошибка загрузки пользователя</AlertTitle>
+        <AlertDescription>{e.message}</AlertDescription>
+      </Alert>
+    );
+  }
+
   return (
     <StrictMode>
       <NextIntlClientProvider>
@@ -84,21 +101,29 @@ export default async function RootLayout({
             <body
               className={cn(["font-sans antialiased", robotoSans.variable, robotoMono.variable])}
             >
-              <ThemeProvider attribute="class" defaultTheme="light" enableSystem>
-                <div className="px-4">
-                  <div className="mx-auto grid min-h-screen md:container">
-                    <div className="mb-10">
-                      <ClerkError />
+              <UserProvider
+                value={{
+                  hiddenSections: genericUser?.hiddenSections || [],
+                  favoriteSections: genericUser?.favoriteSections || [],
+                  favorites: genericUser?.favorites || []
+                }}
+              >
+                <ThemeProvider attribute="class" defaultTheme="light" enableSystem>
+                  <div className="px-4">
+                    <div className="mx-auto grid min-h-screen md:container">
+                      <div className="mb-10">
+                        <ClerkError />
 
-                      <Navbar locate={locale} isUserLoggedIn={!!userId} city={city} />
+                        <Navbar locate={locale} isUserLoggedIn={!!userId} city={city} />
 
-                      {children}
+                        {children}
+                      </div>
+                      <Footer locate={locale} />
                     </div>
-                    <Footer locate={locale} />
                   </div>
-                </div>
-              </ThemeProvider>
-              <SpeedInsights />
+                </ThemeProvider>
+                <SpeedInsights />
+              </UserProvider>
             </body>
             {process.env.GA_ID && <GoogleAnalytics gaId={process.env.GA_ID} />}
           </html>

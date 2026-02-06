@@ -1,42 +1,29 @@
 import { Search } from "lucide-react";
 import Link from "next/link";
+import { useContext } from "react";
 
-import { postRemoveFromHiddenSections } from "@/api/post";
 import { Button } from "@/app/components/ui/button";
 import { Input } from "@/app/components/ui/input";
 import { Separator } from "@/app/components/ui/separator";
+import { UserContext } from "@/app/contexts/user-context";
 import { cn } from "@/app/lib/utils";
 import { useSearchStore } from "@/app/stores/search-store";
 
-import type { UserSections } from "@/types/user";
-
 type FilterContainerProps = {
   sections?: string[];
-  hiddenSections: UserSections;
-  favoriteSections: UserSections;
   onClose: () => void;
   foundCount?: number;
 };
 
-function FilterContainer({
-  sections,
-  hiddenSections,
-  favoriteSections,
-  onClose,
-  foundCount = 0
-}: FilterContainerProps) {
+function FilterContainer({ sections, onClose, foundCount = 0 }: FilterContainerProps) {
+  const { favoriteSections, hiddenSections, onToggleHiddenSection } = useContext(UserContext);
   const onChange = useSearchStore(state => state.updateSearchTerm);
   const searchTerm = useSearchStore(state => state.searchTerm);
 
-  const handleScrollToLink = async (title: string) => {
+  const handleScrollToLink = (title: string) => {
+    onToggleHiddenSection?.(title);
     onChange("");
     onClose();
-
-    try {
-      await postRemoveFromHiddenSections(title);
-    } catch {
-      // If the request fails, we still want to scroll to the section, so we don't handle the error.
-    }
   };
 
   return (

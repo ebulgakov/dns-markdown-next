@@ -1,20 +1,20 @@
 "use client";
 
 import { Star } from "lucide-react";
-import { useState, useOptimistic, startTransition } from "react";
+import { useState, useOptimistic, startTransition, useContext } from "react";
 
 import { postAddToFavorites, postRemoveFromFavorites } from "@/api/post";
+import { UserContext } from "@/app/contexts/user-context";
 import { sendGAEvent } from "@/app/lib/sendGAEvent";
 
 import type { Goods as GoodsType } from "@/types/pricelist";
-import type { Favorite } from "@/types/user";
 
 type PriceListFavoriteToggleProps = {
-  favorites: Favorite[];
   goods: GoodsType;
 };
 
-function PriceListFavoriteToggle({ favorites, goods }: PriceListFavoriteToggleProps) {
+function PriceListFavoriteToggle({ goods }: PriceListFavoriteToggleProps) {
+  const { favorites } = useContext(UserContext);
   const [inFavorites, setInFavorites] = useState<boolean>(
     favorites.some(fav => fav.item.link === goods.link)
   );

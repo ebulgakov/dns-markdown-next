@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useContext, useState } from "react";
 
 import { PriceListSection } from "@/app/components/price-list";
 import { ScrollToTop } from "@/app/components/scroll-to-top";
@@ -8,20 +8,18 @@ import { PageTitle } from "@/app/components/ui/page-title";
 
 import type { DiffsCollection as DiffsType } from "@/types/analysis-diff";
 import type { Position as PositionType } from "@/types/pricelist";
-import type { Favorite } from "@/types/user";
+import { UserContext } from "@/app/contexts/user-context";
 
 type UpdatesProps = {
   diffNew?: PositionType;
   diffChangesPrice?: PositionType;
   diffRemoved?: PositionType;
   diffChangesProfit?: PositionType;
-  userFavoritesGoods: Favorite[];
   changePriceDiff: DiffsType;
   changeProfitDiff: DiffsType;
 };
 function Updates({
   diffNew,
-  userFavoritesGoods,
   diffChangesPrice,
   changePriceDiff,
   diffRemoved,
@@ -44,38 +42,11 @@ function Updates({
   return (
     <div>
       <PageTitle title="Обновления с начала дня" />
-      {diffNew && (
-        <PriceListSection
-          onHidden={onToggleSection}
-          isOpen={shownSections.includes(diffNew.title)}
-          position={diffNew}
-          favorites={userFavoritesGoods}
-        />
-      )}
-      {diffChangesPrice && (
-        <PriceListSection
-          onHidden={onToggleSection}
-          isOpen={shownSections.includes(diffChangesPrice.title)}
-          position={diffChangesPrice}
-          favorites={userFavoritesGoods}
-          diffs={changePriceDiff}
-        />
-      )}
-      {diffRemoved && (
-        <PriceListSection
-          onHidden={onToggleSection}
-          isOpen={shownSections.includes(diffRemoved.title)}
-          position={diffRemoved}
-        />
-      )}
+      {diffNew && <PriceListSection position={diffNew} />}
+      {diffChangesPrice && <PriceListSection position={diffChangesPrice} diffs={changePriceDiff} />}
+      {diffRemoved && <PriceListSection position={diffRemoved} />}
       {diffChangesProfit && (
-        <PriceListSection
-          onHidden={onToggleSection}
-          isOpen={shownSections.includes(diffChangesProfit.title)}
-          position={diffChangesProfit}
-          diffs={changeProfitDiff}
-          favorites={userFavoritesGoods}
-        />
+        <PriceListSection position={diffChangesProfit} diffs={changeProfitDiff} />
       )}
 
       <ScrollToTop />

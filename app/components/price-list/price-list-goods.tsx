@@ -12,15 +12,15 @@ import { PriceListGoodsDiff } from "./price-list-goods-diff";
 
 import type { Diff as DiffType } from "@/types/analysis-diff";
 import type { Goods as GoodsType } from "@/types/pricelist";
-import type { Favorite, FavoriteStatus } from "@/types/user";
+import type { FavoriteStatus } from "@/types/user";
 
 type PriceListGoodsProps = {
   item: GoodsType;
   diff?: DiffType;
-  favorites?: Favorite[];
+  shownFavorites: boolean;
   status?: FavoriteStatus;
 };
-function PriceListGoods({ item, status, diff, favorites }: PriceListGoodsProps) {
+function PriceListGoods({ item, status, diff, shownFavorites }: PriceListGoodsProps) {
   const handleSendGAEvent = (event: string) => {
     sendGAEvent({
       event,
@@ -138,7 +138,7 @@ function PriceListGoods({ item, status, diff, favorites }: PriceListGoodsProps) 
       <div className="text-center [grid-area:store]">{item.available}</div>
 
       <div className="[grid-area:image] lg:[grid-area:favorites]">
-        {favorites && <PriceListFavoriteToggle favorites={favorites} goods={item} />}
+        {shownFavorites && <PriceListFavoriteToggle goods={item} />}
       </div>
     </div>
   );
