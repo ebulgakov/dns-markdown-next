@@ -20,10 +20,13 @@ function FilterContainer({ sections, onClose, foundCount = 0 }: FilterContainerP
   const onChange = useSearchStore(state => state.updateSearchTerm);
   const searchTerm = useSearchStore(state => state.searchTerm);
 
-  const handleScrollToLink = (title: string) => {
-    onToggleHiddenSection?.(title);
+  const handleScrollToLink = (section: string) => {
     onChange("");
     onClose();
+
+    if (hiddenSections.includes(section)) {
+      onToggleHiddenSection?.(section);
+    }
   };
 
   return (
