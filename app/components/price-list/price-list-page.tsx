@@ -57,9 +57,9 @@ function PriceListPage({
           <div className="mb-4">
             <Title variant="h2">
               Поиск по названию товара:&nbsp;
-              <span className="font-normal">{searchTerm.trim()}</span>
+              <span className="font-normal">{searchTerm.trim()}</span>&nbsp;
               <button
-                className="text-destructive relative top-1 ml-1 cursor-pointer p-1"
+                className="text-destructive relative top-2 ml-1 cursor-pointer p-1 md:top-1"
                 onClick={() => onChangeSearch("")}
               >
                 <span className="sr-only">Очистить поиск</span>
