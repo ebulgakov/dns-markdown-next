@@ -1,10 +1,12 @@
 import { getTranslations } from "next-intl/server";
 
 import { getPriceListById } from "@/api/get";
+import { getUser as getGenericUser } from "@/api/post";
 import { PriceListPage } from "@/app/components/price-list";
 import { Alert, AlertDescription, AlertTitle } from "@/app/components/ui/alert";
 import { PageTitle } from "@/app/components/ui/page-title";
 import { formatDate } from "@/app/helpers/format";
+import { User } from "@/types/user";
 
 import type { Metadata } from "next";
 
@@ -30,8 +32,21 @@ export async function generateMetadata({ params }: ArchiveItemPage): Promise<Met
 
 export default async function ArchiveItemPage({ params }: ArchiveItemPage) {
   const { id } = await params;
-  let priceList;
 
+  let genericUser: User | null = null;
+  try {
+    genericUser = await getGenericUser();
+  } catch (error) {
+    const e = error as Error;
+    return (
+      <Alert variant="destructive">
+        <AlertTitle>Ошибка загрузки пользователя</AlertTitle>
+        <AlertDescription>{e.message}</AlertDescription>
+      </Alert>
+    );
+  }
+
+  let priceList;
   try {
     priceList = await getPriceListById(id);
   } catch (e) {
@@ -56,7 +71,11 @@ export default async function ArchiveItemPage({ params }: ArchiveItemPage) {
           </div>
         </div>
       </PageTitle>
-      <PriceListPage priceList={priceList} />
+      <PriceListPage
+        favoriteSections={genericUser?.favoriteSections}
+        hiddenSections={genericUser?.hiddenSections}
+        priceList={priceList}
+      />
     </div>
   );
 }

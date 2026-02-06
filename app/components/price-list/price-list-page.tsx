@@ -28,7 +28,7 @@ type PriceListPageProps = {
 function PriceListPage({
   favoriteSections = [],
   hiddenSections = [],
-  userFavorites = [],
+  userFavorites,
   priceList
 }: PriceListPageProps) {
   const sortGoods = useSortGoodsStore(state => state.sortGoods);
