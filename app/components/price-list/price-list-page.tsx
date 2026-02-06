@@ -35,6 +35,7 @@ type PriceListPageProps = {
 };
 
 function PriceListPage({ priceList, variant, diffs }: PriceListPageProps) {
+  const [scrollHeight, setScrollHeight] = useState(0);
   // Initialize hidden sections with no saving sections to user
   const [hiddenSections, setHiddenSections] = useState<UserSections>([]);
 
@@ -54,6 +55,14 @@ function PriceListPage({ priceList, variant, diffs }: PriceListPageProps) {
     estimateSize: index => {
       if (filteredList[index].type === "header") return 60;
       return 220;
+    },
+    getItemKey: index => {
+      const item = filteredList[index];
+      if (!item) return index;
+      if (item.type === "goods") return (item as VisualizationGoods)._id;
+      if (item.type === "header") return `header-${(item as VisualizationHeader).title}`;
+      if (item.type === "title") return `title-${(item as VisualizationSectionTitle).category}`;
+      return index;
     },
     overscan: 5,
     scrollMargin: 0,
@@ -103,6 +112,10 @@ function PriceListPage({ priceList, variant, diffs }: PriceListPageProps) {
     return () => window.removeEventListener("hashchange", handleHashScroll);
   }, [filteredList, virtualizer]);
 
+  useEffect(() => {
+    setScrollHeight(virtualizer.getTotalSize());
+  }, [virtualizer, filteredList.length]);
+
   return (
     <div data-testid="price-list-page" ref={listRef}>
       {isSearchMode && (
@@ -128,7 +141,7 @@ function PriceListPage({ priceList, variant, diffs }: PriceListPageProps) {
 
       <div
         style={{
-          height: `${virtualizer.getTotalSize()}px`,
+          height: `${scrollHeight}px`,
           width: "100%",
           position: "relative"
         }}
@@ -152,7 +165,7 @@ function PriceListPage({ priceList, variant, diffs }: PriceListPageProps) {
                 <PriceListSection
                   shownHeart={!(["updates", "archive"] as PageVariant[]).includes(variant)}
                   header={item as VisualizationHeader}
-                  outerHiddenSections={hiddenSections}
+                  outerHiddenSections={variant === "updates" ? hiddenSections : undefined}
                   onOuterToggleHiddenSection={variant === "updates" ? onToggleSection : undefined}
                 />
               )}
