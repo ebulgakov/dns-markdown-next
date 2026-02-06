@@ -57,7 +57,7 @@ export default async function CatalogPage() {
   const count = priceList.positions.reduce((acc, cur) => acc + cur.items.length, 0);
 
   return (
-    <div>
+    <>
       <PageTitle title={formatDate(priceList.createdAt)} subTitle={formatTime(priceList.createdAt)}>
         <div className="mt-4 flex items-center justify-between gap-4 md:mt-0">
           <div>
@@ -74,6 +74,6 @@ export default async function CatalogPage() {
         userFavorites={genericUser?.favorites}
         priceList={priceList}
       />
-    </div>
+    </>
   );
 }

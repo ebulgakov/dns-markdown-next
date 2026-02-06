@@ -31,8 +31,8 @@ function PriceListSection({
   isFavoriteSection
 }: PriceListProps) {
   return (
-    <div className="mb-3">
-      <div className="bg-background sticky top-0 z-10 flex w-full items-center justify-start gap-2 border-b border-solid border-b-neutral-300 text-left">
+    <section className="border-b border-b-neutral-300">
+      <div className="bg-background sticky top-[var(--nav-bar-offset)] z-10 -mb-[1px] flex w-full items-center justify-start gap-2 border-b border-solid border-b-neutral-300 py-3 text-left">
         <button
           type="button"
           onClick={() => onHidden(position.title)}
@@ -60,7 +60,7 @@ function PriceListSection({
         )}
       </div>
 
-      <div className="divide-y divide-gray-200">
+      <div className="divide-y divide-neutral-300">
         {isOpen &&
           position.items.map(item => (
             <PriceListGoods
@@ -71,7 +71,7 @@ function PriceListSection({
             />
           ))}
       </div>
-    </div>
+    </section>
   );
 }
 

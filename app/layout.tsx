@@ -90,9 +90,8 @@ export default async function RootLayout({
                     <div className="mb-10">
                       <ClerkError />
 
-                      <div className="mt-4 mb-5">
-                        <Navbar locate={locale} isUserLoggedIn={!!userId} city={city} />
-                      </div>
+                      <Navbar locate={locale} isUserLoggedIn={!!userId} city={city} />
+
                       {children}
                     </div>
                     <Footer locate={locale} />
