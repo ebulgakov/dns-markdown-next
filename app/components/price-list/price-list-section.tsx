@@ -98,7 +98,7 @@ function PriceListSection({
                     )
                   }
                   className={cn("relative hidden cursor-pointer text-gray-300 md:block", {
-                    "text-green-500": copiedText
+                    "text-success": copiedText
                   })}
                 >
                   <span className="sr-only">Перейти к категории {position.title}</span>
@@ -118,8 +118,8 @@ function PriceListSection({
                   onClick={() => onToggleFavoriteSection?.(position.title)}
                 >
                   <Heart
-                    className={cn("text-red-500 hover:fill-red-300", {
-                      "fill-red-500": isFavoriteSection
+                    className={cn("text-favorite-section hover:fill-favorite-section-foreground", {
+                      "fill-favorite-section": isFavoriteSection
                     })}
                   />
                 </button>

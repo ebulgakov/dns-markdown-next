@@ -40,7 +40,7 @@ function FilterContainer({ sections, onClose, foundCount = 0 }: FilterContainerP
                 key={section}
                 className={cn("py-1", {
                   "text-muted-foreground": hiddenSections.includes(section),
-                  "text-red-500": favoriteSections.includes(section)
+                  "text-favorite-section": favoriteSections.includes(section)
                 })}
               >
                 <Link
