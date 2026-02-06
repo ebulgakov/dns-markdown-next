@@ -42,6 +42,7 @@ function Updates({
       <PageTitle title="Обновления с начала дня" />
       {diffNew && (
         <PriceListSection
+          shownAddingToFavorites
           outerHiddenSections={hiddenSections}
           onOuterToggleHiddenSection={onToggleSection}
           position={diffNew}
@@ -49,6 +50,7 @@ function Updates({
       )}
       {diffChangesPrice && (
         <PriceListSection
+          shownAddingToFavorites
           outerHiddenSections={hiddenSections}
           onOuterToggleHiddenSection={onToggleSection}
           position={diffChangesPrice}
@@ -57,6 +59,7 @@ function Updates({
       )}
       {diffRemoved && (
         <PriceListSection
+          shownAddingToFavorites
           outerHiddenSections={hiddenSections}
           onOuterToggleHiddenSection={onToggleSection}
           position={diffRemoved}
@@ -64,6 +67,7 @@ function Updates({
       )}
       {diffChangesProfit && (
         <PriceListSection
+          shownAddingToFavorites
           outerHiddenSections={hiddenSections}
           onOuterToggleHiddenSection={onToggleSection}
           position={diffChangesProfit}

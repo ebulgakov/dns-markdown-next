@@ -20,10 +20,11 @@ import { PriceListGoods } from "./price-list-goods";
 import type { Position, PriceList as PriceListType } from "@/types/pricelist";
 
 type PriceListPageProps = {
+  variant?: "archive";
   priceList: PriceListType;
 };
 
-function PriceListPage({ priceList }: PriceListPageProps) {
+function PriceListPage({ priceList, variant }: PriceListPageProps) {
   const { favoriteSections } = useContext(UserContext);
   const sortGoods = useSortGoodsStore(state => state.sortGoods);
   const onChangeSearch = useSearchStore(state => state.updateSearchTerm);
@@ -79,7 +80,12 @@ function PriceListPage({ priceList }: PriceListPageProps) {
             {favoriteSectionsPositions
               .sort((a, b) => a.title.localeCompare(b.title))
               .map(position => (
-                <PriceListSection shownHeart key={position._id} position={position} />
+                <PriceListSection
+                  shownAddingToFavorites={variant !== "archive"}
+                  shownHeart
+                  key={position._id}
+                  position={position}
+                />
               ))}
 
             <Title variant="h2">Все категории</Title>
@@ -91,7 +97,12 @@ function PriceListPage({ priceList }: PriceListPageProps) {
         {nonFavoritesSectionsPositions
           .sort((a, b) => a.title.localeCompare(b.title))
           .map(position => (
-            <PriceListSection shownHeart key={position._id} position={position} />
+            <PriceListSection
+              shownAddingToFavorites={variant !== "archive"}
+              shownHeart
+              key={position._id}
+              position={position}
+            />
           ))}
       </div>
 

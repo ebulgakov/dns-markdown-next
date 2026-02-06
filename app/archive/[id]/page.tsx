@@ -56,7 +56,7 @@ export default async function ArchiveItemPage({ params }: ArchiveItemPage) {
           </div>
         </div>
       </PageTitle>
-      <PriceListPage priceList={priceList} />
+      <PriceListPage variant="archive" priceList={priceList} />
     </div>
   );
 }

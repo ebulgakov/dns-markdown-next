@@ -20,6 +20,7 @@ type PriceListProps = {
   diffs?: DiffsType;
   isUserLoggedIn?: boolean;
   outerHiddenSections?: UserSections;
+  shownAddingToFavorites: boolean;
   onOuterToggleHiddenSection?: (section: string) => void;
 };
 
@@ -28,6 +29,7 @@ function PriceListSection({
   diffs,
   shownHeart,
   outerHiddenSections,
+  shownAddingToFavorites,
   onOuterToggleHiddenSection
 }: PriceListProps) {
   const [isTooltipOpen, setIsTooltipOpen] = useState(false);
@@ -141,7 +143,7 @@ function PriceListSection({
           position.items.map(item => (
             <PriceListGoods
               key={item._id}
-              shownFavorites
+              shownFavorites={shownAddingToFavorites}
               item={item}
               diff={diffs && diffs[item._id]}
             />
