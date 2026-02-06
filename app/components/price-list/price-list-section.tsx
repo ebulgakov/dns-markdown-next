@@ -1,6 +1,6 @@
 "use client";
 
-import { Plus, Minus, Heart } from "lucide-react";
+import { Plus, Minus, Heart, Hash } from "lucide-react";
 import { useContext } from "react";
 
 import { UserContext } from "@/app/contexts/user-context";
@@ -60,17 +60,33 @@ function PriceListSection({
         </span>
 
         {shownHeart && (
-          <button
-            type="button"
-            className="relative ml-auto cursor-pointer"
-            onClick={() => onToggleFavoriteSection?.(position.title)}
-          >
-            <Heart
-              className={cn("text-red-500", {
-                "fill-red-500": isFavoriteSection
-              })}
-            />
-          </button>
+          <div className="ml-auto flex items-center gap-4">
+            <a
+              href={`#${position.title}`}
+              title="Получить ссылку на эту категорию"
+              className="relative hidden text-gray-300 md:block"
+            >
+              <span className="sr-only">Перейти к категории {position.title}</span>
+              <Hash />
+            </a>
+
+            <button
+              type="button"
+              className="relative cursor-pointer"
+              title={
+                isFavoriteSection
+                  ? "Убрать категорию из избранного"
+                  : "Добавить категорию в избранное"
+              }
+              onClick={() => onToggleFavoriteSection?.(position.title)}
+            >
+              <Heart
+                className={cn("text-red-500", {
+                  "fill-red-500": isFavoriteSection
+                })}
+              />
+            </button>
+          </div>
         )}
       </div>
 
