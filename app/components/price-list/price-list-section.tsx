@@ -1,8 +1,8 @@
 "use client";
 
+import { useCopyToClipboard } from "@uidotdev/usehooks";
 import { Plus, Minus, Heart, Hash } from "lucide-react";
 import { useContext, useEffect, useState } from "react";
-import { CopyToClipboard } from "react-copy-to-clipboard";
 
 import { Tooltip, TooltipTrigger, TooltipContent } from "@/app/components/ui/tooltip";
 import { UserContext } from "@/app/contexts/user-context";
@@ -31,7 +31,7 @@ function PriceListSection({
   onOuterToggleHiddenSection
 }: PriceListProps) {
   const [isTooltipOpen, setIsTooltipOpen] = useState(false);
-  const [copied, setCopied] = useState<boolean>(false);
+  const [copiedText, copyToClipboard] = useCopyToClipboard();
   const { favoriteSections, hiddenSections, onToggleFavoriteSection, onToggleHiddenSection } =
     useContext(UserContext);
 
@@ -49,17 +49,17 @@ function PriceListSection({
 
   useEffect(() => {
     let timeout: NodeJS.Timeout;
-    if (copied) {
+    if (copiedText) {
       setIsTooltipOpen(true);
       timeout = setTimeout(() => {
         setIsTooltipOpen(false);
-        setCopied(false);
+        copyToClipboard("");
       }, 2000);
     }
     return () => {
       if (timeout) clearTimeout(timeout);
     };
-  }, [copied]);
+  }, [copiedText, copyToClipboard]);
 
   return (
     <section className="relative border-b border-b-neutral-300">
@@ -81,28 +81,29 @@ function PriceListSection({
           <div className="ml-auto flex items-center gap-4">
             <Tooltip open={isTooltipOpen} onOpenChange={setIsTooltipOpen}>
               <TooltipTrigger
+                asChild
                 onClick={e => e.preventDefault()}
                 onMouseEnter={() => setIsTooltipOpen(true)}
-                onMouseLeave={() => !copied && setIsTooltipOpen(false)}
+                onMouseLeave={() => !copiedText && setIsTooltipOpen(false)}
               >
-                <CopyToClipboard
-                  text={`${window.location.origin}${window.location.pathname}#${position.title}`}
-                  onCopy={() => setCopied(true)}
+                <button
+                  type="button"
+                  title="Получить ссылку на эту категорию"
+                  onClick={() =>
+                    copyToClipboard(
+                      `${window.location.origin}${window.location.pathname}#${position.title}`
+                    )
+                  }
+                  className={cn("relative hidden cursor-pointer text-gray-300 md:block", {
+                    "text-green-500": copiedText
+                  })}
                 >
-                  <button
-                    type="button"
-                    title="Получить ссылку на эту категорию"
-                    className={cn("relative hidden cursor-pointer text-gray-300 md:block", {
-                      "text-green-500": copied
-                    })}
-                  >
-                    <span className="sr-only">Перейти к категории {position.title}</span>
-                    <Hash />
-                  </button>
-                </CopyToClipboard>
+                  <span className="sr-only">Перейти к категории {position.title}</span>
+                  <Hash />
+                </button>
               </TooltipTrigger>
               <TooltipContent>
-                <p>{copied ? "Ссылка скопирована!" : "Скопировать ссылку на эту категорию"}</p>
+                <p>{copiedText ? "Ссылка скопирована!" : "Скопировать ссылку на эту категорию"}</p>
               </TooltipContent>
             </Tooltip>
 
