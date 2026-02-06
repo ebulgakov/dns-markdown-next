@@ -1,5 +1,6 @@
 "use client";
 
+import { useDebounce } from "@uidotdev/usehooks";
 import clsx from "clsx";
 import { X } from "lucide-react";
 import { Fragment, useContext } from "react";
@@ -9,7 +10,6 @@ import { PriceListSection } from "@/app/components/price-list/price-list-section
 import { ScrollToTop } from "@/app/components/scroll-to-top";
 import { Title } from "@/app/components/ui/title";
 import { UserContext } from "@/app/contexts/user-context";
-import { useDebounce } from "@/app/hooks/use-debounce";
 import { useFilteredGoods } from "@/app/hooks/use-filtered-goods";
 import { useSearchStore } from "@/app/stores/search-store";
 import { useSortGoodsStore } from "@/app/stores/sort-goods-store";
