@@ -3,7 +3,7 @@
 import { useWindowVirtualizer } from "@tanstack/react-virtual";
 import { useDebounce } from "@uidotdev/usehooks";
 import { X } from "lucide-react";
-import { useContext, useEffect, useRef } from "react";
+import { useContext, useEffect, useRef, useState } from "react";
 
 import { Filter } from "@/app/components/filter";
 import { PriceListSection } from "@/app/components/price-list/price-list-section";
@@ -11,7 +11,9 @@ import { ScrollToTop } from "@/app/components/scroll-to-top";
 import { Title } from "@/app/components/ui/title";
 import { UserContext } from "@/app/contexts/user-context";
 import { useFilteredGoods } from "@/app/hooks/use-filtered-goods";
+import { cn } from "@/app/lib/utils";
 import { useSearchStore } from "@/app/stores/search-store";
+import { UserSections } from "@/types/user";
 import {
   VisualizationGoods,
   VisualizationHeader,
@@ -21,19 +23,28 @@ import {
 import { PriceListFavoritesEmptyAlert } from "./price-list-favorites-empty-alert";
 import { PriceListGoods } from "./price-list-goods";
 
+import type { DiffsCollection as DiffsType } from "@/types/analysis-diff";
 import type { PriceList as PriceListType } from "@/types/pricelist";
 
+type PageVariant = "archive" | "updates" | "default";
+
 type PriceListPageProps = {
-  variant?: "archive";
+  variant: PageVariant;
   priceList: PriceListType;
+  diffs?: DiffsType;
 };
 
-function PriceListPage({ priceList, variant }: PriceListPageProps) {
+function PriceListPage({ priceList, variant, diffs }: PriceListPageProps) {
+  // Initialize hidden sections with no saving sections to user
+  const [hiddenSections, setHiddenSections] = useState<UserSections>([]);
+
   const { favoriteSections } = useContext(UserContext);
   const onChangeSearch = useSearchStore(state => state.updateSearchTerm);
   const searchTerm = useSearchStore(state => state.searchTerm);
   const debouncedSearch = useDebounce<string>(searchTerm.trim(), 100);
-  const filteredList = useFilteredGoods(debouncedSearch, priceList);
+  const filteredList = useFilteredGoods(debouncedSearch, priceList, {
+    hiddenSections
+  });
   const isSearchMode = debouncedSearch.length > 2;
 
   // Virtualization setup
@@ -45,9 +56,18 @@ function PriceListPage({ priceList, variant }: PriceListPageProps) {
       return 220;
     },
     overscan: 5,
-    scrollMargin: listRef.current?.offsetTop ?? 0
+    scrollMargin: 0,
+    initialOffset: 0
   });
   const virtualItems = virtualizer.getVirtualItems();
+
+  const onToggleSection = (sectionId: string) => {
+    setHiddenSections(prevState =>
+      prevState.includes(sectionId)
+        ? prevState.filter(id => id !== sectionId)
+        : [...prevState, sectionId]
+    );
+  };
 
   useEffect(() => {
     const handleHashScroll = () => {
@@ -129,7 +149,12 @@ function PriceListPage({ priceList, variant }: PriceListPageProps) {
               }}
             >
               {item.type === "header" && (
-                <PriceListSection shownHeart header={item as VisualizationHeader} />
+                <PriceListSection
+                  shownHeart={!(["updates", "archive"] as PageVariant[]).includes(variant)}
+                  header={item as VisualizationHeader}
+                  outerHiddenSections={hiddenSections}
+                  onOuterToggleHiddenSection={variant === "updates" ? onToggleSection : undefined}
+                />
               )}
 
               {item.type === "goods" && (
@@ -137,13 +162,18 @@ function PriceListPage({ priceList, variant }: PriceListPageProps) {
                   <PriceListGoods
                     shownFavorites={variant !== "archive"}
                     item={item as VisualizationGoods}
-                    // diff={...}
+                    diff={diffs?.[`${(item as VisualizationGoods)._id}`]}
                   />
                 </div>
               )}
 
-              {item.type === "title" && (
-                <Title variant="h2" className="mb-2">
+              {item.type === "title" && variant !== "updates" && (
+                <Title
+                  variant="h2"
+                  className={cn("mb-2", {
+                    "mt-0": (item as VisualizationSectionTitle).category === "favorite"
+                  })}
+                >
                   {(item as VisualizationSectionTitle).category === "favorite"
                     ? "Избранные категории"
                     : "Все категории"}

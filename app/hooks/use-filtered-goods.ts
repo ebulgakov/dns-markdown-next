@@ -7,15 +7,19 @@ import {
   getOptimizedOutput
 } from "@/app/helpers/pricelist";
 import { useSortGoodsStore } from "@/app/stores/sort-goods-store";
+import { UserSections } from "@/types/user";
 import { VisualizationOutputList } from "@/types/visualization";
 
 import type { PriceList as priceListType } from "@/types/pricelist";
 
 export const useFilteredGoods = (
   term: string,
-  priceList: priceListType
+  priceList: priceListType,
+  { hiddenSections: extendedHiddenSections }: { hiddenSections: UserSections }
 ): VisualizationOutputList => {
-  const { favoriteSections, hiddenSections } = useContext(UserContext);
+  const { favoriteSections, hiddenSections: userHiddenSections } = useContext(UserContext);
+  const hiddenSections = Array.from(new Set([...userHiddenSections, ...extendedHiddenSections]));
+
   const sortGoods = useSortGoodsStore(state => state.sortGoods);
 
   const flattenOptimizedPriceList = getOptimizedFlatPriceListWithTitle(priceList);
