@@ -79,7 +79,11 @@ function PriceListPage({
         />
       </div>
 
-      <Filter priceList={priceList} hiddenSections={hiddenSections} />
+      <Filter
+        priceList={priceList}
+        hiddenSections={hiddenSections}
+        foundCount={filteredList.length}
+      />
     </div>
   );
 }

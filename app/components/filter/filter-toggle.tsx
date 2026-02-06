@@ -1,20 +1,24 @@
 import { X, Funnel } from "lucide-react";
 
+import { Button } from "@/app/components/ui/button";
+
 type FilterToggleProps = {
   isActive?: boolean;
   onToggle?: () => void;
 };
 function FilterToggle({ isActive, onToggle }: FilterToggleProps) {
   return (
-    <button
+    <Button
       onClick={onToggle}
       type="button"
       aria-label="Toggle filter visibility"
       name="toggle-visibility"
-      className="size-full cursor-pointer rounded-full bg-orange-400 p-4 text-white hover:bg-orange-500"
+      variant="secondary"
+      size="flex"
+      className="rounded-full p-4"
     >
-      {isActive ? <X /> : <Funnel />}
-    </button>
+      {isActive ? <X className="size-full" /> : <Funnel className="size-full" />}
+    </Button>
   );
 }
 
