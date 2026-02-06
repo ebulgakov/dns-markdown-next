@@ -1,4 +1,7 @@
-import { mockGoodsList } from "./__mocks__/goods";
+import { mockGoodsList } from "@/app/components/price-list/__mocks__/goods";
+import { UserProvider } from "@/app/contexts/user-context";
+
+import { filledWithFavoritesContext, defaultContext } from "./__mocks__/context";
 import { PriceListFavoriteToggle } from "./price-list-favorite-toggle";
 
 import type { Meta, StoryObj } from "@storybook/react";
@@ -10,11 +13,6 @@ const meta: Meta<typeof PriceListFavoriteToggle> = {
   parameters: {
     layout: "centered"
   },
-  decorators: [
-    (Story, { args }) => {
-      return <Story args={args} />;
-    }
-  ],
   args: {
     goods: mockGoodsList[0]
   }
@@ -24,9 +22,17 @@ export default meta;
 type Story = StoryObj<typeof PriceListFavoriteToggle>;
 
 export const Default: Story = {
-  args: {}
+  render: args => (
+    <UserProvider value={defaultContext}>
+      <PriceListFavoriteToggle {...args} />
+    </UserProvider>
+  )
 };
 
 export const InFavorites: Story = {
-  args: {}
+  render: args => (
+    <UserProvider value={filledWithFavoritesContext}>
+      <PriceListFavoriteToggle {...args} />
+    </UserProvider>
+  )
 };

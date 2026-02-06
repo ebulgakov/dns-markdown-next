@@ -1,3 +1,9 @@
+import {
+  defaultContext,
+  filledWithFavoritesContext
+} from "@/app/components/price-list/__mocks__/context";
+import { UserProvider } from "@/app/contexts/user-context";
+
 import { mockDiff, mockGoodsList } from "./__mocks__/goods";
 import { PriceListSection } from "./price-list-section";
 
@@ -28,26 +34,48 @@ const mockPosition: Position = {
 };
 
 export const Default: Story = {
+  render: args => (
+    <UserProvider value={defaultContext}>
+      <PriceListSection {...args} />
+    </UserProvider>
+  ),
   args: {
     position: mockPosition
   }
 };
 
 export const WithFavorites: Story = {
+  render: args => (
+    <UserProvider value={filledWithFavoritesContext}>
+      <PriceListSection {...args} />
+    </UserProvider>
+  ),
   args: {
-    ...Default.args
+    ...Default.args,
+    shownHeart: true
   }
 };
 
 export const WithDiffs: Story = {
+  render: args => (
+    <UserProvider value={defaultContext}>
+      <PriceListSection {...args} />
+    </UserProvider>
+  ),
   args: {
     ...Default.args,
-    diffs: { "1": mockDiff }
+    diffs: { g1: mockDiff, g3: mockDiff }
   }
 };
 
-export const Closed: Story = {
+export const WithOuterHiddenSections: Story = {
+  render: args => (
+    <UserProvider value={defaultContext}>
+      <PriceListSection {...args} />
+    </UserProvider>
+  ),
   args: {
-    ...Default.args
+    ...Default.args,
+    outerHiddenSections: ["Apple"]
   }
 };

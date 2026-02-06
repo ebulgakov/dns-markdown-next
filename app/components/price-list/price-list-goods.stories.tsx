@@ -1,3 +1,6 @@
+import { defaultContext } from "@/app/components/price-list/__mocks__/context";
+import { UserProvider } from "@/app/contexts/user-context";
+
 import { mockGoodsList } from "./__mocks__/goods";
 import { PriceListGoods } from "./price-list-goods";
 
@@ -25,25 +28,42 @@ const mockDiff: DiffType = {
 };
 
 export const Default: Story = {
+  render: args => (
+    <UserProvider value={defaultContext}>
+      <PriceListGoods {...args} />
+    </UserProvider>
+  ),
   args: {
     item: mockGoodsList[0]
   }
 };
 
-export const AuthUser: Story = {
+export const WithStar: Story = {
+  render: args => (
+    <UserProvider value={defaultContext}>
+      <PriceListGoods {...args} />
+    </UserProvider>
+  ),
   args: {
-    item: mockGoodsList[0]
+    item: mockGoodsList[0],
+    shownFavorites: true
   }
 };
 
 export const WithDiff: Story = {
+  render: args => (
+    <UserProvider value={defaultContext}>
+      <PriceListGoods {...args} />
+    </UserProvider>
+  ),
   args: {
     item: mockGoodsList[0],
-    diff: mockDiff
+    diff: mockDiff,
+    shownFavorites: true
   }
 };
 
-export const Bought: Story = {
+export const WithStatus: Story = {
   args: {
     item: mockGoodsList[0],
     status: {
