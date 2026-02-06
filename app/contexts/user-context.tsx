@@ -1,6 +1,13 @@
 "use client";
 
-import { createContext, type ReactNode, startTransition, useOptimistic } from "react";
+import {
+  createContext,
+  type ReactNode,
+  startTransition,
+  useOptimistic,
+  useEffect,
+  useState
+} from "react";
 
 import {
   postAddToFavoriteSections,
@@ -36,31 +43,54 @@ export function UserProvider({
   children: ReactNode;
   value: FilterContextType;
 }) {
+  const [hiddenSections, setHiddenSections] = useState(value.hiddenSections);
+  const [favoriteSections, setFavoriteSections] = useState(value.favoriteSections);
+
+  useEffect(() => {
+    setHiddenSections(value.hiddenSections);
+  }, [value.hiddenSections]);
+
+  useEffect(() => {
+    setFavoriteSections(value.favoriteSections);
+  }, [value.favoriteSections]);
+
+  type OptimisticAction = {
+    action: "add" | "remove";
+    title: string;
+  };
+
   const [optimisticHiddenSections, setOptimisticHiddenSection] = useOptimistic(
-    value.hiddenSections,
-    (state: string[], title: string) =>
-      state.includes(title) ? state.filter(section => section !== title) : [...state, title]
+    hiddenSections,
+    (state: string[], { action, title }: OptimisticAction) => {
+      if (action === "remove") return state.filter(section => section !== title);
+      return [...state, title];
+    }
   );
 
   const [optimisticFavoriteSections, setOptimisticFavoriteSection] = useOptimistic(
-    value.favoriteSections,
-    (state: string[], title: string) =>
-      state.includes(title) ? state.filter(section => section !== title) : [...state, title].sort()
+    favoriteSections,
+    (state: string[], { action, title }: OptimisticAction) => {
+      if (action === "remove") return state.filter(section => section !== title);
+      return [...state, title].sort();
+    }
   );
 
   const onToggleHiddenSection = (title: string) => {
+    const isCurrentlyHidden = optimisticHiddenSections.includes(title);
+    const action = isCurrentlyHidden ? "remove" : "add";
+
     startTransition(async () => {
-      setOptimisticHiddenSection(title);
+      setOptimisticHiddenSection({ action, title });
 
       try {
-        const isCurrentlyHidden = optimisticHiddenSections.includes(title);
-
         let result;
         if (isCurrentlyHidden) {
           result = await postRemoveFromHiddenSections(title);
         } else {
           result = await postAddToHiddenSections(title);
         }
+
+        if (result?.sections) setHiddenSections(result.sections);
       } catch (error) {
         console.error("Failed to update hidden sections:", error);
       }
@@ -68,17 +98,21 @@ export function UserProvider({
   };
 
   const onToggleFavoriteSection = (title: string) => {
+    const isCurrentlyFavorite = optimisticFavoriteSections.includes(title);
+    const action = isCurrentlyFavorite ? "remove" : "add";
+
     startTransition(async () => {
-      setOptimisticFavoriteSection(title);
+      setOptimisticFavoriteSection({ action, title });
 
       try {
-        const isCurrentlyFavorite = optimisticFavoriteSections.includes(title);
-
+        let result;
         if (isCurrentlyFavorite) {
-          await postRemoveFromFavoriteSection(title);
+          result = await postRemoveFromFavoriteSection(title);
         } else {
-          await postAddToFavoriteSections(title);
+          result = await postAddToFavoriteSections(title);
         }
+
+        if (result?.sections) setFavoriteSections(result.sections);
       } catch (error) {
         console.error("Failed to update favorite sections:", error);
       }
