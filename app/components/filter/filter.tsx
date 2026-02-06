@@ -53,9 +53,10 @@ function Filter({ priceList, hiddenSections, foundCount = 0 }: FilterProps) {
     <div ref={containerRef}>
       <div
         className={cn(
-          "bg-background fixed inset-0 left-auto z-20 w-full items-center justify-center shadow-lg md:bottom-22 md:max-w-[370px] md:rounded-bl-lg",
+          "bg-background fixed inset-0 left-auto z-20 w-full items-center justify-center shadow-lg transition-all duration-300 ease-in-out md:bottom-20 md:max-w-[370px] md:rounded-bl-lg",
           {
-            hidden: !isShownFilter
+            "invisible opacity-0": !isShownFilter,
+            "visible opacity-100": isShownFilter
           }
         )}
       >
