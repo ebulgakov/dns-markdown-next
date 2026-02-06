@@ -5,7 +5,6 @@ import { Alert, AlertDescription, AlertTitle } from "@/app/components/ui/alert";
 import { Updates } from "@/app/components/updates";
 
 import type { DiffsCollection as DiffsType } from "@/types/analysis-diff";
-import type { Favorite as FavoriteType } from "@/types/user";
 import type { Metadata } from "next";
 
 type UpdatesPageProps = {
@@ -25,7 +24,6 @@ export default async function UpdatesPage() {
   let diffRemoved;
   let diffChangesPrice;
   let diffChangesProfit;
-  let userFavoritesGoods: FavoriteType[] = [];
   const changePriceDiff: DiffsType = {};
   const changeProfitDiff: DiffsType = {};
 

@@ -79,7 +79,7 @@ function PriceListPage({ priceList }: PriceListPageProps) {
             {favoriteSectionsPositions
               .sort((a, b) => a.title.localeCompare(b.title))
               .map(position => (
-                <PriceListSection key={position._id} position={position} />
+                <PriceListSection shownHeart key={position._id} position={position} />
               ))}
 
             <Title variant="h2">Все категории</Title>
@@ -91,7 +91,7 @@ function PriceListPage({ priceList }: PriceListPageProps) {
         {nonFavoritesSectionsPositions
           .sort((a, b) => a.title.localeCompare(b.title))
           .map(position => (
-            <PriceListSection key={position._id} position={position} />
+            <PriceListSection shownHeart key={position._id} position={position} />
           ))}
       </div>
 

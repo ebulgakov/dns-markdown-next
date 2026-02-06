@@ -5,6 +5,7 @@ import { useContext } from "react";
 
 import { UserContext } from "@/app/contexts/user-context";
 import { cn } from "@/app/lib/utils";
+import { UserSections } from "@/types/user";
 
 import { PriceListGoods } from "./price-list-goods";
 
@@ -13,16 +14,34 @@ import type { Position as PositionType } from "@/types/pricelist";
 
 type PriceListProps = {
   position: PositionType;
+  shownHeart?: boolean;
   diffs?: DiffsType;
   isUserLoggedIn?: boolean;
+  outerHiddenSections?: UserSections;
+  onOuterToggleHiddenSection?: (section: string) => void;
 };
 
-function PriceListSection({ position, diffs }: PriceListProps) {
+function PriceListSection({
+  position,
+  diffs,
+  shownHeart,
+  outerHiddenSections,
+  onOuterToggleHiddenSection
+}: PriceListProps) {
   const { favoriteSections, hiddenSections, onToggleFavoriteSection, onToggleHiddenSection } =
     useContext(UserContext);
 
+  const handleToggleHiddenSection = (section: string) => {
+    if (onOuterToggleHiddenSection) {
+      onOuterToggleHiddenSection(section);
+    } else if (onToggleHiddenSection) {
+      onToggleHiddenSection(section);
+    }
+  };
+
   const isFavoriteSection = favoriteSections.includes(position.title);
-  const isHiddenSection = hiddenSections.includes(position.title);
+  const currentHiddenSections = outerHiddenSections ? outerHiddenSections : hiddenSections;
+  const isHiddenSection = currentHiddenSections.includes(position.title);
 
   return (
     <section className="relative border-b border-b-neutral-300">
@@ -30,7 +49,7 @@ function PriceListSection({ position, diffs }: PriceListProps) {
       <div className="bg-background sticky top-[var(--nav-bar-offset)] z-10 -mb-[1px] flex w-full items-center justify-start gap-2 border-b border-solid border-b-neutral-300 py-3 text-left">
         <button
           type="button"
-          onClick={() => onToggleHiddenSection?.(position.title)}
+          onClick={() => handleToggleHiddenSection(position.title)}
           className="cursor-pointer after:absolute after:inset-0"
         >
           {!isHiddenSection ? <Minus className="text-accent" /> : <Plus className="text-accent" />}
@@ -40,17 +59,19 @@ function PriceListSection({ position, diffs }: PriceListProps) {
           {position.title} &ndash; {position.items.length}
         </span>
 
-        <button
-          type="button"
-          className="relative ml-auto cursor-pointer"
-          onClick={() => onToggleFavoriteSection?.(position.title)}
-        >
-          <Heart
-            className={cn("text-red-500", {
-              "fill-red-500": isFavoriteSection
-            })}
-          />
-        </button>
+        {shownHeart && (
+          <button
+            type="button"
+            className="relative ml-auto cursor-pointer"
+            onClick={() => onToggleFavoriteSection?.(position.title)}
+          >
+            <Heart
+              className={cn("text-red-500", {
+                "fill-red-500": isFavoriteSection
+              })}
+            />
+          </button>
+        )}
       </div>
 
       <div className="divide-y divide-neutral-300">
