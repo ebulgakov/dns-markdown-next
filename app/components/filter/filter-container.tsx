@@ -26,11 +26,7 @@ function FilterContainer({ sections, onClose, foundCount = 0 }: FilterContainerP
 
     onChange("");
     onClose();
-
-    requestAnimationFrame(() => {
-      const element = document.getElementById(encodeURIComponent(section));
-      element?.scrollIntoView({ block: "start" });
-    });
+    window.location.hash = encodeURIComponent(section);
   };
 
   return (
@@ -40,16 +36,17 @@ function FilterContainer({ sections, onClose, foundCount = 0 }: FilterContainerP
         <div className="overflow-auto">
           <div>
             {sections?.map(section => (
-              <button
-                key={section}
-                className={cn("hover:text-primary block w-full cursor-pointer py-1 text-left", {
-                  "text-muted-foreground": hiddenSections.includes(section),
-                  "text-favorite-section": favoriteSections.includes(section)
-                })}
-                onClick={() => handleScrollToLink(section)}
-              >
-                {section}
-              </button>
+              <div key={section}>
+                <a
+                  className={cn("hover:text-primary block w-full cursor-pointer py-1 text-left", {
+                    "text-muted-foreground": hiddenSections.includes(section),
+                    "text-favorite-section": favoriteSections.includes(section)
+                  })}
+                  onClick={() => handleScrollToLink(section)}
+                >
+                  {section}
+                </a>
+              </div>
             ))}
           </div>
         </div>

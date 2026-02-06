@@ -3,7 +3,7 @@
 import { useWindowVirtualizer } from "@tanstack/react-virtual";
 import { useDebounce } from "@uidotdev/usehooks";
 import { X } from "lucide-react";
-import { useContext, useRef } from "react";
+import { useContext, useEffect, useRef } from "react";
 
 import { Filter } from "@/app/components/filter";
 import { PriceListSection } from "@/app/components/price-list/price-list-section";
@@ -48,6 +48,40 @@ function PriceListPage({ priceList, variant }: PriceListPageProps) {
     scrollMargin: listRef.current?.offsetTop ?? 0
   });
   const virtualItems = virtualizer.getVirtualItems();
+
+  useEffect(() => {
+    const handleHashScroll = () => {
+      const hash = window.location.hash;
+      if (hash) {
+        const title = decodeURIComponent(hash.slice(1));
+
+        const index = filteredList.findIndex(item => {
+          const header = item as VisualizationHeader;
+          return header.type === "header" && header.title === title;
+        });
+
+        if (index !== -1) {
+          const foundList = virtualizer.getOffsetForIndex(index, "start");
+          if (!foundList) return;
+
+          const listOffset = listRef.current?.offsetTop ?? 0;
+          const navHeightStr = getComputedStyle(document.documentElement).getPropertyValue(
+            "--nav-bar-offset"
+          );
+          const navHeight = parseInt(navHeightStr) || 56; // height of navbar
+
+          window.scrollTo({
+            top: foundList[0] + listOffset - navHeight,
+            behavior: "smooth"
+          });
+        }
+      }
+    };
+
+    handleHashScroll();
+    window.addEventListener("hashchange", handleHashScroll);
+    return () => window.removeEventListener("hashchange", handleHashScroll);
+  }, [filteredList, virtualizer]);
 
   return (
     <div data-testid="price-list-page" ref={listRef}>
