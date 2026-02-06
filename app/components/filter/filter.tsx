@@ -28,11 +28,11 @@ function Filter({ priceList, foundCount = 0 }: FilterProps) {
       const isFavoriteA = favoriteSections.includes(a);
       const isFavoriteB = favoriteSections.includes(b);
 
-      if (isHiddenA && !isHiddenB) return 1;
-      if (!isHiddenA && isHiddenB) return -1;
-
       if (isFavoriteA && !isFavoriteB) return -1;
       if (!isFavoriteA && isFavoriteB) return 1;
+
+      if (isHiddenA && !isHiddenB) return 1;
+      if (!isHiddenA && isHiddenB) return -1;
 
       return a.localeCompare(b);
     });
