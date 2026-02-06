@@ -118,8 +118,8 @@
 }
 
 .dark {
-  --favorite-section: lch(62 91.73 30.37);
-  --favorite-section-foreground: lch(61.29% 64.86 23.74);
+  --favorite-section: oklch(0.64 0.24 25.34);
+  --favorite-section-foreground: oklch(0.81 0.11 19.58);
   --success: oklch(0.6 0.18 149.58);
   --background: oklch(0.2 0 0);
   --foreground: oklch(0.92 0 0);

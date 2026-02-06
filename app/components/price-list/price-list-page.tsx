@@ -66,7 +66,7 @@ function PriceListPage({ priceList, variant }: PriceListPageProps) {
           </div>
           <div className="divide-y divide-neutral-300">
             {filteredList.map(item => (
-              <PriceListGoods shownFavorites key={item._id} item={item} />
+              <PriceListGoods shownFavorites={variant !== "archive"} key={item._id} item={item} />
             ))}
           </div>
         </>

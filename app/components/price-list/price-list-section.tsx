@@ -36,6 +36,12 @@ function PriceListSection({
   const [copiedText, copyToClipboard] = useCopyToClipboard();
   const { favoriteSections, hiddenSections, onToggleFavoriteSection, onToggleHiddenSection } =
     useContext(UserContext);
+  const handleCopy = async () => {
+    await copyToClipboard(
+      `${window.location.origin}${window.location.pathname}#${encodeURIComponent(position.title)}`
+    );
+    setIsTooltipOpen(true);
+  };
 
   const handleToggleHiddenSection = (section: string) => {
     if (onOuterToggleHiddenSection) {
@@ -51,17 +57,15 @@ function PriceListSection({
 
   useEffect(() => {
     let timeout: NodeJS.Timeout;
-    if (copiedText) {
-      setIsTooltipOpen(true);
+    if (isTooltipOpen) {
       timeout = setTimeout(() => {
         setIsTooltipOpen(false);
-        copyToClipboard("");
       }, 2000);
     }
     return () => {
       if (timeout) clearTimeout(timeout);
     };
-  }, [copiedText, copyToClipboard]);
+  }, [isTooltipOpen]);
 
   return (
     <section className="relative border-b border-b-neutral-300">
@@ -94,11 +98,7 @@ function PriceListSection({
                 <button
                   type="button"
                   title="Получить ссылку на эту категорию"
-                  onClick={() =>
-                    copyToClipboard(
-                      `${window.location.origin}${window.location.pathname}#${encodeURIComponent(position.title)}`
-                    )
-                  }
+                  onClick={handleCopy}
                   className={cn("relative hidden cursor-pointer text-gray-300 md:block", {
                     "text-success": copiedText
                   })}
