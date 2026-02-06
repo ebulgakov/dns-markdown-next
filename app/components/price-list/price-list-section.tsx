@@ -1,8 +1,10 @@
 "use client";
 
 import { Plus, Minus, Heart, Hash } from "lucide-react";
-import { useContext } from "react";
+import { useContext, useEffect, useState } from "react";
+import { CopyToClipboard } from "react-copy-to-clipboard";
 
+import { Tooltip, TooltipTrigger, TooltipContent } from "@/app/components/ui/tooltip";
 import { UserContext } from "@/app/contexts/user-context";
 import { cn } from "@/app/lib/utils";
 import { UserSections } from "@/types/user";
@@ -28,6 +30,8 @@ function PriceListSection({
   outerHiddenSections,
   onOuterToggleHiddenSection
 }: PriceListProps) {
+  const [isTooltipOpen, setIsTooltipOpen] = useState(false);
+  const [copied, setCopied] = useState<boolean>(false);
   const { favoriteSections, hiddenSections, onToggleFavoriteSection, onToggleHiddenSection } =
     useContext(UserContext);
 
@@ -42,6 +46,20 @@ function PriceListSection({
   const isFavoriteSection = favoriteSections.includes(position.title);
   const currentHiddenSections = outerHiddenSections ? outerHiddenSections : hiddenSections;
   const isHiddenSection = currentHiddenSections.includes(position.title);
+
+  useEffect(() => {
+    let timeout: NodeJS.Timeout;
+    if (copied) {
+      setIsTooltipOpen(true);
+      timeout = setTimeout(() => {
+        setIsTooltipOpen(false);
+        setCopied(false);
+      }, 2000);
+    }
+    return () => {
+      if (timeout) clearTimeout(timeout);
+    };
+  }, [copied]);
 
   return (
     <section className="relative border-b border-b-neutral-300">
@@ -61,31 +79,55 @@ function PriceListSection({
 
         {shownHeart && (
           <div className="ml-auto flex items-center gap-4">
-            <a
-              href={`#${position.title}`}
-              title="Получить ссылку на эту категорию"
-              className="relative hidden text-gray-300 md:block"
-            >
-              <span className="sr-only">Перейти к категории {position.title}</span>
-              <Hash />
-            </a>
+            <Tooltip open={isTooltipOpen} onOpenChange={setIsTooltipOpen}>
+              <TooltipTrigger
+                onClick={e => e.preventDefault()}
+                onMouseEnter={() => setIsTooltipOpen(true)}
+                onMouseLeave={() => !copied && setIsTooltipOpen(false)}
+              >
+                <CopyToClipboard
+                  text={`${window.location.origin}${window.location.pathname}#${position.title}`}
+                  onCopy={() => setCopied(true)}
+                >
+                  <button
+                    type="button"
+                    title="Получить ссылку на эту категорию"
+                    className={cn("relative hidden cursor-pointer text-gray-300 md:block", {
+                      "text-green-500": copied
+                    })}
+                  >
+                    <span className="sr-only">Перейти к категории {position.title}</span>
+                    <Hash />
+                  </button>
+                </CopyToClipboard>
+              </TooltipTrigger>
+              <TooltipContent>
+                <p>{copied ? "Ссылка скопирована!" : "Скопировать ссылку на эту категорию"}</p>
+              </TooltipContent>
+            </Tooltip>
 
-            <button
-              type="button"
-              className="relative cursor-pointer"
-              title={
-                isFavoriteSection
-                  ? "Убрать категорию из избранного"
-                  : "Добавить категорию в избранное"
-              }
-              onClick={() => onToggleFavoriteSection?.(position.title)}
-            >
-              <Heart
-                className={cn("text-red-500", {
-                  "fill-red-500": isFavoriteSection
-                })}
-              />
-            </button>
+            <Tooltip>
+              <TooltipTrigger asChild>
+                <button
+                  type="button"
+                  className="relative cursor-pointer"
+                  onClick={() => onToggleFavoriteSection?.(position.title)}
+                >
+                  <Heart
+                    className={cn("text-red-500 hover:fill-red-300", {
+                      "fill-red-500": isFavoriteSection
+                    })}
+                  />
+                </button>
+              </TooltipTrigger>
+              <TooltipContent>
+                <p>
+                  {isFavoriteSection
+                    ? "Убрать категорию из избранного"
+                    : "Добавить категорию в избранное"}
+                </p>
+              </TooltipContent>
+            </Tooltip>
           </div>
         )}
       </div>
