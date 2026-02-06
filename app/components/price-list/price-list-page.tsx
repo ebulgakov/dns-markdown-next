@@ -1,6 +1,7 @@
 "use client";
 
 import clsx from "clsx";
+import { X } from "lucide-react";
 import { Fragment } from "react";
 
 import { Filter } from "@/app/components/filter";
@@ -32,6 +33,7 @@ function PriceListPage({
   priceList
 }: PriceListPageProps) {
   const sortGoods = useSortGoodsStore(state => state.sortGoods);
+  const onChangeSearch = useSearchStore(state => state.updateSearchTerm);
   const searchTerm = useSearchStore(state => state.searchTerm);
   const debouncedSearch = useDebounce<string>(searchTerm.trim(), 100);
   const filteredList = useFilteredGoods(debouncedSearch, priceList);
@@ -56,6 +58,13 @@ function PriceListPage({
             <Title variant="h2">
               Поиск по названию товара:&nbsp;
               <span className="font-normal">{searchTerm.trim()}</span>
+              <button
+                className="text-destructive relative top-1 ml-1 cursor-pointer p-1"
+                onClick={() => onChangeSearch("")}
+              >
+                <span className="sr-only">Очистить поиск</span>
+                <X />
+              </button>
             </Title>
             <div>
               Найдено товаров: <b>{filteredList.length}</b>
