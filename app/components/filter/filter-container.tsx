@@ -26,7 +26,7 @@ function FilterContainer({ sections, onClose, foundCount = 0 }: FilterContainerP
 
     onChange("");
     onClose();
-    window.location.hash = encodeURIComponent(section);
+    window.location.assign(`#${encodeURIComponent(section)}`);
   };
 
   return (
