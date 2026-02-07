@@ -28,7 +28,7 @@ export async function getOffersData() {
     mostDiscounted = mostDiscountedArr[0];
     mostProfitable = mostProfitableArr[0];
     const [latestPriceList] = priceListDates.reverse();
-    catalogDate = latestPriceList.createdAt;
+    catalogDate = latestPriceList?.createdAt;
   } catch (e) {
     error = e as Error;
   }

@@ -1,3 +1,5 @@
+"use client";
+
 import { Catalog } from "@/app/components/catalog";
 import { PageTitle } from "@/app/components/ui/page-title";
 import { formatDate } from "@/app/helpers/format";

@@ -33,13 +33,7 @@ function AnalyticsGoodsCountChart({ chartData }: AnalyticsGoodsChartProps) {
         >
           <BarChart data={formattedData}>
             <CartesianGrid vertical={false} />
-            <XAxis
-              dataKey="date"
-              tickLine={false}
-              tickMargin={10}
-              tickFormatter={date => formatDateShort(date)}
-              axisLine={false}
-            />
+            <XAxis dataKey="date" tickLine={false} tickMargin={10} axisLine={false} />
             <ChartTooltip cursor={false} content={<ChartTooltipContent />} />
             <Bar dataKey="count" fill="var(--accent)" radius={8} />
           </BarChart>

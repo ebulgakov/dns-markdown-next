@@ -16,7 +16,7 @@ export async function GET(req: NextRequest) {
 
     return NextResponse.json(priceList);
   } catch (e) {
-    const { message } = e as Error;
-    return NextResponse.json({ message }, { status: 500 });
+    console.error("Failed to fetch last price list:", e);
+    return NextResponse.json({ message: "Internal server error" }, { status: 500 });
   }
 }
