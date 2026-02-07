@@ -52,7 +52,7 @@ export default async function CatalogPage() {
         </div>
       </PageTitle>
 
-      <PriceListPage priceList={priceList} />
+      <PriceListPage variant="default" priceList={priceList} />
     </>
   );
 }

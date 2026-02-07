@@ -1,8 +1,10 @@
 import { getTranslations } from "next-intl/server";
 
 import { getPriceListCity, getLastDiffByCity } from "@/api/get";
+import { PriceListPage } from "@/app/components/price-list";
 import { Alert, AlertDescription, AlertTitle } from "@/app/components/ui/alert";
-import { Updates } from "@/app/components/updates";
+import { PageTitle } from "@/app/components/ui/page-title";
+import { Position, PriceList } from "@/types/pricelist";
 
 import type { DiffsCollection as DiffsType } from "@/types/analysis-diff";
 import type { Metadata } from "next";
@@ -27,8 +29,21 @@ export default async function UpdatesPage() {
   const changePriceDiff: DiffsType = {};
   const changeProfitDiff: DiffsType = {};
 
+  let city;
+
   try {
-    const city = await getPriceListCity();
+    city = await getPriceListCity();
+  } catch (e) {
+    const { message } = e as Error;
+    return (
+      <Alert variant="destructive">
+        <AlertTitle>Ошибка загрузки города</AlertTitle>
+        <AlertDescription>{message}</AlertDescription>
+      </Alert>
+    );
+  }
+
+  try {
     const collection = await getLastDiffByCity(city);
 
     diffNew = {
@@ -70,14 +85,33 @@ export default async function UpdatesPage() {
     );
   }
 
+  const digestList: PriceList = {
+    _id: "digest",
+    city,
+    createdAt: new Date(),
+    positions: [diffNew, diffChangesPrice, diffRemoved, diffChangesProfit].filter(
+      Boolean
+    ) as Position[]
+  };
+
+  const diffs = { ...changePriceDiff, ...changeProfitDiff };
+
   return (
-    <Updates
-      diffNew={diffNew}
-      diffChangesPrice={diffChangesPrice}
-      changePriceDiff={changePriceDiff}
-      diffRemoved={diffRemoved}
-      diffChangesProfit={diffChangesProfit}
-      changeProfitDiff={changeProfitDiff}
-    />
+    <>
+      <PageTitle title="Обновления за день" />
+
+      <PriceListPage
+        customSortSections={[
+          "Новые поступления",
+          "Изменения цены",
+          "Продано на сегодня",
+          "Изменения Выгоды"
+        ]}
+        customHiddenSections={["Изменения Выгоды"]}
+        variant="updates"
+        diffs={diffs}
+        priceList={digestList}
+      />
+    </>
   );
 }

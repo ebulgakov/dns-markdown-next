@@ -1,49 +1,107 @@
-import { getFlatPriceList } from "@/app/helpers/pricelist";
+import { useContext } from "react";
+
+import { UserContext } from "@/app/contexts/user-context";
+import {
+  getOptimizedFlatPriceListWithTitle,
+  getOptimizedFlatTitles,
+  getOptimizedOutput
+} from "@/app/helpers/pricelist";
 import { useSortGoodsStore } from "@/app/stores/sort-goods-store";
+import { UserSections } from "@/types/user";
+import { VisualizationHeader, VisualizationOutputList } from "@/types/visualization";
 
-import type { Goods as GoodsType, PriceList as priceListType } from "@/types/pricelist";
+import type { PriceList as priceListType } from "@/types/pricelist";
 
-export const useFilteredGoods = (term: string, priceList: priceListType): GoodsType[] => {
+export const useFilteredGoods = (
+  term: string,
+  priceList: priceListType,
+  {
+    hiddenSections: extendedHiddenSections,
+    customSortSections = []
+  }: { hiddenSections: UserSections; customSortSections?: UserSections }
+): {
+  flattenList: VisualizationOutputList;
+  flattenTitles: VisualizationHeader[];
+} => {
+  const { favoriteSections, hiddenSections: userHiddenSections } = useContext(UserContext);
+  const hiddenSections = Array.from(new Set([...userHiddenSections, ...extendedHiddenSections]));
+
   const sortGoods = useSortGoodsStore(state => state.sortGoods);
 
-  if (term.length > 1 || sortGoods !== "default") {
-    const flatCatalog = getFlatPriceList(priceList);
-    let filteredArray = flatCatalog.filter(item =>
+  const flattenOptimizedPriceList = getOptimizedFlatPriceListWithTitle(priceList);
+
+  if (sortGoods === "default" && term.length <= 2) {
+    const flattenTitles = getOptimizedFlatTitles(priceList);
+
+    flattenTitles.sort((a, b) => {
+      const aIndex = customSortSections.findIndex(section => section === a.title);
+      const bIndex = customSortSections.findIndex(section => section === b.title);
+
+      if (aIndex === -1 && bIndex === -1) {
+        return a.title.localeCompare(b.title);
+      }
+      if (aIndex === -1) return 1;
+      if (bIndex === -1) return -1;
+
+      return aIndex - bIndex;
+    });
+
+    const flattenList = getOptimizedOutput(flattenOptimizedPriceList, flattenTitles, {
+      favoriteSections,
+      hiddenSections
+    });
+
+    return {
+      flattenList,
+      flattenTitles
+    };
+  }
+
+  if (term.length > 2) {
+    const flattenList = flattenOptimizedPriceList.filter(item =>
       item.title.toLowerCase().includes(term.toLowerCase())
     );
-
-    if (sortGoods === "price") {
-      filteredArray.sort((a, b) => Number(a.price) - Number(b.price));
-    }
-
-    if (sortGoods === "discount") {
-      const withOldPrice = filteredArray.filter(
-        item => Number(item.priceOld) && Number(item.priceOld) > 0
-      );
-      const withoutOldPrice = filteredArray.filter(
-        item => !Number(item.priceOld) || Number(item.priceOld) <= 0
-      );
-      withOldPrice.sort(
-        (a, b) =>
-          (Number(a.price) * 100) / Number(a.priceOld) -
-          (Number(b.price) * 100) / Number(b.priceOld)
-      );
-      filteredArray = [...withOldPrice, ...withoutOldPrice];
-    }
-
-    if (sortGoods === "profit") {
-      const profitableItems = filteredArray.filter(
-        item => Number(item.profit) && Number(item.profit) > 0
-      );
-      const nonProfitableItems = filteredArray.filter(
-        item => !Number(item.profit) || Number(item.profit) <= 0
-      );
-      profitableItems.sort((a, b) => Number(b.profit) - Number(a.profit));
-      filteredArray = [...profitableItems, ...nonProfitableItems];
-    }
-
-    return filteredArray;
-  } else {
-    return [];
+    return {
+      flattenList,
+      flattenTitles: []
+    };
+  } else if (sortGoods === "price") {
+    const flattenList = flattenOptimizedPriceList.sort((a, b) => Number(a.price) - Number(b.price));
+    return {
+      flattenList,
+      flattenTitles: []
+    };
+  } else if (sortGoods === "discount") {
+    const withOldPrice = flattenOptimizedPriceList.filter(
+      item => Number(item.priceOld) && Number(item.priceOld) > 0
+    );
+    const withoutOldPrice = flattenOptimizedPriceList.filter(
+      item => !Number(item.priceOld) || Number(item.priceOld) <= 0
+    );
+    withOldPrice.sort(
+      (a, b) =>
+        (Number(a.price) * 100) / Number(a.priceOld) - (Number(b.price) * 100) / Number(b.priceOld)
+    );
+    return {
+      flattenList: [...withOldPrice, ...withoutOldPrice],
+      flattenTitles: []
+    };
+  } else if (sortGoods === "profit") {
+    const profitableItems = flattenOptimizedPriceList.filter(
+      item => Number(item.profit) && Number(item.profit) > 0
+    );
+    const nonProfitableItems = flattenOptimizedPriceList.filter(
+      item => !Number(item.profit) || Number(item.profit) <= 0
+    );
+    profitableItems.sort((a, b) => Number(b.profit) - Number(a.profit));
+    return {
+      flattenList: [...profitableItems, ...nonProfitableItems],
+      flattenTitles: []
+    };
   }
+
+  return {
+    flattenList: [],
+    flattenTitles: []
+  };
 };
