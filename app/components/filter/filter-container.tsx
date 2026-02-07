@@ -38,11 +38,15 @@ function FilterContainer({ sections, onClose, foundCount = 0 }: FilterContainerP
             {sections?.map(section => (
               <div key={section}>
                 <a
+                  href={`#${encodeURIComponent(section)}`}
                   className={cn("hover:text-primary block w-full cursor-pointer py-1 text-left", {
                     "text-muted-foreground": hiddenSections.includes(section),
                     "text-favorite-section": favoriteSections.includes(section)
                   })}
-                  onClick={() => handleScrollToLink(section)}
+                  onClick={e => {
+                    e.preventDefault();
+                    handleScrollToLink(section);
+                  }}
                 >
                   {section}
                 </a>
