@@ -10,7 +10,9 @@ import {
 import { updateUsersFavorites } from "#api/post.ts";
 
 async function checkFavorites() {
-  const city = process.env.CITY || "samara";
+  const city = process.env.CITY;
+
+  if (!city) throw new Error("No city found");
 
   const lastPriceList = await getLastPriceList(city);
   if (!lastPriceList) throw new Error("No last price list found");
@@ -23,6 +25,10 @@ async function checkFavorites() {
   await updateUsersFavorites(updatedUsers);
 }
 
-getPerformance(checkFavorites).then(() => {
-  console.log("/************** FAVORITES CHECKED ****************/");
-});
+getPerformance(checkFavorites)
+  .then(() => {
+    console.log("/************** FAVORITES CHECKED ****************/");
+  })
+  .catch(err => {
+    console.error("Error checking favorites:", err);
+  });

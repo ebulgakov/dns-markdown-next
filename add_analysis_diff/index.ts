@@ -6,7 +6,9 @@ import type { AnalysisData } from "#types/analysis-data.ts";
 
 async function addAnalysisDiff() {
   const writeStrategy = process.env.WRITE_STRATEGY || "insert";
-  const city = process.env.CITY || "samara";
+  const city = process.env.CITY;
+
+  if (!city) throw new Error("No city found");
 
   const options: {
     city: string;
@@ -53,6 +55,10 @@ async function addAnalysisDiff() {
   await addManyAnalysisDiff(diffs);
 }
 
-getPerformance(addAnalysisDiff).then(() => {
-  console.log("/************** ANALYSIS DIFF ADDED ****************/");
-});
+getPerformance(addAnalysisDiff)
+  .then(() => {
+    console.log("/************** ANALYSIS DIFF ADDED ****************/");
+  })
+  .catch(err => {
+    console.error("Error adding analysis diff:", err);
+  });

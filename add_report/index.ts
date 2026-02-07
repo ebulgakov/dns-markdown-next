@@ -4,7 +4,9 @@ import { getLastPriceList } from "#api/get.ts";
 import { addNewReportByCity, deleteReportByCityDate } from "#api/post.ts";
 
 async function addReport() {
-  const city = process.env.CITY || "samara";
+  const city = process.env.CITY;
+
+  if (!city) throw new Error("No city found");
 
   const lastPriceList = await getLastPriceList(city);
 
@@ -29,6 +31,10 @@ async function addReport() {
   await addNewReportByCity({ city, report, dateAdded: lastPriceList.createdAt });
 }
 
-getPerformance(addReport).then(() => {
-  console.log("/************** REPORT ADDED ****************/");
-});
+getPerformance(addReport)
+  .then(() => {
+    console.log("/************** REPORT ADDED ****************/");
+  })
+  .catch(err => {
+    console.error("Error adding report:", err);
+  });

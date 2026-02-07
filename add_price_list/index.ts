@@ -13,7 +13,9 @@ async function addPriceList() {
   const html = readFileSync(join(path, "body.html")).toString();
   const { data } = JSON.parse(readFileSync(join(path, "prices.html")).toString());
   const goods = createData(html, data);
-  const city = process.env.CITY || "samara";
+  const city = process.env.CITY;
+
+  if (!city) throw new Error("No city found");
 
   if (goods.length > 0) {
     // Check if there's already a price list for today and delete it.
@@ -32,6 +34,10 @@ async function addPriceList() {
   }
 }
 
-getPerformance(addPriceList).then(() => {
-  console.log("/************** PRICE LIST ADDED ****************/");
-});
+getPerformance(addPriceList)
+  .then(() => {
+    console.log("/************** PRICE LIST ADDED ****************/");
+  })
+  .catch(err => {
+    console.error("Error adding price list:", err);
+  });

@@ -5,7 +5,9 @@ import { deleteAllAnalysisData, deleteAnalysisByDateData, addManyAnalysisData } 
 
 async function addAnalysisData() {
   const writeStrategy = process.env.WRITE_STRATEGY || "insert";
-  const city = process.env.CITY || "samara";
+  const city = process.env.CITY;
+
+  if (!city) throw new Error("No city found");
 
   const priceListsCollections = await getAllPriceLists({ city });
 
@@ -24,6 +26,10 @@ async function addAnalysisData() {
   await addManyAnalysisData({ analysisData: data });
 }
 
-getPerformance(addAnalysisData).then(() => {
-  console.log("/************** DIFF ADDED ****************/");
-});
+getPerformance(addAnalysisData)
+  .then(() => {
+    console.log("/************** DIFF ADDED ****************/");
+  })
+  .catch(err => {
+    console.error("Error adding analysis data:", err);
+  });
