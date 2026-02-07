@@ -4,6 +4,7 @@ import axios from "axios";
 import { useContext } from "react";
 
 import { Catalog } from "@/app/components/catalog";
+import { PageLoader } from "@/app/components/page-loader";
 import { SortGoods } from "@/app/components/sort-goods";
 import { Alert, AlertDescription, AlertTitle } from "@/app/components/ui/alert";
 import { PageTitle } from "@/app/components/ui/page-title";
@@ -28,7 +29,7 @@ function CatalogClientPage() {
         .then(r => r.data)
   });
 
-  if (isPending) return <span>Loading...</span>;
+  if (isPending) return <PageLoader />;
   if (error)
     return (
       <Alert variant="destructive">

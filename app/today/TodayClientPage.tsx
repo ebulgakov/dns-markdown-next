@@ -5,12 +5,12 @@ import axios from "axios";
 import { useContext } from "react";
 
 import { Catalog } from "@/app/components/catalog";
+import { PageLoader } from "@/app/components/page-loader";
 import { Alert, AlertDescription, AlertTitle } from "@/app/components/ui/alert";
 import { PageTitle } from "@/app/components/ui/page-title";
 import { UserContext } from "@/app/contexts/user-context";
-import { Position, PriceList } from "@/types/pricelist";
-
 import { AnalysisDiff, DiffsCollection as DiffsType } from "@/types/analysis-diff";
+import { Position, PriceList } from "@/types/pricelist";
 
 function TodayClientPage() {
   const { city } = useContext(UserContext);
@@ -28,7 +28,7 @@ function TodayClientPage() {
         .then(r => r.data)
   });
 
-  if (isPending) return <span>Loading...</span>;
+  if (isPending) return <PageLoader />;
   if (error)
     return (
       <Alert variant="destructive">
