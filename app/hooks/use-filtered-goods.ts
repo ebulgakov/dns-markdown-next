@@ -8,7 +8,7 @@ import {
 } from "@/app/helpers/pricelist";
 import { useSortGoodsStore } from "@/app/stores/sort-goods-store";
 import { UserSections } from "@/types/user";
-import { VisualizationOutputList } from "@/types/visualization";
+import { VisualizationHeader, VisualizationOutputList } from "@/types/visualization";
 
 import type { PriceList as priceListType } from "@/types/pricelist";
 
@@ -16,7 +16,10 @@ export const useFilteredGoods = (
   term: string,
   priceList: priceListType,
   { hiddenSections: extendedHiddenSections }: { hiddenSections: UserSections }
-): VisualizationOutputList => {
+): {
+  flattenList: VisualizationOutputList;
+  flattenTitles: VisualizationHeader[];
+} => {
   const { favoriteSections, hiddenSections: userHiddenSections } = useContext(UserContext);
   const hiddenSections = Array.from(new Set([...userHiddenSections, ...extendedHiddenSections]));
 
@@ -25,19 +28,32 @@ export const useFilteredGoods = (
   const flattenOptimizedPriceList = getOptimizedFlatPriceListWithTitle(priceList);
 
   if (sortGoods === "default" && term.length <= 2) {
-    const flattenOptimizedTitles = getOptimizedFlatTitles(priceList);
-    return getOptimizedOutput(flattenOptimizedPriceList, flattenOptimizedTitles, {
+    const flattenTitles = getOptimizedFlatTitles(priceList);
+    const flattenList = getOptimizedOutput(flattenOptimizedPriceList, flattenTitles, {
       favoriteSections,
       hiddenSections
     });
+
+    return {
+      flattenList,
+      flattenTitles
+    };
   }
 
   if (term.length > 2) {
-    return flattenOptimizedPriceList.filter(item =>
+    const flattenList = flattenOptimizedPriceList.filter(item =>
       item.title.toLowerCase().includes(term.toLowerCase())
     );
+    return {
+      flattenList,
+      flattenTitles: []
+    };
   } else if (sortGoods === "price") {
-    return flattenOptimizedPriceList.sort((a, b) => Number(a.price) - Number(b.price));
+    const flattenList = flattenOptimizedPriceList.sort((a, b) => Number(a.price) - Number(b.price));
+    return {
+      flattenList,
+      flattenTitles: []
+    };
   } else if (sortGoods === "discount") {
     const withOldPrice = flattenOptimizedPriceList.filter(
       item => Number(item.priceOld) && Number(item.priceOld) > 0
@@ -49,7 +65,10 @@ export const useFilteredGoods = (
       (a, b) =>
         (Number(a.price) * 100) / Number(a.priceOld) - (Number(b.price) * 100) / Number(b.priceOld)
     );
-    return [...withOldPrice, ...withoutOldPrice];
+    return {
+      flattenList: [...withOldPrice, ...withoutOldPrice],
+      flattenTitles: []
+    };
   } else if (sortGoods === "profit") {
     const profitableItems = flattenOptimizedPriceList.filter(
       item => Number(item.profit) && Number(item.profit) > 0
@@ -58,8 +77,14 @@ export const useFilteredGoods = (
       item => !Number(item.profit) || Number(item.profit) <= 0
     );
     profitableItems.sort((a, b) => Number(b.profit) - Number(a.profit));
-    return [...profitableItems, ...nonProfitableItems];
+    return {
+      flattenList: [...profitableItems, ...nonProfitableItems],
+      flattenTitles: []
+    };
   }
 
-  return [];
+  return {
+    flattenList: [],
+    flattenTitles: []
+  };
 };

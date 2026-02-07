@@ -1,12 +1,15 @@
 "use client";
 
-import { useWindowVirtualizer } from "@tanstack/react-virtual";
+import { useWindowVirtualizer, VirtualItem } from "@tanstack/react-virtual";
 import { useDebounce } from "@uidotdev/usehooks";
 import { X } from "lucide-react";
 import { useContext, useEffect, useRef, useState } from "react";
 
 import { Filter } from "@/app/components/filter";
-import { PriceListSection } from "@/app/components/price-list/price-list-section";
+import {
+  PriceListSection,
+  PriceListStickySection
+} from "@/app/components/price-list/price-list-section";
 import { ScrollToTop } from "@/app/components/scroll-to-top";
 import { Title } from "@/app/components/ui/title";
 import { UserContext } from "@/app/contexts/user-context";
@@ -17,6 +20,8 @@ import { UserSections } from "@/types/user";
 import {
   VisualizationGoods,
   VisualizationHeader,
+  VisualizationOutput,
+  VisualizationOutputList,
   VisualizationSectionTitle
 } from "@/types/visualization";
 
@@ -43,7 +48,7 @@ function PriceListPage({ priceList, variant, diffs }: PriceListPageProps) {
   const onChangeSearch = useSearchStore(state => state.updateSearchTerm);
   const searchTerm = useSearchStore(state => state.searchTerm);
   const debouncedSearch = useDebounce<string>(searchTerm.trim(), 100);
-  const filteredList = useFilteredGoods(debouncedSearch, priceList, {
+  const { flattenList, flattenTitles } = useFilteredGoods(debouncedSearch, priceList, {
     hiddenSections
   });
   const isSearchMode = debouncedSearch.length > 2;
@@ -51,13 +56,13 @@ function PriceListPage({ priceList, variant, diffs }: PriceListPageProps) {
   // Virtualization setup
   const listRef = useRef<HTMLDivElement>(null);
   const virtualizer = useWindowVirtualizer({
-    count: filteredList.length,
+    count: flattenList.length,
     estimateSize: index => {
-      if (filteredList[index].type === "header") return 60;
+      if (flattenList[index].type === "header") return 60;
       return 220;
     },
     getItemKey: index => {
-      const item = filteredList[index];
+      const item = flattenList[index];
       if (!item) return index;
       if (item.type === "goods") return (item as VisualizationGoods)._id;
       if (item.type === "header") return `header-${(item as VisualizationHeader).title}`;
@@ -78,43 +83,70 @@ function PriceListPage({ priceList, variant, diffs }: PriceListPageProps) {
     );
   };
 
+  const getTitle = (): string | undefined => {
+    const [firstVItem] = virtualItems;
+
+    if (firstVItem && firstVItem.index < 1) return;
+
+    const extractTitle = (vItem: VirtualItem) => {
+      const item = flattenList[vItem.index];
+
+      if (
+        (item as VisualizationGoods).type === "goods" &&
+        (item as VisualizationGoods).sectionTitle
+      ) {
+        return (item as VisualizationGoods).sectionTitle;
+      }
+
+      if ((item as VisualizationHeader).type === "header" && (item as VisualizationHeader).title) {
+        return (item as VisualizationHeader).title;
+      }
+      return undefined;
+    };
+
+    const cutVirtualItems = virtualItems.splice(4);
+    const foundHeaderIdx = cutVirtualItems.find(extractTitle);
+    return foundHeaderIdx ? extractTitle(foundHeaderIdx) : undefined;
+  };
+
   useEffect(() => {
     const handleHashScroll = () => {
       const hash = window.location.hash;
-      if (hash) {
-        const title = decodeURIComponent(hash.slice(1));
+      if (!hash) return;
 
-        const index = filteredList.findIndex(item => {
-          const header = item as VisualizationHeader;
-          return header.type === "header" && header.title === title;
-        });
+      const title = decodeURIComponent(hash.slice(1));
 
-        if (index !== -1) {
-          const foundList = virtualizer.getOffsetForIndex(index, "start");
-          if (!foundList) return;
+      const index = flattenList.findIndex(item => {
+        const header = item as VisualizationHeader;
+        return header.type === "header" && header.title === title;
+      });
 
-          const listOffset = listRef.current?.offsetTop ?? 0;
-          const navHeightStr = getComputedStyle(document.documentElement).getPropertyValue(
-            "--nav-bar-offset"
-          );
-          const navHeight = parseInt(navHeightStr) || 56; // height of navbar
+      if (index !== -1) {
+        const foundList = virtualizer.getOffsetForIndex(index, "start");
+        if (foundList == null) return;
 
-          window.scrollTo({
-            top: foundList[0] + listOffset - navHeight,
-            behavior: "smooth"
-          });
-        }
+        const listOffset = listRef.current?.offsetTop ?? 0;
+        const navHeightStr = getComputedStyle(document.documentElement).getPropertyValue(
+          "--nav-bar-offset"
+        );
+        const navHeight = parseInt(navHeightStr) || 56; // height of navbar
+
+        window.scrollTo({ top: foundList[0] + listOffset - navHeight });
       }
     };
 
-    handleHashScroll();
+    const timeoutId = setTimeout(handleHashScroll, 100); // Delay to ensure the page has rendered and virtualizer has calculated item positions
     window.addEventListener("hashchange", handleHashScroll);
-    return () => window.removeEventListener("hashchange", handleHashScroll);
-  }, [filteredList, virtualizer]);
+
+    return () => {
+      window.removeEventListener("hashchange", handleHashScroll);
+      clearTimeout(timeoutId);
+    };
+  }, []);
 
   useEffect(() => {
     setScrollHeight(virtualizer.getTotalSize());
-  }, [virtualizer, filteredList.length]);
+  }, [virtualizer, flattenList.length]);
 
   return (
     <div data-testid="price-list-page" ref={listRef}>
@@ -132,12 +164,20 @@ function PriceListPage({ priceList, variant, diffs }: PriceListPageProps) {
             </button>
           </Title>
           <div>
-            Найдено товаров: <b>{filteredList.length}</b>
+            Найдено товаров: <b>{flattenList.length}</b>
           </div>
         </div>
       )}
 
       {!isSearchMode && favoriteSections.length === 0 && <PriceListFavoritesEmptyAlert />}
+
+      <PriceListStickySection
+        neededTitle={getTitle()}
+        shownHeart={!(["updates", "archive"] as PageVariant[]).includes(variant)}
+        outerHiddenSections={variant === "updates" ? hiddenSections : undefined}
+        onOuterToggleHiddenSection={variant === "updates" ? onToggleSection : undefined}
+        titles={flattenTitles}
+      />
 
       <div
         style={{
@@ -147,7 +187,7 @@ function PriceListPage({ priceList, variant, diffs }: PriceListPageProps) {
         }}
       >
         {virtualItems.map(virtualItem => {
-          const item = filteredList[virtualItem.index];
+          const item = flattenList[virtualItem.index];
           return (
             <div
               key={virtualItem.key}
@@ -198,7 +238,7 @@ function PriceListPage({ priceList, variant, diffs }: PriceListPageProps) {
       </div>
 
       <ScrollToTop variant="filter" />
-      <Filter priceList={priceList} foundCount={filteredList.length} />
+      <Filter priceList={priceList} foundCount={flattenList.length} />
     </div>
   );
 }

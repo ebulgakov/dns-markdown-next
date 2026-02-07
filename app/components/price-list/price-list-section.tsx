@@ -8,7 +8,7 @@ import { Tooltip, TooltipTrigger, TooltipContent } from "@/app/components/ui/too
 import { UserContext } from "@/app/contexts/user-context";
 import { cn } from "@/app/lib/utils";
 import { UserSections } from "@/types/user";
-import { VisualizationHeader } from "@/types/visualization";
+import { VisualizationHeader, VisualizationOutputList } from "@/types/visualization";
 
 type PriceListSectionProps = {
   header: VisualizationHeader;
@@ -16,6 +16,34 @@ type PriceListSectionProps = {
   outerHiddenSections?: UserSections;
   onOuterToggleHiddenSection?: (section: string) => void;
 };
+
+type PriceListStickySectionProps = Omit<PriceListSectionProps, "header"> & {
+  titles: VisualizationHeader[];
+  neededTitle?: string;
+};
+
+function PriceListStickySection({
+  titles,
+  neededTitle,
+  shownHeart,
+  outerHiddenSections,
+  onOuterToggleHiddenSection
+}: PriceListStickySectionProps) {
+  const header = titles.find(title => title.title === neededTitle);
+  if (!header) return null;
+  return (
+    <div className="fixed top-14 right-0 left-0 z-10">
+      <div className="mx-auto md:container">
+        <PriceListSection
+          header={header}
+          shownHeart={shownHeart}
+          outerHiddenSections={outerHiddenSections}
+          onOuterToggleHiddenSection={onOuterToggleHiddenSection}
+        />
+      </div>
+    </div>
+  );
+}
 
 function PriceListSection({
   header,
@@ -126,4 +154,4 @@ function PriceListSection({
   );
 }
 
-export { PriceListSection };
+export { PriceListSection, PriceListStickySection };
