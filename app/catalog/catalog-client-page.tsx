@@ -1,16 +1,46 @@
+"use client";
+import { useQuery } from "@tanstack/react-query";
+import axios from "axios";
+import { useContext } from "react";
+
 import { Catalog } from "@/app/components/catalog/catalog";
 import { SortGoods } from "@/app/components/sort-goods";
+import { Alert, AlertDescription, AlertTitle } from "@/app/components/ui/alert";
 import { PageTitle } from "@/app/components/ui/page-title";
+import { UserContext } from "@/app/contexts/user-context";
 import { formatDate, formatTime } from "@/app/helpers/format";
 
 import type { PriceList } from "@/types/pricelist";
 
-type CatalogClientPageProps = {
-  priceList: PriceList;
-  count: number;
-};
+function CatalogClientPage() {
+  const { city } = useContext(UserContext);
+  const {
+    data: priceList,
+    isPending,
+    error
+  } = useQuery({
+    queryKey: ["todos"],
+    queryFn: () =>
+      axios
+        .get("/api/last-pricelist", {
+          params: { city }
+        })
+        .then(r => {
+          console.log(r.data);
+          return r.data;
+        })
+  });
 
-function CatalogClientPage({ priceList, count }: CatalogClientPageProps) {
+  if (isPending) return <span>Loading...</span>;
+  if (error)
+    return (
+      <Alert variant="destructive">
+        <AlertTitle>Ошибка загрузки каталога</AlertTitle>
+        <AlertDescription>{error.message}</AlertDescription>
+      </Alert>
+    );
+
+  const count = (priceList as PriceList).positions.reduce((acc, cur) => acc + cur.items.length, 0);
   return (
     <>
       <PageTitle title={formatDate(priceList.createdAt)} subTitle={formatTime(priceList.createdAt)}>
