@@ -139,6 +139,7 @@ function PriceListPage({
         const navHeight = parseInt(navHeightStr) || 56; // height of navbar
 
         window.scrollTo({ top: foundList[0] + listOffset - navHeight });
+        history.pushState(null, document.title, window.location.pathname + window.location.search);
       }
     };
 
@@ -149,7 +150,7 @@ function PriceListPage({
       window.removeEventListener("hashchange", handleHashScroll);
       clearTimeout(timeoutId);
     };
-  }, []); // eslint-disable-line react-hooks/exhaustive-deps
+  }, [virtualizer, flattenList]);
 
   useEffect(() => {
     setScrollHeight(virtualizer.getTotalSize());
