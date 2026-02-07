@@ -15,7 +15,7 @@ import type { PriceList } from "@/types/pricelist";
 function CatalogClientPage() {
   const { city } = useContext(UserContext);
   const {
-    data: priceList,
+    data: priceListResponse,
     isPending,
     error
   } = useQuery({
@@ -37,7 +37,9 @@ function CatalogClientPage() {
       </Alert>
     );
 
-  const count = (priceList as PriceList).positions.reduce((acc, cur) => acc + cur.items.length, 0);
+  const priceList = priceListResponse as PriceList;
+
+  const count = priceList.positions.reduce((acc, cur) => acc + cur.items.length, 0);
   return (
     <>
       <PageTitle title={formatDate(priceList.createdAt)} subTitle={formatTime(priceList.createdAt)}>

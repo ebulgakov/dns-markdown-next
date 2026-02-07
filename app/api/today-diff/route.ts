@@ -1,6 +1,6 @@
-import { type NextRequest, NextResponse } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
 
-import { getLastPriceList } from "@/api/get";
+import { getLastDiffByCity } from "@/api/get";
 
 export async function GET(req: NextRequest) {
   const city = req?.nextUrl?.searchParams.get("city");
@@ -10,11 +10,13 @@ export async function GET(req: NextRequest) {
   }
 
   try {
-    const priceList = await getLastPriceList(city);
+    const collection = await getLastDiffByCity(city);
 
-    if (!priceList) return NextResponse.json({ message: "priceList not found" }, { status: 404 });
+    if (!collection) {
+      return NextResponse.json({ message: "No diff found for the city" }, { status: 404 });
+    }
 
-    return NextResponse.json(priceList);
+    return NextResponse.json(collection);
   } catch (e) {
     const { message } = e as Error;
     return NextResponse.json({ message }, { status: 500 });
