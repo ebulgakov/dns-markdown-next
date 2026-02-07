@@ -25,11 +25,13 @@ export const getOptimizedFlatPriceListWithTitle = (priceList: PriceList): Visual
 };
 
 export const getOptimizedFlatTitles = (priceList: PriceList): VisualizationHeader[] => {
-  return priceList.positions.map(position => ({
-    title: position.title,
-    itemsCount: position.items.length,
-    type: "header"
-  }));
+  return priceList.positions
+    .map(position => ({
+      title: position.title,
+      itemsCount: position.items.length,
+      type: "header" as VisualizationType
+    }))
+    .sort((a, b) => a.title.localeCompare(b.title));
 };
 
 export const getOptimizedOutput = (
