@@ -101,7 +101,7 @@ function PriceListSection({
       </span>
 
       {shownHeart && (
-        <div className="ml-auto flex items-center gap-4">
+        <div className="ml-auto flex flex-col items-center gap-1 md:flex-row md:gap-2">
           <Tooltip open={isTooltipOpen} onOpenChange={setIsTooltipOpen}>
             <TooltipTrigger
               asChild
@@ -113,7 +113,7 @@ function PriceListSection({
                 type="button"
                 title="Получить ссылку на эту категорию"
                 onClick={handleCopy}
-                className={cn("relative hidden cursor-pointer text-gray-300 md:block", {
+                className={cn("relative block cursor-pointer text-gray-300", {
                   "text-success": copiedText
                 })}
               >
