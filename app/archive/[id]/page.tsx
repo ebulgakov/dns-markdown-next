@@ -1,9 +1,8 @@
 import { getTranslations } from "next-intl/server";
 
 import { getPriceListById } from "@/api/get";
-import { PriceListPage } from "@/app/components/price-list";
+import { ArchiveItemClientPage } from "@/app/archive/[id]/archive-item-client-page";
 import { Alert, AlertDescription, AlertTitle } from "@/app/components/ui/alert";
-import { PageTitle } from "@/app/components/ui/page-title";
 import { formatDate } from "@/app/helpers/format";
 
 import type { Metadata } from "next";
@@ -44,19 +43,7 @@ export default async function ArchiveItemPage({ params }: ArchiveItemPage) {
     );
   }
 
-  const pageTitle = `Страница Архива за ${formatDate(priceList.createdAt)}`;
   const count = priceList.positions.reduce((acc, cur) => acc + cur.items.length, 0);
 
-  return (
-    <div>
-      <PageTitle title={pageTitle}>
-        <div className="mt-4 flex items-center justify-between gap-4 md:mt-0">
-          <div>
-            Количество: <b data-testid="archive-price-list-count">{count}</b>
-          </div>
-        </div>
-      </PageTitle>
-      <PriceListPage variant="archive" priceList={priceList} />
-    </div>
-  );
+  return <ArchiveItemClientPage priceList={priceList} count={count} />;
 }

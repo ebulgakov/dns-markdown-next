@@ -1,4 +1,4 @@
-import { mockGoodsList } from "@/app/components/price-list/__mocks__/goods";
+import { mockGoodsList } from "@/app/components/product-card/__mocks__/goods";
 
 import { HotOffer } from "./hot-offer";
 

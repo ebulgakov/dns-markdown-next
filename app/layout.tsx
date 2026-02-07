@@ -16,6 +16,7 @@ import { Footer } from "@/app/components/footer";
 import { Navbar } from "@/app/components/navbar";
 import { UserProvider } from "@/app/contexts/user-context";
 import { cn } from "@/app/lib/utils";
+import { QueryProvider } from "@/app/providers/query-provider";
 import { ThemeProvider } from "@/app/providers/theme-provider";
 import { User } from "@/types/user";
 
@@ -86,30 +87,32 @@ export default async function RootLayout({
             <body
               className={cn(["font-sans antialiased", robotoSans.variable, robotoMono.variable])}
             >
-              <UserProvider
-                value={{
-                  hiddenSections: genericUser?.hiddenSections || [],
-                  favoriteSections: genericUser?.favoriteSections || [],
-                  favorites: genericUser?.favorites || [],
-                  city: genericUser?.city || process.env.DEFAULT_CITY!
-                }}
-              >
-                <ThemeProvider attribute="class" defaultTheme="light" enableSystem>
-                  <div className="px-4">
-                    <div className="mx-auto grid min-h-screen md:container">
-                      <div className="mb-10">
-                        <ClerkError />
+              <QueryProvider>
+                <UserProvider
+                  value={{
+                    hiddenSections: genericUser?.hiddenSections || [],
+                    favoriteSections: genericUser?.favoriteSections || [],
+                    favorites: genericUser?.favorites || [],
+                    city: genericUser?.city || process.env.DEFAULT_CITY!
+                  }}
+                >
+                  <ThemeProvider attribute="class" defaultTheme="light" enableSystem>
+                    <div className="px-4">
+                      <div className="mx-auto grid min-h-screen md:container">
+                        <div className="mb-10">
+                          <ClerkError />
 
-                        <Navbar locate={locale} isUserLoggedIn={!!userId} />
+                          <Navbar locate={locale} isUserLoggedIn={!!userId} />
 
-                        {children}
+                          {children}
+                        </div>
+                        <Footer locate={locale} />
                       </div>
-                      <Footer locate={locale} />
                     </div>
-                  </div>
-                </ThemeProvider>
-                <SpeedInsights />
-              </UserProvider>
+                  </ThemeProvider>
+                  <SpeedInsights />
+                </UserProvider>
+              </QueryProvider>
             </body>
             {process.env.GA_ID && <GoogleAnalytics gaId={process.env.GA_ID} />}
           </html>

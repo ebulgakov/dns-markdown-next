@@ -2,7 +2,7 @@ import { getTranslations } from "next-intl/server";
 
 import { getProductByLink } from "@/api/get";
 import { ChartPrices } from "@/app/components/chart-prices";
-import { PriceListGoods } from "@/app/components/price-list";
+import { ProductCard } from "@/app/components/product-card";
 import { Alert, AlertDescription, AlertTitle } from "@/app/components/ui/alert";
 import { PageTitle } from "@/app/components/ui/page-title";
 import { Title } from "@/app/components/ui/title";
@@ -48,7 +48,7 @@ export default async function CatalogItemPage({ params }: CatalogItemPage) {
     <div>
       <PageTitle title={product.item.title} />
 
-      <PriceListGoods item={product.item} shownFavorites status={product.status} />
+      <ProductCard item={product.item} shownFavorites status={product.status} />
 
       <Title variant="h2">Сравнение цен</Title>
 

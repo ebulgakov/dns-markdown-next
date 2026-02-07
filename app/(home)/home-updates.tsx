@@ -9,6 +9,7 @@ import { HotOffer } from "@/app/components/hot-offer";
 import { MoreLink } from "@/app/components/more-link";
 import { Alert, AlertDescription, AlertTitle } from "@/app/components/ui/alert";
 import { Title } from "@/app/components/ui/title";
+import { formatDate } from "@/app/helpers/format";
 import { sendGAEvent } from "@/app/lib/sendGAEvent";
 
 import type { CustomDate } from "@/types/common";
@@ -60,7 +61,7 @@ export default function HomeUpdates({
   return (
     <Fragment>
       <Title variant="h2">
-        {t("most_title")} {cities(city)}
+        {t("most_title")} {cities(city)} &mdash; {formatDate(date)}
       </Title>
 
       <div className="grid gap-x-8 gap-y-2 md:grid-cols-[repeat(2,_1fr)] lg:grid-cols-[repeat(3,_1fr)]">

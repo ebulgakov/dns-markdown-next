@@ -6,10 +6,7 @@ import { X } from "lucide-react";
 import { useContext, useEffect, useRef, useState } from "react";
 
 import { Filter } from "@/app/components/filter";
-import {
-  PriceListSection,
-  PriceListStickySection
-} from "@/app/components/price-list/price-list-section";
+import { ProductCard } from "@/app/components/product-card";
 import { ScrollToTop } from "@/app/components/scroll-to-top";
 import { Title } from "@/app/components/ui/title";
 import { UserContext } from "@/app/contexts/user-context";
@@ -23,8 +20,8 @@ import {
   VisualizationSectionTitle
 } from "@/types/visualization";
 
-import { PriceListFavoritesEmptyAlert } from "./price-list-favorites-empty-alert";
-import { PriceListGoods } from "./price-list-goods";
+import { CatalogFavoritesEmptyAlert } from "./catalog-favorites-empty-alert";
+import { CatalogStickyHeader, CatalogHeader } from "./catalog-header";
 
 import type { DiffsCollection as DiffsType } from "@/types/analysis-diff";
 import type { PriceList as PriceListType } from "@/types/pricelist";
@@ -39,7 +36,7 @@ type PriceListPageProps = {
   customSortSections?: UserSections;
 };
 
-function PriceListPage({
+function Catalog({
   priceList,
   variant,
   diffs,
@@ -177,9 +174,9 @@ function PriceListPage({
         </div>
       )}
 
-      {!isSearchMode && favoriteSections.length === 0 && <PriceListFavoritesEmptyAlert />}
+      {!isSearchMode && favoriteSections.length === 0 && <CatalogFavoritesEmptyAlert />}
 
-      <PriceListStickySection
+      <CatalogStickyHeader
         neededTitle={getTitle()}
         shownHeart={!(["updates", "archive"] as PageVariant[]).includes(variant)}
         outerHiddenSections={variant === "updates" ? hiddenSections : undefined}
@@ -210,7 +207,7 @@ function PriceListPage({
               }}
             >
               {item.type === "header" && (
-                <PriceListSection
+                <CatalogHeader
                   shownHeart={!(["updates", "archive"] as PageVariant[]).includes(variant)}
                   header={item as VisualizationHeader}
                   outerHiddenSections={variant === "updates" ? hiddenSections : undefined}
@@ -220,7 +217,7 @@ function PriceListPage({
 
               {item.type === "goods" && (
                 <div className="border-b border-neutral-300">
-                  <PriceListGoods
+                  <ProductCard
                     shownFavorites={variant !== "archive"}
                     item={item as VisualizationGoods}
                     diff={diffs?.[`${(item as VisualizationGoods)._id}`]}
@@ -251,4 +248,4 @@ function PriceListPage({
   );
 }
 
-export { PriceListPage };
+export { Catalog };

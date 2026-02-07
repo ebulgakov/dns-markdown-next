@@ -3,11 +3,11 @@ import { NumericFormat } from "react-number-format";
 
 import type { Diff as DiffType } from "@/types/analysis-diff";
 
-type PriceListGoodsDiffProps = {
+type ProductCardDiffProps = {
   diff: DiffType;
 };
 
-function PriceListGoodsDiff({ diff }: PriceListGoodsDiffProps) {
+function ProductCardDiff({ diff }: ProductCardDiffProps) {
   return (
     <div className="text-center opacity-40">
       <NumericFormat
@@ -41,4 +41,4 @@ function PriceListGoodsDiff({ diff }: PriceListGoodsDiffProps) {
   );
 }
 
-export { PriceListGoodsDiff };
+export { ProductCardDiff };

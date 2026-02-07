@@ -14,6 +14,11 @@ type AnalyticsGoodsChartProps = {
 };
 
 function AnalyticsGoodsCountChart({ chartData }: AnalyticsGoodsChartProps) {
+  const formattedData = chartData.map(item => ({
+    ...item,
+    date: formatDateShort(item.date)
+  }));
+
   return (
     <Card>
       <CardContent className="p-0 md:px-2 md:pt-4">
@@ -26,15 +31,9 @@ function AnalyticsGoodsCountChart({ chartData }: AnalyticsGoodsChartProps) {
           }}
           className="aspect-auto h-[250px] w-full"
         >
-          <BarChart data={chartData}>
+          <BarChart data={formattedData}>
             <CartesianGrid vertical={false} />
-            <XAxis
-              dataKey="date"
-              tickLine={false}
-              tickMargin={10}
-              tickFormatter={date => formatDateShort(date)}
-              axisLine={false}
-            />
+            <XAxis dataKey="date" tickLine={false} tickMargin={10} axisLine={false} />
             <ChartTooltip cursor={false} content={<ChartTooltipContent />} />
             <Bar dataKey="count" fill="var(--accent)" radius={8} />
           </BarChart>

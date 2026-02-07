@@ -13,7 +13,7 @@ type PriceListFavoriteToggleProps = {
   goods: GoodsType;
 };
 
-function PriceListFavoriteToggle({ goods }: PriceListFavoriteToggleProps) {
+function ProductCardFavoriteToggle({ goods }: PriceListFavoriteToggleProps) {
   const { favorites } = useContext(UserContext);
   const [inFavorites, setInFavorites] = useState<boolean>(
     favorites.some(fav => fav.item.link === goods.link)
@@ -83,4 +83,4 @@ function PriceListFavoriteToggle({ goods }: PriceListFavoriteToggleProps) {
   );
 }
 
-export { PriceListFavoriteToggle };
+export { ProductCardFavoriteToggle };

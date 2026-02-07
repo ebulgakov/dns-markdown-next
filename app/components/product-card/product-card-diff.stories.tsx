@@ -1,10 +1,10 @@
-import { PriceListGoodsDiff } from "./price-list-goods-diff";
+import { ProductCardDiff } from "./product-card-diff";
 
 import type { Meta, StoryObj } from "@storybook/react";
 
-const meta: Meta<typeof PriceListGoodsDiff> = {
-  title: "Components/PriceList/PriceListGoodsDiff",
-  component: PriceListGoodsDiff,
+const meta: Meta<typeof ProductCardDiff> = {
+  title: "Components/PriceList/ProductCardDiff",
+  component: ProductCardDiff,
   parameters: {
     layout: "centered"
   },

@@ -1,9 +1,9 @@
 import {
-  getLastPriceList,
   getPriceListCity,
   getMostCheapProducts,
   getMostDiscountedProducts,
-  getMostProfitableProducts
+  getMostProfitableProducts,
+  getArchiveListDates
 } from "@/api/get";
 
 import type { CustomDate } from "@/types/common";
@@ -19,7 +19,7 @@ export async function getOffersData() {
 
   try {
     city = await getPriceListCity();
-    const priceList = await getLastPriceList(city);
+    const priceListDates = await getArchiveListDates(city);
     const mostCheapArr = await getMostCheapProducts(city);
     const mostDiscountedArr = await getMostDiscountedProducts(city);
     const mostProfitableArr = await getMostProfitableProducts(city);
@@ -27,7 +27,8 @@ export async function getOffersData() {
     mostCheap = mostCheapArr[0];
     mostDiscounted = mostDiscountedArr[0];
     mostProfitable = mostProfitableArr[0];
-    catalogDate = priceList?.createdAt;
+    const [latestPriceList] = priceListDates.reverse();
+    catalogDate = latestPriceList?.createdAt;
   } catch (e) {
     error = e as Error;
   }
