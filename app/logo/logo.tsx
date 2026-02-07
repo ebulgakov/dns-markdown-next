@@ -1,7 +1,8 @@
 import { ChevronDown } from "lucide-react";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { useTranslations } from "next-intl";
-import { useContext } from "react";
+import { useContext, startTransition } from "react";
 
 import { postChangeUserCity } from "@/api/post";
 import { Button } from "@/app/components/ui/button";
@@ -17,6 +18,7 @@ import { UserContext } from "@/app/contexts/user-context";
 import { sendGAEvent } from "@/app/lib/sendGAEvent";
 
 function Logo() {
+  const router = useRouter();
   const { city } = useContext(UserContext);
   const t = useTranslations("Navbar");
   const cities = useTranslations("cities");
@@ -32,6 +34,20 @@ function Logo() {
 
   const handleChangeCity = async (newCity: string) => {
     await postChangeUserCity(newCity);
+    startTransition(async () => {
+      try {
+        await postChangeUserCity(newCity);
+        sendGAEvent({
+          event: "change_city",
+          value: newCity,
+          category: "Navbar",
+          action: "click"
+        });
+        router.refresh();
+      } catch (error) {
+        console.error("Failed to change city:", error);
+      }
+    });
     sendGAEvent({
       event: "change_city",
       value: newCity,
