@@ -39,7 +39,8 @@
     "signin": "Sign In",
     "signup": "Sign Up",
     "signout": "Sign Out",
-    "menu": "Menu"
+    "menu": "Menu",
+    "change_city": "Select City"
   },
   "About": {
     "title": "About"
