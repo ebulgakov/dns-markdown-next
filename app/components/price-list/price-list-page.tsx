@@ -102,7 +102,7 @@ function PriceListPage({ priceList, variant, diffs }: PriceListPageProps) {
       return undefined;
     };
 
-    const cutVirtualItems = virtualItems.splice(4);
+    const cutVirtualItems = virtualItems.slice(4);
     const foundHeaderIdx = cutVirtualItems.find(extractTitle);
     return foundHeaderIdx ? extractTitle(foundHeaderIdx) : undefined;
   };

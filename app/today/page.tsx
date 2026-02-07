@@ -29,7 +29,19 @@ export default async function UpdatesPage() {
   const changePriceDiff: DiffsType = {};
   const changeProfitDiff: DiffsType = {};
 
-  const city = await getPriceListCity();
+  let city;
+
+  try {
+    city = await getPriceListCity();
+  } catch (e) {
+    const { message } = e as Error;
+    return (
+      <Alert variant="destructive">
+        <AlertTitle>Ошибка загрузки города</AlertTitle>
+        <AlertDescription>{message}</AlertDescription>
+      </Alert>
+    );
+  }
 
   try {
     const collection = await getLastDiffByCity(city);
