@@ -3,6 +3,7 @@ import Link from "next/link";
 import { useTranslations } from "next-intl";
 import { useContext } from "react";
 
+import { postChangeUserCity } from "@/api/post";
 import { Button } from "@/app/components/ui/button";
 import {
   DropdownMenu,
@@ -29,6 +30,16 @@ function Logo() {
     });
   };
 
+  const handleChangeCity = async (newCity: string) => {
+    await postChangeUserCity(newCity);
+    sendGAEvent({
+      event: "change_city",
+      value: newCity,
+      category: "Navbar",
+      action: "click"
+    });
+  };
+
   return (
     <div>
       <Button asChild variant="link" className="cursor-pointer">
@@ -47,13 +58,17 @@ function Logo() {
         <DropdownMenuContent className="w-40">
           <DropdownMenuGroup>
             <DropdownMenuLabel>{t("change_city")}</DropdownMenuLabel>
-            <DropdownMenuCheckboxItem checked={city === "samara"} onCheckedChange={() => {}}>
+            <DropdownMenuCheckboxItem
+              checked={city === "samara"}
+              disabled={city === "samara"}
+              onCheckedChange={() => handleChangeCity("samara")}
+            >
               {cities("samara")}
             </DropdownMenuCheckboxItem>
             <DropdownMenuCheckboxItem
               checked={city === "moscow"}
-              onCheckedChange={() => {}}
-              disabled
+              disabled={city === "moscow"}
+              onCheckedChange={() => handleChangeCity("moscow")}
             >
               {cities("moscow")}
             </DropdownMenuCheckboxItem>
