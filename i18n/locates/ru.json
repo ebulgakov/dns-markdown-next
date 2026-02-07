@@ -11,7 +11,8 @@
     "keywords": "уценка dns, dns скидки, dns уценённые товары, dns прайслист, dns архив, dns обновления, dns избранное"
   },
   "cities": {
-    "samara": "Самара"
+    "samara": "Самара",
+    "moscow": "Москва"
   },
   "HomePage": {
     "title": "Уценка DNS",

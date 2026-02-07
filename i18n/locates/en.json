@@ -11,7 +11,8 @@
     "keywords": "DNS, discounted goods, price tracking, favorites, email notifications, price analysis, Samara"
   },
   "cities": {
-    "samara": "Samara"
+    "samara": "Samara",
+    "moscow": "Moscow"
   },
   "HomePage": {
     "title": "DNS Markdown",
