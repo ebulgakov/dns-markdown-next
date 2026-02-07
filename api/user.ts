@@ -11,6 +11,7 @@ import type { Favorite, User, UserNotifications, UserSections } from "@/types/us
 
 export type FavoritesResponse = { message: string; favorites: Favorite[] };
 export type FavoritesStatusResponse = { message: string; shownBoughtFavorites: boolean };
+export type CityStatusResponse = { message: string; city: string };
 
 export type SectionsResponse = {
   message: string;
@@ -59,6 +60,12 @@ export const postToggleFavoriteShownBought = async (
   return await wrapApiCall("/api/user/toggle-shown-bought-favorites", token, {
     status: shownBoughtFavorites
   });
+};
+
+export const postChangeUserCity = async (city: string): Promise<CityStatusResponse | null> => {
+  const { token, userId } = await getSessionInfo();
+  revalidateTag(`user-${userId}`, { expire: 0 });
+  return await wrapApiCall("/api/user/change-city", token, { city });
 };
 
 // User Favorites API

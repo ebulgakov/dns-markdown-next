@@ -7,11 +7,10 @@ import type { NavbarLinks } from "@/types/common";
 
 type NavbarProps = {
   locate?: string;
-  city?: string;
   isUserLoggedIn?: boolean;
 };
 
-function Navbar({ locate, isUserLoggedIn, city }: NavbarProps) {
+function Navbar({ locate, isUserLoggedIn }: NavbarProps) {
   const t = useTranslations("Navbar");
   const aboutT = useTranslations("About");
   const linksList: NavbarLinks = [
@@ -54,7 +53,6 @@ function Navbar({ locate, isUserLoggedIn, city }: NavbarProps) {
           linksList={mobileNavbar}
           userLinks={userLinks}
           locate={locate}
-          city={city}
         />
       </div>
       <div className="hidden md:block">
@@ -62,7 +60,6 @@ function Navbar({ locate, isUserLoggedIn, city }: NavbarProps) {
           isUserLoggedIn={isUserLoggedIn}
           linksList={linksList}
           userLinks={userLinks}
-          city={city}
         />
       </div>
     </header>

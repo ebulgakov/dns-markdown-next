@@ -5,7 +5,12 @@ import { cookies } from "next/headers";
 
 import { Goods } from "@/types/pricelist";
 
-import type { FavoritesResponse, FavoritesStatusResponse, SectionsResponse } from "@/api/user";
+import type {
+  CityStatusResponse,
+  FavoritesResponse,
+  FavoritesStatusResponse,
+  SectionsResponse
+} from "@/api/user";
 import type { Favorite, User } from "@/types/user";
 
 const GUEST_TTL_SECONDS = 60 * 60 * 24 * 30; // 30 days
@@ -150,5 +155,16 @@ export const toggleShownBoughtFavorites = async (
   return {
     message: "OK",
     shownBoughtFavorites: guest.shownBoughtFavorites
+  };
+};
+
+export const changeCity = async (city: string): Promise<CityStatusResponse> => {
+  const guest = await getGuest();
+  guest.city = city;
+  await setGuest(guest);
+
+  return {
+    message: "OK",
+    city: guest.city
   };
 };

@@ -9,7 +9,6 @@ import { StrictMode, type ReactNode } from "react";
 
 import "./globals.css";
 
-import { getPriceListCity } from "@/api/get";
 import { getUser as getGenericUser } from "@/api/post";
 import { getSessionInfo } from "@/api/user";
 import { ClerkError } from "@/app/components/clerk-error";
@@ -64,13 +63,6 @@ export default async function RootLayout({
 }>) {
   const locale = await getLocale();
 
-  let city;
-  try {
-    city = await getPriceListCity();
-  } catch {
-    city = undefined;
-  }
-
   let userId;
   try {
     const authData = await getSessionInfo();
@@ -98,7 +90,8 @@ export default async function RootLayout({
                 value={{
                   hiddenSections: genericUser?.hiddenSections || [],
                   favoriteSections: genericUser?.favoriteSections || [],
-                  favorites: genericUser?.favorites || []
+                  favorites: genericUser?.favorites || [],
+                  city: genericUser?.city || process.env.DEFAULT_CITY!
                 }}
               >
                 <ThemeProvider attribute="class" defaultTheme="light" enableSystem>
@@ -107,7 +100,7 @@ export default async function RootLayout({
                       <div className="mb-10">
                         <ClerkError />
 
-                        <Navbar locate={locale} isUserLoggedIn={!!userId} city={city} />
+                        <Navbar locate={locale} isUserLoggedIn={!!userId} />
 
                         {children}
                       </div>

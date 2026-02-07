@@ -8,7 +8,8 @@ import {
   removeFromFavoriteSections as removeFromFavoriteSectionsGuest,
   addToFavorites as addToFavoritesGuest,
   removeFromFavorites as removeFromFavoritesGuest,
-  toggleShownBoughtFavorites as toggleShownBoughtFavoritesGuest
+  toggleShownBoughtFavorites as toggleShownBoughtFavoritesGuest,
+  changeCity as changeCityGuest
 } from "@/api/guest";
 
 import {
@@ -20,6 +21,7 @@ import {
   postRemoveFromHiddenSections as postRemoveFromHiddenSectionsUser,
   postAddToFavoriteSections as postAddToFavoriteSectionsUser,
   postRemoveFromFavoriteSection as postRemoveFromFavoriteSectionUser,
+  postChangeUserCity as postChangeUserCityUser,
   getUser as getUserUser,
   getSessionInfo
 } from "./user";
@@ -104,6 +106,20 @@ export const postRemoveFromFavoriteSection = async (title: string) => {
     return await postRemoveFromFavoriteSectionUser(title);
   } else {
     return await removeFromFavoriteSectionsGuest(title);
+  }
+};
+
+export const postChangeUserCity = async (city: string) => {
+  const { userId } = await getSessionInfo();
+  const ALLOWED_CITIES = ["samara", "moscow"] as const;
+  if (!ALLOWED_CITIES.includes(city as (typeof ALLOWED_CITIES)[number])) {
+    throw new Error(`Invalid city: ${city}`);
+  }
+
+  if (userId) {
+    return await postChangeUserCityUser(city);
+  } else {
+    return await changeCityGuest(city);
   }
 };
 

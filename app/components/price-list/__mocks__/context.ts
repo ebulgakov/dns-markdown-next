@@ -6,7 +6,8 @@ export const defaultContext = {
   favorites: [],
   onToggleHiddenSection: () => {},
   onToggleFavoriteSection: () => {},
-  onFavorite: () => {}
+  onFavorite: () => {},
+  city: "Test City"
 };
 
 export const filledWithFavoritesContext = {
@@ -15,7 +16,8 @@ export const filledWithFavoritesContext = {
   favorites: mockFavorites,
   onToggleHiddenSection: () => {},
   onToggleFavoriteSection: () => {},
-  onFavorite: () => {}
+  onFavorite: () => {},
+  city: "Test City"
 };
 
 export const filledWithFavoritesSectionsContext = {
@@ -24,7 +26,8 @@ export const filledWithFavoritesSectionsContext = {
   favorites: [],
   onToggleHiddenSection: () => {},
   onToggleFavoriteSection: () => {},
-  onFavorite: () => {}
+  onFavorite: () => {},
+  city: "Test City"
 };
 
 export const filledWithHiddenSectionsContext = {
@@ -33,7 +36,8 @@ export const filledWithHiddenSectionsContext = {
   favorites: [],
   onToggleHiddenSection: () => {},
   onToggleFavoriteSection: () => {},
-  onFavorite: () => {}
+  onFavorite: () => {},
+  city: "Test City"
 };
 
 export const filledWithHiddenAndFavoritesSectionsContext = {
@@ -42,5 +46,6 @@ export const filledWithHiddenAndFavoritesSectionsContext = {
   favorites: [],
   onToggleHiddenSection: () => {},
   onToggleFavoriteSection: () => {},
-  onFavorite: () => {}
+  onFavorite: () => {},
+  city: "Test City"
 };
