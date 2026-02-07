@@ -20,8 +20,6 @@ import { UserSections } from "@/types/user";
 import {
   VisualizationGoods,
   VisualizationHeader,
-  VisualizationOutput,
-  VisualizationOutputList,
   VisualizationSectionTitle
 } from "@/types/visualization";
 
@@ -142,7 +140,7 @@ function PriceListPage({ priceList, variant, diffs }: PriceListPageProps) {
       window.removeEventListener("hashchange", handleHashScroll);
       clearTimeout(timeoutId);
     };
-  }, []);
+  }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
   useEffect(() => {
     setScrollHeight(virtualizer.getTotalSize());
