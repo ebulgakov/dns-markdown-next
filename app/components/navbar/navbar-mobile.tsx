@@ -18,6 +18,7 @@ import {
   DialogTrigger
 } from "@/app/components/ui/dialog";
 import { sendGAEvent } from "@/app/lib/sendGAEvent";
+import { Logo } from "@/app/logo";
 
 import type { NavbarLinks } from "@/types/common";
 
@@ -26,12 +27,10 @@ type NavbarMobileProps = {
   userLinks: NavbarLinks;
   isUserLoggedIn?: boolean;
   locate?: string;
-  city?: string;
 };
 
-function NavbarMobile({ linksList, userLinks, isUserLoggedIn, locate, city }: NavbarMobileProps) {
+function NavbarMobile({ linksList, userLinks, isUserLoggedIn, locate }: NavbarMobileProps) {
   const t = useTranslations("Navbar");
-  const cities = useTranslations("cities");
 
   const handleSendGAEvent = (link: { name: string; url: string }) => {
     sendGAEvent({
@@ -44,11 +43,7 @@ function NavbarMobile({ linksList, userLinks, isUserLoggedIn, locate, city }: Na
   return (
     <Dialog>
       <div className="border-primary flex items-center gap-4 rounded border-2 py-2">
-        <Button asChild variant="link" className="font-bold">
-          <Link href="/" onClick={() => handleSendGAEvent({ name: "home", url: "/" })}>
-            {t("logo")} {city ? cities(city) : ""}
-          </Link>
-        </Button>
+        <Logo />
 
         <DialogTrigger asChild>
           <Button className="ml-auto" variant="link" aria-label={t("menu")}>

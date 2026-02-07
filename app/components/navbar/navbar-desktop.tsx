@@ -1,7 +1,6 @@
 "use client";
 
 import { SignedIn, SignInButton, SignUpButton, UserButton, ClerkLoaded } from "@clerk/nextjs";
-import Link from "next/link";
 import { useTranslations } from "next-intl";
 
 import { Button } from "@/app/components/ui/button";
@@ -12,6 +11,7 @@ import {
   NavigationMenuList
 } from "@/app/components/ui/navigation-menu";
 import { sendGAEvent } from "@/app/lib/sendGAEvent";
+import { Logo } from "@/app/logo";
 
 import type { NavbarLinks } from "@/types/common";
 
@@ -19,11 +19,9 @@ type NavbarDesktopProps = {
   linksList: NavbarLinks;
   userLinks: NavbarLinks;
   isUserLoggedIn?: boolean;
-  city?: string;
 };
-function NavbarDesktop({ linksList, isUserLoggedIn, userLinks, city }: NavbarDesktopProps) {
+function NavbarDesktop({ linksList, isUserLoggedIn, userLinks }: NavbarDesktopProps) {
   const t = useTranslations("Navbar");
-  const cities = useTranslations("cities");
 
   const handleSendGAEvent = (link: { name: string; url: string }) => {
     sendGAEvent({
@@ -40,12 +38,7 @@ function NavbarDesktop({ linksList, isUserLoggedIn, userLinks, city }: NavbarDes
       className="border-primary flex items-center gap-4 rounded border-2 py-2"
     >
       <NavigationMenu>
-        <Button asChild variant="link" className="font-bold">
-          <Link href="/" onClick={() => handleSendGAEvent({ name: "home", url: "/" })}>
-            {t("logo")} {city ? cities(city) : ""}
-          </Link>
-        </Button>
-
+        <Logo />
         <NavigationMenuList>
           {linksList.map(link => (
             <NavigationMenuItem key={link.name}>

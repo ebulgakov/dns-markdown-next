@@ -4,7 +4,7 @@ import { unstable_cache as cacheToken } from "next/cache";
 
 import { apiClient } from "@/api/client";
 
-import { getUser } from "./user";
+import { getUser } from "./post";
 
 import type { AnalysisDiff, AnalysisDiffReport } from "@/types/analysis-diff";
 import type { Goods, PriceList, PriceListDate, PriceListsArchiveCount } from "@/types/pricelist";
