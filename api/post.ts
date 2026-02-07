@@ -111,6 +111,10 @@ export const postRemoveFromFavoriteSection = async (title: string) => {
 
 export const postChangeUserCity = async (city: string) => {
   const { userId } = await getSessionInfo();
+  const ALLOWED_CITIES = ["samara", "moscow"] as const;
+  if (!ALLOWED_CITIES.includes(city as (typeof ALLOWED_CITIES)[number])) {
+    throw new Error(`Invalid city: ${city}`);
+  }
 
   if (userId) {
     return await postChangeUserCityUser(city);
