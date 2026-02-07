@@ -91,7 +91,7 @@ export default async function RootLayout({
                   hiddenSections: genericUser?.hiddenSections || [],
                   favoriteSections: genericUser?.favoriteSections || [],
                   favorites: genericUser?.favorites || [],
-                  city: genericUser?.city
+                  city: genericUser?.city || process.env.DEFAULT_CITY!
                 }}
               >
                 <ThemeProvider attribute="class" defaultTheme="light" enableSystem>

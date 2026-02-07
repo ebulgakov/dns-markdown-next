@@ -22,7 +22,7 @@ type FilterContextType = {
   hiddenSections: UserSections;
   favoriteSections: UserSections;
   favorites: Favorite[];
-  city?: string;
+  city: string;
   onToggleHiddenSection?: (title: string) => void;
   onToggleFavoriteSection?: (title: string) => void;
   onFavorite?: (title: string) => void;
