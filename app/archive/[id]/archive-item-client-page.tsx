@@ -1,4 +1,4 @@
-import { Catalog } from "@/app/components/catalog/catalog";
+import { Catalog } from "@/app/components/catalog";
 import { PageTitle } from "@/app/components/ui/page-title";
 import { formatDate } from "@/app/helpers/format";
 

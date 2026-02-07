@@ -3,7 +3,7 @@ import { useQuery } from "@tanstack/react-query";
 import axios from "axios";
 import { useContext } from "react";
 
-import { Catalog } from "@/app/components/catalog/catalog";
+import { Catalog } from "@/app/components/catalog";
 import { SortGoods } from "@/app/components/sort-goods";
 import { Alert, AlertDescription, AlertTitle } from "@/app/components/ui/alert";
 import { PageTitle } from "@/app/components/ui/page-title";
@@ -19,16 +19,13 @@ function CatalogClientPage() {
     isPending,
     error
   } = useQuery({
-    queryKey: ["todos"],
+    queryKey: ["last-price-list", city],
     queryFn: () =>
       axios
         .get("/api/last-pricelist", {
           params: { city }
         })
-        .then(r => {
-          console.log(r.data);
-          return r.data;
-        })
+        .then(r => r.data)
   });
 
   if (isPending) return <span>Loading...</span>;
