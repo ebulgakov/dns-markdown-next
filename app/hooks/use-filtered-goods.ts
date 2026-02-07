@@ -15,7 +15,10 @@ import type { PriceList as priceListType } from "@/types/pricelist";
 export const useFilteredGoods = (
   term: string,
   priceList: priceListType,
-  { hiddenSections: extendedHiddenSections }: { hiddenSections: UserSections }
+  {
+    hiddenSections: extendedHiddenSections,
+    customSortSections = []
+  }: { hiddenSections: UserSections; customSortSections?: UserSections }
 ): {
   flattenList: VisualizationOutputList;
   flattenTitles: VisualizationHeader[];
@@ -29,6 +32,20 @@ export const useFilteredGoods = (
 
   if (sortGoods === "default" && term.length <= 2) {
     const flattenTitles = getOptimizedFlatTitles(priceList);
+
+    flattenTitles.sort((a, b) => {
+      const aIndex = customSortSections.findIndex(section => section === a.title);
+      const bIndex = customSortSections.findIndex(section => section === b.title);
+
+      if (aIndex === -1 && bIndex === -1) {
+        return a.title.localeCompare(b.title);
+      }
+      if (aIndex === -1) return 1;
+      if (bIndex === -1) return -1;
+
+      return aIndex - bIndex;
+    });
+
     const flattenList = getOptimizedOutput(flattenOptimizedPriceList, flattenTitles, {
       favoriteSections,
       hiddenSections

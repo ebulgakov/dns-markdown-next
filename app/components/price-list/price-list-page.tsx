@@ -35,19 +35,28 @@ type PriceListPageProps = {
   variant: PageVariant;
   priceList: PriceListType;
   diffs?: DiffsType;
+  customHiddenSections?: UserSections;
+  customSortSections?: UserSections;
 };
 
-function PriceListPage({ priceList, variant, diffs }: PriceListPageProps) {
+function PriceListPage({
+  priceList,
+  variant,
+  diffs,
+  customHiddenSections = [],
+  customSortSections = []
+}: PriceListPageProps) {
   const [scrollHeight, setScrollHeight] = useState(0);
   // Initialize hidden sections with no saving sections to user
-  const [hiddenSections, setHiddenSections] = useState<UserSections>([]);
+  const [hiddenSections, setHiddenSections] = useState<UserSections>(customHiddenSections);
 
   const { favoriteSections } = useContext(UserContext);
   const onChangeSearch = useSearchStore(state => state.updateSearchTerm);
   const searchTerm = useSearchStore(state => state.searchTerm);
   const debouncedSearch = useDebounce<string>(searchTerm.trim(), 100);
   const { flattenList, flattenTitles } = useFilteredGoods(debouncedSearch, priceList, {
-    hiddenSections
+    hiddenSections,
+    customSortSections
   });
   const isSearchMode = debouncedSearch.length > 2;
 

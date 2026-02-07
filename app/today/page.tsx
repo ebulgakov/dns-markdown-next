@@ -100,7 +100,18 @@ export default async function UpdatesPage() {
     <>
       <PageTitle title="Обновления за день" />
 
-      <PriceListPage variant="updates" diffs={diffs} priceList={digestList} />
+      <PriceListPage
+        customSortSections={[
+          "Новые поступления",
+          "Изменения цены",
+          "Продано на сегодня",
+          "Изменения Выгоды"
+        ]}
+        customHiddenSections={["Изменения Выгоды"]}
+        variant="updates"
+        diffs={diffs}
+        priceList={digestList}
+      />
     </>
   );
 }
