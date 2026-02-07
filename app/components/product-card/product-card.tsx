@@ -7,8 +7,8 @@ import { NumericFormat } from "react-number-format";
 import { formatDate, formatDateShort } from "@/app/helpers/format";
 import { sendGAEvent } from "@/app/lib/sendGAEvent";
 
-import { PriceListFavoriteToggle } from "./price-list-favorite-toggle";
-import { PriceListGoodsDiff } from "./price-list-goods-diff";
+import { ProductCardDiff } from "./product-card-diff";
+import { ProductCardFavoriteToggle } from "./product-card-favorite-toggle";
 
 import type { Diff as DiffType } from "@/types/analysis-diff";
 import type { Goods as GoodsType } from "@/types/pricelist";
@@ -20,7 +20,7 @@ type PriceListGoodsProps = {
   shownFavorites: boolean;
   status?: FavoriteStatus;
 };
-function PriceListGoods({ item, status, diff, shownFavorites }: PriceListGoodsProps) {
+function ProductCard({ item, status, diff, shownFavorites }: PriceListGoodsProps) {
   const handleSendGAEvent = (event: string) => {
     sendGAEvent({
       event,
@@ -90,7 +90,7 @@ function PriceListGoods({ item, status, diff, shownFavorites }: PriceListGoodsPr
         )}
       </div>
 
-      <div className="[grid-area:diff]">{diff && <PriceListGoodsDiff diff={diff} />}</div>
+      <div className="[grid-area:diff]">{diff && <ProductCardDiff diff={diff} />}</div>
 
       <div className="text-center [grid-area:prices]">
         <NumericFormat
@@ -138,10 +138,10 @@ function PriceListGoods({ item, status, diff, shownFavorites }: PriceListGoodsPr
       <div className="text-center [grid-area:store]">{item.available}</div>
 
       <div className="[grid-area:image] lg:[grid-area:favorites]">
-        {shownFavorites && <PriceListFavoriteToggle goods={item} />}
+        {shownFavorites && <ProductCardFavoriteToggle goods={item} />}
       </div>
     </div>
   );
 }
 
-export { PriceListGoods };
+export { ProductCard };

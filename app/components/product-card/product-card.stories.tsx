@@ -1,15 +1,15 @@
-import { defaultContext } from "@/app/components/price-list/__mocks__/context";
+import { defaultContext } from "@/app/components/product-card/__mocks__/context";
 import { UserProvider } from "@/app/contexts/user-context";
 
 import { mockGoodsList } from "./__mocks__/goods";
-import { PriceListGoods } from "./price-list-goods";
+import { ProductCard } from "./product-card";
 
 import type { Diff as DiffType } from "@/types/analysis-diff";
 import type { Meta, StoryObj } from "@storybook/react";
 
-const meta: Meta<typeof PriceListGoods> = {
+const meta: Meta<typeof ProductCard> = {
   title: "Components/PriceList/PriceListGoods",
-  component: PriceListGoods,
+  component: ProductCard,
   tags: ["autodocs"],
   argTypes: {
     item: { control: "object" },
@@ -19,7 +19,7 @@ const meta: Meta<typeof PriceListGoods> = {
 };
 
 export default meta;
-type Story = StoryObj<typeof PriceListGoods>;
+type Story = StoryObj<typeof ProductCard>;
 
 const mockDiff: DiffType = {
   price: "19999",
@@ -30,7 +30,7 @@ const mockDiff: DiffType = {
 export const Default: Story = {
   render: args => (
     <UserProvider value={defaultContext}>
-      <PriceListGoods {...args} />
+      <ProductCard {...args} />
     </UserProvider>
   ),
   args: {
@@ -41,7 +41,7 @@ export const Default: Story = {
 export const WithStar: Story = {
   render: args => (
     <UserProvider value={defaultContext}>
-      <PriceListGoods {...args} />
+      <ProductCard {...args} />
     </UserProvider>
   ),
   args: {
@@ -53,7 +53,7 @@ export const WithStar: Story = {
 export const WithDiff: Story = {
   render: args => (
     <UserProvider value={defaultContext}>
-      <PriceListGoods {...args} />
+      <ProductCard {...args} />
     </UserProvider>
   ),
   args: {

@@ -1,7 +1,8 @@
 import { getTranslations } from "next-intl/server";
 
 import { getLastPriceList, getPriceListCity } from "@/api/get";
-import { PriceListPage } from "@/app/components/price-list";
+import { CatalogClientPage } from "@/app/catalog/catalog-client-page";
+import { PriceListPage } from "@/app/components/product-card";
 import { SortGoods } from "@/app/components/sort-goods";
 import { Alert, AlertDescription, AlertTitle } from "@/app/components/ui/alert";
 import { PageTitle } from "@/app/components/ui/page-title";
@@ -40,19 +41,5 @@ export default async function CatalogPage() {
 
   const count = priceList.positions.reduce((acc, cur) => acc + cur.items.length, 0);
 
-  return (
-    <>
-      <PageTitle title={formatDate(priceList.createdAt)} subTitle={formatTime(priceList.createdAt)}>
-        <div className="mt-4 flex items-center justify-between gap-4 md:mt-0">
-          <div>
-            Количество: <b>{count}</b>
-          </div>
-
-          <SortGoods />
-        </div>
-      </PageTitle>
-
-      <PriceListPage variant="default" priceList={priceList} />
-    </>
-  );
+  return <CatalogClientPage count={count} priceList={priceList} />;
 }

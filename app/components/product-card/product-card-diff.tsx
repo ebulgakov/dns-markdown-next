@@ -7,7 +7,7 @@ type PriceListGoodsDiffProps = {
   diff: DiffType;
 };
 
-function PriceListGoodsDiff({ diff }: PriceListGoodsDiffProps) {
+function ProductCardDiff({ diff }: PriceListGoodsDiffProps) {
   return (
     <div className="text-center opacity-40">
       <NumericFormat
@@ -41,4 +41,4 @@ function PriceListGoodsDiff({ diff }: PriceListGoodsDiffProps) {
   );
 }
 
-export { PriceListGoodsDiff };
+export { ProductCardDiff };

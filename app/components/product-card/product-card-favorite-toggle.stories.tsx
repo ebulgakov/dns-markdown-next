@@ -1,13 +1,13 @@
-import { mockGoodsList } from "@/app/components/price-list/__mocks__/goods";
+import { mockGoodsList } from "@/app/components/product-card/__mocks__/goods";
 import { UserProvider } from "@/app/contexts/user-context";
 
 import { filledWithFavoritesContext, defaultContext } from "./__mocks__/context";
-import { PriceListFavoriteToggle } from "./price-list-favorite-toggle";
+import { ProductCardFavoriteToggle } from "./product-card-favorite-toggle";
 
 import type { Meta, StoryObj } from "@storybook/react";
 
-const meta: Meta<typeof PriceListFavoriteToggle> = {
-  component: PriceListFavoriteToggle,
+const meta: Meta<typeof ProductCardFavoriteToggle> = {
+  component: ProductCardFavoriteToggle,
   title: "Components/PriceList/PriceListFavoriteToggle",
   tags: ["autodocs"],
   parameters: {
@@ -19,12 +19,12 @@ const meta: Meta<typeof PriceListFavoriteToggle> = {
 };
 
 export default meta;
-type Story = StoryObj<typeof PriceListFavoriteToggle>;
+type Story = StoryObj<typeof ProductCardFavoriteToggle>;
 
 export const Default: Story = {
   render: args => (
     <UserProvider value={defaultContext}>
-      <PriceListFavoriteToggle {...args} />
+      <ProductCardFavoriteToggle {...args} />
     </UserProvider>
   )
 };
@@ -32,7 +32,7 @@ export const Default: Story = {
 export const InFavorites: Story = {
   render: args => (
     <UserProvider value={filledWithFavoritesContext}>
-      <PriceListFavoriteToggle {...args} />
+      <ProductCardFavoriteToggle {...args} />
     </UserProvider>
   )
 };

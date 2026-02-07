@@ -1,6 +1,6 @@
 import { Alert, AlertDescription, AlertTitle } from "@/app/components/ui/alert";
 
-function PriceListFavoritesEmptyAlert() {
+function CatalogFavoritesEmptyAlert() {
   return (
     <div className="mb-10">
       <Alert variant="success">
@@ -14,4 +14,4 @@ function PriceListFavoritesEmptyAlert() {
   );
 }
 
-export { PriceListFavoritesEmptyAlert };
+export { CatalogFavoritesEmptyAlert };

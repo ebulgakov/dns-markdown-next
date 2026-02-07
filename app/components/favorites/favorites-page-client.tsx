@@ -3,7 +3,7 @@
 import { startTransition, useOptimistic, useState } from "react";
 
 import { postToggleFavoriteShownBought } from "@/api/post";
-import { PriceListGoods } from "@/app/components/price-list";
+import { ProductCard } from "@/app/components/product-card";
 import { Alert, AlertDescription, AlertTitle } from "@/app/components/ui/alert";
 import { CheckboxWithLabel } from "@/app/components/ui/control-with-label";
 import { PageTitle } from "@/app/components/ui/page-title";
@@ -78,7 +78,7 @@ function FavoritesPageClient({
 
       <div className="divide-y divide-gray-200">
         {filteredFavorites.map(favorite => (
-          <PriceListGoods
+          <ProductCard
             key={favorite.item._id}
             item={favorite.item}
             status={favorite.status}

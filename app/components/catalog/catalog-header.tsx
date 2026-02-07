@@ -10,31 +10,31 @@ import { cn } from "@/app/lib/utils";
 import { UserSections } from "@/types/user";
 import { VisualizationHeader } from "@/types/visualization";
 
-type PriceListSectionProps = {
+type CatalogHeaderProps = {
   header: VisualizationHeader;
   shownHeart?: boolean;
   outerHiddenSections?: UserSections;
   onOuterToggleHiddenSection?: (section: string) => void;
 };
 
-type PriceListStickySectionProps = Omit<PriceListSectionProps, "header"> & {
+type CatalogStickyHeaderProps = Omit<CatalogHeaderProps, "header"> & {
   titles: VisualizationHeader[];
   neededTitle?: string;
 };
 
-function PriceListStickySection({
+function CatalogStickyHeader({
   titles,
   neededTitle,
   shownHeart,
   outerHiddenSections,
   onOuterToggleHiddenSection
-}: PriceListStickySectionProps) {
+}: CatalogStickyHeaderProps) {
   const header = titles.find(title => title.title === neededTitle);
   if (!header) return null;
   return (
     <div className="fixed top-14 right-0 left-0 z-10 px-4">
       <div className="mx-auto md:container">
-        <PriceListSection
+        <CatalogHeader
           header={header}
           shownHeart={shownHeart}
           outerHiddenSections={outerHiddenSections}
@@ -45,12 +45,12 @@ function PriceListStickySection({
   );
 }
 
-function PriceListSection({
+function CatalogHeader({
   header,
   shownHeart,
   outerHiddenSections,
   onOuterToggleHiddenSection
-}: PriceListSectionProps) {
+}: CatalogHeaderProps) {
   const [isTooltipOpen, setIsTooltipOpen] = useState(false);
   const [copiedText, copyToClipboard] = useCopyToClipboard();
   const { favoriteSections, hiddenSections, onToggleFavoriteSection, onToggleHiddenSection } =
@@ -154,4 +154,4 @@ function PriceListSection({
   );
 }
 
-export { PriceListSection, PriceListStickySection };
+export { CatalogHeader, CatalogStickyHeader };

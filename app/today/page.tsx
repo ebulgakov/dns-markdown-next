@@ -1,9 +1,8 @@
 import { getTranslations } from "next-intl/server";
 
 import { getPriceListCity, getLastDiffByCity } from "@/api/get";
-import { PriceListPage } from "@/app/components/price-list";
 import { Alert, AlertDescription, AlertTitle } from "@/app/components/ui/alert";
-import { PageTitle } from "@/app/components/ui/page-title";
+import { TodayClientPage } from "@/app/today/TodayClientPage";
 import { Position, PriceList } from "@/types/pricelist";
 
 import type { DiffsCollection as DiffsType } from "@/types/analysis-diff";
@@ -96,22 +95,5 @@ export default async function UpdatesPage() {
 
   const diffs = { ...changePriceDiff, ...changeProfitDiff };
 
-  return (
-    <>
-      <PageTitle title="Обновления за день" />
-
-      <PriceListPage
-        customSortSections={[
-          "Новые поступления",
-          "Изменения цены",
-          "Продано на сегодня",
-          "Изменения Выгоды"
-        ]}
-        customHiddenSections={["Изменения Выгоды"]}
-        variant="updates"
-        diffs={diffs}
-        priceList={digestList}
-      />
-    </>
-  );
+  return <TodayClientPage priceList={digestList} diffs={diffs} />;
 }
