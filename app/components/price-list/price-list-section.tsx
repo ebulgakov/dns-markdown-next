@@ -33,7 +33,7 @@ function PriceListStickySection({
   if (!header) return null;
   return (
     <div className="fixed top-14 right-0 left-0 z-10">
-      <div className="mx-auto md:container">
+      <div className="mx-auto px-4 md:container">
         <PriceListSection
           header={header}
           shownHeart={shownHeart}
