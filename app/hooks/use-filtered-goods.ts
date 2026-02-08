@@ -21,7 +21,6 @@ import type { PriceList as priceListType } from "@/types/pricelist";
 
 type UseFilteredGoodsParams = {
   hiddenSections: UserSections;
-  customSortSections?: UserSections;
   term: string;
   priceList: priceListType;
   variant: CatalogComponentVariant;

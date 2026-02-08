@@ -12,6 +12,13 @@ export const getFlatPriceList = (priceList: PriceList) => {
   return priceList.positions.flatMap(position => position.items);
 };
 
+export const getPriceListWithSortedPositions = (priceList: PriceList) => {
+  return {
+    ...priceList,
+    positions: priceList.positions.sort((a, b) => a.title.localeCompare(b.title))
+  };
+};
+
 export const getOptimizedFlatPriceListWithTitle = (priceList: PriceList): VisualizationGoods[] => {
   return priceList.positions
     .map(position =>
@@ -27,15 +34,13 @@ export const getOptimizedFlatPriceListWithTitle = (priceList: PriceList): Visual
 };
 
 export const getOptimizedFlatTitles = (priceList: PriceList): VisualizationHeader[] => {
-  return priceList.positions
-    .map(
-      (position): VisualizationHeader => ({
-        title: position.title,
-        itemsCount: position.items.length,
-        type: "header"
-      })
-    )
-    .sort((a, b) => a.title.localeCompare(b.title));
+  return priceList.positions.map(
+    (position): VisualizationHeader => ({
+      title: position.title,
+      itemsCount: position.items.length,
+      type: "header"
+    })
+  );
 };
 
 export const getOptimizedFlatTitlesFromGoods = (
