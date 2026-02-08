@@ -30,7 +30,6 @@ type PriceListPageProps = {
   diffs?: DiffsType;
   hiddenSections: UserSections;
   onChangeHiddenSections?: (section: string) => void;
-  customSortSections?: UserSections;
 };
 
 function Catalog({
@@ -38,8 +37,7 @@ function Catalog({
   variant,
   diffs,
   hiddenSections,
-  onChangeHiddenSections,
-  customSortSections = []
+  onChangeHiddenSections
 }: PriceListPageProps) {
   const isUpdates = variant === "updates";
   const [scrollHeight, setScrollHeight] = useState(0);
@@ -49,7 +47,6 @@ function Catalog({
     term: debouncedSearch,
     priceList,
     hiddenSections,
-    customSortSections,
     variant
   });
   const isSearchMode = !isUpdates && debouncedSearch.length > 2;
@@ -61,6 +58,7 @@ function Catalog({
   const currentTitle = getCurrentCatalogTitle(virtualItems, flattenList, flattenTitles);
 
   useEffect(() => {
+    // After filtering the list, we need to update the total scroll height for virtualization
     setScrollHeight(virtualizer.getTotalSize());
   }, [virtualizer, flattenList.length]);
 

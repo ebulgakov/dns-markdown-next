@@ -31,8 +31,7 @@ export const useFilteredGoods = ({
   term,
   priceList,
   hiddenSections,
-  variant,
-  customSortSections = []
+  variant
 }: UseFilteredGoodsParams): {
   flattenList: VisualizationOutputList;
   flattenTitles: VisualizationHeader[];
@@ -42,19 +41,6 @@ export const useFilteredGoods = ({
 
   let flattenOptimizedPriceList = getOptimizedFlatPriceListWithTitle(priceList);
   let flattenTitles = getOptimizedFlatTitles(priceList);
-
-  flattenTitles.sort((a, b) => {
-    const aIndex = customSortSections.findIndex(section => section === a.title);
-    const bIndex = customSortSections.findIndex(section => section === b.title);
-
-    if (aIndex === -1 && bIndex === -1) {
-      return a.title.localeCompare(b.title);
-    }
-    if (aIndex === -1) return 1;
-    if (bIndex === -1) return -1;
-
-    return aIndex - bIndex;
-  });
 
   if (variant === "updates") {
     const flattenList = getOptimizedOutput(flattenOptimizedPriceList, flattenTitles, {

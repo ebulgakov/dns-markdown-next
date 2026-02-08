@@ -40,15 +40,18 @@ function TodayClientPage() {
 
   const diff = diffResponse as AnalysisDiff;
 
+  /*
+    Important thing: leave spaces in the beginning of titles, because they are used for sorting sections in right order.
+   */
   const diffNew = {
     _id: "new-items",
-    title: "Новые поступления",
+    title: "   Новые поступления",
     items: diff.newItems
   };
 
   const diffRemoved = {
     _id: "removed-items",
-    title: "Продано на сегодня",
+    title: " Продано на сегодня",
     items: diff.removedItems
   };
 
@@ -63,7 +66,7 @@ function TodayClientPage() {
 
   const diffChangesPrice = {
     _id: "change-price-items",
-    title: "Изменения цены",
+    title: "  Изменения цены",
     items: diff.changesPrice.map(item => {
       changePriceDiff[`${item.item._id}`] = item.diff;
       return item.item;
@@ -86,12 +89,6 @@ function TodayClientPage() {
       <PageTitle title="Обновления за день" />
 
       <Catalog
-        customSortSections={[
-          "Новые поступления",
-          "Изменения цены",
-          "Продано на сегодня",
-          "Изменения Выгоды"
-        ]}
         hiddenSections={hiddenSections}
         onChangeHiddenSections={section =>
           setHiddenSections(prev =>
