@@ -5,6 +5,7 @@ import { CatalogClientPage } from "@/app/catalog/catalog-client-page";
 import type { Metadata } from "next";
 
 type CatalogPage = {
+  searchParams: Promise<Record<string, string | string[] | undefined>>;
   params: Promise<{ locale: string }>;
 };
 
@@ -16,6 +17,9 @@ export async function generateMetadata({ params }: CatalogPage): Promise<Metadat
   return { title: `${t("sub_title")}${title}` };
 }
 
-export default async function CatalogPage() {
-  return <CatalogClientPage />;
+export default async function CatalogPage({ searchParams }: CatalogPage) {
+  const params = await searchParams;
+  const city = Array.isArray(params.city) ? params.city[0] : params.city;
+
+  return <CatalogClientPage city={city} />;
 }

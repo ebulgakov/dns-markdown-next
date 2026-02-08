@@ -2,7 +2,7 @@
 
 import { useQuery } from "@tanstack/react-query";
 import axios from "axios";
-import { useContext } from "react";
+import { useContext, useState } from "react";
 
 import { Catalog } from "@/app/components/catalog";
 import { PageLoader } from "@/app/components/page-loader";
@@ -12,8 +12,10 @@ import { PageTitle } from "@/app/components/ui/page-title";
 import { UserContext } from "@/app/contexts/user-context";
 import { AnalysisDiff, DiffsCollection as DiffsType } from "@/types/analysis-diff";
 import { Position, PriceList } from "@/types/pricelist";
+import { UserSections } from "@/types/user";
 
 function TodayClientPage() {
+  const [hiddenSections, setHiddenSections] = useState<UserSections>(["Изменения Выгоды"]);
   const { city } = useContext(UserContext);
   const {
     data: diffResponse,
@@ -21,12 +23,7 @@ function TodayClientPage() {
     error
   } = useQuery({
     queryKey: ["today-diff", city],
-    queryFn: () =>
-      axios
-        .get("/api/today-diff", {
-          params: { city }
-        })
-        .then(r => r.data)
+    queryFn: () => axios.get("/api/today-diff").then(r => r.data)
   });
 
   if (isPending) return <PageLoader />;
@@ -95,7 +92,12 @@ function TodayClientPage() {
           "Продано на сегодня",
           "Изменения Выгоды"
         ]}
-        customHiddenSections={["Изменения Выгоды"]}
+        hiddenSections={hiddenSections}
+        onChangeHiddenSections={section =>
+          setHiddenSections(prev =>
+            prev.includes(section) ? prev.filter(s => s !== section) : [...prev, section]
+          )
+        }
         variant="updates"
         diffs={diffs}
         priceList={digestList}

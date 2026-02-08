@@ -26,7 +26,7 @@ export default async function FavoritesPage() {
   } else {
     try {
       const guest = await getGuest();
-      const lastPriceList = await getLastPriceList(guest.city);
+      const lastPriceList = await getLastPriceList();
       if (!lastPriceList) throw new Error("Price list not found for guests's city");
 
       const flatCatalog = getFlatPriceList(lastPriceList);

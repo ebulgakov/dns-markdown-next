@@ -29,7 +29,8 @@ type PriceListPageProps = {
   variant: PageVariant;
   priceList: PriceListType;
   diffs?: DiffsType;
-  customHiddenSections?: UserSections;
+  hiddenSections: UserSections;
+  onChangeHiddenSections?: (section: string) => void;
   customSortSections?: UserSections;
 };
 
@@ -37,14 +38,14 @@ function Catalog({
   priceList,
   variant,
   diffs,
-  customHiddenSections = [],
+  hiddenSections,
+  onChangeHiddenSections,
   customSortSections = []
 }: PriceListPageProps) {
+  const { favoriteSections } = useContext(UserContext);
   const [scrollHeight, setScrollHeight] = useState(0);
   // Initialize hidden sections with no saving sections to user
-  const [hiddenSections, setHiddenSections] = useState<UserSections>(customHiddenSections);
 
-  const { favoriteSections } = useContext(UserContext);
   const searchTerm = useSearchStore(state => state.searchTerm);
   const debouncedSearch = useDebounce<string>(searchTerm.trim(), 100);
   const { flattenList, flattenTitles } = useFilteredGoods(debouncedSearch, priceList, {
@@ -74,14 +75,6 @@ function Catalog({
     initialOffset: 0
   });
   const virtualItems = virtualizer.getVirtualItems();
-
-  const onToggleSection = (sectionId: string) => {
-    setHiddenSections(prevState =>
-      prevState.includes(sectionId)
-        ? prevState.filter(id => id !== sectionId)
-        : [...prevState, sectionId]
-    );
-  };
 
   const getTitle = (): VisualizationHeader | undefined => {
     const [firstVItem] = virtualItems;
@@ -183,9 +176,10 @@ function Catalog({
         >
           <div className="mx-auto md:container">
             <CatalogHeader
+              city={priceList.city}
               shownHeart={!(["updates", "archive"] as PageVariant[]).includes(variant)}
-              outerHiddenSections={variant === "updates" ? hiddenSections : undefined}
-              onOuterToggleHiddenSection={variant === "updates" ? onToggleSection : undefined}
+              hiddenSections={hiddenSections}
+              onOuterToggleHiddenSection={onChangeHiddenSections}
               header={currentTitle}
             />
           </div>
@@ -216,10 +210,11 @@ function Catalog({
             >
               {item.type === "header" && (
                 <CatalogHeader
+                  city={priceList.city}
                   shownHeart={!(["updates", "archive"] as PageVariant[]).includes(variant)}
                   header={item as VisualizationHeader}
-                  outerHiddenSections={variant === "updates" ? hiddenSections : undefined}
-                  onOuterToggleHiddenSection={variant === "updates" ? onToggleSection : undefined}
+                  hiddenSections={hiddenSections}
+                  onOuterToggleHiddenSection={onChangeHiddenSections}
                 />
               )}
 

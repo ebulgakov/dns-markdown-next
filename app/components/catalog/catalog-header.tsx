@@ -13,23 +13,25 @@ import { VisualizationHeader } from "@/types/visualization";
 type CatalogHeaderProps = {
   header: VisualizationHeader;
   shownHeart?: boolean;
-  outerHiddenSections?: UserSections;
+  city: string;
+  hiddenSections: UserSections;
   onOuterToggleHiddenSection?: (section: string) => void;
 };
 
 function CatalogHeader({
   header,
+  city,
   shownHeart,
-  outerHiddenSections,
+  hiddenSections,
   onOuterToggleHiddenSection
 }: CatalogHeaderProps) {
   const [isTooltipOpen, setIsTooltipOpen] = useState(false);
   const [copiedText, copyToClipboard] = useCopyToClipboard();
-  const { favoriteSections, hiddenSections, onToggleFavoriteSection, onToggleHiddenSection } =
+  const { favoriteSections, onToggleFavoriteSection, onToggleHiddenSection } =
     useContext(UserContext);
   const handleCopy = async () => {
     await copyToClipboard(
-      `${window.location.origin}${window.location.pathname}#${encodeURIComponent(header.title)}`
+      `${window.location.origin}${window.location.pathname}?city=${city}#${encodeURIComponent(header.title)}`
     );
     setIsTooltipOpen(true);
   };
@@ -43,8 +45,7 @@ function CatalogHeader({
   };
 
   const isFavoriteSection = favoriteSections.includes(header.title);
-  const currentHiddenSections = outerHiddenSections ? outerHiddenSections : hiddenSections;
-  const isHiddenSection = currentHiddenSections.includes(header.title);
+  const isHiddenSection = hiddenSections.includes(header.title);
 
   useEffect(() => {
     let timeout: NodeJS.Timeout;

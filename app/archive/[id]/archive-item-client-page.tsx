@@ -1,9 +1,12 @@
 "use client";
 
+import { useContext } from "react";
+
 import { Catalog } from "@/app/components/catalog";
 import { JumpToSection } from "@/app/components/jump-to-section";
 import { ScrollToTop } from "@/app/components/scroll-to-top";
 import { PageTitle } from "@/app/components/ui/page-title";
+import { UserContext } from "@/app/contexts/user-context";
 import { formatDate } from "@/app/helpers/format";
 
 import type { PriceList } from "@/types/pricelist";
@@ -14,6 +17,7 @@ type ArchiveItemClientPageProps = {
 };
 
 function ArchiveItemClientPage({ priceList, count }: ArchiveItemClientPageProps) {
+  const { hiddenSections } = useContext(UserContext);
   const pageTitle = `Страница Архива за ${formatDate(priceList.createdAt)}`;
 
   return (
@@ -25,7 +29,7 @@ function ArchiveItemClientPage({ priceList, count }: ArchiveItemClientPageProps)
           </div>
         </div>
       </PageTitle>
-      <Catalog variant="archive" priceList={priceList} />
+      <Catalog hiddenSections={hiddenSections} variant="archive" priceList={priceList} />
       <JumpToSection priceList={priceList} />
       <ScrollToTop variant="with-jump-to-search" />
     </div>
