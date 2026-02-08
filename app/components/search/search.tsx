@@ -21,7 +21,7 @@ function Search() {
             window.scrollTo({ top: 0 });
             onChange(e.target.value);
           }}
-          placeholder="Быстрый поиск по названию товара"
+          placeholder="Поиск по названию..."
         />
       </div>
 
