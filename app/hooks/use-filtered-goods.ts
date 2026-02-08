@@ -32,8 +32,8 @@ export const useFilteredGoods = ({
   flattenList: VisualizationOutputList;
   flattenTitles: VisualizationHeader[];
 } => {
-  const { favoriteSections } = useContext(UserContext);
-  let { hiddenSections } = useContext(UserContext);
+  const { favoriteSections, hiddenSections: initialHiddenSections } = useContext(UserContext);
+  let hiddenSections = initialHiddenSections;
   const sortGoods = useSortGoodsStore(state => state.sortGoods);
 
   let flattenOptimizedPriceList = getOptimizedFlatPriceListWithTitle(priceList);

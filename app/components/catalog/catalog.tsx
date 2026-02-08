@@ -35,6 +35,7 @@ function Catalog({ priceList, variant, diffs }: PriceListPageProps) {
     variant
   });
   const isSearchMode = !isUpdates && debouncedSearch.length > 1;
+  const goodsCount = flattenList.filter(i => i.type === "goods").length;
 
   // Virtualization setup
   const listRef = useRef<HTMLDivElement>(null);
@@ -60,7 +61,7 @@ function Catalog({ priceList, variant, diffs }: PriceListPageProps) {
             <CatalogHeader
               city={priceList.city}
               disableCollapse={isSearchMode}
-              shownHeart={!(["updates", "archive"] as CatalogComponentVariant[]).includes(variant)}
+              shownHeart={variant === "default"}
               header={currentTitle}
             />
           </div>
@@ -94,9 +95,7 @@ function Catalog({ priceList, variant, diffs }: PriceListPageProps) {
               {item.type === "foundTitle" && (
                 <Title variant="h3" className="mt-0 mb-5 flex h-12 items-center">
                   Найдено товаров: &nbsp;
-                  <span className="font-normal">
-                    {flattenList.filter(i => i.type === "goods").length}
-                  </span>
+                  <span className="font-normal">{goodsCount}</span>
                 </Title>
               )}
 
@@ -104,7 +103,7 @@ function Catalog({ priceList, variant, diffs }: PriceListPageProps) {
                 <CatalogHeader
                   city={priceList.city}
                   disableCollapse={isSearchMode}
-                  shownHeart={!["updates", "archive"].includes(variant)}
+                  shownHeart={variant === "default"}
                   header={item}
                 />
               )}
