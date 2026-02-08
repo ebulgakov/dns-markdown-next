@@ -54,7 +54,7 @@ export const useFilteredGoods = ({
     };
   }
 
-  if (term.length > 2) {
+  if (term.length > 1) {
     flattenOptimizedPriceList = flattenOptimizedPriceList.filter(item =>
       item.title.toLowerCase().includes(term.toLowerCase())
     );
@@ -105,7 +105,7 @@ export const useFilteredGoods = ({
     flattenList.unshift(noFavsAlert);
   }
 
-  if (term.length > 2) {
+  if (term.length > 1) {
     const foundTitle: VisualizationFoundTitle = {
       type: "foundTitle"
     };

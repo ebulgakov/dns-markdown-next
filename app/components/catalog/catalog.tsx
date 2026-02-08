@@ -44,7 +44,7 @@ function Catalog({
     hiddenSections,
     variant
   });
-  const isSearchMode = !isUpdates && debouncedSearch.length > 2;
+  const isSearchMode = !isUpdates && debouncedSearch.length > 1;
 
   // Virtualization setup
   const listRef = useRef<HTMLDivElement>(null);
