@@ -1,29 +1,27 @@
 import type { Goods } from "@/types/pricelist";
 
-export type VisualizationType = "title" | "header" | "goods" | "noFavsAlert" | "foundTitle";
-
 export type VisualizationGoods = Goods & {
-  type: VisualizationType;
+  type: "goods";
   sectionTitle: string;
 };
 
 export type VisualizationHeader = {
+  type: "header";
   title: string;
   itemsCount: number;
-  type: VisualizationType;
 };
 
 export type VisualizationSectionTitle = {
+  type: "title";
   category: "favorite" | "other";
-  type: VisualizationType;
 };
 
 export type VisualizationNoFavsAlert = {
-  type: VisualizationType;
+  type: "noFavsAlert";
 };
 
 export type VisualizationFoundTitle = {
-  type: VisualizationType;
+  type: "foundTitle";
 };
 
 export type VisualizationOutput =

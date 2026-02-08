@@ -13,15 +13,15 @@ import { Alert, AlertDescription, AlertTitle } from "@/app/components/ui/alert";
 import { PageTitle } from "@/app/components/ui/page-title";
 import { UserContext } from "@/app/contexts/user-context";
 import { formatDate, formatTime } from "@/app/helpers/format";
-
-import type { PriceList } from "@/types/pricelist";
+import { getPriceListWithSortedPositions } from "@/app/helpers/pricelist";
+import { PriceList } from "@/types/pricelist";
 
 type CatalogClientPageProps = {
   city?: string;
 };
 
 function CatalogClientPage({ city: cityFromUrl }: CatalogClientPageProps) {
-  const { city: cityFromUser, hiddenSections } = useContext(UserContext);
+  const { city: cityFromUser } = useContext(UserContext);
   const city = cityFromUrl || cityFromUser;
   const {
     data: priceListResponse,
@@ -29,7 +29,7 @@ function CatalogClientPage({ city: cityFromUrl }: CatalogClientPageProps) {
     error
   } = useQuery({
     queryKey: ["last-price-list", city],
-    queryFn: () =>
+    queryFn: (): Promise<PriceList> =>
       axios
         .get("/api/last-pricelist", {
           params: { city }
@@ -46,7 +46,7 @@ function CatalogClientPage({ city: cityFromUrl }: CatalogClientPageProps) {
       </Alert>
     );
 
-  const priceList = priceListResponse as PriceList;
+  const priceList = getPriceListWithSortedPositions(priceListResponse);
 
   const count = priceList.positions.reduce((acc, cur) => acc + cur.items.length, 0);
   return (
@@ -61,7 +61,7 @@ function CatalogClientPage({ city: cityFromUrl }: CatalogClientPageProps) {
         </div>
       </PageTitle>
       <Search />
-      <Catalog hiddenSections={hiddenSections} variant="default" priceList={priceList} />
+      <Catalog variant="default" priceList={priceList} />
       <JumpToSection priceList={priceList} />
       <ScrollToTop variant="with-jump-to-search" />
     </>

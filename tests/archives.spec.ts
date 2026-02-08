@@ -21,7 +21,7 @@ test.describe("Archives", () => {
     const productsCount = Number(productsCountText);
     test.expect(productsCount).toBeGreaterThan(0);
 
-    const archivePriceListItem = page.getByTestId("price-list-page");
-    await test.expect(archivePriceListItem).toBeVisible();
+    const archivePriceList = page.getByTestId("catalog-list");
+    await test.expect(archivePriceList).toBeVisible();
   });
 });

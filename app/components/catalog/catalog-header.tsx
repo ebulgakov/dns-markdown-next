@@ -7,29 +7,19 @@ import { useContext, useEffect, useState } from "react";
 import { Tooltip, TooltipTrigger, TooltipContent } from "@/app/components/ui/tooltip";
 import { UserContext } from "@/app/contexts/user-context";
 import { cn } from "@/app/lib/utils";
-import { UserSections } from "@/types/user";
 import { VisualizationHeader } from "@/types/visualization";
 
 type CatalogHeaderProps = {
   header: VisualizationHeader;
   shownHeart?: boolean;
   city: string;
-  hiddenSections: UserSections;
-  onOuterToggleHiddenSection?: (section: string) => void;
   disableCollapse?: boolean;
 };
 
-function CatalogHeader({
-  disableCollapse,
-  header,
-  city,
-  shownHeart,
-  hiddenSections,
-  onOuterToggleHiddenSection
-}: CatalogHeaderProps) {
+function CatalogHeader({ disableCollapse, header, city, shownHeart }: CatalogHeaderProps) {
   const [isTooltipOpen, setIsTooltipOpen] = useState(false);
   const [copiedText, copyToClipboard] = useCopyToClipboard();
-  const { favoriteSections, onToggleFavoriteSection, onToggleHiddenSection } =
+  const { favoriteSections, hiddenSections, onToggleFavoriteSection, onToggleHiddenSection } =
     useContext(UserContext);
   const handleCopy = async () => {
     await copyToClipboard(
@@ -39,11 +29,7 @@ function CatalogHeader({
   };
 
   const handleToggleHiddenSection = (section: string) => {
-    if (onOuterToggleHiddenSection) {
-      onOuterToggleHiddenSection(section);
-    } else if (onToggleHiddenSection) {
-      onToggleHiddenSection(section);
-    }
+    onToggleHiddenSection?.(section);
   };
 
   const isFavoriteSection = favoriteSections.includes(header.title);

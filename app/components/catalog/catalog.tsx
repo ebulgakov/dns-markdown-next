@@ -1,157 +1,55 @@
 "use client";
 
-import { useWindowVirtualizer, VirtualItem } from "@tanstack/react-virtual";
 import { useDebounce } from "@uidotdev/usehooks";
 import { useEffect, useRef, useState } from "react";
 
 import { CatalogFavoritesEmptyAlert } from "@/app/components/catalog/catalog-favorites-empty-alert";
+import { getCurrentCatalogTitle } from "@/app/components/catalog/helpers/get-current-catalog-title";
+import { CatalogComponentVariant } from "@/app/components/catalog/types";
 import { ProductCard } from "@/app/components/product-card";
 import { Title } from "@/app/components/ui/title";
+import { useCatalogVirtualizer } from "@/app/hooks/use-catalog-virtualizer";
 import { useFilteredGoods } from "@/app/hooks/use-filtered-goods";
 import { cn } from "@/app/lib/utils";
 import { useSearchStore } from "@/app/stores/search-store";
-import { UserSections } from "@/types/user";
-import {
-  VisualizationGoods,
-  VisualizationHeader,
-  VisualizationSectionTitle
-} from "@/types/visualization";
 
 import { CatalogHeader } from "./catalog-header";
 
 import type { DiffsCollection as DiffsType } from "@/types/analysis-diff";
 import type { PriceList as PriceListType } from "@/types/pricelist";
 
-type PageVariant = "archive" | "updates" | "default";
-
 type PriceListPageProps = {
-  variant: PageVariant;
+  variant: CatalogComponentVariant;
   priceList: PriceListType;
   diffs?: DiffsType;
-  hiddenSections: UserSections;
-  onChangeHiddenSections?: (section: string) => void;
-  customSortSections?: UserSections;
 };
 
-function Catalog({
-  priceList,
-  variant,
-  diffs,
-  hiddenSections,
-  onChangeHiddenSections,
-  customSortSections = []
-}: PriceListPageProps) {
+function Catalog({ priceList, variant, diffs }: PriceListPageProps) {
   const isUpdates = variant === "updates";
   const [scrollHeight, setScrollHeight] = useState(0);
   const searchTerm = useSearchStore(state => state.searchTerm);
   const debouncedSearch = useDebounce<string>(searchTerm.trim(), 100);
-  const { flattenList, flattenTitles } = useFilteredGoods(
-    isUpdates ? "" : debouncedSearch,
+  const { flattenList, flattenTitles } = useFilteredGoods({
+    term: debouncedSearch,
     priceList,
-    {
-      hiddenSections,
-      customSortSections
-    }
-  );
-  const isSearchMode = !isUpdates && debouncedSearch.length > 2;
+    variant
+  });
+  const isSearchMode = !isUpdates && debouncedSearch.length > 1;
+  const goodsCount = flattenList.filter(i => i.type === "goods").length;
 
   // Virtualization setup
   const listRef = useRef<HTMLDivElement>(null);
-  const virtualizer = useWindowVirtualizer({
-    count: flattenList.length,
-    estimateSize: index => {
-      if (flattenList[index].type === "header") return 60;
-      return 220;
-    },
-    getItemKey: index => {
-      const item = flattenList[index];
-      if (!item) return index;
-      if (item.type === "goods") return (item as VisualizationGoods)._id;
-      if (item.type === "header") return `header-${(item as VisualizationHeader).title}`;
-      if (item.type === "title") return `title-${(item as VisualizationSectionTitle).category}`;
-      return index;
-    },
-    overscan: 5,
-    scrollMargin: 100, // Equal -mt-25 -> 25 * 4. I need it for correct work of sticky header overlapping
-    initialOffset: 0
-  });
+  const virtualizer = useCatalogVirtualizer({ flattenList, variant, listRef });
   const virtualItems = virtualizer.getVirtualItems();
-
-  const getTitle = (): VisualizationHeader | undefined => {
-    const [firstVItem] = virtualItems;
-
-    if (firstVItem && firstVItem.index < 1) return;
-
-    const extractTitle = (vItem: VirtualItem) => {
-      const item = flattenList[vItem.index];
-
-      if (
-        (item as VisualizationGoods).type === "goods" &&
-        (item as VisualizationGoods).sectionTitle
-      ) {
-        return (item as VisualizationGoods).sectionTitle;
-      }
-
-      if ((item as VisualizationHeader).type === "header" && (item as VisualizationHeader).title) {
-        return (item as VisualizationHeader).title;
-      }
-      return undefined;
-    };
-
-    const cutVirtualItems = virtualItems.slice(4);
-    const foundHeaderIdx = cutVirtualItems.find(extractTitle);
-    const neededTitle = foundHeaderIdx ? extractTitle(foundHeaderIdx) : undefined;
-    return flattenTitles.find(title => title.title === neededTitle);
-  };
-
-  const currentTitle = getTitle();
+  const currentTitle = getCurrentCatalogTitle(virtualItems, flattenList, flattenTitles);
 
   useEffect(() => {
-    const handleHashScroll = () => {
-      const hash = window.location.hash;
-      if (!hash) return;
-
-      const title = decodeURIComponent(hash.slice(1));
-
-      const index = flattenList.findIndex(item => {
-        const header = item as VisualizationHeader;
-        return header.type === "header" && header.title === title;
-      });
-
-      if (index !== -1) {
-        const foundList = virtualizer.getOffsetForIndex(index, "start");
-        if (foundList == null) return;
-
-        const listOffset = listRef.current?.offsetTop ?? 0;
-        const navHeightStr = getComputedStyle(document.documentElement).getPropertyValue(
-          "--nav-bar-height"
-        );
-        let navHeight = parseInt(navHeightStr) || 56; // height of navbar + search bar
-
-        if (["default", "archive"].includes(variant)) {
-          navHeight *= 2;
-        }
-
-        window.scrollTo({ top: foundList[0] + listOffset - navHeight + 10 }); // Additional 10px for better visibility of the header
-        history.pushState(null, document.title, window.location.pathname + window.location.search);
-      }
-    };
-
-    const timeoutId = setTimeout(handleHashScroll, 100); // Delay to ensure the page has rendered and virtualizer has calculated item positions
-    window.addEventListener("hashchange", handleHashScroll);
-
-    return () => {
-      window.removeEventListener("hashchange", handleHashScroll);
-      clearTimeout(timeoutId);
-    };
-  }, [virtualizer, flattenList, variant]);
-
-  useEffect(() => {
+    // After filtering the list, we need to update the total scroll height for virtualization
     setScrollHeight(virtualizer.getTotalSize());
   }, [virtualizer, flattenList.length]);
 
   return (
-    <div ref={listRef} className="-mt-25">
+    <div ref={listRef} data-testid="catalog-list" className="-mt-25">
       {currentTitle && (
         <div
           className={cn("fixed right-0 left-0 z-10 px-4", {
@@ -163,9 +61,7 @@ function Catalog({
             <CatalogHeader
               city={priceList.city}
               disableCollapse={isSearchMode}
-              shownHeart={!(["updates", "archive"] as PageVariant[]).includes(variant)}
-              hiddenSections={hiddenSections}
-              onOuterToggleHiddenSection={onChangeHiddenSections}
+              shownHeart={variant === "default"}
               header={currentTitle}
             />
           </div>
@@ -194,15 +90,12 @@ function Catalog({
                 transform: `translateY(${virtualItem.start}px)`
               }}
             >
-              {item.type === "noFavsAlert" && !isUpdates && <CatalogFavoritesEmptyAlert />}
+              {item.type === "noFavsAlert" && <CatalogFavoritesEmptyAlert />}
 
-              {item.type === "foundTitle" && !isUpdates && (
+              {item.type === "foundTitle" && (
                 <Title variant="h3" className="mt-0 mb-5 flex h-12 items-center">
                   Найдено товаров: &nbsp;
-                  <span className="font-normal">
-                    {flattenList.filter(i => i.type === "goods").length}
-                  </span>
-                  &nbsp;
+                  <span className="font-normal">{goodsCount}</span>
                 </Title>
               )}
 
@@ -210,10 +103,8 @@ function Catalog({
                 <CatalogHeader
                   city={priceList.city}
                   disableCollapse={isSearchMode}
-                  shownHeart={!(["updates", "archive"] as PageVariant[]).includes(variant)}
-                  header={item as VisualizationHeader}
-                  hiddenSections={hiddenSections}
-                  onOuterToggleHiddenSection={onChangeHiddenSections}
+                  shownHeart={variant === "default"}
+                  header={item}
                 />
               )}
 
@@ -221,22 +112,18 @@ function Catalog({
                 <div className="border-b border-neutral-300">
                   <ProductCard
                     shownFavorites={variant !== "archive"}
-                    item={item as VisualizationGoods}
-                    diff={diffs?.[`${(item as VisualizationGoods)._id}`]}
+                    item={item}
+                    diff={diffs?.[item._id]}
                   />
                 </div>
               )}
 
-              {item.type === "title" && !isUpdates && (
+              {item.type === "title" && (
                 <Title
                   variant="h2"
-                  className={cn("mb-2", {
-                    "mt-0": (item as VisualizationSectionTitle).category === "favorite"
-                  })}
+                  className={cn("mb-2", { "mt-0": item.category === "favorite" })}
                 >
-                  {(item as VisualizationSectionTitle).category === "favorite"
-                    ? "Избранные категории"
-                    : "Все категории"}
+                  {item.category === "favorite" ? "Избранные категории" : "Все категории"}
                 </Title>
               )}
             </div>

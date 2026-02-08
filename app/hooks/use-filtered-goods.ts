@@ -1,5 +1,6 @@
 import { useContext } from "react";
 
+import { CatalogComponentVariant } from "@/app/components/catalog/types";
 import { UserContext } from "@/app/contexts/user-context";
 import {
   getOptimizedFlatPriceListWithTitle,
@@ -8,7 +9,6 @@ import {
   getOptimizedOutput
 } from "@/app/helpers/pricelist";
 import { useSortGoodsStore } from "@/app/stores/sort-goods-store";
-import { UserSections } from "@/types/user";
 import {
   VisualizationFoundTitle,
   VisualizationHeader,
@@ -18,24 +18,40 @@ import {
 
 import type { PriceList as priceListType } from "@/types/pricelist";
 
-export const useFilteredGoods = (
-  term: string,
-  priceList: priceListType,
-  {
-    hiddenSections,
-    customSortSections = []
-  }: { hiddenSections: UserSections; customSortSections?: UserSections }
-): {
+type UseFilteredGoodsParams = {
+  term: string;
+  priceList: priceListType;
+  variant: CatalogComponentVariant;
+};
+
+export const useFilteredGoods = ({
+  term,
+  priceList,
+  variant
+}: UseFilteredGoodsParams): {
   flattenList: VisualizationOutputList;
   flattenTitles: VisualizationHeader[];
 } => {
-  const { favoriteSections } = useContext(UserContext);
+  const { favoriteSections, hiddenSections: initialHiddenSections } = useContext(UserContext);
+  let hiddenSections = initialHiddenSections;
   const sortGoods = useSortGoodsStore(state => state.sortGoods);
 
   let flattenOptimizedPriceList = getOptimizedFlatPriceListWithTitle(priceList);
   let flattenTitles = getOptimizedFlatTitles(priceList);
 
-  if (term.length > 2) {
+  if (variant === "updates") {
+    const flattenList = getOptimizedOutput(flattenOptimizedPriceList, flattenTitles, {
+      favoriteSections,
+      hiddenSections
+    }).filter(title => title.type !== "title");
+
+    return {
+      flattenList,
+      flattenTitles
+    };
+  }
+
+  if (term.length > 0) {
     flattenOptimizedPriceList = flattenOptimizedPriceList.filter(item =>
       item.title.toLowerCase().includes(term.toLowerCase())
     );
@@ -43,19 +59,6 @@ export const useFilteredGoods = (
     hiddenSections = [];
     flattenTitles = getOptimizedFlatTitlesFromGoods(flattenOptimizedPriceList);
   }
-
-  flattenTitles.sort((a, b) => {
-    const aIndex = customSortSections.findIndex(section => section === a.title);
-    const bIndex = customSortSections.findIndex(section => section === b.title);
-
-    if (aIndex === -1 && bIndex === -1) {
-      return a.title.localeCompare(b.title);
-    }
-    if (aIndex === -1) return 1;
-    if (bIndex === -1) return -1;
-
-    return aIndex - bIndex;
-  });
 
   if (sortGoods === "price") {
     flattenOptimizedPriceList = flattenOptimizedPriceList.sort(
@@ -91,20 +94,18 @@ export const useFilteredGoods = (
     hiddenSections
   });
 
-  if (favoriteSections.length === 0 && term.length === 0) {
-    const noFavsAlert: VisualizationNoFavsAlert = {
-      type: "noFavsAlert"
-    };
-
-    flattenList.unshift(noFavsAlert);
-  }
-
-  if (term.length > 2) {
+  if (term.length > 0) {
     const foundTitle: VisualizationFoundTitle = {
       type: "foundTitle"
     };
 
     flattenList.unshift(foundTitle);
+  } else if (favoriteSections.length === 0) {
+    const noFavsAlert: VisualizationNoFavsAlert = {
+      type: "noFavsAlert"
+    };
+
+    flattenList.unshift(noFavsAlert);
   }
 
   return {
