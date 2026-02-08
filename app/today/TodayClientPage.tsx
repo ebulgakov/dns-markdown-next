@@ -21,12 +21,7 @@ function TodayClientPage() {
     error
   } = useQuery({
     queryKey: ["today-diff", city],
-    queryFn: () =>
-      axios
-        .get("/api/today-diff", {
-          params: { city }
-        })
-        .then(r => r.data)
+    queryFn: () => axios.get("/api/today-diff").then(r => r.data)
   });
 
   if (isPending) return <PageLoader />;

@@ -16,7 +16,7 @@ export async function getAnalysisData() {
 
   let goodsCountByDates: PriceListsArchiveCount[];
   try {
-    goodsCountByDates = await getLast30ArchiveProductsCount(city);
+    goodsCountByDates = await getLast30ArchiveProductsCount();
     if (!goodsCountByDates) throw new Error();
   } catch (error) {
     const e = error as Error;
@@ -26,7 +26,7 @@ export async function getAnalysisData() {
 
   let goodsChangesByDates: AnalysisDiffReportType[];
   try {
-    goodsChangesByDates = await getLast30DiffsReportByCity(city);
+    goodsChangesByDates = await getLast30DiffsReportByCity();
     goodsChangesByDates.reverse();
   } catch (error) {
     const e = error as Error;
@@ -36,7 +36,7 @@ export async function getAnalysisData() {
 
   let reports: ReportsResponse;
   try {
-    reports = await getLast30ReportsByCity(city);
+    reports = await getLast30ReportsByCity();
   } catch (error) {
     const e = error as Error;
     console.error(e);
@@ -45,7 +45,7 @@ export async function getAnalysisData() {
 
   let countUniqueGoods: number;
   try {
-    countUniqueGoods = await getTotalUniqProductsCount(city);
+    countUniqueGoods = await getTotalUniqProductsCount();
     if (countUniqueGoods == null) throw new Error(); // allow zero count
   } catch (error) {
     const e = error as Error;
@@ -55,7 +55,7 @@ export async function getAnalysisData() {
 
   let startFrom: string;
   try {
-    const archiveCollection = await getArchiveListDates(city);
+    const archiveCollection = await getArchiveListDates();
     startFrom = archiveCollection[0]?.createdAt;
   } catch (error) {
     const e = error as Error;

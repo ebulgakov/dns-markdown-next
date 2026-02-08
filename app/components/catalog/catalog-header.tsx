@@ -14,11 +14,13 @@ type CatalogHeaderProps = {
   header: VisualizationHeader;
   shownHeart?: boolean;
   outerHiddenSections?: UserSections;
+  city: string;
   onOuterToggleHiddenSection?: (section: string) => void;
 };
 
 function CatalogHeader({
   header,
+  city,
   shownHeart,
   outerHiddenSections,
   onOuterToggleHiddenSection
@@ -29,7 +31,7 @@ function CatalogHeader({
     useContext(UserContext);
   const handleCopy = async () => {
     await copyToClipboard(
-      `${window.location.origin}${window.location.pathname}#${encodeURIComponent(header.title)}`
+      `${window.location.origin}${window.location.pathname}?city=${city}#${encodeURIComponent(header.title)}`
     );
     setIsTooltipOpen(true);
   };

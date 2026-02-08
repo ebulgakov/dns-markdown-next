@@ -1,6 +1,6 @@
 import { getTranslations } from "next-intl/server";
 
-import { getArchiveListDates, getPriceListCity } from "@/api/get";
+import { getArchiveListDates } from "@/api/get";
 import { ArchiveList } from "@/app/archive/ArchiveList";
 import { Alert, AlertDescription, AlertTitle } from "@/app/components/ui/alert";
 import { PageTitle } from "@/app/components/ui/page-title";
@@ -22,8 +22,7 @@ export default async function ArchivePage() {
   let archiveCollection;
 
   try {
-    const city = await getPriceListCity();
-    archiveCollection = await getArchiveListDates(city);
+    archiveCollection = await getArchiveListDates();
   } catch (e) {
     const { message } = e as Error;
     return (

@@ -183,6 +183,7 @@ function Catalog({
         >
           <div className="mx-auto md:container">
             <CatalogHeader
+              city={priceList.city}
               shownHeart={!(["updates", "archive"] as PageVariant[]).includes(variant)}
               outerHiddenSections={variant === "updates" ? hiddenSections : undefined}
               onOuterToggleHiddenSection={variant === "updates" ? onToggleSection : undefined}
@@ -216,6 +217,7 @@ function Catalog({
             >
               {item.type === "header" && (
                 <CatalogHeader
+                  city={priceList.city}
                   shownHeart={!(["updates", "archive"] as PageVariant[]).includes(variant)}
                   header={item as VisualizationHeader}
                   outerHiddenSections={variant === "updates" ? hiddenSections : undefined}

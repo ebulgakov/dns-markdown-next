@@ -1,16 +1,10 @@
-import { NextRequest, NextResponse } from "next/server";
+import { NextResponse } from "next/server";
 
 import { getLastDiffByCity } from "@/api/get";
 
-export async function GET(req: NextRequest) {
-  const city = req?.nextUrl?.searchParams.get("city");
-
-  if (!city) {
-    return NextResponse.json({ message: "City is required" }, { status: 400 });
-  }
-
+export async function GET() {
   try {
-    const collection = await getLastDiffByCity(city);
+    const collection = await getLastDiffByCity();
 
     if (!collection) {
       return NextResponse.json({ message: "No diff found for the city" }, { status: 404 });

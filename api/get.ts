@@ -28,7 +28,11 @@ const getCachedPriceList = cacheToken(
   ["last-pricelist"],
   { tags: ["daily-data"] }
 );
-export const getLastPriceList = async (city: string) => getCachedPriceList(city);
+export const getLastPriceList = async (city?: string) => {
+  const defaultCity = await getPriceListCity();
+  const cityToUse = city || defaultCity;
+  return getCachedPriceList(cityToUse);
+};
 
 const getCachedArchiveListDates = cacheToken(
   async (city: string): Promise<PriceListDate[]> =>
@@ -36,7 +40,10 @@ const getCachedArchiveListDates = cacheToken(
   ["archive-list-dates"],
   { tags: ["daily-data"] }
 );
-export const getArchiveListDates = async (city: string) => getCachedArchiveListDates(city);
+export const getArchiveListDates = async () => {
+  const defaultCity = await getPriceListCity();
+  return getCachedArchiveListDates(defaultCity);
+};
 
 const getCachedPriceListById = cacheToken(
   async (id: string): Promise<PriceList> => wrapApiCall(`/api/pricelist/id/${id}`),
@@ -64,7 +71,10 @@ const getCachedMostCheapProducts = cacheToken(
   ["most-cheap-products"],
   { tags: ["daily-data"] }
 );
-export const getMostCheapProducts = async (city: string) => getCachedMostCheapProducts(city);
+export const getMostCheapProducts = async () => {
+  const defaultCity = await getPriceListCity();
+  return getCachedMostCheapProducts(defaultCity);
+};
 
 const getCachedMostDiscountedProducts = cacheToken(
   async (city: string): Promise<Goods[]> =>
@@ -72,8 +82,10 @@ const getCachedMostDiscountedProducts = cacheToken(
   ["most-discounted-products"],
   { tags: ["daily-data"] }
 );
-export const getMostDiscountedProducts = async (city: string) =>
-  getCachedMostDiscountedProducts(city);
+export const getMostDiscountedProducts = async () => {
+  const defaultCity = await getPriceListCity();
+  return getCachedMostDiscountedProducts(defaultCity);
+};
 
 const getCachedMostProfitableProducts = cacheToken(
   async (city: string): Promise<Goods[]> =>
@@ -81,8 +93,10 @@ const getCachedMostProfitableProducts = cacheToken(
   ["most-profitable-products"],
   { tags: ["daily-data"] }
 );
-export const getMostProfitableProducts = async (city: string) =>
-  getCachedMostProfitableProducts(city);
+export const getMostProfitableProducts = async () => {
+  const defaultCity = await getPriceListCity();
+  return getCachedMostProfitableProducts(defaultCity);
+};
 
 const getCachedLastDiffByCity = cacheToken(
   async (city: string): Promise<AnalysisDiff> =>
@@ -90,7 +104,10 @@ const getCachedLastDiffByCity = cacheToken(
   ["last-diff-by-city"],
   { tags: ["daily-data"] }
 );
-export const getLastDiffByCity = async (city: string) => getCachedLastDiffByCity(city);
+export const getLastDiffByCity = async () => {
+  const defaultCity = await getPriceListCity();
+  return getCachedLastDiffByCity(defaultCity);
+};
 
 const getCachedLast30DiffsReportByCity = cacheToken(
   async (city: string): Promise<AnalysisDiffReport[]> =>
@@ -98,17 +115,21 @@ const getCachedLast30DiffsReportByCity = cacheToken(
   ["last-30-diffs-report-by-city"],
   { tags: ["daily-data"] }
 );
-export const getLast30DiffsReportByCity = async (city: string) =>
-  getCachedLast30DiffsReportByCity(city);
+export const getLast30DiffsReportByCity = async () => {
+  const defaultCity = await getPriceListCity();
+  return getCachedLast30DiffsReportByCity(defaultCity);
+};
 
-export const getCachedLast30ArchiveProductsCount = cacheToken(
+const getCachedLast30ArchiveProductsCount = cacheToken(
   async (city: string): Promise<PriceListsArchiveCount[]> =>
     wrapApiCall("/api/analysis/products-count", { params: { city } }),
   ["last-30-archive-products-count"],
   { tags: ["daily-data"] }
 );
-export const getLast30ArchiveProductsCount = async (city: string) =>
-  getCachedLast30ArchiveProductsCount(city);
+export const getLast30ArchiveProductsCount = async () => {
+  const defaultCity = await getPriceListCity();
+  return getCachedLast30ArchiveProductsCount(defaultCity);
+};
 
 const getCachedLast30ReportsByCity = cacheToken(
   async (city: string): Promise<ReportsResponse> =>
@@ -116,7 +137,10 @@ const getCachedLast30ReportsByCity = cacheToken(
   ["last-30-reports-by-city"],
   { tags: ["daily-data"] }
 );
-export const getLast30ReportsByCity = async (city: string) => getCachedLast30ReportsByCity(city);
+export const getLast30ReportsByCity = async () => {
+  const defaultCity = await getPriceListCity();
+  return getCachedLast30ReportsByCity(defaultCity);
+};
 
 const getCachedTotalUniqProductsCount = cacheToken(
   async (city: string): Promise<number> =>
@@ -124,5 +148,7 @@ const getCachedTotalUniqProductsCount = cacheToken(
   ["total-uniq-products-count"],
   { tags: ["daily-data"] }
 );
-export const getTotalUniqProductsCount = async (city: string) =>
-  getCachedTotalUniqProductsCount(city);
+export const getTotalUniqProductsCount = async () => {
+  const defaultCity = await getPriceListCity();
+  return getCachedTotalUniqProductsCount(defaultCity);
+};
