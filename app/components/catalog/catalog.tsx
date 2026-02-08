@@ -2,12 +2,9 @@
 
 import { useWindowVirtualizer, VirtualItem } from "@tanstack/react-virtual";
 import { useDebounce } from "@uidotdev/usehooks";
-import { X } from "lucide-react";
 import { useContext, useEffect, useRef, useState } from "react";
 
-import { Filter } from "@/app/components/filter";
 import { ProductCard } from "@/app/components/product-card";
-import { ScrollToTop } from "@/app/components/scroll-to-top";
 import { Title } from "@/app/components/ui/title";
 import { UserContext } from "@/app/contexts/user-context";
 import { useFilteredGoods } from "@/app/hooks/use-filtered-goods";
@@ -21,7 +18,7 @@ import {
 } from "@/types/visualization";
 
 import { CatalogFavoritesEmptyAlert } from "./catalog-favorites-empty-alert";
-import { CatalogStickyHeader, CatalogHeader } from "./catalog-header";
+import { CatalogHeader } from "./catalog-header";
 
 import type { DiffsCollection as DiffsType } from "@/types/analysis-diff";
 import type { PriceList as PriceListType } from "@/types/pricelist";
@@ -48,7 +45,6 @@ function Catalog({
   const [hiddenSections, setHiddenSections] = useState<UserSections>(customHiddenSections);
 
   const { favoriteSections } = useContext(UserContext);
-  const onChangeSearch = useSearchStore(state => state.updateSearchTerm);
   const searchTerm = useSearchStore(state => state.searchTerm);
   const debouncedSearch = useDebounce<string>(searchTerm.trim(), 100);
   const { flattenList, flattenTitles } = useFilteredGoods(debouncedSearch, priceList, {
@@ -87,7 +83,7 @@ function Catalog({
     );
   };
 
-  const getTitle = (): string | undefined => {
+  const getTitle = (): VisualizationHeader | undefined => {
     const [firstVItem] = virtualItems;
 
     if (firstVItem && firstVItem.index < 1) return;
@@ -110,8 +106,11 @@ function Catalog({
 
     const cutVirtualItems = virtualItems.slice(4);
     const foundHeaderIdx = cutVirtualItems.find(extractTitle);
-    return foundHeaderIdx ? extractTitle(foundHeaderIdx) : undefined;
+    const neededTitle = foundHeaderIdx ? extractTitle(foundHeaderIdx) : undefined;
+    return flattenTitles.find(title => title.title === neededTitle);
   };
+
+  const currentTitle = getTitle();
 
   useEffect(() => {
     const handleHashScroll = () => {
@@ -131,9 +130,13 @@ function Catalog({
 
         const listOffset = listRef.current?.offsetTop ?? 0;
         const navHeightStr = getComputedStyle(document.documentElement).getPropertyValue(
-          "--nav-bar-offset"
+          "--nav-bar-height"
         );
-        const navHeight = parseInt(navHeightStr) || 56; // height of navbar
+        let navHeight = parseInt(navHeightStr) || 56; // height of navbar + search bar
+
+        if (["default", "archive"].includes(variant)) {
+          navHeight *= 2;
+        }
 
         window.scrollTo({ top: foundList[0] + listOffset - navHeight });
         history.pushState(null, document.title, window.location.pathname + window.location.search);
@@ -147,7 +150,7 @@ function Catalog({
       window.removeEventListener("hashchange", handleHashScroll);
       clearTimeout(timeoutId);
     };
-  }, [virtualizer, flattenList]);
+  }, [virtualizer, flattenList, variant]);
 
   useEffect(() => {
     setScrollHeight(virtualizer.getTotalSize());
@@ -158,31 +161,34 @@ function Catalog({
       {isSearchMode && (
         <div className="mb-4">
           <Title variant="h2">
-            Поиск по названию товара:&nbsp;
-            <span className="font-normal">{searchTerm.trim()}</span>&nbsp;
-            <button
-              className="text-destructive relative top-2 ml-1 cursor-pointer p-1 md:top-1"
-              onClick={() => onChangeSearch("")}
-            >
-              <span className="sr-only">Очистить поиск</span>
-              <X />
-            </button>
+            Найдено товаров: &nbsp;
+            <span className="font-normal">
+              {flattenList.filter(i => i.type === "goods").length}
+            </span>
+            &nbsp;
           </Title>
-          <div>
-            Найдено товаров: <b>{flattenList.length}</b>
-          </div>
         </div>
       )}
 
       {!isSearchMode && favoriteSections.length === 0 && <CatalogFavoritesEmptyAlert />}
 
-      <CatalogStickyHeader
-        neededTitle={getTitle()}
-        shownHeart={!(["updates", "archive"] as PageVariant[]).includes(variant)}
-        outerHiddenSections={variant === "updates" ? hiddenSections : undefined}
-        onOuterToggleHiddenSection={variant === "updates" ? onToggleSection : undefined}
-        titles={flattenTitles}
-      />
+      {currentTitle && (
+        <div
+          className={cn("fixed right-0 left-0 z-10 px-4", {
+            "top-[calc(var(--nav-bar-height)_*_2)]": ["default", "archive"].includes(variant),
+            "top-[var(--nav-bar-height)]": variant === "updates"
+          })}
+        >
+          <div className="mx-auto md:container">
+            <CatalogHeader
+              shownHeart={!(["updates", "archive"] as PageVariant[]).includes(variant)}
+              outerHiddenSections={variant === "updates" ? hiddenSections : undefined}
+              onOuterToggleHiddenSection={variant === "updates" ? onToggleSection : undefined}
+              header={currentTitle}
+            />
+          </div>
+        </div>
+      )}
 
       <div
         style={{
@@ -241,9 +247,6 @@ function Catalog({
           );
         })}
       </div>
-
-      <ScrollToTop variant="filter" />
-      <Filter priceList={priceList} foundCount={flattenList.length} />
     </div>
   );
 }

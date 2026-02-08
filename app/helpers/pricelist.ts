@@ -34,6 +34,17 @@ export const getOptimizedFlatTitles = (priceList: PriceList): VisualizationHeade
     .sort((a, b) => a.title.localeCompare(b.title));
 };
 
+export const getOptimizedFlatTitlesFromGoods = (
+  goods: VisualizationGoods[]
+): VisualizationHeader[] => {
+  const uniqueTitles = Array.from(new Set(goods.map(good => good.sectionTitle)));
+  return uniqueTitles.map(title => ({
+    title,
+    itemsCount: goods.filter(good => good.sectionTitle === title).length,
+    type: "header" as VisualizationType
+  }));
+};
+
 export const getOptimizedOutput = (
   goods: VisualizationGoods[],
   headers: VisualizationHeader[],

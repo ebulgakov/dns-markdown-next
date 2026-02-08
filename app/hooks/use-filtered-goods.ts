@@ -4,6 +4,7 @@ import { UserContext } from "@/app/contexts/user-context";
 import {
   getOptimizedFlatPriceListWithTitle,
   getOptimizedFlatTitles,
+  getOptimizedFlatTitlesFromGoods,
   getOptimizedOutput
 } from "@/app/helpers/pricelist";
 import { useSortGoodsStore } from "@/app/stores/sort-goods-store";
@@ -24,53 +25,39 @@ export const useFilteredGoods = (
   flattenTitles: VisualizationHeader[];
 } => {
   const { favoriteSections, hiddenSections: userHiddenSections } = useContext(UserContext);
-  const hiddenSections = Array.from(new Set([...userHiddenSections, ...extendedHiddenSections]));
+  let hiddenSections = Array.from(new Set([...userHiddenSections, ...extendedHiddenSections]));
 
   const sortGoods = useSortGoodsStore(state => state.sortGoods);
 
-  const flattenOptimizedPriceList = getOptimizedFlatPriceListWithTitle(priceList);
-
-  if (sortGoods === "default" && term.length <= 2) {
-    const flattenTitles = getOptimizedFlatTitles(priceList);
-
-    flattenTitles.sort((a, b) => {
-      const aIndex = customSortSections.findIndex(section => section === a.title);
-      const bIndex = customSortSections.findIndex(section => section === b.title);
-
-      if (aIndex === -1 && bIndex === -1) {
-        return a.title.localeCompare(b.title);
-      }
-      if (aIndex === -1) return 1;
-      if (bIndex === -1) return -1;
-
-      return aIndex - bIndex;
-    });
-
-    const flattenList = getOptimizedOutput(flattenOptimizedPriceList, flattenTitles, {
-      favoriteSections,
-      hiddenSections
-    });
-
-    return {
-      flattenList,
-      flattenTitles
-    };
-  }
+  let flattenOptimizedPriceList = getOptimizedFlatPriceListWithTitle(priceList);
+  let flattenTitles = getOptimizedFlatTitles(priceList);
 
   if (term.length > 2) {
-    const flattenList = flattenOptimizedPriceList.filter(item =>
+    flattenOptimizedPriceList = flattenOptimizedPriceList.filter(item =>
       item.title.toLowerCase().includes(term.toLowerCase())
     );
-    return {
-      flattenList,
-      flattenTitles: []
-    };
-  } else if (sortGoods === "price") {
-    const flattenList = flattenOptimizedPriceList.sort((a, b) => Number(a.price) - Number(b.price));
-    return {
-      flattenList,
-      flattenTitles: []
-    };
+
+    hiddenSections = [];
+    flattenTitles = getOptimizedFlatTitlesFromGoods(flattenOptimizedPriceList);
+  }
+
+  flattenTitles.sort((a, b) => {
+    const aIndex = customSortSections.findIndex(section => section === a.title);
+    const bIndex = customSortSections.findIndex(section => section === b.title);
+
+    if (aIndex === -1 && bIndex === -1) {
+      return a.title.localeCompare(b.title);
+    }
+    if (aIndex === -1) return 1;
+    if (bIndex === -1) return -1;
+
+    return aIndex - bIndex;
+  });
+
+  if (sortGoods === "price") {
+    flattenOptimizedPriceList = flattenOptimizedPriceList.sort(
+      (a, b) => Number(a.price) - Number(b.price)
+    );
   } else if (sortGoods === "discount") {
     const withOldPrice = flattenOptimizedPriceList.filter(
       item => Number(item.priceOld) && Number(item.priceOld) > 0
@@ -82,10 +69,8 @@ export const useFilteredGoods = (
       (a, b) =>
         (Number(a.price) * 100) / Number(a.priceOld) - (Number(b.price) * 100) / Number(b.priceOld)
     );
-    return {
-      flattenList: [...withOldPrice, ...withoutOldPrice],
-      flattenTitles: []
-    };
+
+    flattenOptimizedPriceList = [...withOldPrice, ...withoutOldPrice];
   } else if (sortGoods === "profit") {
     const profitableItems = flattenOptimizedPriceList.filter(
       item => Number(item.profit) && Number(item.profit) > 0
@@ -94,14 +79,17 @@ export const useFilteredGoods = (
       item => !Number(item.profit) || Number(item.profit) <= 0
     );
     profitableItems.sort((a, b) => Number(b.profit) - Number(a.profit));
-    return {
-      flattenList: [...profitableItems, ...nonProfitableItems],
-      flattenTitles: []
-    };
+
+    flattenOptimizedPriceList = [...profitableItems, ...nonProfitableItems];
   }
 
+  const flattenList = getOptimizedOutput(flattenOptimizedPriceList, flattenTitles, {
+    favoriteSections,
+    hiddenSections
+  });
+
   return {
-    flattenList: [],
-    flattenTitles: []
+    flattenList,
+    flattenTitles
   };
 };

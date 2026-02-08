@@ -6,6 +6,7 @@ import { useContext } from "react";
 
 import { Catalog } from "@/app/components/catalog";
 import { PageLoader } from "@/app/components/page-loader";
+import { ScrollToTop } from "@/app/components/scroll-to-top";
 import { Alert, AlertDescription, AlertTitle } from "@/app/components/ui/alert";
 import { PageTitle } from "@/app/components/ui/page-title";
 import { UserContext } from "@/app/contexts/user-context";
@@ -99,6 +100,7 @@ function TodayClientPage() {
         diffs={diffs}
         priceList={digestList}
       />
+      <ScrollToTop />
     </>
   );
 }

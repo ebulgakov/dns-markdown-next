@@ -1,6 +1,8 @@
 "use client";
 
 import { Catalog } from "@/app/components/catalog";
+import { JumpToSection } from "@/app/components/jump-to-section";
+import { ScrollToTop } from "@/app/components/scroll-to-top";
 import { PageTitle } from "@/app/components/ui/page-title";
 import { formatDate } from "@/app/helpers/format";
 
@@ -24,6 +26,8 @@ function ArchiveItemClientPage({ priceList, count }: ArchiveItemClientPageProps)
         </div>
       </PageTitle>
       <Catalog variant="archive" priceList={priceList} />
+      <JumpToSection priceList={priceList} />
+      <ScrollToTop variant="with-jump-to-search" />
     </div>
   );
 }

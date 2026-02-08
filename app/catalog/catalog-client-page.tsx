@@ -4,7 +4,10 @@ import axios from "axios";
 import { useContext } from "react";
 
 import { Catalog } from "@/app/components/catalog";
+import { JumpToSection } from "@/app/components/jump-to-section";
 import { PageLoader } from "@/app/components/page-loader";
+import { ScrollToTop } from "@/app/components/scroll-to-top";
+import { Search } from "@/app/components/search";
 import { SortGoods } from "@/app/components/sort-goods";
 import { Alert, AlertDescription, AlertTitle } from "@/app/components/ui/alert";
 import { PageTitle } from "@/app/components/ui/page-title";
@@ -52,8 +55,10 @@ function CatalogClientPage() {
           <SortGoods />
         </div>
       </PageTitle>
-
+      <Search />
       <Catalog variant="default" priceList={priceList} />
+      <JumpToSection priceList={priceList} />
+      <ScrollToTop variant="with-jump-to-search" />
     </>
   );
 }

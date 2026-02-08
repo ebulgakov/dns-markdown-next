@@ -17,6 +17,7 @@ export const mockFavorites: Favorite[] = [
       available: "В наличии"
     },
     status: {
+      city: "TestCity",
       updatedAt: new Date("2024-06-10T10:00:00Z").toISOString(),
       createdAt: new Date("2024-06-01T10:00:00Z").toISOString(),
       deleted: false
@@ -38,6 +39,7 @@ export const mockFavorites: Favorite[] = [
       available: "В наличии"
     },
     status: {
+      city: "TestCity",
       updatedAt: new Date("2024-06-11T10:00:00Z").toISOString(),
       createdAt: new Date("2024-06-02T10:00:00Z").toISOString(),
       deleted: false
@@ -59,6 +61,7 @@ export const mockFavorites: Favorite[] = [
       available: "В наличии"
     },
     status: {
+      city: "TestCity",
       updatedAt: new Date("2024-06-12T10:00:00Z").toISOString(),
       createdAt: new Date("2024-06-03T10:00:00Z").toISOString(),
       deleted: true
