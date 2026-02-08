@@ -2,6 +2,7 @@ import { ChevronUp } from "lucide-react";
 import ReactScrollUp from "react-scroll-up";
 
 import { Button } from "@/app/components/ui/button";
+import { Tooltip, TooltipTrigger, TooltipContent } from "@/app/components/ui/tooltip";
 import { cn } from "@/app/lib/utils";
 
 type ScrollToTopProps = {
@@ -16,16 +17,21 @@ function ScrollToTop({ variant }: ScrollToTopProps) {
       })}
     >
       <ReactScrollUp showUnder={160} style={{ position: "static" }}>
-        <Button
-          type="button"
-          aria-label="Scroll to top"
-          name="scroll-to-top"
-          variant="secondary"
-          size="flex"
-          className="cursor-pointer rounded-full p-2 md:p-3"
-        >
-          <ChevronUp className="size-full" />
-        </Button>
+        <Tooltip>
+          <TooltipTrigger asChild>
+            <Button
+              type="button"
+              aria-label="Scroll to top"
+              name="scroll-to-top"
+              variant="secondary"
+              size="flex"
+              className="cursor-pointer rounded-full p-2 md:p-3"
+            >
+              <ChevronUp className="size-full" />
+            </Button>
+          </TooltipTrigger>
+          <TooltipContent side="left">Наверх</TooltipContent>
+        </Tooltip>
       </ReactScrollUp>
     </div>
   );
