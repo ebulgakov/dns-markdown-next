@@ -58,7 +58,7 @@ function Catalog({
   }, [virtualizer, flattenList.length]);
 
   return (
-    <div ref={listRef} className="-mt-25">
+    <div ref={listRef} data-testid="catalog-list" className="-mt-25">
       {currentTitle && (
         <div
           className={cn("fixed right-0 left-0 z-10 px-4", {
