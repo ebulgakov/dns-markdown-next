@@ -16,8 +16,13 @@ import { formatDate, formatTime } from "@/app/helpers/format";
 
 import type { PriceList } from "@/types/pricelist";
 
-function CatalogClientPage() {
-  const { city } = useContext(UserContext);
+type CatalogClientPageProps = {
+  city?: string;
+};
+
+function CatalogClientPage({ city: cityFromUrl }: CatalogClientPageProps) {
+  const { city: cityFromUser } = useContext(UserContext);
+  const city = cityFromUrl || cityFromUser;
   const {
     data: priceListResponse,
     isPending,

@@ -17,16 +17,14 @@ export const useFilteredGoods = (
   term: string,
   priceList: priceListType,
   {
-    hiddenSections: extendedHiddenSections,
+    hiddenSections,
     customSortSections = []
   }: { hiddenSections: UserSections; customSortSections?: UserSections }
 ): {
   flattenList: VisualizationOutputList;
   flattenTitles: VisualizationHeader[];
 } => {
-  const { favoriteSections, hiddenSections: userHiddenSections } = useContext(UserContext);
-  let hiddenSections = Array.from(new Set([...userHiddenSections, ...extendedHiddenSections]));
-
+  const { favoriteSections } = useContext(UserContext);
   const sortGoods = useSortGoodsStore(state => state.sortGoods);
 
   let flattenOptimizedPriceList = getOptimizedFlatPriceListWithTitle(priceList);

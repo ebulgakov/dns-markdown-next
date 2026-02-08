@@ -40,15 +40,15 @@ function Catalog({
   customHiddenSections = [],
   customSortSections = []
 }: PriceListPageProps) {
+  const { favoriteSections, hiddenSections: userHiddenSections } = useContext(UserContext);
   const [scrollHeight, setScrollHeight] = useState(0);
   // Initialize hidden sections with no saving sections to user
   const [hiddenSections, setHiddenSections] = useState<UserSections>(customHiddenSections);
 
-  const { favoriteSections } = useContext(UserContext);
   const searchTerm = useSearchStore(state => state.searchTerm);
   const debouncedSearch = useDebounce<string>(searchTerm.trim(), 100);
   const { flattenList, flattenTitles } = useFilteredGoods(debouncedSearch, priceList, {
-    hiddenSections,
+    hiddenSections: customHiddenSections?.length > 0 ? hiddenSections : userHiddenSections,
     customSortSections
   });
   const isSearchMode = debouncedSearch.length > 2;
