@@ -5,6 +5,7 @@ import { useEffect, useRef, useState } from "react";
 
 import { CatalogFavoritesEmptyAlert } from "@/app/components/catalog/catalog-favorites-empty-alert";
 import { getCurrentCatalogTitle } from "@/app/components/catalog/helpers/get-current-catalog-title";
+import { CatalogComponentVariant } from "@/app/components/catalog/types";
 import { ProductCard } from "@/app/components/product-card";
 import { Title } from "@/app/components/ui/title";
 import { useCatalogVirtualizer } from "@/app/hooks/use-catalog-virtualizer";
@@ -23,10 +24,8 @@ import { CatalogHeader } from "./catalog-header";
 import type { DiffsCollection as DiffsType } from "@/types/analysis-diff";
 import type { PriceList as PriceListType } from "@/types/pricelist";
 
-type PageVariant = "archive" | "updates" | "default";
-
 type PriceListPageProps = {
-  variant: PageVariant;
+  variant: CatalogComponentVariant;
   priceList: PriceListType;
   diffs?: DiffsType;
   hiddenSections: UserSections;
@@ -46,14 +45,13 @@ function Catalog({
   const [scrollHeight, setScrollHeight] = useState(0);
   const searchTerm = useSearchStore(state => state.searchTerm);
   const debouncedSearch = useDebounce<string>(searchTerm.trim(), 100);
-  const { flattenList, flattenTitles } = useFilteredGoods(
-    isUpdates ? "" : debouncedSearch,
+  const { flattenList, flattenTitles } = useFilteredGoods({
+    term: debouncedSearch,
     priceList,
-    {
-      hiddenSections,
-      customSortSections
-    }
-  );
+    hiddenSections,
+    customSortSections,
+    variant
+  });
   const isSearchMode = !isUpdates && debouncedSearch.length > 2;
 
   // Virtualization setup
@@ -79,7 +77,7 @@ function Catalog({
             <CatalogHeader
               city={priceList.city}
               disableCollapse={isSearchMode}
-              shownHeart={!(["updates", "archive"] as PageVariant[]).includes(variant)}
+              shownHeart={!(["updates", "archive"] as CatalogComponentVariant[]).includes(variant)}
               hiddenSections={hiddenSections}
               onOuterToggleHiddenSection={onChangeHiddenSections}
               header={currentTitle}
@@ -110,9 +108,9 @@ function Catalog({
                 transform: `translateY(${virtualItem.start}px)`
               }}
             >
-              {item.type === "noFavsAlert" && !isUpdates && <CatalogFavoritesEmptyAlert />}
+              {item.type === "noFavsAlert" && <CatalogFavoritesEmptyAlert />}
 
-              {item.type === "foundTitle" && !isUpdates && (
+              {item.type === "foundTitle" && (
                 <Title variant="h3" className="mt-0 mb-5 flex h-12 items-center">
                   Найдено товаров: &nbsp;
                   <span className="font-normal">
@@ -126,7 +124,9 @@ function Catalog({
                 <CatalogHeader
                   city={priceList.city}
                   disableCollapse={isSearchMode}
-                  shownHeart={!(["updates", "archive"] as PageVariant[]).includes(variant)}
+                  shownHeart={
+                    !(["updates", "archive"] as CatalogComponentVariant[]).includes(variant)
+                  }
                   header={item as VisualizationHeader}
                   hiddenSections={hiddenSections}
                   onOuterToggleHiddenSection={onChangeHiddenSections}
@@ -143,7 +143,7 @@ function Catalog({
                 </div>
               )}
 
-              {item.type === "title" && !isUpdates && (
+              {item.type === "title" && (
                 <Title
                   variant="h2"
                   className={cn("mb-2", {

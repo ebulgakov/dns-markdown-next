@@ -1,6 +1,7 @@
 import { useWindowVirtualizer } from "@tanstack/react-virtual";
 import { useEffect } from "react";
 
+import { CatalogComponentVariant } from "@/app/components/catalog/types";
 import {
   VisualizationGoods,
   VisualizationHeader,
@@ -11,7 +12,7 @@ import {
 type UseCatalogVirtualizerProps = {
   flattenList: VisualizationOutputList;
   listRef: React.RefObject<HTMLDivElement | null>;
-  variant: "archive" | "updates" | "default";
+  variant: CatalogComponentVariant;
 };
 
 export const useCatalogVirtualizer = ({
@@ -34,7 +35,7 @@ export const useCatalogVirtualizer = ({
       return index;
     },
     overscan: 5,
-    //scrollMargin: 100, // Equal -mt-25 -> 25 * 4. I need it for correct work of sticky header overlapping
+    scrollMargin: 100, // Equal -mt-25 -> 25 * 4. I need it for correct work of sticky header overlapping
     initialOffset: 0
   });
 

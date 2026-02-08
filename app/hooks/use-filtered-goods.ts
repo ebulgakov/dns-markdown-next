@@ -1,5 +1,6 @@
 import { useContext } from "react";
 
+import { CatalogComponentVariant } from "@/app/components/catalog/types";
 import { UserContext } from "@/app/contexts/user-context";
 import {
   getOptimizedFlatPriceListWithTitle,
@@ -18,14 +19,21 @@ import {
 
 import type { PriceList as priceListType } from "@/types/pricelist";
 
-export const useFilteredGoods = (
-  term: string,
-  priceList: priceListType,
-  {
-    hiddenSections,
-    customSortSections = []
-  }: { hiddenSections: UserSections; customSortSections?: UserSections }
-): {
+type UseFilteredGoodsParams = {
+  hiddenSections: UserSections;
+  customSortSections?: UserSections;
+  term: string;
+  priceList: priceListType;
+  variant: CatalogComponentVariant;
+};
+
+export const useFilteredGoods = ({
+  term,
+  priceList,
+  hiddenSections,
+  variant,
+  customSortSections = []
+}: UseFilteredGoodsParams): {
   flattenList: VisualizationOutputList;
   flattenTitles: VisualizationHeader[];
 } => {
@@ -34,15 +42,6 @@ export const useFilteredGoods = (
 
   let flattenOptimizedPriceList = getOptimizedFlatPriceListWithTitle(priceList);
   let flattenTitles = getOptimizedFlatTitles(priceList);
-
-  if (term.length > 2) {
-    flattenOptimizedPriceList = flattenOptimizedPriceList.filter(item =>
-      item.title.toLowerCase().includes(term.toLowerCase())
-    );
-
-    hiddenSections = [];
-    flattenTitles = getOptimizedFlatTitlesFromGoods(flattenOptimizedPriceList);
-  }
 
   flattenTitles.sort((a, b) => {
     const aIndex = customSortSections.findIndex(section => section === a.title);
@@ -56,6 +55,27 @@ export const useFilteredGoods = (
 
     return aIndex - bIndex;
   });
+
+  if (variant === "updates") {
+    const flattenList = getOptimizedOutput(flattenOptimizedPriceList, flattenTitles, {
+      favoriteSections,
+      hiddenSections
+    }).filter(title => title.type !== "title");
+
+    return {
+      flattenList,
+      flattenTitles
+    };
+  }
+
+  if (term.length > 2) {
+    flattenOptimizedPriceList = flattenOptimizedPriceList.filter(item =>
+      item.title.toLowerCase().includes(term.toLowerCase())
+    );
+
+    hiddenSections = [];
+    flattenTitles = getOptimizedFlatTitlesFromGoods(flattenOptimizedPriceList);
+  }
 
   if (sortGoods === "price") {
     flattenOptimizedPriceList = flattenOptimizedPriceList.sort(
