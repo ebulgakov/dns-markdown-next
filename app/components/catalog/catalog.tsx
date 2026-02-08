@@ -170,7 +170,9 @@ function Catalog({
         </div>
       )}
 
-      {!isSearchMode && favoriteSections.length === 0 && <CatalogFavoritesEmptyAlert />}
+      {!isSearchMode && favoriteSections.length === 0 && variant !== "updates" && (
+        <CatalogFavoritesEmptyAlert />
+      )}
 
       {currentTitle && (
         <div
