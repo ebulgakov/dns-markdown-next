@@ -27,8 +27,8 @@
     "check:favorites": "bun ./check_favorites",
     "cache:clear:local": "KEYS=local:* bun ./cache_clear",
     "cache:clear": "KEYS=daily:* bun ./cache_clear",
-    "parse": "bun run downloader && bun run add:list && bun run add:analysis-data && bun run add:analysis-diff && bun run check:favorites && bun run cache:clear",
-    "parse:samara": "CITY=samara bun run parse",
+    "parse": "bun run downloader && bun run add:list && bun run add:analysis-data && bun run add:analysis-diff && bun run cache:clear",
+    "parse:samara": "CITY=samara bun run parse && bun run check:favorites",
     "parse:moscow": "CITY=moscow bun run parse",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
