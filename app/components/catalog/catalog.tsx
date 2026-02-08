@@ -5,9 +5,7 @@ import { useDebounce } from "@uidotdev/usehooks";
 import { X } from "lucide-react";
 import { useContext, useEffect, useRef, useState } from "react";
 
-import { JumpToSection } from "@/app/components/jump-to-section";
 import { ProductCard } from "@/app/components/product-card";
-import { ScrollToTop } from "@/app/components/scroll-to-top";
 import { Title } from "@/app/components/ui/title";
 import { UserContext } from "@/app/contexts/user-context";
 import { useFilteredGoods } from "@/app/hooks/use-filtered-goods";
@@ -241,9 +239,6 @@ function Catalog({
           );
         })}
       </div>
-
-      <ScrollToTop variant="filter" />
-      <JumpToSection priceList={priceList} />
     </div>
   );
 }

@@ -5,14 +5,14 @@ import { Button } from "@/app/components/ui/button";
 import { cn } from "@/app/lib/utils";
 
 type ScrollToTopProps = {
-  variant?: "filter";
+  variant?: "with-jump-to-search";
 };
 
 function ScrollToTop({ variant }: ScrollToTopProps) {
   return (
     <div
       className={cn("fixed right-3 bottom-3 z-11 size-10 md:size-14", {
-        "bottom-15 md:bottom-20": variant === "filter"
+        "bottom-15 md:bottom-20": variant === "with-jump-to-search"
       })}
     >
       <ReactScrollUp showUnder={160} style={{ position: "static" }}>
