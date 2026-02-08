@@ -13,11 +13,6 @@ import { useFilteredGoods } from "@/app/hooks/use-filtered-goods";
 import { cn } from "@/app/lib/utils";
 import { useSearchStore } from "@/app/stores/search-store";
 import { UserSections } from "@/types/user";
-import {
-  VisualizationGoods,
-  VisualizationHeader,
-  VisualizationSectionTitle
-} from "@/types/visualization";
 
 import { CatalogHeader } from "./catalog-header";
 
@@ -114,7 +109,6 @@ function Catalog({
                   <span className="font-normal">
                     {flattenList.filter(i => i.type === "goods").length}
                   </span>
-                  &nbsp;
                 </Title>
               )}
 
@@ -122,10 +116,8 @@ function Catalog({
                 <CatalogHeader
                   city={priceList.city}
                   disableCollapse={isSearchMode}
-                  shownHeart={
-                    !(["updates", "archive"] as CatalogComponentVariant[]).includes(variant)
-                  }
-                  header={item as VisualizationHeader}
+                  shownHeart={!["updates", "archive"].includes(variant)}
+                  header={item}
                   hiddenSections={hiddenSections}
                   onOuterToggleHiddenSection={onChangeHiddenSections}
                 />
@@ -135,8 +127,8 @@ function Catalog({
                 <div className="border-b border-neutral-300">
                   <ProductCard
                     shownFavorites={variant !== "archive"}
-                    item={item as VisualizationGoods}
-                    diff={diffs?.[`${(item as VisualizationGoods)._id}`]}
+                    item={item}
+                    diff={diffs?.[item._id]}
                   />
                 </div>
               )}
@@ -144,13 +136,9 @@ function Catalog({
               {item.type === "title" && (
                 <Title
                   variant="h2"
-                  className={cn("mb-2", {
-                    "mt-0": (item as VisualizationSectionTitle).category === "favorite"
-                  })}
+                  className={cn("mb-2", { "mt-0": item.category === "favorite" })}
                 >
-                  {(item as VisualizationSectionTitle).category === "favorite"
-                    ? "Избранные категории"
-                    : "Все категории"}
+                  {item.category === "favorite" ? "Избранные категории" : "Все категории"}
                 </Title>
               )}
             </div>

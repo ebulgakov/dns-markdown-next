@@ -3,8 +3,7 @@ import {
   VisualizationGoods,
   VisualizationHeader,
   VisualizationOutputList,
-  VisualizationSectionTitle,
-  VisualizationType
+  VisualizationSectionTitle
 } from "@/types/visualization";
 
 import type { PriceList } from "@/types/pricelist";
@@ -12,25 +11,30 @@ import type { PriceList } from "@/types/pricelist";
 export const getFlatPriceList = (priceList: PriceList) => {
   return priceList.positions.flatMap(position => position.items);
 };
+
 export const getOptimizedFlatPriceListWithTitle = (priceList: PriceList): VisualizationGoods[] => {
   return priceList.positions
     .map(position =>
-      position.items.map(item => ({
-        ...item,
-        type: "goods" as VisualizationType,
-        sectionTitle: position.title
-      }))
+      position.items.map(
+        (item): VisualizationGoods => ({
+          ...item,
+          type: "goods",
+          sectionTitle: position.title
+        })
+      )
     )
     .flat();
 };
 
 export const getOptimizedFlatTitles = (priceList: PriceList): VisualizationHeader[] => {
   return priceList.positions
-    .map(position => ({
-      title: position.title,
-      itemsCount: position.items.length,
-      type: "header" as VisualizationType
-    }))
+    .map(
+      (position): VisualizationHeader => ({
+        title: position.title,
+        itemsCount: position.items.length,
+        type: "header"
+      })
+    )
     .sort((a, b) => a.title.localeCompare(b.title));
 };
 
@@ -38,11 +42,13 @@ export const getOptimizedFlatTitlesFromGoods = (
   goods: VisualizationGoods[]
 ): VisualizationHeader[] => {
   const uniqueTitles = Array.from(new Set(goods.map(good => good.sectionTitle)));
-  return uniqueTitles.map(title => ({
-    title,
-    itemsCount: goods.filter(good => good.sectionTitle === title).length,
-    type: "header" as VisualizationType
-  }));
+  return uniqueTitles.map(
+    (title): VisualizationHeader => ({
+      title,
+      itemsCount: goods.filter(good => good.sectionTitle === title).length,
+      type: "header"
+    })
+  );
 };
 
 export const getOptimizedOutput = (
@@ -67,6 +73,7 @@ export const getOptimizedOutput = (
     category: "other",
     type: "title"
   };
+
   const nonFavoriteSections = headers
     .filter(header => !favoriteSections.some(title => title === header.title))
     .map(header => header.title);

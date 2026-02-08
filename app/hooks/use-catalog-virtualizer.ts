@@ -2,12 +2,7 @@ import { useWindowVirtualizer } from "@tanstack/react-virtual";
 import { useEffect } from "react";
 
 import { CatalogComponentVariant } from "@/app/components/catalog/types";
-import {
-  VisualizationGoods,
-  VisualizationHeader,
-  VisualizationOutputList,
-  VisualizationSectionTitle
-} from "@/types/visualization";
+import { VisualizationHeader, VisualizationOutputList } from "@/types/visualization";
 
 type UseCatalogVirtualizerProps = {
   flattenList: VisualizationOutputList;
@@ -29,9 +24,9 @@ export const useCatalogVirtualizer = ({
     getItemKey: index => {
       const item = flattenList[index];
       if (!item) return index;
-      if (item.type === "goods") return (item as VisualizationGoods)._id;
-      if (item.type === "header") return `header-${(item as VisualizationHeader).title}`;
-      if (item.type === "title") return `title-${(item as VisualizationSectionTitle).category}`;
+      if (item.type === "goods") return item._id;
+      if (item.type === "header") return `header-${item.title}`;
+      if (item.type === "title") return `title-${item.category}`;
       return index;
     },
     overscan: 5,
