@@ -34,6 +34,25 @@ type PriceListPageProps = {
   customSortSections?: UserSections;
 };
 
+const indents = {
+  updates: {
+    scroll: 84,
+    indent: "-mt-21"
+  },
+  emptyFavs: {
+    scroll: 208,
+    indent: "-mt-52"
+  },
+  user: {
+    scroll: 100,
+    indent: "-mt-25"
+  },
+  search: {
+    scroll: 100,
+    indent: "-mt-25"
+  }
+};
+
 function Catalog({
   priceList,
   variant,
@@ -53,7 +72,17 @@ function Catalog({
     customSortSections
   });
   const isSearchMode = debouncedSearch.length > 2;
-  const withLeadBox = isSearchMode || (favoriteSections.length === 0 && variant !== "updates");
+
+  const currentIndent =
+    indents[
+      variant === "updates"
+        ? "updates"
+        : isSearchMode
+          ? "search"
+          : favoriteSections.length === 0
+            ? "emptyFavs"
+            : "user"
+    ];
 
   // Virtualization setup
   const listRef = useRef<HTMLDivElement>(null);
@@ -72,7 +101,7 @@ function Catalog({
       return index;
     },
     overscan: 5,
-    scrollMargin: withLeadBox ? 208 : 84, // height of lead box + some extra space
+    scrollMargin: currentIndent.scroll,
     initialOffset: 0
   });
   const virtualItems = virtualizer.getVirtualItems();
@@ -152,7 +181,7 @@ function Catalog({
 
   return (
     <div data-testid="price-list-page">
-      {withLeadBox && (
+      {(favoriteSections.length === 0 || isSearchMode) && variant !== "updates" && (
         <div className="flex h-27 flex-col justify-center">
           {isSearchMode && (
             <Title variant="h2">
@@ -163,18 +192,11 @@ function Catalog({
               &nbsp;
             </Title>
           )}
-          {!isSearchMode && favoriteSections.length === 0 && variant !== "updates" && (
-            <CatalogFavoritesEmptyAlert />
-          )}
+          {!isSearchMode && favoriteSections.length === 0 && <CatalogFavoritesEmptyAlert />}
         </div>
       )}
 
-      <div
-        ref={listRef}
-        className={cn("-mt-21", {
-          "-mt-52": withLeadBox
-        })}
-      >
+      <div ref={listRef} className={currentIndent.indent}>
         {currentTitle && (
           <div
             className={cn("fixed right-0 left-0 z-10 px-4", {
@@ -185,6 +207,7 @@ function Catalog({
             <div className="mx-auto md:container">
               <CatalogHeader
                 city={priceList.city}
+                disableCollapse={isSearchMode}
                 shownHeart={!(["updates", "archive"] as PageVariant[]).includes(variant)}
                 hiddenSections={hiddenSections}
                 onOuterToggleHiddenSection={onChangeHiddenSections}
@@ -219,6 +242,7 @@ function Catalog({
                 {item.type === "header" && (
                   <CatalogHeader
                     city={priceList.city}
+                    disableCollapse={isSearchMode}
                     shownHeart={!(["updates", "archive"] as PageVariant[]).includes(variant)}
                     header={item as VisualizationHeader}
                     hiddenSections={hiddenSections}

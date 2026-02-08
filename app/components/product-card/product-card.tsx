@@ -34,7 +34,7 @@ function ProductCard({ item, status, diff, shownFavorites }: PriceListGoodsProps
     <div
       data-testid="pricelist-goods"
       className={clsx(
-        "grid gap-x-4 gap-y-1 py-4 [grid-template-areas:'image_prices'_'image_diff'_'image_store'_'description_description'] md:[grid-template-areas:'image_description_prices'_'image_description_diff'_'image_description_store'] lg:[grid-template-columns:auto_1fr_auto_140px_130px_24px] lg:items-center lg:py-1 lg:[grid-template-areas:'image_description_diff_prices_store_favorites']",
+        "bg-background grid gap-x-4 gap-y-1 py-4 [grid-template-areas:'image_prices'_'image_diff'_'image_store'_'description_description'] md:[grid-template-areas:'image_description_prices'_'image_description_diff'_'image_description_store'] lg:[grid-template-columns:auto_1fr_auto_140px_130px_24px] lg:items-center lg:py-1 lg:[grid-template-areas:'image_description_diff_prices_store_favorites']",
         {
           "opacity-40": status?.deleted
         }

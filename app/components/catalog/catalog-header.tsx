@@ -16,9 +16,11 @@ type CatalogHeaderProps = {
   city: string;
   hiddenSections: UserSections;
   onOuterToggleHiddenSection?: (section: string) => void;
+  disableCollapse?: boolean;
 };
 
 function CatalogHeader({
+  disableCollapse,
   header,
   city,
   shownHeart,
@@ -61,13 +63,15 @@ function CatalogHeader({
 
   return (
     <div className="bg-background flex w-full items-center justify-start gap-2 border-b border-solid border-b-neutral-300 py-3 text-left">
-      <button
-        type="button"
-        onClick={() => handleToggleHiddenSection(header.title)}
-        className="cursor-pointer after:absolute after:inset-0"
-      >
-        {!isHiddenSection ? <Minus className="text-accent" /> : <Plus className="text-accent" />}
-      </button>
+      {!disableCollapse && (
+        <button
+          type="button"
+          onClick={() => handleToggleHiddenSection(header.title)}
+          className="cursor-pointer after:absolute after:inset-0"
+        >
+          {!isHiddenSection ? <Minus className="text-accent" /> : <Plus className="text-accent" />}
+        </button>
+      )}
 
       <span className="text-lg font-bold uppercase md:text-xl">
         {header.title} &ndash; {header.itemsCount}
