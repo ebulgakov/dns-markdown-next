@@ -59,7 +59,8 @@ function TodayClientPage() {
     error
   } = useQuery({
     queryKey: ["today-diff", city],
-    queryFn: (): Promise<AnalysisDiff> => axios.get("/api/today-diff").then(r => r.data)
+    queryFn: (): Promise<AnalysisDiff> =>
+      axios.get("/api/today-diff", { params: { city } }).then(r => r.data)
   });
 
   const diffData = diff ? transformDiffData(diff, city) : null;
