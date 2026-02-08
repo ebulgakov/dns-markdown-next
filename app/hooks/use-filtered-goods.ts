@@ -96,7 +96,9 @@ export const useFilteredGoods = ({
 
   if (term.length > 0) {
     const foundTitle: VisualizationFoundTitle = {
-      type: "foundTitle"
+      type: "foundTitle",
+      titles: flattenTitles.map(title => title.title),
+      goodsCount: flattenList.filter(item => item.type === "goods").length
     };
 
     flattenList.unshift(foundTitle);

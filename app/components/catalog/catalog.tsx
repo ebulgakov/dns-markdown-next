@@ -35,7 +35,6 @@ function Catalog({ priceList, variant, diffs }: PriceListPageProps) {
     variant
   });
   const isSearchMode = !isUpdates && debouncedSearch.length > 1;
-  const goodsCount = flattenList.filter(i => i.type === "goods").length;
 
   // Virtualization setup
   const listRef = useRef<HTMLDivElement>(null);
@@ -93,10 +92,29 @@ function Catalog({ priceList, variant, diffs }: PriceListPageProps) {
               {item.type === "noFavsAlert" && <CatalogFavoritesEmptyAlert />}
 
               {item.type === "foundTitle" && (
-                <Title variant="h3" className="mt-0 mb-5 flex h-12 items-center">
-                  Найдено товаров: &nbsp;
-                  <span className="font-normal">{goodsCount}</span>
-                </Title>
+                <div>
+                  <Title variant="h3" className="mt-0 mb-5 flex h-12 items-center">
+                    Найдено товаров: &nbsp;
+                    <span className="font-normal">{item.goodsCount}</span>
+                  </Title>
+
+                  <div>
+                    {item.titles.map(title => (
+                      <div key={title} className="mb-2">
+                        <a
+                          href={`#${encodeURIComponent(title)}`}
+                          className="hover:text-primary cursor-pointer text-sm text-gray-500"
+                          onClick={e => {
+                            e.preventDefault();
+                            window.location.assign(`#${encodeURIComponent(title)}`);
+                          }}
+                        >
+                          {title}
+                        </a>
+                      </div>
+                    ))}
+                  </div>
+                </div>
               )}
 
               {item.type === "header" && (

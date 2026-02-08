@@ -22,6 +22,8 @@ export type VisualizationNoFavsAlert = {
 
 export type VisualizationFoundTitle = {
   type: "foundTitle";
+  titles: string[];
+  goodsCount: number;
 };
 
 export type VisualizationOutput =
