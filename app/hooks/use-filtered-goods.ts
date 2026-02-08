@@ -9,7 +9,12 @@ import {
 } from "@/app/helpers/pricelist";
 import { useSortGoodsStore } from "@/app/stores/sort-goods-store";
 import { UserSections } from "@/types/user";
-import { VisualizationHeader, VisualizationOutputList } from "@/types/visualization";
+import {
+  VisualizationFoundTitle,
+  VisualizationHeader,
+  VisualizationNoFavsAlert,
+  VisualizationOutputList
+} from "@/types/visualization";
 
 import type { PriceList as priceListType } from "@/types/pricelist";
 
@@ -85,6 +90,22 @@ export const useFilteredGoods = (
     favoriteSections,
     hiddenSections
   });
+
+  if (favoriteSections.length === 0 && term.length === 0) {
+    const noFavsAlert: VisualizationNoFavsAlert = {
+      type: "noFavsAlert"
+    };
+
+    flattenList.unshift(noFavsAlert);
+  }
+
+  if (term.length > 2) {
+    const foundTitle: VisualizationFoundTitle = {
+      type: "foundTitle"
+    };
+
+    flattenList.unshift(foundTitle);
+  }
 
   return {
     flattenList,

@@ -1,6 +1,6 @@
 import type { Goods } from "@/types/pricelist";
 
-export type VisualizationType = "title" | "header" | "goods";
+export type VisualizationType = "title" | "header" | "goods" | "noFavsAlert" | "foundTitle";
 
 export type VisualizationGoods = Goods & {
   type: VisualizationType;
@@ -18,7 +18,17 @@ export type VisualizationSectionTitle = {
   type: VisualizationType;
 };
 
+export type VisualizationNoFavsAlert = {
+  type: VisualizationType;
+};
+
+export type VisualizationFoundTitle = {
+  type: VisualizationType;
+};
+
 export type VisualizationOutput =
+  | VisualizationFoundTitle
+  | VisualizationNoFavsAlert
   | VisualizationGoods
   | VisualizationHeader
   | VisualizationSectionTitle;

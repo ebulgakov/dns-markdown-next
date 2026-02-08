@@ -5,6 +5,7 @@ import { useContext } from "react";
 import { Catalog } from "@/app/components/catalog";
 import { JumpToSection } from "@/app/components/jump-to-section";
 import { ScrollToTop } from "@/app/components/scroll-to-top";
+import { Search } from "@/app/components/search";
 import { PageTitle } from "@/app/components/ui/page-title";
 import { UserContext } from "@/app/contexts/user-context";
 import { formatDate } from "@/app/helpers/format";
@@ -29,6 +30,7 @@ function ArchiveItemClientPage({ priceList, count }: ArchiveItemClientPageProps)
           </div>
         </div>
       </PageTitle>
+      <Search />
       <Catalog hiddenSections={hiddenSections} variant="archive" priceList={priceList} />
       <JumpToSection priceList={priceList} />
       <ScrollToTop variant="with-jump-to-search" />
