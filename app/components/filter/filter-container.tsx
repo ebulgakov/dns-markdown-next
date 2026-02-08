@@ -14,10 +14,9 @@ type FilterContainerProps = {
   foundCount?: number;
 };
 
-function FilterContainer({ sections, onClose, foundCount = 0 }: FilterContainerProps) {
+function FilterContainer({ sections, onClose }: FilterContainerProps) {
   const { favoriteSections, hiddenSections, onToggleHiddenSection } = useContext(UserContext);
   const onChange = useSearchStore(state => state.updateSearchTerm);
-  const searchTerm = useSearchStore(state => state.searchTerm);
 
   const handleScrollToLink = (section: string) => {
     if (hiddenSections.includes(section)) {
@@ -53,33 +52,6 @@ function FilterContainer({ sections, onClose, foundCount = 0 }: FilterContainerP
               </div>
             ))}
           </div>
-        </div>
-      </div>
-
-      <Separator />
-
-      <div className="space-y-2">
-        <div className="text-xl font-medium">Поиск по названию товара</div>
-        <div className="flex gap-4">
-          <Input
-            inputSize="lg"
-            role="search"
-            type="search"
-            value={searchTerm}
-            onChange={e => {
-              window.scrollTo({ top: 0 });
-              onChange(e.target.value);
-            }}
-            placeholder="Минимум 3 буквы"
-          />
-
-          <Button type="button" variant="secondary" size="lg" onClick={onClose}>
-            <Search />
-          </Button>
-        </div>
-
-        <div className="h-6">
-          {searchTerm.length > 2 && <div className="italic">Найдено товаров: {foundCount}</div>}
         </div>
       </div>
     </div>

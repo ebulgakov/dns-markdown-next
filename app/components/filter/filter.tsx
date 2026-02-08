@@ -12,10 +12,9 @@ import type { PriceList } from "@/types/pricelist";
 
 type FilterProps = {
   priceList: PriceList;
-  foundCount?: number;
 };
 
-function Filter({ priceList, foundCount = 0 }: FilterProps) {
+function Filter({ priceList }: FilterProps) {
   const { favoriteSections, hiddenSections } = useContext(UserContext);
   const containerRef = useRef<HTMLDivElement>(null);
   const [isShownFilter, setIsShownFilter] = useState<boolean>(false);
@@ -65,7 +64,7 @@ function Filter({ priceList, foundCount = 0 }: FilterProps) {
           }
         )}
       >
-        <FilterContainer onClose={handleClose} sections={sections} foundCount={foundCount} />
+        <FilterContainer onClose={handleClose} sections={sections} />
       </div>
       <div
         className={cn("fixed right-3 bottom-3 z-20 size-10 md:size-14", {

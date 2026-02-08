@@ -58,7 +58,7 @@
   --shadow-2xl: var(--shadow-2xl);
 
   /*** Custom properties */
-  --nav-bar-offset: 56px;
+  --nav-bar-height: 56px;
 }
 
 :root {

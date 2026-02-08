@@ -131,9 +131,9 @@ function Catalog({
 
         const listOffset = listRef.current?.offsetTop ?? 0;
         const navHeightStr = getComputedStyle(document.documentElement).getPropertyValue(
-          "--nav-bar-offset"
+          "--nav-bar-height"
         );
-        const navHeight = parseInt(navHeightStr) || 56; // height of navbar
+        const navHeight = parseInt(navHeightStr) * 2 || 112; // height of navbar + search bar
 
         window.scrollTo({ top: foundList[0] + listOffset - navHeight });
         history.pushState(null, document.title, window.location.pathname + window.location.search);
@@ -243,7 +243,7 @@ function Catalog({
       </div>
 
       <ScrollToTop variant="filter" />
-      <Filter priceList={priceList} foundCount={flattenList.length} />
+      <Filter priceList={priceList} />
     </div>
   );
 }

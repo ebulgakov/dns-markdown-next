@@ -12,6 +12,7 @@ import { UserContext } from "@/app/contexts/user-context";
 import { formatDate, formatTime } from "@/app/helpers/format";
 
 import type { PriceList } from "@/types/pricelist";
+import { Search } from "@/app/components/search";
 
 function CatalogClientPage() {
   const { city } = useContext(UserContext);
@@ -52,7 +53,7 @@ function CatalogClientPage() {
           <SortGoods />
         </div>
       </PageTitle>
-
+      <Search />
       <Catalog variant="default" priceList={priceList} />
     </>
   );
