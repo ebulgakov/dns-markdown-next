@@ -17,34 +17,6 @@ type CatalogHeaderProps = {
   onOuterToggleHiddenSection?: (section: string) => void;
 };
 
-type CatalogStickyHeaderProps = Omit<CatalogHeaderProps, "header"> & {
-  titles: VisualizationHeader[];
-  neededTitle?: string;
-};
-
-function CatalogStickyHeader({
-  titles,
-  neededTitle,
-  shownHeart,
-  outerHiddenSections,
-  onOuterToggleHiddenSection
-}: CatalogStickyHeaderProps) {
-  const header = titles.find(title => title.title === neededTitle);
-  if (!header) return null;
-  return (
-    <div className="fixed top-28 right-0 left-0 z-10 px-4">
-      <div className="mx-auto md:container">
-        <CatalogHeader
-          header={header}
-          shownHeart={shownHeart}
-          outerHiddenSections={outerHiddenSections}
-          onOuterToggleHiddenSection={onOuterToggleHiddenSection}
-        />
-      </div>
-    </div>
-  );
-}
-
 function CatalogHeader({
   header,
   shownHeart,
@@ -154,4 +126,4 @@ function CatalogHeader({
   );
 }
 
-export { CatalogHeader, CatalogStickyHeader };
+export { CatalogHeader };

@@ -18,7 +18,7 @@ import {
 } from "@/types/visualization";
 
 import { CatalogFavoritesEmptyAlert } from "./catalog-favorites-empty-alert";
-import { CatalogStickyHeader, CatalogHeader } from "./catalog-header";
+import { CatalogHeader } from "./catalog-header";
 
 import type { DiffsCollection as DiffsType } from "@/types/analysis-diff";
 import type { PriceList as PriceListType } from "@/types/pricelist";
@@ -83,7 +83,7 @@ function Catalog({
     );
   };
 
-  const getTitle = (): string | undefined => {
+  const getTitle = (): VisualizationHeader | undefined => {
     const [firstVItem] = virtualItems;
 
     if (firstVItem && firstVItem.index < 1) return;
@@ -106,8 +106,11 @@ function Catalog({
 
     const cutVirtualItems = virtualItems.slice(4);
     const foundHeaderIdx = cutVirtualItems.find(extractTitle);
-    return foundHeaderIdx ? extractTitle(foundHeaderIdx) : undefined;
+    const neededTitle = foundHeaderIdx ? extractTitle(foundHeaderIdx) : undefined;
+    return flattenTitles.find(title => title.title === neededTitle);
   };
+
+  const currentTitle = getTitle();
 
   useEffect(() => {
     const handleHashScroll = () => {
@@ -129,7 +132,11 @@ function Catalog({
         const navHeightStr = getComputedStyle(document.documentElement).getPropertyValue(
           "--nav-bar-height"
         );
-        const navHeight = parseInt(navHeightStr) * 2 || 112; // height of navbar + search bar
+        let navHeight = parseInt(navHeightStr) || 56; // height of navbar + search bar
+
+        if (["default", "archive"].includes(variant)) {
+          navHeight *= 2;
+        }
 
         window.scrollTo({ top: foundList[0] + listOffset - navHeight });
         history.pushState(null, document.title, window.location.pathname + window.location.search);
@@ -143,7 +150,7 @@ function Catalog({
       window.removeEventListener("hashchange", handleHashScroll);
       clearTimeout(timeoutId);
     };
-  }, [virtualizer, flattenList]);
+  }, [virtualizer, flattenList, variant]);
 
   useEffect(() => {
     setScrollHeight(virtualizer.getTotalSize());
@@ -161,13 +168,23 @@ function Catalog({
 
       {!isSearchMode && favoriteSections.length === 0 && <CatalogFavoritesEmptyAlert />}
 
-      <CatalogStickyHeader
-        neededTitle={getTitle()}
-        shownHeart={!(["updates", "archive"] as PageVariant[]).includes(variant)}
-        outerHiddenSections={variant === "updates" ? hiddenSections : undefined}
-        onOuterToggleHiddenSection={variant === "updates" ? onToggleSection : undefined}
-        titles={flattenTitles}
-      />
+      {currentTitle && (
+        <div
+          className={cn("fixed right-0 left-0 z-10 px-4", {
+            "top-[calc(var(--nav-bar-height)_*_2)]": ["default", "archive"].includes(variant),
+            "top-[var(--nav-bar-height)]": variant === "updates"
+          })}
+        >
+          <div className="mx-auto md:container">
+            <CatalogHeader
+              shownHeart={!(["updates", "archive"] as PageVariant[]).includes(variant)}
+              outerHiddenSections={variant === "updates" ? hiddenSections : undefined}
+              onOuterToggleHiddenSection={variant === "updates" ? onToggleSection : undefined}
+              header={currentTitle}
+            />
+          </div>
+        </div>
+      )}
 
       <div
         style={{
