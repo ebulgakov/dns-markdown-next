@@ -61,7 +61,16 @@ export const useCatalogVirtualizer = ({
         }
 
         window.scrollTo({ top: foundList[0] + listOffset - navHeight + 10 }); // Additional 10px for better visibility of the header
-        history.pushState(null, document.title, window.location.pathname + window.location.search);
+
+        // Need to update the scroll position after the virtualizer has recalculated item positions
+        setTimeout(() => {
+          handleHashScroll();
+          history.pushState(
+            null,
+            document.title,
+            window.location.pathname + window.location.search
+          );
+        }, 100);
       }
     };
 
