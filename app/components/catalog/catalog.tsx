@@ -161,7 +161,11 @@ function Catalog({
       {isSearchMode && (
         <div className="mb-4">
           <Title variant="h2">
-            Найдено товаров: &nbsp;<span className="font-normal">{flattenList.length}</span>&nbsp;
+            Найдено товаров: &nbsp;
+            <span className="font-normal">
+              {flattenList.filter(i => i.type === "goods").length}
+            </span>
+            &nbsp;
           </Title>
         </div>
       )}

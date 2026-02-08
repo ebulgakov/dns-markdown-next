@@ -69,14 +69,16 @@ export const postChangeUserCity = async (city: string): Promise<CityStatusRespon
 };
 
 // User Favorites API
-export const postAddToFavorites = async (product: Goods): Promise<FavoritesResponse | null> => {
+export const postAddToFavorites = async (
+  product: Goods,
+  city: string
+): Promise<FavoritesResponse | null> => {
   const { token, userId } = await getSessionInfo();
-  const user = await getUser();
   revalidateTag(`user-${userId}`, { expire: 0 });
   return await wrapApiCall("/api/user/favorite-add", token, {
     product: {
       ...product,
-      city: user?.city
+      city
     }
   });
 };

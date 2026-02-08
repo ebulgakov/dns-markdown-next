@@ -1,5 +1,6 @@
 "use server";
 
+import { getPriceListCity } from "@/api/get";
 import {
   getGuest,
   addToHiddenSections as addToHiddenSectionsGuest,
@@ -52,10 +53,12 @@ export const postToggleFavoriteShownBought = async (shownBoughtFavorites: boolea
 export const postAddToFavorites = async (product: Goods) => {
   const { userId } = await getSessionInfo();
 
+  const city = await getPriceListCity();
+
   if (userId) {
-    return await postAddToFavoritesUser(product);
+    return await postAddToFavoritesUser(product, city);
   } else {
-    return await addToFavoritesGuest(product);
+    return await addToFavoritesGuest(product, city);
   }
 };
 

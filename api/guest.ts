@@ -115,14 +115,14 @@ export const removeFromFavoriteSections = async (title: string) => {
   };
 };
 
-export const addToFavorites = async (product: Goods): Promise<FavoritesResponse> => {
+export const addToFavorites = async (product: Goods, city: string): Promise<FavoritesResponse> => {
   const guest = await getGuest();
   if (!guest.favorites.some(fav => fav.item.link === product.link)) {
     const newFavorite: Favorite = {
       id: crypto.randomUUID(),
       item: product,
       status: {
-        city: guest.city,
+        city,
         deleted: false,
         createdAt: `${new Date()}`,
         updatedAt: `${new Date()}`
