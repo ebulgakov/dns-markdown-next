@@ -2,11 +2,11 @@
 
 import { useWindowVirtualizer, VirtualItem } from "@tanstack/react-virtual";
 import { useDebounce } from "@uidotdev/usehooks";
-import { useContext, useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 
+import { CatalogFavoritesEmptyAlert } from "@/app/components/catalog/catalog-favorites-empty-alert";
 import { ProductCard } from "@/app/components/product-card";
 import { Title } from "@/app/components/ui/title";
-import { UserContext } from "@/app/contexts/user-context";
 import { useFilteredGoods } from "@/app/hooks/use-filtered-goods";
 import { cn } from "@/app/lib/utils";
 import { useSearchStore } from "@/app/stores/search-store";
@@ -17,7 +17,6 @@ import {
   VisualizationSectionTitle
 } from "@/types/visualization";
 
-import { CatalogFavoritesEmptyAlert } from "./catalog-favorites-empty-alert";
 import { CatalogHeader } from "./catalog-header";
 
 import type { DiffsCollection as DiffsType } from "@/types/analysis-diff";
@@ -34,25 +33,6 @@ type PriceListPageProps = {
   customSortSections?: UserSections;
 };
 
-const indents = {
-  updates: {
-    scroll: 84,
-    indent: "-mt-21"
-  },
-  emptyFavs: {
-    scroll: 208,
-    indent: "-mt-52"
-  },
-  user: {
-    scroll: 100,
-    indent: "-mt-25"
-  },
-  search: {
-    scroll: 100,
-    indent: "-mt-25"
-  }
-};
-
 function Catalog({
   priceList,
   variant,
@@ -61,28 +41,19 @@ function Catalog({
   onChangeHiddenSections,
   customSortSections = []
 }: PriceListPageProps) {
-  const { favoriteSections } = useContext(UserContext);
+  const isUpdates = variant === "updates";
   const [scrollHeight, setScrollHeight] = useState(0);
-  // Initialize hidden sections with no saving sections to user
-
   const searchTerm = useSearchStore(state => state.searchTerm);
   const debouncedSearch = useDebounce<string>(searchTerm.trim(), 100);
-  const { flattenList, flattenTitles } = useFilteredGoods(debouncedSearch, priceList, {
-    hiddenSections,
-    customSortSections
-  });
-  const isSearchMode = debouncedSearch.length > 2;
-
-  const currentIndent =
-    indents[
-      variant === "updates"
-        ? "updates"
-        : isSearchMode
-          ? "search"
-          : favoriteSections.length === 0
-            ? "emptyFavs"
-            : "user"
-    ];
+  const { flattenList, flattenTitles } = useFilteredGoods(
+    isUpdates ? "" : debouncedSearch,
+    priceList,
+    {
+      hiddenSections,
+      customSortSections
+    }
+  );
+  const isSearchMode = !isUpdates && debouncedSearch.length > 2;
 
   // Virtualization setup
   const listRef = useRef<HTMLDivElement>(null);
@@ -101,7 +72,7 @@ function Catalog({
       return index;
     },
     overscan: 5,
-    scrollMargin: currentIndent.scroll,
+    scrollMargin: 100, // Equal -mt-25 -> 25 * 4. I need it for correct work of sticky header overlapping
     initialOffset: 0
   });
   const virtualItems = virtualizer.getVirtualItems();
@@ -161,7 +132,7 @@ function Catalog({
           navHeight *= 2;
         }
 
-        window.scrollTo({ top: foundList[0] + listOffset - navHeight });
+        window.scrollTo({ top: foundList[0] + listOffset - navHeight + 10 }); // Additional 10px for better visibility of the header
         history.pushState(null, document.title, window.location.pathname + window.location.search);
       }
     };
@@ -180,102 +151,97 @@ function Catalog({
   }, [virtualizer, flattenList.length]);
 
   return (
-    <div data-testid="price-list-page">
-      {(favoriteSections.length === 0 || isSearchMode) && variant !== "updates" && (
-        <div className="flex h-27 flex-col justify-center">
-          {isSearchMode && (
-            <Title variant="h2">
-              Найдено товаров: &nbsp;
-              <span className="font-normal">
-                {flattenList.filter(i => i.type === "goods").length}
-              </span>
-              &nbsp;
-            </Title>
-          )}
-          {!isSearchMode && favoriteSections.length === 0 && <CatalogFavoritesEmptyAlert />}
+    <div ref={listRef} className="-mt-25">
+      {currentTitle && (
+        <div
+          className={cn("fixed right-0 left-0 z-10 px-4", {
+            "top-[calc(var(--nav-bar-height)_*_2)]": !isUpdates,
+            "top-[var(--nav-bar-height)]": isUpdates
+          })}
+        >
+          <div className="mx-auto md:container">
+            <CatalogHeader
+              city={priceList.city}
+              disableCollapse={isSearchMode}
+              shownHeart={!(["updates", "archive"] as PageVariant[]).includes(variant)}
+              hiddenSections={hiddenSections}
+              onOuterToggleHiddenSection={onChangeHiddenSections}
+              header={currentTitle}
+            />
+          </div>
         </div>
       )}
 
-      <div ref={listRef} className={currentIndent.indent}>
-        {currentTitle && (
-          <div
-            className={cn("fixed right-0 left-0 z-10 px-4", {
-              "top-[calc(var(--nav-bar-height)_*_2)]": ["default", "archive"].includes(variant),
-              "top-[var(--nav-bar-height)]": variant === "updates"
-            })}
-          >
-            <div className="mx-auto md:container">
-              <CatalogHeader
-                city={priceList.city}
-                disableCollapse={isSearchMode}
-                shownHeart={!(["updates", "archive"] as PageVariant[]).includes(variant)}
-                hiddenSections={hiddenSections}
-                onOuterToggleHiddenSection={onChangeHiddenSections}
-                header={currentTitle}
-              />
-            </div>
-          </div>
-        )}
+      <div
+        style={{
+          height: `${scrollHeight}px`,
+          width: "100%",
+          position: "relative"
+        }}
+      >
+        {virtualItems.map(virtualItem => {
+          const item = flattenList[virtualItem.index];
+          return (
+            <div
+              key={virtualItem.key}
+              data-index={virtualItem.index}
+              ref={virtualizer.measureElement}
+              style={{
+                position: "absolute",
+                top: 0,
+                left: 0,
+                width: "100%",
+                transform: `translateY(${virtualItem.start}px)`
+              }}
+            >
+              {item.type === "noFavsAlert" && !isUpdates && <CatalogFavoritesEmptyAlert />}
 
-        <div
-          style={{
-            height: `${scrollHeight}px`,
-            width: "100%",
-            position: "relative"
-          }}
-        >
-          {virtualItems.map(virtualItem => {
-            const item = flattenList[virtualItem.index];
-            return (
-              <div
-                key={virtualItem.key}
-                data-index={virtualItem.index}
-                ref={virtualizer.measureElement}
-                style={{
-                  position: "absolute",
-                  top: 0,
-                  left: 0,
-                  width: "100%",
-                  transform: `translateY(${virtualItem.start}px)`
-                }}
-              >
-                {item.type === "header" && (
-                  <CatalogHeader
-                    city={priceList.city}
-                    disableCollapse={isSearchMode}
-                    shownHeart={!(["updates", "archive"] as PageVariant[]).includes(variant)}
-                    header={item as VisualizationHeader}
-                    hiddenSections={hiddenSections}
-                    onOuterToggleHiddenSection={onChangeHiddenSections}
+              {item.type === "foundTitle" && !isUpdates && (
+                <Title variant="h3" className="mt-0 mb-5 flex h-12 items-center">
+                  Найдено товаров: &nbsp;
+                  <span className="font-normal">
+                    {flattenList.filter(i => i.type === "goods").length}
+                  </span>
+                  &nbsp;
+                </Title>
+              )}
+
+              {item.type === "header" && (
+                <CatalogHeader
+                  city={priceList.city}
+                  disableCollapse={isSearchMode}
+                  shownHeart={!(["updates", "archive"] as PageVariant[]).includes(variant)}
+                  header={item as VisualizationHeader}
+                  hiddenSections={hiddenSections}
+                  onOuterToggleHiddenSection={onChangeHiddenSections}
+                />
+              )}
+
+              {item.type === "goods" && (
+                <div className="border-b border-neutral-300">
+                  <ProductCard
+                    shownFavorites={variant !== "archive"}
+                    item={item as VisualizationGoods}
+                    diff={diffs?.[`${(item as VisualizationGoods)._id}`]}
                   />
-                )}
+                </div>
+              )}
 
-                {item.type === "goods" && (
-                  <div className="border-b border-neutral-300">
-                    <ProductCard
-                      shownFavorites={variant !== "archive"}
-                      item={item as VisualizationGoods}
-                      diff={diffs?.[`${(item as VisualizationGoods)._id}`]}
-                    />
-                  </div>
-                )}
-
-                {item.type === "title" && variant !== "updates" && (
-                  <Title
-                    variant="h2"
-                    className={cn("mb-2", {
-                      "mt-0": (item as VisualizationSectionTitle).category === "favorite"
-                    })}
-                  >
-                    {(item as VisualizationSectionTitle).category === "favorite"
-                      ? "Избранные категории"
-                      : "Все категории"}
-                  </Title>
-                )}
-              </div>
-            );
-          })}
-        </div>
+              {item.type === "title" && !isUpdates && (
+                <Title
+                  variant="h2"
+                  className={cn("mb-2", {
+                    "mt-0": (item as VisualizationSectionTitle).category === "favorite"
+                  })}
+                >
+                  {(item as VisualizationSectionTitle).category === "favorite"
+                    ? "Избранные категории"
+                    : "Все категории"}
+                </Title>
+              )}
+            </div>
+          );
+        })}
       </div>
     </div>
   );
