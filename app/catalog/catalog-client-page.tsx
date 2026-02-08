@@ -21,7 +21,7 @@ type CatalogClientPageProps = {
 };
 
 function CatalogClientPage({ city: cityFromUrl }: CatalogClientPageProps) {
-  const { city: cityFromUser, hiddenSections } = useContext(UserContext);
+  const { city: cityFromUser } = useContext(UserContext);
   const city = cityFromUrl || cityFromUser;
   const {
     data: priceListResponse,
@@ -61,7 +61,7 @@ function CatalogClientPage({ city: cityFromUrl }: CatalogClientPageProps) {
         </div>
       </PageTitle>
       <Search />
-      <Catalog hiddenSections={hiddenSections} variant="default" priceList={priceList} />
+      <Catalog variant="default" priceList={priceList} />
       <JumpToSection priceList={priceList} />
       <ScrollToTop variant="with-jump-to-search" />
     </>

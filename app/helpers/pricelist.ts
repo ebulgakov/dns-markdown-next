@@ -15,7 +15,7 @@ export const getFlatPriceList = (priceList: PriceList) => {
 export const getPriceListWithSortedPositions = (priceList: PriceList) => {
   return {
     ...priceList,
-    positions: priceList.positions.sort((a, b) => a.title.localeCompare(b.title))
+    positions: [...priceList.positions].sort((a, b) => a.title.localeCompare(b.title))
   };
 };
 

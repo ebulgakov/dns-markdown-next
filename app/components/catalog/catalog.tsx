@@ -12,7 +12,6 @@ import { useCatalogVirtualizer } from "@/app/hooks/use-catalog-virtualizer";
 import { useFilteredGoods } from "@/app/hooks/use-filtered-goods";
 import { cn } from "@/app/lib/utils";
 import { useSearchStore } from "@/app/stores/search-store";
-import { UserSections } from "@/types/user";
 
 import { CatalogHeader } from "./catalog-header";
 
@@ -23,17 +22,9 @@ type PriceListPageProps = {
   variant: CatalogComponentVariant;
   priceList: PriceListType;
   diffs?: DiffsType;
-  hiddenSections: UserSections;
-  onChangeHiddenSections?: (section: string) => void;
 };
 
-function Catalog({
-  priceList,
-  variant,
-  diffs,
-  hiddenSections,
-  onChangeHiddenSections
-}: PriceListPageProps) {
+function Catalog({ priceList, variant, diffs }: PriceListPageProps) {
   const isUpdates = variant === "updates";
   const [scrollHeight, setScrollHeight] = useState(0);
   const searchTerm = useSearchStore(state => state.searchTerm);
@@ -41,7 +32,6 @@ function Catalog({
   const { flattenList, flattenTitles } = useFilteredGoods({
     term: debouncedSearch,
     priceList,
-    hiddenSections,
     variant
   });
   const isSearchMode = !isUpdates && debouncedSearch.length > 1;
@@ -71,8 +61,6 @@ function Catalog({
               city={priceList.city}
               disableCollapse={isSearchMode}
               shownHeart={!(["updates", "archive"] as CatalogComponentVariant[]).includes(variant)}
-              hiddenSections={hiddenSections}
-              onOuterToggleHiddenSection={onChangeHiddenSections}
               header={currentTitle}
             />
           </div>
@@ -118,8 +106,6 @@ function Catalog({
                   disableCollapse={isSearchMode}
                   shownHeart={!["updates", "archive"].includes(variant)}
                   header={item}
-                  hiddenSections={hiddenSections}
-                  onOuterToggleHiddenSection={onChangeHiddenSections}
                 />
               )}
 

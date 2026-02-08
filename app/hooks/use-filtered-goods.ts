@@ -9,7 +9,6 @@ import {
   getOptimizedOutput
 } from "@/app/helpers/pricelist";
 import { useSortGoodsStore } from "@/app/stores/sort-goods-store";
-import { UserSections } from "@/types/user";
 import {
   VisualizationFoundTitle,
   VisualizationHeader,
@@ -20,7 +19,6 @@ import {
 import type { PriceList as priceListType } from "@/types/pricelist";
 
 type UseFilteredGoodsParams = {
-  hiddenSections: UserSections;
   term: string;
   priceList: priceListType;
   variant: CatalogComponentVariant;
@@ -29,13 +27,13 @@ type UseFilteredGoodsParams = {
 export const useFilteredGoods = ({
   term,
   priceList,
-  hiddenSections,
   variant
 }: UseFilteredGoodsParams): {
   flattenList: VisualizationOutputList;
   flattenTitles: VisualizationHeader[];
 } => {
   const { favoriteSections } = useContext(UserContext);
+  let { hiddenSections } = useContext(UserContext);
   const sortGoods = useSortGoodsStore(state => state.sortGoods);
 
   let flattenOptimizedPriceList = getOptimizedFlatPriceListWithTitle(priceList);

@@ -2,7 +2,7 @@
 
 import { useQuery } from "@tanstack/react-query";
 import axios from "axios";
-import { useContext, useState } from "react";
+import { useContext } from "react";
 
 import { Catalog } from "@/app/components/catalog";
 import { PageLoader } from "@/app/components/page-loader";
@@ -10,10 +10,9 @@ import { ScrollToTop } from "@/app/components/scroll-to-top";
 import { Alert, AlertDescription, AlertTitle } from "@/app/components/ui/alert";
 import { PageTitle } from "@/app/components/ui/page-title";
 import { UserContext } from "@/app/contexts/user-context";
+import { formatDate } from "@/app/helpers/format";
 import { AnalysisDiff, DiffsCollection as DiffsType } from "@/types/analysis-diff";
 import { PriceList } from "@/types/pricelist";
-import { UserSections } from "@/types/user";
-import { formatDate } from "@/app/helpers/format";
 
 const transformDiffData = (diff: AnalysisDiff, city: string) => {
   const digestList: PriceList = {
@@ -53,7 +52,6 @@ const transformDiffData = (diff: AnalysisDiff, city: string) => {
 };
 
 function TodayClientPage() {
-  const [hiddenSections, setHiddenSections] = useState<UserSections>([]);
   const { city } = useContext(UserContext);
   const {
     data: diff,
@@ -80,17 +78,7 @@ function TodayClientPage() {
     <>
       <PageTitle title={`Обновления на ${formatDate(diffData.digestList.createdAt)}`} />
 
-      <Catalog
-        hiddenSections={hiddenSections}
-        onChangeHiddenSections={section =>
-          setHiddenSections(prev =>
-            prev.includes(section) ? prev.filter(s => s !== section) : [...prev, section]
-          )
-        }
-        variant="updates"
-        diffs={diffData.diffs}
-        priceList={diffData.digestList}
-      />
+      <Catalog variant="updates" diffs={diffData.diffs} priceList={diffData.digestList} />
       <ScrollToTop />
     </>
   );
