@@ -22,7 +22,6 @@ export interface Goods {
   code: string;
   image: string;
   available: string;
-  city?: string;
 }
 
 export interface RemovedGoods {
