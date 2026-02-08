@@ -5,7 +5,7 @@ import { CatalogClientPage } from "@/app/catalog/catalog-client-page";
 import type { Metadata } from "next";
 
 type CatalogPage = {
-  searchParams: Record<string, string | string[] | undefined>;
+  searchParams: Promise<Record<string, string | string[] | undefined>>;
   params: Promise<{ locale: string }>;
 };
 
