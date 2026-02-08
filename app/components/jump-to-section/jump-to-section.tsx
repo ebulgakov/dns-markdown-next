@@ -5,19 +5,19 @@ import { useCallback, useContext, useEffect, useRef, useState } from "react";
 import { UserContext } from "@/app/contexts/user-context";
 import { cn } from "@/app/lib/utils";
 
-import { FilterContainer } from "./filter-container";
-import { FilterToggle } from "./filter-toggle";
+import { JumpToSectionContainer } from "./jump-to-section-container";
+import { JumpToSectionToggle } from "./jump-to-section-toggle";
 
 import type { PriceList } from "@/types/pricelist";
 
-type FilterProps = {
+type JumpToSectionProps = {
   priceList: PriceList;
 };
 
-function Filter({ priceList }: FilterProps) {
+function JumpToSection({ priceList }: JumpToSectionProps) {
   const { favoriteSections, hiddenSections } = useContext(UserContext);
   const containerRef = useRef<HTMLDivElement>(null);
-  const [isShownFilter, setIsShownFilter] = useState<boolean>(false);
+  const [isShownContainer, setIsShownContainer] = useState<boolean>(false);
 
   const sections = priceList.positions
     .map(position => position.title)
@@ -37,7 +37,7 @@ function Filter({ priceList }: FilterProps) {
     });
 
   const handleClose = useCallback(() => {
-    setIsShownFilter(false);
+    setIsShownContainer(false);
   }, []);
 
   useEffect(() => {
@@ -59,22 +59,25 @@ function Filter({ priceList }: FilterProps) {
         className={cn(
           "bg-background fixed inset-0 left-auto z-20 w-full items-center justify-center shadow-lg transition-all duration-300 ease-in-out md:bottom-20 md:max-w-[370px] md:rounded-bl-lg",
           {
-            "invisible opacity-0": !isShownFilter,
-            "visible opacity-100": isShownFilter
+            "invisible opacity-0": !isShownContainer,
+            "visible opacity-100": isShownContainer
           }
         )}
       >
-        <FilterContainer onClose={handleClose} sections={sections} />
+        <JumpToSectionContainer onClose={handleClose} sections={sections} />
       </div>
       <div
         className={cn("fixed right-3 bottom-3 z-20 size-10 md:size-14", {
-          "top-3 md:top-auto": isShownFilter
+          "top-3 md:top-auto": isShownContainer
         })}
       >
-        <FilterToggle isActive={isShownFilter} onToggle={() => setIsShownFilter(prev => !prev)} />
+        <JumpToSectionToggle
+          isActive={isShownContainer}
+          onToggle={() => setIsShownContainer(prev => !prev)}
+        />
       </div>
     </div>
   );
 }
 
-export { Filter };
+export { JumpToSection };
