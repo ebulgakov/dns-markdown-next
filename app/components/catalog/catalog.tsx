@@ -53,6 +53,7 @@ function Catalog({
     customSortSections
   });
   const isSearchMode = debouncedSearch.length > 2;
+  const withLeadBox = isSearchMode || (favoriteSections.length === 0 && variant !== "updates");
 
   // Virtualization setup
   const listRef = useRef<HTMLDivElement>(null);
@@ -71,7 +72,7 @@ function Catalog({
       return index;
     },
     overscan: 5,
-    scrollMargin: 0,
+    scrollMargin: withLeadBox ? 208 : 84, // height of lead box + some extra space
     initialOffset: 0
   });
   const virtualItems = virtualizer.getVirtualItems();
@@ -150,99 +151,107 @@ function Catalog({
   }, [virtualizer, flattenList.length]);
 
   return (
-    <div data-testid="price-list-page" ref={listRef}>
-      {isSearchMode && (
-        <div className="mb-4">
-          <Title variant="h2">
-            Найдено товаров: &nbsp;
-            <span className="font-normal">
-              {flattenList.filter(i => i.type === "goods").length}
-            </span>
-            &nbsp;
-          </Title>
-        </div>
-      )}
-
-      {!isSearchMode && favoriteSections.length === 0 && variant !== "updates" && (
-        <CatalogFavoritesEmptyAlert />
-      )}
-
-      {currentTitle && (
-        <div
-          className={cn("fixed right-0 left-0 z-10 px-4", {
-            "top-[calc(var(--nav-bar-height)_*_2)]": ["default", "archive"].includes(variant),
-            "top-[var(--nav-bar-height)]": variant === "updates"
-          })}
-        >
-          <div className="mx-auto md:container">
-            <CatalogHeader
-              city={priceList.city}
-              shownHeart={!(["updates", "archive"] as PageVariant[]).includes(variant)}
-              hiddenSections={hiddenSections}
-              onOuterToggleHiddenSection={onChangeHiddenSections}
-              header={currentTitle}
-            />
-          </div>
+    <div data-testid="price-list-page">
+      {withLeadBox && (
+        <div className="flex h-27 flex-col justify-center">
+          {isSearchMode && (
+            <Title variant="h2">
+              Найдено товаров: &nbsp;
+              <span className="font-normal">
+                {flattenList.filter(i => i.type === "goods").length}
+              </span>
+              &nbsp;
+            </Title>
+          )}
+          {!isSearchMode && favoriteSections.length === 0 && variant !== "updates" && (
+            <CatalogFavoritesEmptyAlert />
+          )}
         </div>
       )}
 
       <div
-        style={{
-          height: `${scrollHeight}px`,
-          width: "100%",
-          position: "relative"
-        }}
-      >
-        {virtualItems.map(virtualItem => {
-          const item = flattenList[virtualItem.index];
-          return (
-            <div
-              key={virtualItem.key}
-              data-index={virtualItem.index}
-              ref={virtualizer.measureElement}
-              style={{
-                position: "absolute",
-                top: 0,
-                left: 0,
-                width: "100%",
-                transform: `translateY(${virtualItem.start}px)`
-              }}
-            >
-              {item.type === "header" && (
-                <CatalogHeader
-                  city={priceList.city}
-                  shownHeart={!(["updates", "archive"] as PageVariant[]).includes(variant)}
-                  header={item as VisualizationHeader}
-                  hiddenSections={hiddenSections}
-                  onOuterToggleHiddenSection={onChangeHiddenSections}
-                />
-              )}
-
-              {item.type === "goods" && (
-                <div className="border-b border-neutral-300">
-                  <ProductCard
-                    shownFavorites={variant !== "archive"}
-                    item={item as VisualizationGoods}
-                    diff={diffs?.[`${(item as VisualizationGoods)._id}`]}
-                  />
-                </div>
-              )}
-
-              {item.type === "title" && variant !== "updates" && (
-                <Title
-                  variant="h2"
-                  className={cn("mb-2", {
-                    "mt-0": (item as VisualizationSectionTitle).category === "favorite"
-                  })}
-                >
-                  {(item as VisualizationSectionTitle).category === "favorite"
-                    ? "Избранные категории"
-                    : "Все категории"}
-                </Title>
-              )}
-            </div>
-          );
+        ref={listRef}
+        className={cn("-mt-21", {
+          "-mt-52": withLeadBox
         })}
+      >
+        {currentTitle && (
+          <div
+            className={cn("fixed right-0 left-0 z-10 px-4", {
+              "top-[calc(var(--nav-bar-height)_*_2)]": ["default", "archive"].includes(variant),
+              "top-[var(--nav-bar-height)]": variant === "updates"
+            })}
+          >
+            <div className="mx-auto md:container">
+              <CatalogHeader
+                city={priceList.city}
+                shownHeart={!(["updates", "archive"] as PageVariant[]).includes(variant)}
+                hiddenSections={hiddenSections}
+                onOuterToggleHiddenSection={onChangeHiddenSections}
+                header={currentTitle}
+              />
+            </div>
+          </div>
+        )}
+
+        <div
+          style={{
+            height: `${scrollHeight}px`,
+            width: "100%",
+            position: "relative"
+          }}
+        >
+          {virtualItems.map(virtualItem => {
+            const item = flattenList[virtualItem.index];
+            return (
+              <div
+                key={virtualItem.key}
+                data-index={virtualItem.index}
+                ref={virtualizer.measureElement}
+                style={{
+                  position: "absolute",
+                  top: 0,
+                  left: 0,
+                  width: "100%",
+                  transform: `translateY(${virtualItem.start}px)`
+                }}
+              >
+                {item.type === "header" && (
+                  <CatalogHeader
+                    city={priceList.city}
+                    shownHeart={!(["updates", "archive"] as PageVariant[]).includes(variant)}
+                    header={item as VisualizationHeader}
+                    hiddenSections={hiddenSections}
+                    onOuterToggleHiddenSection={onChangeHiddenSections}
+                  />
+                )}
+
+                {item.type === "goods" && (
+                  <div className="border-b border-neutral-300">
+                    <ProductCard
+                      shownFavorites={variant !== "archive"}
+                      item={item as VisualizationGoods}
+                      diff={diffs?.[`${(item as VisualizationGoods)._id}`]}
+                    />
+                  </div>
+                )}
+
+                {item.type === "title" && variant !== "updates" && (
+                  <Title
+                    variant="h2"
+                    className={cn("mb-2", {
+                      "mt-0": (item as VisualizationSectionTitle).category === "favorite"
+                    })}
+                  >
+                    {(item as VisualizationSectionTitle).category === "favorite"
+                      ? "Избранные категории"
+                      : "Все категории"}
+                  </Title>
+                )}
+              </div>
+            );
+          })}
+        </div>
       </div>
     </div>
   );
