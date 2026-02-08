@@ -25,7 +25,7 @@ export const getGuest = async (): Promise<User> => {
     _id: "0",
     userId: "0",
     email: "guest@example.com",
-    city: "samara",
+    city: process.env.DEFAULT_CITY!,
     favorites: [],
     notifications: { updates: { enabled: false } },
     hiddenSections: [],
