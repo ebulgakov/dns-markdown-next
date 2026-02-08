@@ -4,6 +4,7 @@ export type FavoriteStatus = {
   updatedAt: string;
   createdAt: string;
   deleted: boolean;
+  city?: string;
 };
 
 export type UserSections = string[];

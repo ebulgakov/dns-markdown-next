@@ -121,7 +121,12 @@ export const addToFavorites = async (product: Goods): Promise<FavoritesResponse>
     const newFavorite: Favorite = {
       id: crypto.randomUUID(),
       item: product,
-      status: { deleted: false, createdAt: `${new Date()}`, updatedAt: `${new Date()}` }
+      status: {
+        city: guest.city,
+        deleted: false,
+        createdAt: `${new Date()}`,
+        updatedAt: `${new Date()}`
+      }
     };
 
     guest.favorites.push(newFavorite);
