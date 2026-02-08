@@ -156,19 +156,8 @@ function Catalog({
       {isSearchMode && (
         <div className="mb-4">
           <Title variant="h2">
-            Поиск по названию товара:&nbsp;
-            <span className="font-normal">{searchTerm.trim()}</span>&nbsp;
-            <button
-              className="text-destructive relative top-2 ml-1 cursor-pointer p-1 md:top-1"
-              onClick={() => onChangeSearch("")}
-            >
-              <span className="sr-only">Очистить поиск</span>
-              <X />
-            </button>
+            Найдено товаров: &nbsp;<span className="font-normal">{flattenList.length}</span>&nbsp;
           </Title>
-          <div>
-            Найдено товаров: <b>{flattenList.length}</b>
-          </div>
         </div>
       )}
 
