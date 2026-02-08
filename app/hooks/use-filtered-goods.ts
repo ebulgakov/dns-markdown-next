@@ -51,7 +51,7 @@ export const useFilteredGoods = ({
     };
   }
 
-  if (term.length > 1) {
+  if (term.length > 0) {
     flattenOptimizedPriceList = flattenOptimizedPriceList.filter(item =>
       item.title.toLowerCase().includes(term.toLowerCase())
     );
@@ -94,20 +94,18 @@ export const useFilteredGoods = ({
     hiddenSections
   });
 
-  if (favoriteSections.length === 0 && term.length === 0) {
-    const noFavsAlert: VisualizationNoFavsAlert = {
-      type: "noFavsAlert"
-    };
-
-    flattenList.unshift(noFavsAlert);
-  }
-
-  if (term.length > 1) {
+  if (term.length > 0) {
     const foundTitle: VisualizationFoundTitle = {
       type: "foundTitle"
     };
 
     flattenList.unshift(foundTitle);
+  } else if (favoriteSections.length === 0) {
+    const noFavsAlert: VisualizationNoFavsAlert = {
+      type: "noFavsAlert"
+    };
+
+    flattenList.unshift(noFavsAlert);
   }
 
   return {
