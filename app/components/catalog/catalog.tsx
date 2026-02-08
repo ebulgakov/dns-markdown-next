@@ -2,7 +2,6 @@
 
 import { useWindowVirtualizer, VirtualItem } from "@tanstack/react-virtual";
 import { useDebounce } from "@uidotdev/usehooks";
-import { X } from "lucide-react";
 import { useContext, useEffect, useRef, useState } from "react";
 
 import { ProductCard } from "@/app/components/product-card";
@@ -46,7 +45,6 @@ function Catalog({
   const [hiddenSections, setHiddenSections] = useState<UserSections>(customHiddenSections);
 
   const { favoriteSections } = useContext(UserContext);
-  const onChangeSearch = useSearchStore(state => state.updateSearchTerm);
   const searchTerm = useSearchStore(state => state.searchTerm);
   const debouncedSearch = useDebounce<string>(searchTerm.trim(), 100);
   const { flattenList, flattenTitles } = useFilteredGoods(debouncedSearch, priceList, {
