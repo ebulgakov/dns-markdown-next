@@ -11,7 +11,7 @@ test.describe("Archives", () => {
     test.expect(itemCount).toBeGreaterThan(0);
   });
 
-  test("should archive items page be shown", async ({ page }) => {
+  test("should archive item page be shown", async ({ page }) => {
     const firstArchiveItem = page.getByTestId("archive-list-item-link").first();
     await firstArchiveItem.click();
     await page.waitForLoadState("networkidle");

@@ -65,11 +65,7 @@ export const useCatalogVirtualizer = ({
         // Need to update the scroll position after the virtualizer has recalculated item positions
         setTimeout(() => {
           handleHashScroll();
-          history.pushState(
-            null,
-            document.title,
-            window.location.pathname + window.location.search
-          );
+          history.pushState(null, document.title, window.location.pathname);
         }, 100);
       }
     };
