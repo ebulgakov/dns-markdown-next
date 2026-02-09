@@ -73,7 +73,7 @@ export function UserProvider({
     favoriteSections,
     (state: string[], { action, title }: OptimisticAction) => {
       if (action === "remove") return state.filter(section => section !== title);
-      return [...state, title].sort();
+      return [...state, title];
     }
   );
 

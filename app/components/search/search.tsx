@@ -1,6 +1,6 @@
 "use client";
 
-import { Funnel } from "lucide-react";
+import { X } from "lucide-react";
 
 import { Button } from "@/app/components/ui/button";
 import { Input } from "@/app/components/ui/input";
@@ -17,7 +17,7 @@ function Search() {
         <Input
           inputSize="xl"
           role="search"
-          type="search"
+          type="text"
           value={searchTerm}
           onChange={e => {
             window.scrollTo({ top: 0 });
@@ -27,26 +27,30 @@ function Search() {
         />
       </div>
 
-      <div className="size-11">
-        <Tooltip>
-          <TooltipTrigger asChild>
-            <div>
-              <Button
-                type="button"
-                aria-label="Скрыть/показать категории"
-                name="toggle-visibility"
-                variant="secondary"
-                size="flex"
-                disabled
-                className="cursor-pointer p-2"
-              >
-                <Funnel className="size-full" />
-              </Button>
-            </div>
-          </TooltipTrigger>
-          <TooltipContent side="left">Фильтры ещё в разработке</TooltipContent>
-        </Tooltip>
-      </div>
+      {searchTerm.trim().length > 0 && (
+        <div className="size-11">
+          <Tooltip>
+            <TooltipTrigger asChild>
+              <div>
+                <Button
+                  type="button"
+                  aria-label="Очистить поиск"
+                  onClick={() => {
+                    window.scrollTo({ top: 0 });
+                    onChange("");
+                  }}
+                  variant="secondary"
+                  size="flex"
+                  className="cursor-pointer p-2"
+                >
+                  <X className="size-full" />
+                </Button>
+              </div>
+            </TooltipTrigger>
+            <TooltipContent side="left">Очистить поиск</TooltipContent>
+          </Tooltip>
+        </div>
+      )}
     </div>
   );
 }
