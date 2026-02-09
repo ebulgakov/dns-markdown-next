@@ -18,7 +18,8 @@ type CatalogHeaderProps = {
 
 function CatalogHeader({ disableCollapse, header, city, shownHeart }: CatalogHeaderProps) {
   const [isTooltipOpen, setIsTooltipOpen] = useState(false);
-  const [copiedText, copyToClipboard] = useCopyToClipboard();
+  const [isCopied, setIsCopied] = useState(false);
+  const [, copyToClipboard] = useCopyToClipboard();
   const { favoriteSections, hiddenSections, onToggleFavoriteSection, onToggleHiddenSection } =
     useContext(UserContext);
   const handleCopy = async () => {
@@ -26,6 +27,7 @@ function CatalogHeader({ disableCollapse, header, city, shownHeart }: CatalogHea
       `${window.location.origin}${window.location.pathname}?city=${city}#${encodeURIComponent(header.title)}`
     );
     setIsTooltipOpen(true);
+    setIsCopied(true);
   };
 
   const handleToggleHiddenSection = (section: string) => {
@@ -37,15 +39,16 @@ function CatalogHeader({ disableCollapse, header, city, shownHeart }: CatalogHea
 
   useEffect(() => {
     let timeout: NodeJS.Timeout;
-    if (isTooltipOpen) {
+    if (isCopied) {
       timeout = setTimeout(() => {
+        setIsCopied(false);
         setIsTooltipOpen(false);
       }, 2000);
     }
     return () => {
       if (timeout) clearTimeout(timeout);
     };
-  }, [isTooltipOpen]);
+  }, [isCopied]);
 
   return (
     <div className="bg-background flex w-full items-center justify-start gap-2 border-b border-solid border-b-neutral-300 py-3 text-left">
@@ -70,14 +73,14 @@ function CatalogHeader({ disableCollapse, header, city, shownHeart }: CatalogHea
               asChild
               onClick={e => e.preventDefault()}
               onMouseEnter={() => setIsTooltipOpen(true)}
-              onMouseLeave={() => !copiedText && setIsTooltipOpen(false)}
+              onMouseLeave={() => !isCopied && setIsTooltipOpen(false)}
             >
               <button
                 type="button"
                 title="Получить ссылку на эту категорию"
                 onClick={handleCopy}
                 className={cn("relative block cursor-pointer text-gray-300", {
-                  "text-success": copiedText
+                  "text-success": isCopied
                 })}
               >
                 <span className="sr-only">Перейти к категории {header.title}</span>
@@ -85,7 +88,7 @@ function CatalogHeader({ disableCollapse, header, city, shownHeart }: CatalogHea
               </button>
             </TooltipTrigger>
             <TooltipContent>
-              <p>{copiedText ? "Ссылка скопирована!" : "Скопировать ссылку на эту категорию"}</p>
+              <p>{isCopied ? "Ссылка скопирована!" : "Скопировать ссылку на эту категорию"}</p>
             </TooltipContent>
           </Tooltip>
 
