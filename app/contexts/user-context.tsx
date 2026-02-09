@@ -92,7 +92,9 @@ export function UserProvider({
           result = await postAddToHiddenSections(title);
         }
 
-        if (result?.sections) setHiddenSections(result.sections);
+        if (result?.sections) {
+          setHiddenSections(result.sections);
+        }
       } catch (error) {
         console.error("Failed to update hidden sections:", error);
       }
@@ -114,7 +116,10 @@ export function UserProvider({
           result = await postAddToFavoriteSections(title);
         }
 
-        if (result?.sections) setFavoriteSections(result.sections);
+        if (result?.sections) {
+          // Temporarily disabling syncing with server state
+          // setFavoriteSections(result.sections);
+        }
       } catch (error) {
         console.error("Failed to update favorite sections:", error);
       }
