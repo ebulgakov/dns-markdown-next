@@ -3,6 +3,7 @@ import type { Goods } from "@/types/pricelist";
 export type VisualizationGoods = Goods & {
   type: "goods";
   sectionTitle: string;
+  titleInvertTranslation: string;
 };
 
 export type VisualizationHeader = {

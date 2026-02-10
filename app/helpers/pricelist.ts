@@ -1,3 +1,4 @@
+import { invertTranslation } from "@/app/helpers/fix-keyboard-layout";
 import { UserSections } from "@/types/user";
 import {
   VisualizationGoods,
@@ -26,6 +27,7 @@ export const getOptimizedFlatPriceListWithTitle = (priceList: PriceList): Visual
         (item): VisualizationGoods => ({
           ...item,
           type: "goods",
+          titleInvertTranslation: invertTranslation(item.title),
           sectionTitle: position.title
         })
       )

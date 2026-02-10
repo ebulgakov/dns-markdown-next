@@ -1,5 +1,5 @@
-export const fixKeyboardLayout = (text: string) => {
-  const replacer: { [key: string]: string } = {
+export const invertTranslation = (text: string) => {
+  const enToRu: { [key: string]: string } = {
     q: "й",
     w: "ц",
     e: "у",
@@ -32,11 +32,21 @@ export const fixKeyboardLayout = (text: string) => {
     m: "ь",
     ",": "б",
     ".": "ю",
-    "/": "."
+    "/": ".",
+    "`": "ё"
   };
+
+  const fullReplacer: { [key: string]: string } = { ...enToRu };
+  Object.entries(enToRu).forEach(([eng, ru]) => {
+    fullReplacer[ru] = eng;
+  });
 
   return text
     .split("")
-    .map(char => replacer[char.toLowerCase()] || char)
+    .map(char => {
+      const lower = char.toLowerCase();
+      const replacement = fullReplacer[lower];
+      return replacement || char;
+    })
     .join("");
 };
