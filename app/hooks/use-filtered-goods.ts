@@ -1,7 +1,7 @@
+import Fuse from "fuse.js";
 import { useContext } from "react";
 
 import { CatalogComponentVariant } from "@/app/components/catalog/types";
-import { fixKeyboardLayout } from "@/app/components/search/helpers/fix-keyboard-layout";
 import { UserContext } from "@/app/contexts/user-context";
 import {
   getOptimizedFlatPriceListWithTitle,
@@ -53,11 +53,11 @@ export const useFilteredGoods = ({
   }
 
   if (term.length > 0) {
-    flattenOptimizedPriceList = flattenOptimizedPriceList.filter(
-      item =>
-        item.title.toLowerCase().includes(term.toLowerCase()) ||
-        item.title.toLowerCase().includes(fixKeyboardLayout(term).toLowerCase())
-    );
+    const fuse = new Fuse(flattenOptimizedPriceList, {
+      keys: ["title", "titleInvertTranslation"]
+    });
+
+    flattenOptimizedPriceList = fuse.search(term.toLowerCase()).map(result => result.item);
 
     hiddenSections = [];
     flattenTitles = getOptimizedFlatTitlesFromGoods(flattenOptimizedPriceList);
