@@ -48,7 +48,12 @@ function Catalog({ priceList, variant, diffs }: PriceListPageProps) {
   }, [virtualizer, flattenList.length]);
 
   return (
-    <div ref={listRef} data-testid="catalog-list" className="-mt-25">
+    <div
+      ref={listRef}
+      data-testid="catalog-list"
+      className="relative -mt-25 w-full"
+      style={{ height: `${scrollHeight}px` }}
+    >
       {currentTitle && (
         <div
           className={cn("fixed right-0 left-0 z-10 px-4", {
@@ -67,87 +72,76 @@ function Catalog({ priceList, variant, diffs }: PriceListPageProps) {
         </div>
       )}
 
-      <div
-        style={{
-          height: `${scrollHeight}px`,
-          width: "100%",
-          position: "relative"
-        }}
-      >
-        {virtualItems.map(virtualItem => {
-          const item = flattenList[virtualItem.index];
-          return (
-            <div
-              key={virtualItem.key}
-              data-index={virtualItem.index}
-              ref={virtualizer.measureElement}
-              style={{
-                position: "absolute",
-                top: 0,
-                left: 0,
-                width: "100%",
-                transform: `translateY(${virtualItem.start}px)`
-              }}
-            >
-              {item.type === "noFavsAlert" && <CatalogFavoritesEmptyAlert />}
+      {virtualItems.map(virtualItem => {
+        const item = flattenList[virtualItem.index];
+        return (
+          <div
+            key={virtualItem.key}
+            data-index={virtualItem.index}
+            ref={virtualizer.measureElement}
+            style={{
+              position: "absolute",
+              top: 0,
+              left: 0,
+              width: "100%",
+              transform: `translateY(${virtualItem.start}px)`
+            }}
+          >
+            {item.type === "noFavsAlert" && <CatalogFavoritesEmptyAlert />}
 
-              {item.type === "foundTitle" && (
-                <div>
-                  <Title variant="h3" className="mt-0 mb-5 flex h-12 items-center">
-                    Найдено товаров: &nbsp;
-                    <span className="font-normal">{item.goodsCount}</span>
-                  </Title>
-
-                  <div>
-                    {item.titles.map(title => (
-                      <div key={title} className="mb-2">
-                        <a
-                          href={`#${encodeURIComponent(title)}`}
-                          className="hover:text-primary cursor-pointer text-sm text-gray-500"
-                          onClick={e => {
-                            e.preventDefault();
-                            window.location.assign(`#${encodeURIComponent(title)}`);
-                          }}
-                        >
-                          {title}
-                        </a>
-                      </div>
-                    ))}
-                  </div>
-                </div>
-              )}
-
-              {item.type === "header" && (
-                <CatalogHeader
-                  city={priceList.city}
-                  disableCollapse={isSearchMode}
-                  shownHeart={variant === "default"}
-                  header={item}
-                />
-              )}
-
-              {item.type === "goods" && (
-                <div className="border-b border-neutral-300">
-                  <ProductCard
-                    shownFavorites={variant !== "archive"}
-                    item={item}
-                    diff={diffs?.[item._id]}
-                  />
-                </div>
-              )}
-
-              {item.type === "title" && (
-                <Title
-                  variant="h2"
-                  className={cn("mb-2", { "mt-0": item.category === "favorite" })}
-                >
-                  {item.category === "favorite" ? "Избранные категории" : "Все категории"}
+            {item.type === "foundTitle" && (
+              <div>
+                <Title variant="h3" className="mt-0 mb-5 flex h-12 items-center">
+                  Найдено товаров: &nbsp;
+                  <span className="font-normal">{item.goodsCount}</span>
                 </Title>
-              )}
-            </div>
-          );
-        })}
-      </div>
+
+                <div>
+                  {item.titles.map(title => (
+                    <div key={title} className="mb-2">
+                      <a
+                        href={`#${encodeURIComponent(title)}`}
+                        className="hover:text-primary cursor-pointer text-sm text-gray-500"
+                        onClick={e => {
+                          e.preventDefault();
+                          window.location.assign(`#${encodeURIComponent(title)}`);
+                        }}
+                      >
+                        {title}
+                      </a>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )}
+
+            {item.type === "header" && (
+              <CatalogHeader
+                city={priceList.city}
+                disableCollapse={isSearchMode}
+                shownHeart={variant === "default"}
+                header={item}
+              />
+            )}
+
+            {item.type === "goods" && (
+              <div className="border-b border-neutral-300">
+                <ProductCard
+                  shownFavorites={variant !== "archive"}
+                  item={item}
+                  diff={diffs?.[item._id]}
+                />
+              </div>
+            )}
+
+            {item.type === "title" && (
+              <Title variant="h2" className={cn("mb-2", { "mt-0": item.category === "favorite" })}>
+                {item.category === "favorite" ? "Избранные категории" : "Все категории"}
+              </Title>
+            )}
+          </div>
+        );
+      })}
     </div>
   );
 }
