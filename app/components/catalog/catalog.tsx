@@ -51,7 +51,7 @@ function Catalog({ priceList, variant, diffs }: PriceListPageProps) {
     <div
       ref={listRef}
       data-testid="catalog-list"
-      className="relative -mt-25 w-full"
+      className="relative -mt-38 w-full"
       style={{ height: `${scrollHeight}px` }}
     >
       {currentTitle && (

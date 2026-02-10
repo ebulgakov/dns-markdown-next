@@ -29,8 +29,8 @@ export const useCatalogVirtualizer = ({
       if (item.type === "title") return `title-${item.category}`;
       return index;
     },
-    overscan: 5,
-    scrollMargin: 100, // Equal -mt-25 -> 25 * 4. I need it for correct work of sticky header overlapping
+    overscan: 0,
+    scrollMargin: 152, // Equal -mt-38 -> 38 * 4. I need it for correct work of sticky header overlapping
     initialOffset: 0
   });
 

@@ -30,8 +30,7 @@ export const getCurrentCatalogTitle = (
     return undefined;
   };
 
-  const cutVirtualItems = virtualItems.slice(4);
-  const foundHeaderIdx = cutVirtualItems.find(extractTitle);
+  const foundHeaderIdx = virtualItems.find(extractTitle);
   const neededTitle = foundHeaderIdx ? extractTitle(foundHeaderIdx) : undefined;
   return flattenTitles.find(title => title.title === neededTitle);
 };
