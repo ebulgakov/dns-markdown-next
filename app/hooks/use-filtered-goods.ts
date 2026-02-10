@@ -1,6 +1,7 @@
 import { useContext } from "react";
 
 import { CatalogComponentVariant } from "@/app/components/catalog/types";
+import { fixKeyboardLayout } from "@/app/components/search/helpers/fix-keyboard-layout";
 import { UserContext } from "@/app/contexts/user-context";
 import {
   getOptimizedFlatPriceListWithTitle,
@@ -52,8 +53,10 @@ export const useFilteredGoods = ({
   }
 
   if (term.length > 0) {
-    flattenOptimizedPriceList = flattenOptimizedPriceList.filter(item =>
-      item.title.toLowerCase().includes(term.toLowerCase())
+    flattenOptimizedPriceList = flattenOptimizedPriceList.filter(
+      item =>
+        item.title.toLowerCase().includes(term.toLowerCase()) ||
+        item.title.toLowerCase().includes(fixKeyboardLayout(term).toLowerCase())
     );
 
     hiddenSections = [];
