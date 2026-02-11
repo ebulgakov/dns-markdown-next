@@ -29,7 +29,7 @@ function Catalog({ priceList, variant, diffs }: PriceListPageProps) {
   const [scrollHeight, setScrollHeight] = useState(0);
   const searchTerm = useSearchStore(state => state.searchTerm);
   const debouncedSearch = useDebounce<string>(searchTerm.trim(), 100);
-  const { flattenList, flattenTitles } = useFilteredGoods({
+  const { flattenList, flattenTitles, flattenGoods } = useFilteredGoods({
     term: debouncedSearch,
     priceList,
     variant
@@ -63,6 +63,7 @@ function Catalog({ priceList, variant, diffs }: PriceListPageProps) {
         >
           <div className="mx-auto md:container">
             <CatalogHeader
+              flattenGoods={flattenGoods}
               city={priceList.city}
               disableCollapse={isSearchMode}
               shownHeart={variant === "default"}
@@ -117,6 +118,7 @@ function Catalog({ priceList, variant, diffs }: PriceListPageProps) {
 
             {item.type === "header" && (
               <CatalogHeader
+                flattenGoods={flattenGoods}
                 city={priceList.city}
                 disableCollapse={isSearchMode}
                 shownHeart={variant === "default"}

@@ -14,6 +14,7 @@ import {
   VisualizationFoundTitle,
   VisualizationHeader,
   VisualizationNoFavsAlert,
+  VisualizationGoods,
   VisualizationOutputList
 } from "@/types/visualization";
 
@@ -32,6 +33,7 @@ export const useFilteredGoods = ({
 }: UseFilteredGoodsParams): {
   flattenList: VisualizationOutputList;
   flattenTitles: VisualizationHeader[];
+  flattenGoods: VisualizationGoods[];
 } => {
   const { favoriteSections, hiddenSections: initialHiddenSections } = useContext(UserContext);
   let hiddenSections = initialHiddenSections;
@@ -47,6 +49,7 @@ export const useFilteredGoods = ({
     }).filter(title => title.type !== "title");
 
     return {
+      flattenGoods: flattenOptimizedPriceList,
       flattenList,
       flattenTitles
     };
@@ -114,6 +117,7 @@ export const useFilteredGoods = ({
   }
 
   return {
+    flattenGoods: flattenOptimizedPriceList,
     flattenList,
     flattenTitles
   };
