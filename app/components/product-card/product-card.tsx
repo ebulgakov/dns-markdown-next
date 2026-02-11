@@ -12,17 +12,25 @@ import { ProductCardDiff } from "./product-card-diff";
 import { ProductCardFavoriteToggle } from "./product-card-favorite-toggle";
 
 import type { Diff as DiffType } from "@/types/analysis-diff";
+import type { Goods as GoodsType } from "@/types/pricelist";
 import type { FavoriteStatus } from "@/types/user";
-import type { VisualizationGoods } from "@/types/visualization";
 
 type PriceListGoodsProps = {
-  item: VisualizationGoods;
+  item: GoodsType;
   diff?: DiffType;
-  shownFavorites: boolean;
-  shownCompares: boolean;
+  shownFavorites?: boolean;
+  shownCompares?: boolean;
+  sectionTitle?: string;
   status?: FavoriteStatus;
 };
-function ProductCard({ item, status, diff, shownFavorites, shownCompares }: PriceListGoodsProps) {
+function ProductCard({
+  item,
+  status,
+  diff,
+  shownFavorites,
+  shownCompares,
+  sectionTitle
+}: PriceListGoodsProps) {
   const handleSendGAEvent = (event: string) => {
     sendGAEvent({
       event,
@@ -141,7 +149,9 @@ function ProductCard({ item, status, diff, shownFavorites, shownCompares }: Pric
 
       <div className="flex flex-col gap-4 [grid-area:image] lg:[grid-area:favorites]">
         {shownFavorites && <ProductCardFavoriteToggle goods={item} />}
-        {shownCompares && <ProductCardCompareButton item={item} />}
+        {shownCompares && sectionTitle && (
+          <ProductCardCompareButton sectionTitle={sectionTitle} item={item} />
+        )}
       </div>
     </div>
   );

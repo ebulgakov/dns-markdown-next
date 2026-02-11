@@ -129,6 +129,7 @@ function Catalog({ priceList, variant, diffs }: PriceListPageProps) {
                 <ProductCard
                   shownFavorites={variant !== "archive"}
                   shownCompares={variant === "default"}
+                  sectionTitle={item.sectionTitle}
                   item={item}
                   diff={diffs?.[item._id]}
                 />

@@ -4,12 +4,14 @@ import { useShallow } from "zustand/react/shallow";
 import { Button } from "@/app/components/ui/button";
 import { Tooltip, TooltipContent, TooltipTrigger } from "@/app/components/ui/tooltip";
 import { useLlmStore } from "@/app/stores/llm-store";
-import { VisualizationGoods } from "@/types/visualization";
+
+import type { Goods as GoodsType } from "@/types/pricelist";
 
 type ProductCardCompareButtonProps = {
-  item: VisualizationGoods;
+  item: GoodsType;
+  sectionTitle: string;
 };
-function ProductCardCompareButton({ item }: ProductCardCompareButtonProps) {
+function ProductCardCompareButton({ item, sectionTitle }: ProductCardCompareButtonProps) {
   const {
     compareGoodsLinks,
     updateCompareGoodsLinks,
@@ -29,11 +31,11 @@ function ProductCardCompareButton({ item }: ProductCardCompareButtonProps) {
   );
 
   const isInCompare = compareGoodsLinks.some(link => link.link === item.link);
-  const isEqualTitles = compareGoodsLinks.every(link => link.sectionTitle === item.sectionTitle);
+  const isEqualTitles = compareGoodsLinks.every(link => link.sectionTitle === sectionTitle);
 
   const comparePayload = {
     link: item.link,
-    sectionTitle: item.sectionTitle
+    sectionTitle: sectionTitle
   };
 
   const handleChangeCompare = () => {
