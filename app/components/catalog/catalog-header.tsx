@@ -1,30 +1,25 @@
 "use client";
 
 import { useCopyToClipboard } from "@uidotdev/usehooks";
-import { Plus, Minus, Heart, Hash } from "lucide-react";
+import { Plus, Minus, Heart, Hash, ChartNoAxesColumn } from "lucide-react";
 import { useContext, useEffect, useState } from "react";
 
-import { getLLMCompareProducts } from "@/api/get";
 import { Tooltip, TooltipTrigger, TooltipContent } from "@/app/components/ui/tooltip";
 import { UserContext } from "@/app/contexts/user-context";
 import { cn } from "@/app/lib/utils";
-import { VisualizationHeader, VisualizationGoods } from "@/types/visualization";
+import { useLlmStore } from "@/app/stores/llm-store";
+import { VisualizationHeader } from "@/types/visualization";
 
 type CatalogHeaderProps = {
   header: VisualizationHeader;
-  flattenGoods: VisualizationGoods[];
   shownHeart?: boolean;
   city: string;
   disableCollapse?: boolean;
 };
 
-function CatalogHeader({
-  disableCollapse,
-  header,
-  city,
-  shownHeart,
-  flattenGoods
-}: CatalogHeaderProps) {
+function CatalogHeader({ disableCollapse, header, city, shownHeart }: CatalogHeaderProps) {
+  const isAvailableCompare = useLlmStore(state => state.isAvailableCompare);
+  const onChangeAvailabilityCompare = useLlmStore(state => state.changeAvailabilityCompare);
   const [isTooltipOpen, setIsTooltipOpen] = useState(false);
   const [isCopied, setIsCopied] = useState(false);
   const [, copyToClipboard] = useCopyToClipboard();
@@ -40,14 +35,6 @@ function CatalogHeader({
 
   const handleToggleHiddenSection = (section: string) => {
     onToggleHiddenSection?.(section);
-  };
-
-  const handleCompareGoods = async () => {
-    const goodsInSection = flattenGoods.filter(good => good.sectionTitle === header.title);
-    const goodLinks = goodsInSection.map(good => good.link);
-
-    const info = await getLLMCompareProducts(goodLinks);
-    console.log(info);
   };
 
   const isFavoriteSection = favoriteSections.includes(header.title);
@@ -131,9 +118,24 @@ function CatalogHeader({
             </TooltipContent>
           </Tooltip>
 
-          <button className="relative" onClick={handleCompareGoods}>
-            Сравнить товары в категории
-          </button>
+          <Tooltip>
+            <TooltipTrigger asChild>
+              <button
+                type="button"
+                className="relative cursor-pointer"
+                onClick={() => onChangeAvailabilityCompare(!isAvailableCompare)}
+              >
+                <ChartNoAxesColumn
+                  className={cn("text-gray-400 hover:text-gray-500", {
+                    "fill-gray-900": isAvailableCompare
+                  })}
+                />
+              </button>
+            </TooltipTrigger>
+            <TooltipContent>
+              <p>Сравнить товары</p>
+            </TooltipContent>
+          </Tooltip>
         </div>
       )}
     </div>
