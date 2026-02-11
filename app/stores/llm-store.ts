@@ -15,6 +15,7 @@ type llmStore = {
   updateCompareGoodsLinks: (link: CompareGoodsLink) => void;
   setCompareGoodsLinks: (links: CompareGoodsLink[]) => void;
   compareGoods: (links: CompareGoodsLink[]) => Promise<void>;
+  setReport: (report: string) => void;
   report: string;
 };
 
@@ -37,12 +38,15 @@ export const useLlmStore = create<llmStore>(set => ({
     set(state => ({ ...state, compareGoodsLinks: links }));
   },
   report: "",
+  setReport: report => {
+    set(state => ({ ...state, report }));
+  },
   compareGoods: async links => {
-    set(state => ({ ...state, isCompareGoodsLoading: true }));
+    set(state => ({ ...state, report: "", isCompareGoodsLoading: true }));
     const payloadLinks = links.map(link => link.link);
     try {
-      const response = await getLLMCompareProducts(payloadLinks);
-      set(state => ({ ...state, report: response }));
+      const { report } = await getLLMCompareProducts(payloadLinks);
+      set(state => ({ ...state, report }));
     } finally {
       set(state => ({ ...state, isCompareGoodsLoading: false }));
     }

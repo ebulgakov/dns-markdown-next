@@ -1,10 +1,10 @@
 import { Square, SquareCheckBig } from "lucide-react";
 import { useShallow } from "zustand/react/shallow";
 
+import { Button } from "@/app/components/ui/button";
 import { Tooltip, TooltipContent, TooltipTrigger } from "@/app/components/ui/tooltip";
 import { useLlmStore } from "@/app/stores/llm-store";
 import { VisualizationGoods } from "@/types/visualization";
-import { Button } from "@/app/components/ui/button";
 
 type CatalogCompareButtonProps = {
   item: VisualizationGoods;

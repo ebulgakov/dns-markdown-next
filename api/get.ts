@@ -153,6 +153,20 @@ export const getTotalUniqProductsCount = async () => {
   return getCachedTotalUniqProductsCount(defaultCity);
 };
 
-export const getLLMCompareProducts = async (links: string[]): Promise<string> => {
+export const getLLMCompareProducts = async (
+  links: string[]
+): Promise<{
+  message: string;
+  report: string;
+}> => {
   return wrapApiCall("/api/llm/compare-products", { params: { links: links.join("|") } });
+};
+
+export const getLLMDescribeProduct = async (
+  link: string
+): Promise<{
+  message: string;
+  report: string;
+}> => {
+  return wrapApiCall("/api/llm/compare-products", { params: { link } });
 };

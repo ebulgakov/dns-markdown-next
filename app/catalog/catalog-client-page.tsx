@@ -14,6 +14,7 @@ import { PageTitle } from "@/app/components/ui/page-title";
 import { UserContext } from "@/app/contexts/user-context";
 import { formatDate, formatTime } from "@/app/helpers/format";
 import { getPriceListWithSortedPositions } from "@/app/helpers/pricelist";
+import { LllmReport } from "@/app/llm-report";
 import { PriceList } from "@/types/pricelist";
 
 type CatalogClientPageProps = {
@@ -64,6 +65,7 @@ function CatalogClientPage({ city: cityFromUrl }: CatalogClientPageProps) {
       <Catalog variant="default" priceList={priceList} />
       <JumpToSection priceList={priceList} />
       <ScrollToTop variant="with-jump-to-search" />
+      <LllmReport />
     </>
   );
 }
