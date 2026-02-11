@@ -3,6 +3,7 @@
 import { useDebounce } from "@uidotdev/usehooks";
 import { useEffect, useRef, useState } from "react";
 
+import { CatalogCompareButton } from "@/app/components/catalog/catalog-compare-button";
 import { CatalogFavoritesEmptyAlert } from "@/app/components/catalog/catalog-favorites-empty-alert";
 import { getCurrentCatalogTitle } from "@/app/components/catalog/helpers/get-current-catalog-title";
 import { CatalogComponentVariant } from "@/app/components/catalog/types";
@@ -11,6 +12,7 @@ import { Title } from "@/app/components/ui/title";
 import { useCatalogVirtualizer } from "@/app/hooks/use-catalog-virtualizer";
 import { useFilteredGoods } from "@/app/hooks/use-filtered-goods";
 import { cn } from "@/app/lib/utils";
+import { useLlmStore } from "@/app/stores/llm-store";
 import { useSearchStore } from "@/app/stores/search-store";
 
 import { CatalogHeader } from "./catalog-header";
@@ -27,6 +29,7 @@ type PriceListPageProps = {
 function Catalog({ priceList, variant, diffs }: PriceListPageProps) {
   const isUpdates = variant === "updates";
   const [scrollHeight, setScrollHeight] = useState(0);
+  const isAvailableCompare = useLlmStore(state => state.isAvailableCompare);
   const searchTerm = useSearchStore(state => state.searchTerm);
   const debouncedSearch = useDebounce<string>(searchTerm.trim(), 100);
   const { flattenList, flattenTitles } = useFilteredGoods({
@@ -125,12 +128,14 @@ function Catalog({ priceList, variant, diffs }: PriceListPageProps) {
             )}
 
             {item.type === "goods" && (
-              <div className="border-b border-neutral-300">
+              <div className="relative border-b border-neutral-300">
                 <ProductCard
                   shownFavorites={variant !== "archive"}
                   item={item}
                   diff={diffs?.[item._id]}
                 />
+
+                {isAvailableCompare && <CatalogCompareButton item={item} />}
               </div>
             )}
 
