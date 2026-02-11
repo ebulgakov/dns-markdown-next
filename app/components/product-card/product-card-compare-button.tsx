@@ -6,10 +6,10 @@ import { Tooltip, TooltipContent, TooltipTrigger } from "@/app/components/ui/too
 import { useLlmStore } from "@/app/stores/llm-store";
 import { VisualizationGoods } from "@/types/visualization";
 
-type CatalogCompareButtonProps = {
+type ProductCardCompareButtonProps = {
   item: VisualizationGoods;
 };
-function CatalogCompareButton({ item }: CatalogCompareButtonProps) {
+function ProductCardCompareButton({ item }: ProductCardCompareButtonProps) {
   const {
     compareGoodsLinks,
     updateCompareGoodsLinks,
@@ -54,48 +54,45 @@ function CatalogCompareButton({ item }: CatalogCompareButtonProps) {
   };
 
   return (
-    <div className="relative h-full">
+    <div className="relative">
       {isInCompare && (
-        <div className="bg-background absolute inset-0 flex items-center justify-end">
-          <Button disabled={isReportLoading} className="mr-10" onClick={handleClickCompare}>
+        <div className="bg-background absolute -top-1 left-10 rounded-md md:right-10 md:left-auto">
+          <Button disabled={isReportLoading} onClick={handleClickCompare}>
             {compareGoodsLinks.length < 2 ? "Получить описание" : "Стравнить"}
           </Button>
         </div>
       )}
-      <div className="absolute inset-0 flex items-center justify-center">
-        <Tooltip>
-          <TooltipTrigger asChild>
-            <button
-              onClick={handleChangeCompare}
-              disabled={compareGoodsLinks.length >= 3 && isEqualTitles && !isInCompare}
-              className="cursor-pointer disabled:cursor-not-allowed disabled:opacity-50"
-            >
-              {isInCompare ? (
-                <SquareCheckBig className="text-success" />
-              ) : (
-                <Square className="text-primary" />
-              )}
-            </button>
-          </TooltipTrigger>
-          <TooltipContent>
-            {compareGoodsLinks.length < 2 ? (
-              <p>
-                {isInCompare
-                  ? "Убрать отметку"
-                  : "Получить описание товара или добавить товар в сравнение"}
-              </p>
+
+      <Tooltip>
+        <TooltipTrigger asChild>
+          <button
+            onClick={handleChangeCompare}
+            disabled={compareGoodsLinks.length >= 3 && isEqualTitles && !isInCompare}
+            className="relative block cursor-pointer disabled:cursor-not-allowed disabled:opacity-50"
+          >
+            {isInCompare ? (
+              <SquareCheckBig className="text-success block" />
             ) : (
-              <p>
-                {isInCompare
-                  ? "Убрать из сравнения"
-                  : "Добавить товар в сравнение (макс. 3 товара)"}
-              </p>
+              <Square className="text-primary block" />
             )}
-          </TooltipContent>
-        </Tooltip>
-      </div>
+          </button>
+        </TooltipTrigger>
+        <TooltipContent>
+          {compareGoodsLinks.length < 2 ? (
+            <p>
+              {isInCompare
+                ? "Убрать отметку"
+                : "Получить описание товара или добавить товар в сравнение"}
+            </p>
+          ) : (
+            <p>
+              {isInCompare ? "Убрать из сравнения" : "Добавить товар в сравнение (макс. 3 товара)"}
+            </p>
+          )}
+        </TooltipContent>
+      </Tooltip>
     </div>
   );
 }
 
-export { CatalogCompareButton };
+export { ProductCardCompareButton };

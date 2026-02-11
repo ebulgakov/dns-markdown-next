@@ -69,12 +69,12 @@ function ProductCardFavoriteToggle({ goods }: PriceListFavoriteToggleProps) {
       title="Убрать из избранного"
       onClick={handleRemoveFromFavorites}
     >
-      <Star className="fill-favorite" />
+      <Star className="fill-favorite block" />
     </button>
   ) : (
     <button
       data-testid="add-to-favorites"
-      className="text-favorite text-xl"
+      className="text-favorite block text-xl"
       title="Добавить в избранное"
       onClick={handleAddToFavorites}
     >
