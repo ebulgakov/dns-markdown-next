@@ -1,13 +1,12 @@
 "use client";
 
 import { useCopyToClipboard } from "@uidotdev/usehooks";
-import { Plus, Minus, Heart, Hash, ChartNoAxesColumn } from "lucide-react";
+import { Plus, Minus, Heart, Hash } from "lucide-react";
 import { useContext, useEffect, useState } from "react";
 
 import { Tooltip, TooltipTrigger, TooltipContent } from "@/app/components/ui/tooltip";
 import { UserContext } from "@/app/contexts/user-context";
 import { cn } from "@/app/lib/utils";
-import { useLlmStore } from "@/app/stores/llm-store";
 import { VisualizationHeader } from "@/types/visualization";
 
 type CatalogHeaderProps = {
@@ -18,8 +17,6 @@ type CatalogHeaderProps = {
 };
 
 function CatalogHeader({ disableCollapse, header, city, shownHeart }: CatalogHeaderProps) {
-  const isAvailableCompare = useLlmStore(state => state.isAvailableCompare);
-  const onChangeAvailabilityCompare = useLlmStore(state => state.changeAvailabilityCompare);
   const [isTooltipOpen, setIsTooltipOpen] = useState(false);
   const [isCopied, setIsCopied] = useState(false);
   const [, copyToClipboard] = useCopyToClipboard();
@@ -115,25 +112,6 @@ function CatalogHeader({ disableCollapse, header, city, shownHeart }: CatalogHea
                   ? "Убрать категорию из избранного"
                   : "Добавить категорию в избранное"}
               </p>
-            </TooltipContent>
-          </Tooltip>
-
-          <Tooltip>
-            <TooltipTrigger asChild>
-              <button
-                type="button"
-                className="relative cursor-pointer"
-                onClick={() => onChangeAvailabilityCompare(!isAvailableCompare)}
-              >
-                <ChartNoAxesColumn
-                  className={cn("text-gray-400 hover:text-gray-500", {
-                    "fill-gray-900": isAvailableCompare
-                  })}
-                />
-              </button>
-            </TooltipTrigger>
-            <TooltipContent>
-              <p>Сравнить товары</p>
             </TooltipContent>
           </Tooltip>
         </div>

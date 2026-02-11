@@ -19,6 +19,7 @@ import { CatalogHeader } from "./catalog-header";
 
 import type { DiffsCollection as DiffsType } from "@/types/analysis-diff";
 import type { PriceList as PriceListType } from "@/types/pricelist";
+import { useShallow } from "zustand/react/shallow";
 
 type PriceListPageProps = {
   variant: CatalogComponentVariant;
@@ -29,7 +30,7 @@ type PriceListPageProps = {
 function Catalog({ priceList, variant, diffs }: PriceListPageProps) {
   const isUpdates = variant === "updates";
   const [scrollHeight, setScrollHeight] = useState(0);
-  const isAvailableCompare = useLlmStore(state => state.isAvailableCompare);
+  const isAvailableCompare = variant === "default";
   const searchTerm = useSearchStore(state => state.searchTerm);
   const debouncedSearch = useDebounce<string>(searchTerm.trim(), 100);
   const { flattenList, flattenTitles } = useFilteredGoods({
@@ -128,14 +129,20 @@ function Catalog({ priceList, variant, diffs }: PriceListPageProps) {
             )}
 
             {item.type === "goods" && (
-              <div className="relative border-b border-neutral-300">
-                <ProductCard
-                  shownFavorites={variant !== "archive"}
-                  item={item}
-                  diff={diffs?.[item._id]}
-                />
+              <div className="relative flex gap-4 border-b border-neutral-300">
+                <div className="flex-1">
+                  <ProductCard
+                    shownFavorites={variant !== "archive"}
+                    item={item}
+                    diff={diffs?.[item._id]}
+                  />
+                </div>
 
-                {isAvailableCompare && <CatalogCompareButton item={item} />}
+                {isAvailableCompare && (
+                  <div className="w-6">
+                    <CatalogCompareButton item={item} />
+                  </div>
+                )}
               </div>
             )}
 

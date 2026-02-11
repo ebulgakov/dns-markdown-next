@@ -15,27 +15,29 @@ function CatalogCompareButton({ item }: CatalogCompareButtonProps) {
     updateCompareGoodsLinks,
     setCompareGoodsLinks,
     compareGoods,
-    isCompareGoodsLoading
+    describeGoods,
+    isReportLoading
   } = useLlmStore(
     useShallow(state => ({
       setCompareGoodsLinks: state.setCompareGoodsLinks,
       compareGoodsLinks: state.compareGoodsLinks,
       isAvailableCompare: state.isAvailableCompare,
       updateCompareGoodsLinks: state.updateCompareGoodsLinks,
-      isCompareGoodsLoading: state.isCompareGoodsLoading,
-      compareGoods: state.compareGoods
+      isReportLoading: state.isReportLoading,
+      compareGoods: state.compareGoods,
+      describeGoods: state.describeGoods
     }))
   );
 
   const isInCompare = compareGoodsLinks.some(link => link.link === item.link);
   const isEqualTitles = compareGoodsLinks.every(link => link.sectionTitle === item.sectionTitle);
 
-  const handleChangeCompare = () => {
-    const comparePayload = {
-      link: item.link,
-      sectionTitle: item.sectionTitle
-    };
+  const comparePayload = {
+    link: item.link,
+    sectionTitle: item.sectionTitle
+  };
 
+  const handleChangeCompare = () => {
     if (!isEqualTitles) {
       setCompareGoodsLinks([comparePayload]);
     } else {
@@ -43,16 +45,20 @@ function CatalogCompareButton({ item }: CatalogCompareButtonProps) {
     }
   };
 
+  const handleClickCompare = async () => {
+    if (compareGoodsLinks.length < 2) {
+      await describeGoods(comparePayload);
+    } else {
+      await compareGoods(compareGoodsLinks);
+    }
+  };
+
   return (
-    <div className="bg-background absolute top-0 right-0 h-full w-6">
+    <div className="relative h-full">
       {isInCompare && (
         <div className="bg-background absolute inset-0 flex items-center justify-end">
-          <Button
-            disabled={isCompareGoodsLoading}
-            className="mr-10"
-            onClick={() => compareGoods(compareGoodsLinks)}
-          >
-            Сравнить
+          <Button disabled={isReportLoading} className="mr-10" onClick={handleClickCompare}>
+            {compareGoodsLinks.length < 2 ? "Получить описание" : "Стравнить"}
           </Button>
         </div>
       )}
@@ -72,9 +78,19 @@ function CatalogCompareButton({ item }: CatalogCompareButtonProps) {
             </button>
           </TooltipTrigger>
           <TooltipContent>
-            <p>
-              {isInCompare ? "Убрать из сравнения" : "Добавить товар в сравнение (макс. 3 товара)"}
-            </p>
+            {compareGoodsLinks.length < 2 ? (
+              <p>
+                {isInCompare
+                  ? "Убрать отметку"
+                  : "Получить описание товара или добавить товар в сравнение"}
+              </p>
+            ) : (
+              <p>
+                {isInCompare
+                  ? "Убрать из сравнения"
+                  : "Добавить товар в сравнение (макс. 3 товара)"}
+              </p>
+            )}
           </TooltipContent>
         </Tooltip>
       </div>

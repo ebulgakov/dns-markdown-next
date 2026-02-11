@@ -168,5 +168,5 @@ export const getLLMDescribeProduct = async (
   message: string;
   report: string;
 }> => {
-  return wrapApiCall("/api/llm/compare-products", { params: { link } });
+  return wrapApiCall("/api/llm/describe-product", { params: { link } });
 };
