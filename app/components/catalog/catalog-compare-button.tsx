@@ -4,17 +4,26 @@ import { useShallow } from "zustand/react/shallow";
 import { Tooltip, TooltipContent, TooltipTrigger } from "@/app/components/ui/tooltip";
 import { useLlmStore } from "@/app/stores/llm-store";
 import { VisualizationGoods } from "@/types/visualization";
+import { Button } from "@/app/components/ui/button";
 
 type CatalogCompareButtonProps = {
   item: VisualizationGoods;
 };
 function CatalogCompareButton({ item }: CatalogCompareButtonProps) {
-  const { compareGoodsLinks, updateCompareGoodsLinks, setCompareGoodsLinks } = useLlmStore(
+  const {
+    compareGoodsLinks,
+    updateCompareGoodsLinks,
+    setCompareGoodsLinks,
+    compareGoods,
+    isCompareGoodsLoading
+  } = useLlmStore(
     useShallow(state => ({
       setCompareGoodsLinks: state.setCompareGoodsLinks,
       compareGoodsLinks: state.compareGoodsLinks,
       isAvailableCompare: state.isAvailableCompare,
-      updateCompareGoodsLinks: state.updateCompareGoodsLinks
+      updateCompareGoodsLinks: state.updateCompareGoodsLinks,
+      isCompareGoodsLoading: state.isCompareGoodsLoading,
+      compareGoods: state.compareGoods
     }))
   );
 
@@ -36,7 +45,18 @@ function CatalogCompareButton({ item }: CatalogCompareButtonProps) {
 
   return (
     <div className="bg-background absolute top-0 right-0 h-full w-6">
-      <div className="flex h-full items-center justify-center">
+      {isInCompare && (
+        <div className="bg-background absolute inset-0 flex items-center justify-end">
+          <Button
+            disabled={isCompareGoodsLoading}
+            className="mr-10"
+            onClick={() => compareGoods(compareGoodsLinks)}
+          >
+            Сравнить
+          </Button>
+        </div>
+      )}
+      <div className="absolute inset-0 flex items-center justify-center">
         <Tooltip>
           <TooltipTrigger asChild>
             <button

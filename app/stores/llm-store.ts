@@ -1,5 +1,7 @@
 import { create } from "zustand";
 
+import { getLLMCompareProducts } from "@/api/get";
+
 type CompareGoodsLink = {
   link: string;
   sectionTitle: string;
@@ -7,16 +9,18 @@ type CompareGoodsLink = {
 
 type llmStore = {
   isAvailableCompare: boolean;
+  isCompareGoodsLoading: boolean;
   changeAvailabilityCompare: (isAvailable: boolean) => void;
   compareGoodsLinks: CompareGoodsLink[];
   updateCompareGoodsLinks: (link: CompareGoodsLink) => void;
   setCompareGoodsLinks: (links: CompareGoodsLink[]) => void;
-  //compareGoods: (links: string[]) => Promise<string>;
+  compareGoods: (links: CompareGoodsLink[]) => Promise<void>;
   report: string;
 };
 
 export const useLlmStore = create<llmStore>(set => ({
   isAvailableCompare: false,
+  isCompareGoodsLoading: false,
   changeAvailabilityCompare: isAvailable => {
     set(state => ({ ...state, compareGoodsLinks: [], isAvailableCompare: isAvailable }));
   },
@@ -32,17 +36,15 @@ export const useLlmStore = create<llmStore>(set => ({
   setCompareGoodsLinks: links => {
     set(state => ({ ...state, compareGoodsLinks: links }));
   },
-  report: ""
-  // compareGoods: async (links: string[]) => {
-  //   const response = await fetch("/api/compare-goods", {
-  //     method: "POST",
-  //     headers: {
-  //       "Content-Type": "application/json"
-  //     },
-  //     body: JSON.stringify({ links })
-  //   });
-  //   const data = await response.json();
-  //   set(state => ({ ...state, report: data.report }));
-  //   return data.report;
-  // }
+  report: "",
+  compareGoods: async links => {
+    set(state => ({ ...state, isCompareGoodsLoading: true }));
+    const payloadLinks = links.map(link => link.link);
+    try {
+      const response = await getLLMCompareProducts(payloadLinks);
+      set(state => ({ ...state, report: response }));
+    } finally {
+      set(state => ({ ...state, isCompareGoodsLoading: false }));
+    }
+  }
 }));
