@@ -5,6 +5,7 @@ import { useContext } from "react";
 
 import { Catalog } from "@/app/components/catalog";
 import { JumpToSection } from "@/app/components/jump-to-section";
+import { LllmReport } from "@/app/components/llm-report";
 import { PageLoader } from "@/app/components/page-loader";
 import { ScrollToTop } from "@/app/components/scroll-to-top";
 import { Search } from "@/app/components/search";
@@ -14,7 +15,6 @@ import { PageTitle } from "@/app/components/ui/page-title";
 import { UserContext } from "@/app/contexts/user-context";
 import { formatDate, formatTime } from "@/app/helpers/format";
 import { getPriceListWithSortedPositions } from "@/app/helpers/pricelist";
-import { LllmReport } from "@/app/llm-report";
 import { PriceList } from "@/types/pricelist";
 
 type CatalogClientPageProps = {

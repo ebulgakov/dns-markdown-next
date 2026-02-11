@@ -8,9 +8,7 @@ type CompareGoodsLink = {
 };
 
 type llmStore = {
-  isAvailableCompare: boolean;
   isReportLoading: boolean;
-  changeAvailabilityCompare: (isAvailable: boolean) => void;
   compareGoodsLinks: CompareGoodsLink[];
   updateCompareGoodsLinks: (link: CompareGoodsLink) => void;
   setCompareGoodsLinks: (links: CompareGoodsLink[]) => void;
@@ -21,11 +19,7 @@ type llmStore = {
 };
 
 export const useLlmStore = create<llmStore>(set => ({
-  isAvailableCompare: false,
   isReportLoading: false,
-  changeAvailabilityCompare: isAvailable => {
-    set(state => ({ ...state, compareGoodsLinks: [], isAvailableCompare: isAvailable }));
-  },
   compareGoodsLinks: [],
   updateCompareGoodsLinks: item => {
     set(state => ({
@@ -47,7 +41,7 @@ export const useLlmStore = create<llmStore>(set => ({
     const payloadLinks = links.map(link => link.link);
     try {
       const { report } = await getLLMCompareProducts(payloadLinks);
-      set(state => ({ ...state, report }));
+      set(state => ({ ...state, report, compareGoodsLinks: [] }));
     } finally {
       set(state => ({ ...state, isReportLoading: false }));
     }
@@ -56,7 +50,7 @@ export const useLlmStore = create<llmStore>(set => ({
     set(state => ({ ...state, report: "", isReportLoading: true }));
     try {
       const { report } = await getLLMDescribeProduct(link.link);
-      set(state => ({ ...state, report }));
+      set(state => ({ ...state, report, compareGoodsLinks: [] }));
     } finally {
       set(state => ({ ...state, isReportLoading: false }));
     }

@@ -21,7 +21,6 @@ function ProductCardCompareButton({ item }: ProductCardCompareButtonProps) {
     useShallow(state => ({
       setCompareGoodsLinks: state.setCompareGoodsLinks,
       compareGoodsLinks: state.compareGoodsLinks,
-      isAvailableCompare: state.isAvailableCompare,
       updateCompareGoodsLinks: state.updateCompareGoodsLinks,
       isReportLoading: state.isReportLoading,
       compareGoods: state.compareGoods,
@@ -67,7 +66,7 @@ function ProductCardCompareButton({ item }: ProductCardCompareButtonProps) {
         <TooltipTrigger asChild>
           <button
             onClick={handleChangeCompare}
-            disabled={compareGoodsLinks.length >= 3 && isEqualTitles && !isInCompare}
+            disabled={compareGoodsLinks.length > 5 && isEqualTitles && !isInCompare}
             className="relative block cursor-pointer disabled:cursor-not-allowed disabled:opacity-50"
           >
             {isInCompare ? (
