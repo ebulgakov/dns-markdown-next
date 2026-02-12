@@ -1,7 +1,7 @@
+import { useDebounce } from "@uidotdev/usehooks";
 import Fuse from "fuse.js";
 import { useContext } from "react";
 
-import { CatalogComponentVariant } from "@/app/components/catalog/types";
 import { UserContext } from "@/app/contexts/user-context";
 import {
   getOptimizedFlatPriceListWithTitle,
@@ -9,6 +9,8 @@ import {
   getOptimizedFlatTitlesFromGoods,
   getOptimizedOutput
 } from "@/app/helpers/pricelist";
+import { usePriceListStore } from "@/app/stores/pricelist-store";
+import { useSearchStore } from "@/app/stores/search-store";
 import { useSortGoodsStore } from "@/app/stores/sort-goods-store";
 import {
   VisualizationFoundTitle,
@@ -17,34 +19,38 @@ import {
   VisualizationOutputList
 } from "@/types/visualization";
 
-import type { PriceList as priceListType } from "@/types/pricelist";
-
 type UseFilteredGoodsParams = {
-  term: string;
-  priceList: priceListType;
-  variant: CatalogComponentVariant;
+  hasNoModifyOutput?: boolean;
 };
 
 export const useFilteredGoods = ({
-  term,
-  priceList,
-  variant
+  hasNoModifyOutput
 }: UseFilteredGoodsParams): {
   flattenList: VisualizationOutputList;
   flattenTitles: VisualizationHeader[];
 } => {
+  const searchTerm = useSearchStore(state => state.searchTerm);
+  const debounceSearchTerm = useDebounce<string>(searchTerm.trim(), 100);
+  const priceList = usePriceListStore(state => state.priceList);
   const { favoriteSections, hiddenSections: initialHiddenSections } = useContext(UserContext);
   let hiddenSections = initialHiddenSections;
   const sortGoods = useSortGoodsStore(state => state.sortGoods);
 
+  if (!priceList) {
+    return {
+      flattenList: [],
+      flattenTitles: []
+    };
+  }
+
   let flattenOptimizedPriceList = getOptimizedFlatPriceListWithTitle(priceList);
   let flattenTitles = getOptimizedFlatTitles(priceList);
 
-  if (variant === "updates") {
+  if (hasNoModifyOutput) {
     const flattenList = getOptimizedOutput(flattenOptimizedPriceList, flattenTitles, {
       favoriteSections,
       hiddenSections
-    }).filter(title => title.type !== "title");
+    });
 
     return {
       flattenList,
@@ -52,12 +58,14 @@ export const useFilteredGoods = ({
     };
   }
 
-  if (term.length > 0) {
+  if (debounceSearchTerm.length > 0) {
     const fuse = new Fuse(flattenOptimizedPriceList, {
       keys: ["title", "titleInvertTranslation"]
     });
 
-    flattenOptimizedPriceList = fuse.search(term.toLowerCase()).map(result => result.item);
+    flattenOptimizedPriceList = fuse
+      .search(debounceSearchTerm.toLowerCase())
+      .map(result => result.item);
 
     hiddenSections = [];
     flattenTitles = getOptimizedFlatTitlesFromGoods(flattenOptimizedPriceList);
@@ -97,7 +105,7 @@ export const useFilteredGoods = ({
     hiddenSections
   });
 
-  if (term.length > 0) {
+  if (debounceSearchTerm.length > 0) {
     const foundTitle: VisualizationFoundTitle = {
       type: "foundTitle",
       titles: flattenTitles.map(title => title.title),

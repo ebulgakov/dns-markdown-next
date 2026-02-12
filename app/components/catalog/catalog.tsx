@@ -1,6 +1,5 @@
 "use client";
 
-import { useDebounce } from "@uidotdev/usehooks";
 import { useEffect, useRef, useState } from "react";
 import { useShallow } from "zustand/react/shallow";
 
@@ -13,37 +12,33 @@ import { useCatalogVirtualizer } from "@/app/hooks/use-catalog-virtualizer";
 import { useFilteredGoods } from "@/app/hooks/use-filtered-goods";
 import { cn } from "@/app/lib/utils";
 import { usePriceListStore } from "@/app/stores/pricelist-store";
-import { useSearchStore } from "@/app/stores/search-store";
 
 import { CatalogHeader } from "./catalog-header";
 
 type PriceListPageProps = {
   variant: CatalogComponentVariant;
+  disabledCollapse?: boolean;
 };
 
-function Catalog({ variant }: PriceListPageProps) {
-  const searchTerm = useSearchStore(state => state.searchTerm);
-  const { priceList, getPriceListCity, priceListDiffs } = usePriceListStore(
+function Catalog({ variant, disabledCollapse }: PriceListPageProps) {
+  const { flattenList, flattenTitles } = useFilteredGoods({
+    hasNoModifyOutput: variant === "updates"
+  });
+  const [scrollHeight, setScrollHeight] = useState(0);
+  const { getPriceListCity, priceListDiffs } = usePriceListStore(
     useShallow(state => ({
-      priceList: state.priceList,
       priceListDiffs: state.priceListDiffs,
       getPriceListCity: state.getPriceListCity
     }))
   );
 
-  const isUpdates = variant === "updates";
-  const [scrollHeight, setScrollHeight] = useState(0);
-  const debouncedSearch = useDebounce<string>(searchTerm.trim(), 100);
-  const { flattenList, flattenTitles } = useFilteredGoods({
-    term: debouncedSearch,
-    priceList: priceList!,
-    variant
-  });
-  const isSearchMode = !isUpdates && debouncedSearch.length > 1;
-
   // Virtualization setup
   const listRef = useRef<HTMLDivElement>(null);
-  const virtualizer = useCatalogVirtualizer({ flattenList, variant, listRef });
+  const virtualizer = useCatalogVirtualizer({
+    flattenList,
+    withStickySearch: variant !== "updates",
+    listRef
+  });
   const virtualItems = virtualizer.getVirtualItems();
   const currentTitle = getCurrentCatalogTitle(virtualItems, flattenList, flattenTitles);
 
@@ -51,6 +46,10 @@ function Catalog({ variant }: PriceListPageProps) {
     // After filtering the list, we need to update the total scroll height for virtualization
     setScrollHeight(virtualizer.getTotalSize());
   }, [virtualizer, flattenList.length]);
+
+  if (flattenList.length === 0) {
+    return null;
+  }
 
   return (
     <div
@@ -62,14 +61,14 @@ function Catalog({ variant }: PriceListPageProps) {
       {currentTitle && (
         <div
           className={cn("fixed right-0 left-0 z-10 px-4", {
-            "top-[calc(var(--nav-bar-height)_*_2)]": !isUpdates,
-            "top-[var(--nav-bar-height)]": isUpdates
+            "top-[calc(var(--nav-bar-height)_*_2)]": variant !== "updates",
+            "top-[var(--nav-bar-height)]": variant === "updates"
           })}
         >
           <div className="mx-auto md:container">
             <CatalogHeader
               city={getPriceListCity()}
-              disableCollapse={isSearchMode}
+              disabledCollapse={disabledCollapse}
               shownHeart={variant === "default"}
               header={currentTitle}
             />
@@ -123,7 +122,7 @@ function Catalog({ variant }: PriceListPageProps) {
             {item.type === "header" && (
               <CatalogHeader
                 city={getPriceListCity()}
-                disableCollapse={isSearchMode}
+                disabledCollapse={disabledCollapse}
                 shownHeart={variant === "default"}
                 header={item}
               />

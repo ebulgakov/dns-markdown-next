@@ -1,19 +1,18 @@
 import { useWindowVirtualizer } from "@tanstack/react-virtual";
 import { useEffect } from "react";
 
-import { CatalogComponentVariant } from "@/app/components/catalog/types";
 import { VisualizationHeader, VisualizationOutputList } from "@/types/visualization";
 
 type UseCatalogVirtualizerProps = {
   flattenList: VisualizationOutputList;
   listRef: React.RefObject<HTMLDivElement | null>;
-  variant: CatalogComponentVariant;
+  withStickySearch: boolean;
 };
 
 export const useCatalogVirtualizer = ({
   flattenList,
   listRef,
-  variant
+  withStickySearch
 }: UseCatalogVirtualizerProps) => {
   const virtualizer = useWindowVirtualizer({
     count: flattenList.length,
@@ -56,7 +55,7 @@ export const useCatalogVirtualizer = ({
         );
         let navHeight = parseInt(navHeightStr) || 56; // height of navbar + search bar
 
-        if (["default", "archive"].includes(variant)) {
+        if (withStickySearch) {
           navHeight *= 2;
         }
 
@@ -77,7 +76,7 @@ export const useCatalogVirtualizer = ({
       window.removeEventListener("hashchange", handleHashScroll);
       clearTimeout(timeoutId);
     };
-  }, [virtualizer, flattenList, variant, listRef]);
+  }, [virtualizer, flattenList, withStickySearch, listRef]);
 
   return virtualizer;
 };

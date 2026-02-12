@@ -54,10 +54,9 @@ const transformDiffData = (diff: AnalysisDiff, city: string) => {
 
 function TodayClientPage() {
   const { city } = useContext(UserContext);
-  const { updatePriceList, getPriceListCreatedDate, updatePriceListDiffs } = usePriceListStore(
+  const { updatePriceList, priceListCreatedDate, updatePriceListDiffs } = usePriceListStore(
     useShallow(state => ({
-      getPriceListCreatedDate: state.getPriceListCreatedDate,
-      priceList: state.priceList,
+      priceListCreatedDate: state.getPriceListCreatedDate(),
       updatePriceListDiffs: state.updatePriceListDiffs,
       updatePriceList: state.updatePriceList
     }))
@@ -93,7 +92,7 @@ function TodayClientPage() {
 
   return (
     <>
-      <PageTitle title={`Обновления на ${getPriceListCreatedDate()}`} />
+      <PageTitle title={`Обновления на ${priceListCreatedDate}`} />
       <Catalog variant="updates" />
       <ScrollToTop />
     </>

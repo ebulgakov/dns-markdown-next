@@ -13,10 +13,10 @@ type CatalogHeaderProps = {
   header: VisualizationHeader;
   shownHeart?: boolean;
   city: string;
-  disableCollapse?: boolean;
+  disabledCollapse?: boolean;
 };
 
-function CatalogHeader({ disableCollapse, header, city, shownHeart }: CatalogHeaderProps) {
+function CatalogHeader({ disabledCollapse, header, city, shownHeart }: CatalogHeaderProps) {
   const [isTooltipOpen, setIsTooltipOpen] = useState(false);
   const [isCopied, setIsCopied] = useState(false);
   const [, copyToClipboard] = useCopyToClipboard();
@@ -52,7 +52,7 @@ function CatalogHeader({ disableCollapse, header, city, shownHeart }: CatalogHea
 
   return (
     <div className="bg-background flex w-full items-center justify-start gap-2 border-b border-solid border-b-neutral-300 py-3 text-left">
-      {!disableCollapse && (
+      {!disabledCollapse && (
         <button
           type="button"
           onClick={() => handleToggleHiddenSection(header.title)}
