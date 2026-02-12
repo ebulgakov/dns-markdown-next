@@ -1,4 +1,3 @@
-import { useDebounce } from "@uidotdev/usehooks";
 import Fuse from "fuse.js";
 import { useContext } from "react";
 
@@ -10,7 +9,6 @@ import {
   getOptimizedOutput
 } from "@/app/helpers/pricelist";
 import { usePriceListStore } from "@/app/stores/pricelist-store";
-import { useSearchStore } from "@/app/stores/search-store";
 import { useSortGoodsStore } from "@/app/stores/sort-goods-store";
 import {
   VisualizationFoundTitle,
@@ -20,17 +18,17 @@ import {
 } from "@/types/visualization";
 
 type UseFilteredGoodsParams = {
+  filterTerm: string;
   hasNoModifyOutput?: boolean;
 };
 
 export const useFilteredGoods = ({
+  filterTerm,
   hasNoModifyOutput
 }: UseFilteredGoodsParams): {
   flattenList: VisualizationOutputList;
   flattenTitles: VisualizationHeader[];
 } => {
-  const searchTerm = useSearchStore(state => state.searchTerm);
-  const debounceSearchTerm = useDebounce<string>(searchTerm.trim(), 100);
   const priceList = usePriceListStore(state => state.priceList);
   const { favoriteSections, hiddenSections: initialHiddenSections } = useContext(UserContext);
   let hiddenSections = initialHiddenSections;
@@ -58,14 +56,12 @@ export const useFilteredGoods = ({
     };
   }
 
-  if (debounceSearchTerm.length > 0) {
+  if (filterTerm.length > 0) {
     const fuse = new Fuse(flattenOptimizedPriceList, {
       keys: ["title", "titleInvertTranslation"]
     });
 
-    flattenOptimizedPriceList = fuse
-      .search(debounceSearchTerm.toLowerCase())
-      .map(result => result.item);
+    flattenOptimizedPriceList = fuse.search(filterTerm.toLowerCase()).map(result => result.item);
 
     hiddenSections = [];
     flattenTitles = getOptimizedFlatTitlesFromGoods(flattenOptimizedPriceList);
@@ -105,7 +101,7 @@ export const useFilteredGoods = ({
     hiddenSections
   });
 
-  if (debounceSearchTerm.length > 0) {
+  if (filterTerm.length > 0) {
     const foundTitle: VisualizationFoundTitle = {
       type: "foundTitle",
       titles: flattenTitles.map(title => title.title),

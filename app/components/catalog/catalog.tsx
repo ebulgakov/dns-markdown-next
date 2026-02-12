@@ -1,7 +1,7 @@
 "use client";
 
+import { useDebounce } from "@uidotdev/usehooks";
 import { useEffect, useRef, useState } from "react";
-import { useShallow } from "zustand/react/shallow";
 
 import { CatalogFavoritesEmptyAlert } from "@/app/components/catalog/catalog-favorites-empty-alert";
 import { getCurrentCatalogTitle } from "@/app/components/catalog/helpers/get-current-catalog-title";
@@ -11,26 +11,23 @@ import { Title } from "@/app/components/ui/title";
 import { useCatalogVirtualizer } from "@/app/hooks/use-catalog-virtualizer";
 import { useFilteredGoods } from "@/app/hooks/use-filtered-goods";
 import { cn } from "@/app/lib/utils";
-import { usePriceListStore } from "@/app/stores/pricelist-store";
+import { useSearchStore } from "@/app/stores/search-store";
 
 import { CatalogHeader } from "./catalog-header";
 
 type PriceListPageProps = {
   variant: CatalogComponentVariant;
-  disabledCollapse?: boolean;
 };
 
-function Catalog({ variant, disabledCollapse }: PriceListPageProps) {
+function Catalog({ variant }: PriceListPageProps) {
+  const searchTerm = useSearchStore(state => state.searchTerm);
+  const filterTerm = useDebounce<string>(searchTerm.trim(), 100);
   const { flattenList, flattenTitles } = useFilteredGoods({
+    filterTerm,
     hasNoModifyOutput: variant === "updates"
   });
   const [scrollHeight, setScrollHeight] = useState(0);
-  const { getPriceListCity, priceListDiffs } = usePriceListStore(
-    useShallow(state => ({
-      priceListDiffs: state.priceListDiffs,
-      getPriceListCity: state.getPriceListCity
-    }))
-  );
+  const disabledCollapse = variant !== "updates" && filterTerm.length > 0;
 
   // Virtualization setup
   const listRef = useRef<HTMLDivElement>(null);
@@ -67,7 +64,6 @@ function Catalog({ variant, disabledCollapse }: PriceListPageProps) {
         >
           <div className="mx-auto md:container">
             <CatalogHeader
-              city={getPriceListCity()}
               disabledCollapse={disabledCollapse}
               shownHeart={variant === "default"}
               header={currentTitle}
@@ -121,7 +117,6 @@ function Catalog({ variant, disabledCollapse }: PriceListPageProps) {
 
             {item.type === "header" && (
               <CatalogHeader
-                city={getPriceListCity()}
                 disabledCollapse={disabledCollapse}
                 shownHeart={variant === "default"}
                 header={item}
@@ -135,7 +130,6 @@ function Catalog({ variant, disabledCollapse }: PriceListPageProps) {
                   shownCompares={variant === "default"}
                   sectionTitle={item.sectionTitle}
                   item={item}
-                  diff={priceListDiffs?.[item._id]}
                 />
               </div>
             )}

@@ -3,20 +3,27 @@
 import { useCopyToClipboard } from "@uidotdev/usehooks";
 import { Plus, Minus, Heart, Hash } from "lucide-react";
 import { useContext, useEffect, useState } from "react";
+import { useShallow } from "zustand/react/shallow";
 
 import { Tooltip, TooltipTrigger, TooltipContent } from "@/app/components/ui/tooltip";
 import { UserContext } from "@/app/contexts/user-context";
 import { cn } from "@/app/lib/utils";
+import { usePriceListStore } from "@/app/stores/pricelist-store";
 import { VisualizationHeader } from "@/types/visualization";
 
 type CatalogHeaderProps = {
   header: VisualizationHeader;
   shownHeart?: boolean;
-  city: string;
   disabledCollapse?: boolean;
 };
 
-function CatalogHeader({ disabledCollapse, header, city, shownHeart }: CatalogHeaderProps) {
+function CatalogHeader({ disabledCollapse, header, shownHeart }: CatalogHeaderProps) {
+  const { priceListCity } = usePriceListStore(
+    useShallow(state => ({
+      priceListCity: state.getPriceListCity()
+    }))
+  );
+
   const [isTooltipOpen, setIsTooltipOpen] = useState(false);
   const [isCopied, setIsCopied] = useState(false);
   const [, copyToClipboard] = useCopyToClipboard();
@@ -24,7 +31,7 @@ function CatalogHeader({ disabledCollapse, header, city, shownHeart }: CatalogHe
     useContext(UserContext);
   const handleCopy = async () => {
     await copyToClipboard(
-      `${window.location.origin}${window.location.pathname}?city=${city}#${encodeURIComponent(header.title)}`
+      `${window.location.origin}${window.location.pathname}?city=${priceListCity}#${encodeURIComponent(header.title)}`
     );
     setIsTooltipOpen(true);
     setIsCopied(true);

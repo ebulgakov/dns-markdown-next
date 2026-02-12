@@ -1,6 +1,5 @@
 "use client";
 import { useQuery } from "@tanstack/react-query";
-import { useDebounce } from "@uidotdev/usehooks";
 import axios from "axios";
 import { useContext, useEffect } from "react";
 import { useShallow } from "zustand/react/shallow";
@@ -16,7 +15,6 @@ import { Alert, AlertDescription, AlertTitle } from "@/app/components/ui/alert";
 import { PageTitle } from "@/app/components/ui/page-title";
 import { UserContext } from "@/app/contexts/user-context";
 import { usePriceListStore } from "@/app/stores/pricelist-store";
-import { useSearchStore } from "@/app/stores/search-store";
 import { PriceList } from "@/types/pricelist";
 
 type CatalogClientPageProps = {
@@ -24,8 +22,6 @@ type CatalogClientPageProps = {
 };
 
 function CatalogClientPage({ city: cityFromUrl }: CatalogClientPageProps) {
-  const searchTerm = useSearchStore(state => state.searchTerm);
-  const debouncedSearch = useDebounce<string>(searchTerm.trim(), 100);
   const { updatePriceList, priceListCreatedDate, priceListCreatedTime, priceListCount } =
     usePriceListStore(
       useShallow(state => ({
@@ -78,7 +74,7 @@ function CatalogClientPage({ city: cityFromUrl }: CatalogClientPageProps) {
         </div>
       </PageTitle>
       <Search />
-      <Catalog variant="default" disabledCollapse={debouncedSearch.length > 0} />
+      <Catalog variant="default" />
       <JumpToSection />
       <ScrollToTop variant="with-jump-to-search" />
       <LLMReport />
