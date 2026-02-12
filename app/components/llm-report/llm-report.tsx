@@ -4,6 +4,7 @@ import { ChevronDown, X } from "lucide-react";
 import { useEffect, useState } from "react";
 import ReactMarkdown from "react-markdown";
 import rehypeRaw from "rehype-raw";
+import rehypeSanitize from "rehype-sanitize";
 import remarkGfm from "remark-gfm";
 import { useShallow } from "zustand/react/shallow";
 
@@ -12,7 +13,7 @@ import { useLlmStore } from "@/app/stores/llm-store";
 
 import styles from "./llm-report.module.css";
 
-function LllmReport() {
+function LLMReport() {
   const { llmReport, setReport } = useLlmStore(
     useShallow(state => ({
       llmReport: state.report,
@@ -87,7 +88,7 @@ function LllmReport() {
       <div className="mx-auto md:container">
         <div className={styles.wrapper}>
           <ReactMarkdown
-            rehypePlugins={[rehypeRaw]}
+            rehypePlugins={[rehypeRaw, rehypeSanitize]}
             remarkPlugins={[remarkGfm]}
             remarkRehypeOptions={{ passThrough: ["link"] }}
           >
@@ -99,4 +100,4 @@ function LllmReport() {
   );
 }
 
-export { LllmReport };
+export { LLMReport };

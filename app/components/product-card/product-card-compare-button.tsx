@@ -63,7 +63,7 @@ function ProductCardCompareButton({ item, sectionTitle }: ProductCardCompareButt
               ? "Ждём ответ от ChatGPT"
               : compareGoodsLinks.length < 2
                 ? "Получить описание"
-                : "Стравнить"}
+                : "Сравнить"}
           </Button>
         </div>
       )}

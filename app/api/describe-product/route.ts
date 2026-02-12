@@ -16,7 +16,7 @@ export async function GET(req: NextRequest) {
 
     return NextResponse.json(response);
   } catch (e) {
-    console.error("Failed to fetch product description:", e);
+    console.error("Failed to describe product:", e);
     return NextResponse.json({ message: "Internal server error" }, { status: 500 });
   }
 }

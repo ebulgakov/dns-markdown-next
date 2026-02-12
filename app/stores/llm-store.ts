@@ -50,6 +50,9 @@ export const useLlmStore = create<llmStore>(set => ({
         .then(res => res.data);
 
       set(state => ({ ...state, report, compareGoodsLinks: [] }));
+    } catch (error) {
+      console.error("Failed to compare products:", error);
+      set(state => ({ ...state, report: "Failed to compare products. Please try again later." }));
     } finally {
       set(state => ({ ...state, isReportLoading: false }));
     }
@@ -63,6 +66,9 @@ export const useLlmStore = create<llmStore>(set => ({
         })
         .then(res => res.data);
       set(state => ({ ...state, report, compareGoodsLinks: [] }));
+    } catch (error) {
+      console.error("Failed to describe product:", error);
+      set(state => ({ ...state, report: "Failed to describe product. Please try again later." }));
     } finally {
       set(state => ({ ...state, isReportLoading: false }));
     }

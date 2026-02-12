@@ -1,1 +1,1 @@
-export { LllmReport } from "./llm-report";
+export { LLMReport } from "./llm-report";

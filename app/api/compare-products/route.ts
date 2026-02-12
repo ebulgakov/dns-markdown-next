@@ -5,12 +5,8 @@ import { getLLMCompareProducts } from "@/api/get";
 export async function GET(req: NextRequest) {
   const links = req?.nextUrl?.searchParams.getAll("links[]");
 
-  if (!links) {
-    return NextResponse.json({ message: "Links are required" }, { status: 400 });
-  }
-
-  if (links.length === 0) {
-    return NextResponse.json({ message: "At least one valid link is required" }, { status: 400 });
+  if (links.length < 2) {
+    return NextResponse.json({ message: "Min 2 links are required" }, { status: 400 });
   }
 
   try {
@@ -20,7 +16,7 @@ export async function GET(req: NextRequest) {
 
     return NextResponse.json(response);
   } catch (e) {
-    console.error("Failed to fetch product description:", e);
+    console.error("Failed to compare products:", e);
     return NextResponse.json({ message: "Internal server error" }, { status: 500 });
   }
 }
