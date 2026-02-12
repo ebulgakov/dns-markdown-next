@@ -80,11 +80,7 @@ function LLMReport() {
       </Button>
       <div className="mx-auto md:container">
         <div className={styles.wrapper}>
-          <ReactMarkdown
-            rehypePlugins={[rehypeRaw, rehypeSanitize]}
-            remarkPlugins={[remarkGfm]}
-            remarkRehypeOptions={{ passThrough: ["link"] }}
-          >
+          <ReactMarkdown rehypePlugins={[rehypeRaw, rehypeSanitize]} remarkPlugins={[remarkGfm]}>
             {llmReport}
           </ReactMarkdown>
         </div>
