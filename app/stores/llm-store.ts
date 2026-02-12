@@ -1,4 +1,5 @@
 import axios from "axios";
+import axiosRetry from "axios-retry";
 import { create } from "zustand";
 
 type CompareGoodsLink = {
@@ -16,6 +17,9 @@ type llmStore = {
   setReport: (report: string) => void;
   report: string;
 };
+
+const client = axios.create();
+axiosRetry(client, { retries: 3, retryDelay: retryCount => retryCount * 1000 });
 
 export const useLlmStore = create<llmStore>(set => ({
   isReportLoading: false,
@@ -39,7 +43,7 @@ export const useLlmStore = create<llmStore>(set => ({
     set(state => ({ ...state, report: "", isReportLoading: true }));
     const payloadLinks = links.map(link => link.link);
     try {
-      const { report } = await axios
+      const { report } = await client
         .get("/api/compare-products", {
           params: { links: payloadLinks }
         })
@@ -53,7 +57,7 @@ export const useLlmStore = create<llmStore>(set => ({
   describeGoods: async link => {
     set(state => ({ ...state, report: "", isReportLoading: true }));
     try {
-      const { report } = await axios
+      const { report } = await client
         .get("/api/describe-product", {
           params: { link: link.link }
         })
