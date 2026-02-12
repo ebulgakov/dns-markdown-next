@@ -129,7 +129,7 @@ function Catalog({ variant }: PriceListPageProps) {
               </div>
             )}
 
-            {item.type === "title" && (
+            {item.type === "title" && variant !== "updates" && (
               <Title variant="h2" className={cn("mb-2", { "mt-0": item.category === "favorite" })}>
                 {item.category === "favorite" ? "Избранные категории" : "Все категории"}
               </Title>
