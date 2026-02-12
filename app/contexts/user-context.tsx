@@ -93,7 +93,9 @@ export function UserProvider({
         }
 
         if (result?.sections) {
-          setHiddenSections(result.sections);
+          startTransition(() => {
+            setHiddenSections(result.sections);
+          });
         }
       } catch (error) {
         console.error("Failed to update hidden sections:", error);
@@ -117,7 +119,9 @@ export function UserProvider({
         }
 
         if (result?.sections) {
-          setFavoriteSections(result.sections);
+          startTransition(() => {
+            setFavoriteSections(result.sections);
+          });
         }
       } catch (error) {
         console.error("Failed to update favorite sections:", error);
