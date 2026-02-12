@@ -11,6 +11,11 @@ import type { Goods, PriceList, PriceListDate, PriceListsArchiveCount } from "@/
 import type { ProductPayload } from "@/types/product";
 import type { ReportsResponse } from "@/types/reports";
 
+type LLMResponse = {
+  message: string;
+  report: string;
+};
+
 const wrapApiCall = async (endpoint: string, options = {}) => {
   try {
     const response = await apiClient.get(endpoint, options);
@@ -153,20 +158,25 @@ export const getTotalUniqProductsCount = async () => {
   return getCachedTotalUniqProductsCount(defaultCity);
 };
 
-export const getLLMCompareProducts = async (
-  links: string[]
-): Promise<{
-  message: string;
-  report: string;
-}> => {
-  return wrapApiCall("/api/llm/compare-products", { params: { links: links.join("|") } });
+const getCachedLLMCompareProducts = cacheToken(
+  async (links: string): Promise<LLMResponse> =>
+    wrapApiCall("/api/llm/compare-products", { params: { links } }),
+  ["llm-compare-products"],
+  { tags: ["llm-report"] }
+);
+
+export const getLLMCompareProducts = async (links: string[]) => {
+  const stringifiedLinks = JSON.stringify(links);
+  return getCachedLLMCompareProducts(stringifiedLinks);
 };
 
-export const getLLMDescribeProduct = async (
-  link: string
-): Promise<{
-  message: string;
-  report: string;
-}> => {
-  return wrapApiCall("/api/llm/describe-product", { params: { link } });
+const getCachedLLMDescribeProduct = cacheToken(
+  async (link: string): Promise<LLMResponse> =>
+    wrapApiCall("/api/llm/describe-product", { params: { link } }),
+  ["llm-describe-product"],
+  { tags: ["llm-report"] }
+);
+
+export const getLLMDescribeProduct = async (link: string) => {
+  return getCachedLLMDescribeProduct(link);
 };

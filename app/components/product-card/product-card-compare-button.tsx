@@ -59,7 +59,11 @@ function ProductCardCompareButton({ item, sectionTitle }: ProductCardCompareButt
       {isInCompare && (
         <div className="bg-background absolute -top-1 left-10 rounded-md md:right-10 md:left-auto">
           <Button disabled={isReportLoading} onClick={handleClickCompare}>
-            {compareGoodsLinks.length < 2 ? "Получить описание" : "Стравнить"}
+            {isReportLoading
+              ? "Ждём ответ от ChatGPT"
+              : compareGoodsLinks.length < 2
+                ? "Получить описание"
+                : "Стравнить"}
           </Button>
         </div>
       )}
@@ -87,7 +91,7 @@ function ProductCardCompareButton({ item, sectionTitle }: ProductCardCompareButt
             </p>
           ) : (
             <p>
-              {isInCompare ? "Убрать из сравнения" : "Добавить товар в сравнение (макс. 3 товара)"}
+              {isInCompare ? "Убрать из сравнения" : "Добавить товар в сравнение (макс. 5 товаров)"}
             </p>
           )}
         </TooltipContent>

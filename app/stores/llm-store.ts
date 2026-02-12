@@ -1,6 +1,5 @@
+import axios from "axios";
 import { create } from "zustand";
-
-import { getLLMCompareProducts, getLLMDescribeProduct } from "@/api/get";
 
 type CompareGoodsLink = {
   link: string;
@@ -40,7 +39,12 @@ export const useLlmStore = create<llmStore>(set => ({
     set(state => ({ ...state, report: "", isReportLoading: true }));
     const payloadLinks = links.map(link => link.link);
     try {
-      const { report } = await getLLMCompareProducts(payloadLinks);
+      const { report } = await axios
+        .get("/api/compare-products", {
+          params: { links: payloadLinks }
+        })
+        .then(res => res.data);
+
       set(state => ({ ...state, report, compareGoodsLinks: [] }));
     } finally {
       set(state => ({ ...state, isReportLoading: false }));
@@ -49,7 +53,11 @@ export const useLlmStore = create<llmStore>(set => ({
   describeGoods: async link => {
     set(state => ({ ...state, report: "", isReportLoading: true }));
     try {
-      const { report } = await getLLMDescribeProduct(link.link);
+      const { report } = await axios
+        .get("/api/describe-product", {
+          params: { link: link.link }
+        })
+        .then(res => res.data);
       set(state => ({ ...state, report, compareGoodsLinks: [] }));
     } finally {
       set(state => ({ ...state, isReportLoading: false }));
