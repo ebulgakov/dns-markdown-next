@@ -91,9 +91,9 @@ function Catalog({ variant }: PriceListPageProps) {
                   <span className="font-normal">{item.goodsCount}</span>
                 </Title>
 
-                <div>
+                <div className="mb-10 grid gap-2 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
                   {item.titles.map(title => (
-                    <div key={title} className="mb-2">
+                    <div key={title}>
                       <a
                         href={`#${encodeURIComponent(title)}`}
                         className="hover:text-primary cursor-pointer text-sm text-gray-500"
