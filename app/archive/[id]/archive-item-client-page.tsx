@@ -2,6 +2,7 @@
 
 import { useQuery } from "@tanstack/react-query";
 import axios from "axios";
+import { useTranslations } from "next-intl";
 import { useEffect } from "react";
 import { useShallow } from "zustand/react/shallow";
 
@@ -21,6 +22,7 @@ type ArchiveItemClientPageProps = {
 };
 
 function ArchiveItemClientPage({ id }: ArchiveItemClientPageProps) {
+  const t = useTranslations("metadata");
   const { updatePriceList, priceListCount, priceListCreatedDate } = usePriceListStore(
     useShallow(state => ({
       priceListCreatedDate: state.getPriceListCreatedDate(),
@@ -59,6 +61,7 @@ function ArchiveItemClientPage({ id }: ArchiveItemClientPageProps) {
 
   return (
     <div>
+      <title>{`${priceListCreatedDate} | ${t("archive_title")}`}</title>
       <PageTitle title={`Страница Архива за ${priceListCreatedDate}`}>
         <div className="mt-4 flex items-center justify-between gap-4 md:mt-0">
           <div>
