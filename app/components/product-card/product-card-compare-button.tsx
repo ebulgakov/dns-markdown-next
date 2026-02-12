@@ -57,7 +57,7 @@ function ProductCardCompareButton({ item, sectionTitle }: ProductCardCompareButt
   return (
     <div className="relative">
       {isInCompare && (
-        <div className="bg-background absolute -top-1 left-10 rounded-md md:right-10 md:left-auto">
+        <div className="bg-background absolute -top-1 left-10 z-0 rounded-md md:right-10 md:left-auto">
           <Button disabled={isReportLoading} onClick={handleClickCompare}>
             {isReportLoading
               ? "Ждём ответ от ChatGPT"
