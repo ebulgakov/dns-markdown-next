@@ -117,8 +117,7 @@ export function UserProvider({
         }
 
         if (result?.sections) {
-          // Temporarily disabling syncing with server state
-          // setFavoriteSections(result.sections);
+          setFavoriteSections(result.sections);
         }
       } catch (error) {
         console.error("Failed to update favorite sections:", error);
