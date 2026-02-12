@@ -1,7 +1,7 @@
 "use client";
 
 import { ChevronDown, X } from "lucide-react";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import ReactMarkdown from "react-markdown";
 import rehypeRaw from "rehype-raw";
 import rehypeSanitize from "rehype-sanitize";
@@ -14,13 +14,14 @@ import { useLlmStore } from "@/app/stores/llm-store";
 import styles from "./llm-report.module.css";
 
 function LLMReport() {
-  const { llmReport, setReport } = useLlmStore(
+  const { llmReport, clearReport, shownReport, setShownReport } = useLlmStore(
     useShallow(state => ({
+      shownReport: state.shownReport,
+      setShownReport: state.setShownReport,
       llmReport: state.report,
-      setReport: state.setReport
+      clearReport: state.clearReport
     }))
   );
-  const [shownReport, setShownReport] = useState<boolean>(!!llmReport);
 
   useEffect(() => {
     if (shownReport) {
@@ -33,14 +34,6 @@ function LLMReport() {
       document.body.style.overflow = "";
     };
   }, [shownReport]);
-
-  useEffect(() => {
-    if (!llmReport) {
-      setShownReport(false);
-    } else {
-      setShownReport(true);
-    }
-  }, [llmReport]);
 
   if (!llmReport) return null;
 
@@ -62,7 +55,7 @@ function LLMReport() {
           <button
             className="mr-13 flex cursor-pointer items-center gap-2 md:gap-4"
             type="button"
-            onClick={() => setReport("")}
+            onClick={clearReport}
           >
             <b>Закрыть</b>
             <span className="bg-secondary hover:bg-secondary size-8 rounded-full p-1 text-white">

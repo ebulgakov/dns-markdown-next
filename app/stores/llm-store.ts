@@ -9,12 +9,14 @@ type CompareGoodsLink = {
 
 type llmStore = {
   isReportLoading: boolean;
+  shownReport: boolean;
   compareGoodsLinks: CompareGoodsLink[];
   updateCompareGoodsLinks: (link: CompareGoodsLink) => void;
   setCompareGoodsLinks: (links: CompareGoodsLink[]) => void;
   compareGoods: (links: CompareGoodsLink[]) => Promise<void>;
   describeGoods: (link: CompareGoodsLink) => Promise<void>;
-  setReport: (report: string) => void;
+  clearReport: () => void;
+  setShownReport: (status: boolean) => void;
   report: string;
 };
 
@@ -23,6 +25,7 @@ axiosRetry(client, { retries: 3, retryDelay: retryCount => retryCount * 1000 });
 
 export const useLlmStore = create<llmStore>(set => ({
   isReportLoading: false,
+  shownReport: false,
   compareGoodsLinks: [],
   updateCompareGoodsLinks: item => {
     set(state => ({
@@ -36,8 +39,11 @@ export const useLlmStore = create<llmStore>(set => ({
     set(state => ({ ...state, compareGoodsLinks: links }));
   },
   report: "",
-  setReport: report => {
-    set(state => ({ ...state, report }));
+  clearReport: () => {
+    set(state => ({ ...state, report: "", shownReport: false }));
+  },
+  setShownReport: shownReport => {
+    set(state => ({ ...state, shownReport }));
   },
   compareGoods: async links => {
     set(state => ({ ...state, report: "", isReportLoading: true }));
@@ -49,7 +55,7 @@ export const useLlmStore = create<llmStore>(set => ({
         })
         .then(res => res.data);
 
-      set(state => ({ ...state, report, compareGoodsLinks: [] }));
+      set(state => ({ ...state, report, shownReport: true, compareGoodsLinks: [] }));
     } catch (error) {
       console.error("Failed to compare products:", error);
       set(state => ({ ...state, report: "Failed to compare products. Please try again later." }));
@@ -65,7 +71,7 @@ export const useLlmStore = create<llmStore>(set => ({
           params: { link: link.link }
         })
         .then(res => res.data);
-      set(state => ({ ...state, report, compareGoodsLinks: [] }));
+      set(state => ({ ...state, report, shownReport: true, compareGoodsLinks: [] }));
     } catch (error) {
       console.error("Failed to describe product:", error);
       set(state => ({ ...state, report: "Failed to describe product. Please try again later." }));
