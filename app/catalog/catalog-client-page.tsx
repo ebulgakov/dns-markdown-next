@@ -1,7 +1,8 @@
 "use client";
 import { useQuery } from "@tanstack/react-query";
 import axios from "axios";
-import { useContext } from "react";
+import { useContext, useEffect } from "react";
+import { useShallow } from "zustand/react/shallow";
 
 import { Catalog } from "@/app/components/catalog";
 import { JumpToSection } from "@/app/components/jump-to-section";
@@ -13,8 +14,7 @@ import { SortGoods } from "@/app/components/sort-goods";
 import { Alert, AlertDescription, AlertTitle } from "@/app/components/ui/alert";
 import { PageTitle } from "@/app/components/ui/page-title";
 import { UserContext } from "@/app/contexts/user-context";
-import { formatDate, formatTime } from "@/app/helpers/format";
-import { getPriceListWithSortedPositions } from "@/app/helpers/pricelist";
+import { usePriceListStore } from "@/app/stores/pricelist-store";
 import { PriceList } from "@/types/pricelist";
 
 type CatalogClientPageProps = {
@@ -22,6 +22,15 @@ type CatalogClientPageProps = {
 };
 
 function CatalogClientPage({ city: cityFromUrl }: CatalogClientPageProps) {
+  const { updatePriceList, priceListCreatedDate, priceListCreatedTime, priceListCount } =
+    usePriceListStore(
+      useShallow(state => ({
+        priceListCreatedDate: state.getPriceListCreatedDate(),
+        priceListCount: state.getPriceListCount(),
+        priceListCreatedTime: state.getPriceListCreatedTime(),
+        updatePriceList: state.updatePriceList
+      }))
+    );
   const { city: cityFromUser } = useContext(UserContext);
   const city = cityFromUrl || cityFromUser;
   const {
@@ -38,6 +47,12 @@ function CatalogClientPage({ city: cityFromUrl }: CatalogClientPageProps) {
         .then(r => r.data)
   });
 
+  useEffect(() => {
+    if (priceListResponse) {
+      updatePriceList(priceListResponse);
+    }
+  }, [priceListResponse, updatePriceList]);
+
   if (isPending) return <PageLoader />;
   if (error)
     return (
@@ -47,23 +62,20 @@ function CatalogClientPage({ city: cityFromUrl }: CatalogClientPageProps) {
       </Alert>
     );
 
-  const priceList = getPriceListWithSortedPositions(priceListResponse);
-
-  const count = priceList.positions.reduce((acc, cur) => acc + cur.items.length, 0);
   return (
     <>
-      <PageTitle title={formatDate(priceList.createdAt)} subTitle={formatTime(priceList.createdAt)}>
+      <PageTitle title={priceListCreatedDate} subTitle={priceListCreatedTime}>
         <div className="mt-4 flex items-center justify-between gap-4 md:mt-0">
           <div>
-            Количество: <b>{count}</b>
+            Количество: <b>{priceListCount}</b>
           </div>
 
           <SortGoods />
         </div>
       </PageTitle>
       <Search />
-      <Catalog variant="default" priceList={priceList} />
-      <JumpToSection priceList={priceList} />
+      <Catalog variant="default" />
+      <JumpToSection />
       <ScrollToTop variant="with-jump-to-search" />
       <LLMReport />
     </>

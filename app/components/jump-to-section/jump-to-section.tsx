@@ -1,49 +1,24 @@
 "use client";
 
-import { useCallback, useContext, useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 
-import { UserContext } from "@/app/contexts/user-context";
 import { cn } from "@/app/lib/utils";
 
 import { JumpToSectionContainer } from "./jump-to-section-container";
 import { JumpToSectionToggle } from "./jump-to-section-toggle";
 
-import type { PriceList } from "@/types/pricelist";
-
-type JumpToSectionProps = {
-  priceList: PriceList;
-};
-
-function JumpToSection({ priceList }: JumpToSectionProps) {
-  const { favoriteSections, hiddenSections } = useContext(UserContext);
+function JumpToSection() {
   const containerRef = useRef<HTMLDivElement>(null);
   const [isShownContainer, setIsShownContainer] = useState<boolean>(false);
 
-  const sections = priceList.positions
-    .map(position => position.title)
-    .sort((a, b) => {
-      const isHiddenA = hiddenSections.includes(a);
-      const isHiddenB = hiddenSections.includes(b);
-      const isFavoriteA = favoriteSections.includes(a);
-      const isFavoriteB = favoriteSections.includes(b);
-
-      if (isFavoriteA && !isFavoriteB) return -1;
-      if (!isFavoriteA && isFavoriteB) return 1;
-
-      if (isHiddenA && !isHiddenB) return 1;
-      if (!isHiddenA && isHiddenB) return -1;
-
-      return a.localeCompare(b);
-    });
-
-  const handleClose = useCallback(() => {
+  const handleClose = () => {
     setIsShownContainer(false);
-  }, []);
+  };
 
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
       if (containerRef.current && !containerRef.current.contains(event.target as Node)) {
-        handleClose();
+        setIsShownContainer(false);
       }
     };
 
@@ -51,7 +26,7 @@ function JumpToSection({ priceList }: JumpToSectionProps) {
     return () => {
       document.removeEventListener("mousedown", handleClickOutside);
     };
-  }, [handleClose]);
+  }, []);
 
   return (
     <div ref={containerRef}>
@@ -64,7 +39,7 @@ function JumpToSection({ priceList }: JumpToSectionProps) {
           }
         )}
       >
-        <JumpToSectionContainer onClose={handleClose} sections={sections} />
+        <JumpToSectionContainer onClose={handleClose} />
       </div>
       <div
         className={cn("fixed right-3 bottom-3 z-20 size-10 md:size-14", {

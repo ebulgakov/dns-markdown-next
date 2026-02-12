@@ -15,30 +15,26 @@ import { useSearchStore } from "@/app/stores/search-store";
 
 import { CatalogHeader } from "./catalog-header";
 
-import type { DiffsCollection as DiffsType } from "@/types/analysis-diff";
-import type { PriceList as PriceListType } from "@/types/pricelist";
-
 type PriceListPageProps = {
   variant: CatalogComponentVariant;
-  priceList: PriceListType;
-  diffs?: DiffsType;
 };
 
-function Catalog({ priceList, variant, diffs }: PriceListPageProps) {
-  const isUpdates = variant === "updates";
-  const [scrollHeight, setScrollHeight] = useState(0);
-  const searchTerm = useSearchStore(state => state.searchTerm);
-  const debouncedSearch = useDebounce<string>(searchTerm.trim(), 100);
+function Catalog({ variant }: PriceListPageProps) {
+  const searchTerm = useDebounce<string>(useSearchStore(state => state.searchTerm).trim(), 100);
   const { flattenList, flattenTitles } = useFilteredGoods({
-    term: debouncedSearch,
-    priceList,
-    variant
+    filterTerm: searchTerm,
+    hasNoModifyOutput: variant === "updates"
   });
-  const isSearchMode = !isUpdates && debouncedSearch.length > 1;
+  const [scrollHeight, setScrollHeight] = useState(0);
+  const disabledCollapse = variant !== "updates" && searchTerm.length > 0;
 
   // Virtualization setup
   const listRef = useRef<HTMLDivElement>(null);
-  const virtualizer = useCatalogVirtualizer({ flattenList, variant, listRef });
+  const virtualizer = useCatalogVirtualizer({
+    flattenList,
+    withStickySearch: variant !== "updates",
+    listRef
+  });
   const virtualItems = virtualizer.getVirtualItems();
   const currentTitle = getCurrentCatalogTitle(virtualItems, flattenList, flattenTitles);
 
@@ -57,14 +53,13 @@ function Catalog({ priceList, variant, diffs }: PriceListPageProps) {
       {currentTitle && (
         <div
           className={cn("fixed right-0 left-0 z-10 px-4", {
-            "top-[calc(var(--nav-bar-height)_*_2)]": !isUpdates,
-            "top-[var(--nav-bar-height)]": isUpdates
+            "top-[calc(var(--nav-bar-height)_*_2)]": variant !== "updates",
+            "top-[var(--nav-bar-height)]": variant === "updates"
           })}
         >
           <div className="mx-auto md:container">
             <CatalogHeader
-              city={priceList.city}
-              disableCollapse={isSearchMode}
+              disabledCollapse={disabledCollapse}
               shownHeart={variant === "default"}
               header={currentTitle}
             />
@@ -96,9 +91,9 @@ function Catalog({ priceList, variant, diffs }: PriceListPageProps) {
                   <span className="font-normal">{item.goodsCount}</span>
                 </Title>
 
-                <div>
+                <div className="mb-10 grid gap-2 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
                   {item.titles.map(title => (
-                    <div key={title} className="mb-2">
+                    <div key={title}>
                       <a
                         href={`#${encodeURIComponent(title)}`}
                         className="hover:text-primary cursor-pointer text-sm text-gray-500"
@@ -117,8 +112,7 @@ function Catalog({ priceList, variant, diffs }: PriceListPageProps) {
 
             {item.type === "header" && (
               <CatalogHeader
-                city={priceList.city}
-                disableCollapse={isSearchMode}
+                disabledCollapse={disabledCollapse}
                 shownHeart={variant === "default"}
                 header={item}
               />
@@ -131,12 +125,11 @@ function Catalog({ priceList, variant, diffs }: PriceListPageProps) {
                   shownCompares={variant === "default"}
                   sectionTitle={item.sectionTitle}
                   item={item}
-                  diff={diffs?.[item._id]}
                 />
               </div>
             )}
 
-            {item.type === "title" && (
+            {item.type === "title" && variant !== "updates" && (
               <Title variant="h2" className={cn("mb-2", { "mt-0": item.category === "favorite" })}>
                 {item.category === "favorite" ? "Избранные категории" : "Все категории"}
               </Title>
