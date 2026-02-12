@@ -32,8 +32,7 @@ function ProductCard({
 }: PriceListGoodsProps) {
   const { priceListDiffs } = usePriceListStore(
     useShallow(state => ({
-      priceListDiffs: state.priceListDiffs,
-      getPriceListCity: state.getPriceListCity
+      priceListDiffs: state.priceListDiffs
     }))
   );
 

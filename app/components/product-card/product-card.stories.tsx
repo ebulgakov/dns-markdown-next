@@ -4,7 +4,6 @@ import { UserProvider } from "@/app/contexts/user-context";
 import { mockGoodsList } from "./__mocks__/goods";
 import { ProductCard } from "./product-card";
 
-import type { Diff as DiffType } from "@/types/analysis-diff";
 import type { Meta, StoryObj } from "@storybook/react";
 
 const meta: Meta<typeof ProductCard> = {
@@ -13,19 +12,12 @@ const meta: Meta<typeof ProductCard> = {
   tags: ["autodocs"],
   argTypes: {
     item: { control: "object" },
-    diff: { control: "object" },
     status: { control: "object" }
   }
 };
 
 export default meta;
 type Story = StoryObj<typeof ProductCard>;
-
-const mockDiff: DiffType = {
-  price: "19999",
-  priceOld: "21999",
-  profit: "2000"
-};
 
 export const Default: Story = {
   render: args => (
@@ -58,7 +50,6 @@ export const WithDiff: Story = {
   ),
   args: {
     item: mockGoodsList[0],
-    diff: mockDiff,
     shownFavorites: true
   }
 };

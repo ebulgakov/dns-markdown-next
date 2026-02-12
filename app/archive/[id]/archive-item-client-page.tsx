@@ -21,7 +21,6 @@ function ArchiveItemClientPage({ priceList }: ArchiveItemClientPageProps) {
     useShallow(state => ({
       priceListCreatedDate: state.getPriceListCreatedDate(),
       priceListCount: state.getPriceListCount(),
-      priceList: state.priceList,
       updatePriceList: state.updatePriceList
     }))
   );

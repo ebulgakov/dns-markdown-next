@@ -1,15 +1,16 @@
 import { create } from "zustand";
 
 import { formatDate, formatTime } from "@/app/helpers/format";
+import { UserSections } from "@/types/user";
 
 import type { DiffsCollection } from "@/types/analysis-diff";
 import type { PriceList } from "@/types/pricelist";
 
-type PriceListStore = {
+export type PriceListStore = {
   priceList?: PriceList;
   priceListDiffs?: DiffsCollection;
   getPriceListCount: () => number;
-  getPriceSections: () => string[];
+  getPriceListSections: (favoriteSections: UserSections, hiddenSections: UserSections) => string[];
   getPriceListCreatedDate: () => string;
   getPriceListCreatedTime: () => string;
   getPriceListCity: () => string;
@@ -34,10 +35,23 @@ export const usePriceListStore = create<PriceListStore>((set, get) => ({
     if (!priceList) return "";
     return formatTime(priceList.createdAt);
   },
-  getPriceSections: () => {
-    const priceList = get().priceList;
-    if (!priceList) return [];
-    return priceList.positions.map(position => position.title);
+  getPriceListSections: (favoriteSections, hiddenSections) => {
+    const priceListSections = get().priceList?.positions.map(position => position.title) || [];
+
+    return priceListSections.sort((a, b) => {
+      const isHiddenA = hiddenSections.includes(a);
+      const isHiddenB = hiddenSections.includes(b);
+      const isFavoriteA = favoriteSections.includes(a);
+      const isFavoriteB = favoriteSections.includes(b);
+
+      if (isFavoriteA && !isFavoriteB) return -1;
+      if (!isFavoriteA && isFavoriteB) return 1;
+
+      if (isHiddenA && !isHiddenB) return 1;
+      if (!isHiddenA && isHiddenB) return -1;
+
+      return a.localeCompare(b);
+    });
   },
   updatePriceList: priceList => {
     set(state => ({ ...state, priceList }));

@@ -20,14 +20,13 @@ type PriceListPageProps = {
 };
 
 function Catalog({ variant }: PriceListPageProps) {
-  const searchTerm = useSearchStore(state => state.searchTerm);
-  const filterTerm = useDebounce<string>(searchTerm.trim(), 100);
+  const searchTerm = useDebounce<string>(useSearchStore(state => state.searchTerm).trim(), 100);
   const { flattenList, flattenTitles } = useFilteredGoods({
-    filterTerm,
+    filterTerm: searchTerm,
     hasNoModifyOutput: variant === "updates"
   });
   const [scrollHeight, setScrollHeight] = useState(0);
-  const disabledCollapse = variant !== "updates" && filterTerm.length > 0;
+  const disabledCollapse = variant !== "updates" && searchTerm.length > 0;
 
   // Virtualization setup
   const listRef = useRef<HTMLDivElement>(null);
@@ -43,10 +42,6 @@ function Catalog({ variant }: PriceListPageProps) {
     // After filtering the list, we need to update the total scroll height for virtualization
     setScrollHeight(virtualizer.getTotalSize());
   }, [virtualizer, flattenList.length]);
-
-  if (flattenList.length === 0) {
-    return null;
-  }
 
   return (
     <div
