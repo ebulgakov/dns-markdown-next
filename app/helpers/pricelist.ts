@@ -62,8 +62,8 @@ export const getOptimizedOutput = (
   goods: VisualizationGoods[],
   headers: VisualizationHeader[],
   {
-    favoriteSections,
-    hiddenSections
+    favoriteSections: initialFavoriteSections,
+    hiddenSections: initialHiddenSections
   }: {
     favoriteSections: UserSections;
     hiddenSections: UserSections;
@@ -80,6 +80,14 @@ export const getOptimizedOutput = (
     category: "other",
     type: "title"
   };
+
+  const favoriteSections = headers
+    .filter(header => initialFavoriteSections.some(title => title === header.title))
+    .map(header => header.title);
+
+  const hiddenSections = headers
+    .filter(header => initialHiddenSections.some(title => title === header.title))
+    .map(header => header.title);
 
   const nonFavoriteSections = headers
     .filter(header => !favoriteSections.some(title => title === header.title))
