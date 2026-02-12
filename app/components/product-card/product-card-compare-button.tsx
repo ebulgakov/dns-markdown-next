@@ -72,7 +72,7 @@ function ProductCardCompareButton({ item, sectionTitle }: ProductCardCompareButt
         <TooltipTrigger asChild>
           <button
             onClick={handleChangeCompare}
-            disabled={compareGoodsLinks.length > 5 && isEqualTitles && !isInCompare}
+            disabled={compareGoodsLinks.length >= 5 && isEqualTitles && !isInCompare}
             className="relative block cursor-pointer disabled:cursor-not-allowed disabled:opacity-50"
           >
             {isInCompare ? (
