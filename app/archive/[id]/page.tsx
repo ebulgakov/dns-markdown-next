@@ -2,7 +2,6 @@ import { getTranslations } from "next-intl/server";
 
 import { getPriceListById } from "@/api/get";
 import { ArchiveItemClientPage } from "@/app/archive/[id]/archive-item-client-page";
-import { Alert, AlertDescription, AlertTitle } from "@/app/components/ui/alert";
 import { formatDate } from "@/app/helpers/format";
 
 import type { Metadata } from "next";
@@ -30,18 +29,5 @@ export async function generateMetadata({ params }: ArchiveItemPage): Promise<Met
 export default async function ArchiveItemPage({ params }: ArchiveItemPage) {
   const { id } = await params;
 
-  let priceList;
-  try {
-    priceList = await getPriceListById(id);
-  } catch (e) {
-    const { message } = e as Error;
-    return (
-      <Alert variant="destructive">
-        <AlertTitle>Ошибка загрузки архива</AlertTitle>
-        <AlertDescription>{message}</AlertDescription>
-      </Alert>
-    );
-  }
-
-  return <ArchiveItemClientPage priceList={priceList} />;
+  return <ArchiveItemClientPage id={id} />;
 }

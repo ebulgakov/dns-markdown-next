@@ -1,22 +1,26 @@
 "use client";
 
+import { useQuery } from "@tanstack/react-query";
+import axios from "axios";
 import { useEffect } from "react";
 import { useShallow } from "zustand/react/shallow";
 
 import { Catalog } from "@/app/components/catalog";
 import { JumpToSection } from "@/app/components/jump-to-section";
+import { PageLoader } from "@/app/components/page-loader";
 import { ScrollToTop } from "@/app/components/scroll-to-top";
 import { Search } from "@/app/components/search";
+import { Alert, AlertDescription, AlertTitle } from "@/app/components/ui/alert";
 import { PageTitle } from "@/app/components/ui/page-title";
 import { usePriceListStore } from "@/app/stores/pricelist-store";
 
 import type { PriceList } from "@/types/pricelist";
 
 type ArchiveItemClientPageProps = {
-  priceList: PriceList;
+  id: string;
 };
 
-function ArchiveItemClientPage({ priceList }: ArchiveItemClientPageProps) {
+function ArchiveItemClientPage({ id }: ArchiveItemClientPageProps) {
   const { updatePriceList, priceListCount, priceListCreatedDate } = usePriceListStore(
     useShallow(state => ({
       priceListCreatedDate: state.getPriceListCreatedDate(),
@@ -24,12 +28,34 @@ function ArchiveItemClientPage({ priceList }: ArchiveItemClientPageProps) {
       updatePriceList: state.updatePriceList
     }))
   );
+  const {
+    data: priceListResponse,
+    isPending,
+    error
+  } = useQuery({
+    queryKey: ["pricelist-by-id", id],
+    queryFn: (): Promise<PriceList> =>
+      axios
+        .get("/api/pricelist-by-id", {
+          params: { id }
+        })
+        .then(r => r.data)
+  });
 
   useEffect(() => {
-    if (priceList) {
-      updatePriceList(priceList);
+    if (priceListResponse) {
+      updatePriceList(priceListResponse);
     }
-  }, [updatePriceList, priceList]);
+  }, [priceListResponse, updatePriceList]);
+
+  if (isPending) return <PageLoader />;
+  if (error)
+    return (
+      <Alert variant="destructive">
+        <AlertTitle>Ошибка загрузки каталога</AlertTitle>
+        <AlertDescription>{error.message}</AlertDescription>
+      </Alert>
+    );
 
   return (
     <div>
