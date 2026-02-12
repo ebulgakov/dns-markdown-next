@@ -1,7 +1,7 @@
 "use client";
 import { useQuery } from "@tanstack/react-query";
 import axios from "axios";
-import { useContext } from "react";
+import { useContext, useEffect } from "react";
 import { useShallow } from "zustand/react/shallow";
 
 import { Catalog } from "@/app/components/catalog";
@@ -22,21 +22,16 @@ type CatalogClientPageProps = {
 };
 
 function CatalogClientPage({ city: cityFromUrl }: CatalogClientPageProps) {
-  const {
-    priceList,
-    updatePriceList,
-    getPriceListCount,
-    getPriceListCreatedDate,
-    getPriceListCreatedTime
-  } = usePriceListStore(
-    useShallow(state => ({
-      getPriceListCreatedDate: state.getPriceListCreatedDate,
-      getPriceListCount: state.getPriceListCount,
-      getPriceListCreatedTime: state.getPriceListCreatedTime,
-      priceList: state.priceList,
-      updatePriceList: state.updatePriceList
-    }))
-  );
+  const { updatePriceList, getPriceListCount, getPriceListCreatedDate, getPriceListCreatedTime } =
+    usePriceListStore(
+      useShallow(state => ({
+        getPriceListCreatedDate: state.getPriceListCreatedDate,
+        getPriceListCount: state.getPriceListCount,
+        getPriceListCreatedTime: state.getPriceListCreatedTime,
+        priceList: state.priceList,
+        updatePriceList: state.updatePriceList
+      }))
+    );
   const { city: cityFromUser } = useContext(UserContext);
   const city = cityFromUrl || cityFromUser;
   const {
@@ -53,6 +48,12 @@ function CatalogClientPage({ city: cityFromUrl }: CatalogClientPageProps) {
         .then(r => r.data)
   });
 
+  useEffect(() => {
+    if (priceListResponse) {
+      updatePriceList(priceListResponse);
+    }
+  }, [priceListResponse, updatePriceList]);
+
   if (isPending) return <PageLoader />;
   if (error)
     return (
@@ -61,8 +62,6 @@ function CatalogClientPage({ city: cityFromUrl }: CatalogClientPageProps) {
         <AlertDescription>{error.message}</AlertDescription>
       </Alert>
     );
-
-  updatePriceList(priceListResponse);
 
   return (
     <>
@@ -76,8 +75,8 @@ function CatalogClientPage({ city: cityFromUrl }: CatalogClientPageProps) {
         </div>
       </PageTitle>
       <Search />
-      <Catalog variant="default" priceList={priceList} />
-      <JumpToSection priceList={priceList} />
+      <Catalog variant="default" />
+      <JumpToSection />
       <ScrollToTop variant="with-jump-to-search" />
       <LLMReport />
     </>

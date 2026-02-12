@@ -2,7 +2,8 @@
 
 import { useQuery } from "@tanstack/react-query";
 import axios from "axios";
-import { useContext } from "react";
+import { useContext, useEffect } from "react";
+import { useShallow } from "zustand/react/shallow";
 
 import { Catalog } from "@/app/components/catalog";
 import { PageLoader } from "@/app/components/page-loader";
@@ -10,7 +11,7 @@ import { ScrollToTop } from "@/app/components/scroll-to-top";
 import { Alert, AlertDescription, AlertTitle } from "@/app/components/ui/alert";
 import { PageTitle } from "@/app/components/ui/page-title";
 import { UserContext } from "@/app/contexts/user-context";
-import { formatDate } from "@/app/helpers/format";
+import { usePriceListStore } from "@/app/stores/pricelist-store";
 import { AnalysisDiff, DiffsCollection as DiffsType } from "@/types/analysis-diff";
 import { PriceList } from "@/types/pricelist";
 
@@ -53,6 +54,15 @@ const transformDiffData = (diff: AnalysisDiff, city: string) => {
 
 function TodayClientPage() {
   const { city } = useContext(UserContext);
+  const { updatePriceList, getPriceListCreatedDate, updatePriceListDiffs } = usePriceListStore(
+    useShallow(state => ({
+      getPriceListCreatedDate: state.getPriceListCreatedDate,
+      priceList: state.priceList,
+      updatePriceListDiffs: state.updatePriceListDiffs,
+      updatePriceList: state.updatePriceList
+    }))
+  );
+
   const {
     data: diff,
     isPending,
@@ -63,11 +73,17 @@ function TodayClientPage() {
       axios.get("/api/today-diff", { params: { city } }).then(r => r.data)
   });
 
-  const diffData = diff ? transformDiffData(diff, city) : null;
+  useEffect(() => {
+    if (diff) {
+      const diffData = transformDiffData(diff, city);
+      updatePriceList(diffData.digestList);
+      updatePriceListDiffs(diffData.diffs);
+    }
+  }, [diff, city, updatePriceList, updatePriceListDiffs]);
 
   if (isPending) return <PageLoader />;
 
-  if (error || !diffData)
+  if (error || !diff)
     return (
       <Alert variant="destructive">
         <AlertTitle>Ошибка загрузки каталога</AlertTitle>
@@ -77,9 +93,8 @@ function TodayClientPage() {
 
   return (
     <>
-      <PageTitle title={`Обновления на ${formatDate(diffData.digestList.createdAt)}`} />
-
-      <Catalog variant="updates" diffs={diffData.diffs} priceList={diffData.digestList} />
+      <PageTitle title={`Обновления на ${getPriceListCreatedDate()}`} />
+      <Catalog variant="updates" />
       <ScrollToTop />
     </>
   );

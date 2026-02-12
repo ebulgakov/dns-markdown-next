@@ -2,6 +2,7 @@
 
 import { useDebounce } from "@uidotdev/usehooks";
 import { useEffect, useRef, useState } from "react";
+import { useShallow } from "zustand/react/shallow";
 
 import { CatalogFavoritesEmptyAlert } from "@/app/components/catalog/catalog-favorites-empty-alert";
 import { getCurrentCatalogTitle } from "@/app/components/catalog/helpers/get-current-catalog-title";
@@ -11,27 +12,31 @@ import { Title } from "@/app/components/ui/title";
 import { useCatalogVirtualizer } from "@/app/hooks/use-catalog-virtualizer";
 import { useFilteredGoods } from "@/app/hooks/use-filtered-goods";
 import { cn } from "@/app/lib/utils";
+import { usePriceListStore } from "@/app/stores/pricelist-store";
 import { useSearchStore } from "@/app/stores/search-store";
 
 import { CatalogHeader } from "./catalog-header";
 
-import type { DiffsCollection as DiffsType } from "@/types/analysis-diff";
-import type { PriceList as PriceListType } from "@/types/pricelist";
-
 type PriceListPageProps = {
   variant: CatalogComponentVariant;
-  priceList: PriceListType;
-  diffs?: DiffsType;
 };
 
-function Catalog({ priceList, variant, diffs }: PriceListPageProps) {
+function Catalog({ variant }: PriceListPageProps) {
+  const searchTerm = useSearchStore(state => state.searchTerm);
+  const { priceList, getPriceListCity, priceListDiffs } = usePriceListStore(
+    useShallow(state => ({
+      priceList: state.priceList,
+      priceListDiffs: state.priceListDiffs,
+      getPriceListCity: state.getPriceListCity
+    }))
+  );
+
   const isUpdates = variant === "updates";
   const [scrollHeight, setScrollHeight] = useState(0);
-  const searchTerm = useSearchStore(state => state.searchTerm);
   const debouncedSearch = useDebounce<string>(searchTerm.trim(), 100);
   const { flattenList, flattenTitles } = useFilteredGoods({
     term: debouncedSearch,
-    priceList,
+    priceList: priceList!,
     variant
   });
   const isSearchMode = !isUpdates && debouncedSearch.length > 1;
@@ -63,7 +68,7 @@ function Catalog({ priceList, variant, diffs }: PriceListPageProps) {
         >
           <div className="mx-auto md:container">
             <CatalogHeader
-              city={priceList.city}
+              city={getPriceListCity()}
               disableCollapse={isSearchMode}
               shownHeart={variant === "default"}
               header={currentTitle}
@@ -117,7 +122,7 @@ function Catalog({ priceList, variant, diffs }: PriceListPageProps) {
 
             {item.type === "header" && (
               <CatalogHeader
-                city={priceList.city}
+                city={getPriceListCity()}
                 disableCollapse={isSearchMode}
                 shownHeart={variant === "default"}
                 header={item}
@@ -131,7 +136,7 @@ function Catalog({ priceList, variant, diffs }: PriceListPageProps) {
                   shownCompares={variant === "default"}
                   sectionTitle={item.sectionTitle}
                   item={item}
-                  diff={diffs?.[item._id]}
+                  diff={priceListDiffs?.[item._id]}
                 />
               </div>
             )}

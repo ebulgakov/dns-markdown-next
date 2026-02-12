@@ -43,7 +43,5 @@ export default async function ArchiveItemPage({ params }: ArchiveItemPage) {
     );
   }
 
-  const count = priceList.positions.reduce((acc, cur) => acc + cur.items.length, 0);
-
-  return <ArchiveItemClientPage priceList={priceList} count={count} />;
+  return <ArchiveItemClientPage priceList={priceList} />;
 }

@@ -1,40 +1,40 @@
 "use client";
 
 import { useCallback, useContext, useEffect, useRef, useState } from "react";
+import { useShallow } from "zustand/react/shallow";
 
 import { UserContext } from "@/app/contexts/user-context";
 import { cn } from "@/app/lib/utils";
+import { usePriceListStore } from "@/app/stores/pricelist-store";
 
 import { JumpToSectionContainer } from "./jump-to-section-container";
 import { JumpToSectionToggle } from "./jump-to-section-toggle";
 
-import type { PriceList } from "@/types/pricelist";
+function JumpToSection() {
+  const { getPriceSections } = usePriceListStore(
+    useShallow(state => ({
+      getPriceSections: state.getPriceSections
+    }))
+  );
 
-type JumpToSectionProps = {
-  priceList: PriceList;
-};
-
-function JumpToSection({ priceList }: JumpToSectionProps) {
   const { favoriteSections, hiddenSections } = useContext(UserContext);
   const containerRef = useRef<HTMLDivElement>(null);
   const [isShownContainer, setIsShownContainer] = useState<boolean>(false);
 
-  const sections = priceList.positions
-    .map(position => position.title)
-    .sort((a, b) => {
-      const isHiddenA = hiddenSections.includes(a);
-      const isHiddenB = hiddenSections.includes(b);
-      const isFavoriteA = favoriteSections.includes(a);
-      const isFavoriteB = favoriteSections.includes(b);
+  const sections = getPriceSections().sort((a, b) => {
+    const isHiddenA = hiddenSections.includes(a);
+    const isHiddenB = hiddenSections.includes(b);
+    const isFavoriteA = favoriteSections.includes(a);
+    const isFavoriteB = favoriteSections.includes(b);
 
-      if (isFavoriteA && !isFavoriteB) return -1;
-      if (!isFavoriteA && isFavoriteB) return 1;
+    if (isFavoriteA && !isFavoriteB) return -1;
+    if (!isFavoriteA && isFavoriteB) return 1;
 
-      if (isHiddenA && !isHiddenB) return 1;
-      if (!isHiddenA && isHiddenB) return -1;
+    if (isHiddenA && !isHiddenB) return 1;
+    if (!isHiddenA && isHiddenB) return -1;
 
-      return a.localeCompare(b);
-    });
+    return a.localeCompare(b);
+  });
 
   const handleClose = useCallback(() => {
     setIsShownContainer(false);
