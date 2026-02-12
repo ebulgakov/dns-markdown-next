@@ -128,6 +128,8 @@ function Catalog({ priceList, variant, diffs }: PriceListPageProps) {
               <div className="border-b border-neutral-300">
                 <ProductCard
                   shownFavorites={variant !== "archive"}
+                  shownCompares={variant === "default"}
+                  sectionTitle={item.sectionTitle}
                   item={item}
                   diff={diffs?.[item._id]}
                 />

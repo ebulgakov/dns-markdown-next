@@ -5,6 +5,7 @@ import { useContext } from "react";
 
 import { Catalog } from "@/app/components/catalog";
 import { JumpToSection } from "@/app/components/jump-to-section";
+import { LLMReport } from "@/app/components/llm-report";
 import { PageLoader } from "@/app/components/page-loader";
 import { ScrollToTop } from "@/app/components/scroll-to-top";
 import { Search } from "@/app/components/search";
@@ -64,6 +65,7 @@ function CatalogClientPage({ city: cityFromUrl }: CatalogClientPageProps) {
       <Catalog variant="default" priceList={priceList} />
       <JumpToSection priceList={priceList} />
       <ScrollToTop variant="with-jump-to-search" />
+      <LLMReport />
     </>
   );
 }

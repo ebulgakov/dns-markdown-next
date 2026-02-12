@@ -7,6 +7,7 @@ import { NumericFormat } from "react-number-format";
 import { formatDate, formatDateShort } from "@/app/helpers/format";
 import { sendGAEvent } from "@/app/lib/sendGAEvent";
 
+import { ProductCardCompareButton } from "./product-card-compare-button";
 import { ProductCardDiff } from "./product-card-diff";
 import { ProductCardFavoriteToggle } from "./product-card-favorite-toggle";
 
@@ -17,10 +18,19 @@ import type { FavoriteStatus } from "@/types/user";
 type PriceListGoodsProps = {
   item: GoodsType;
   diff?: DiffType;
-  shownFavorites: boolean;
+  shownFavorites?: boolean;
+  shownCompares?: boolean;
+  sectionTitle?: string;
   status?: FavoriteStatus;
 };
-function ProductCard({ item, status, diff, shownFavorites }: PriceListGoodsProps) {
+function ProductCard({
+  item,
+  status,
+  diff,
+  shownFavorites,
+  shownCompares,
+  sectionTitle
+}: PriceListGoodsProps) {
   const handleSendGAEvent = (event: string) => {
     sendGAEvent({
       event,
@@ -137,8 +147,11 @@ function ProductCard({ item, status, diff, shownFavorites }: PriceListGoodsProps
 
       <div className="text-center [grid-area:store]">{item.available}</div>
 
-      <div className="[grid-area:image] lg:[grid-area:favorites]">
+      <div className="flex flex-col gap-4 [grid-area:image] lg:[grid-area:favorites]">
         {shownFavorites && <ProductCardFavoriteToggle goods={item} />}
+        {shownCompares && sectionTitle && (
+          <ProductCardCompareButton sectionTitle={sectionTitle} item={item} />
+        )}
       </div>
     </div>
   );
