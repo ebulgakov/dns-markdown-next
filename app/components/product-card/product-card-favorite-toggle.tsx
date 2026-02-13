@@ -3,9 +3,9 @@
 import { Star } from "lucide-react";
 import { useState, useOptimistic, startTransition, useContext } from "react";
 
-import { postAddToFavorites, postRemoveFromFavorites } from "@/api/post";
 import { UserContext } from "@/app/contexts/user-context";
 import { sendGAEvent } from "@/app/lib/sendGAEvent";
+import { postAddToFavorites, postRemoveFromFavorites } from "@/services/post";
 
 import type { Goods as GoodsType } from "@/types/pricelist";
 

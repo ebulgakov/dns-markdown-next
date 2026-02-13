@@ -2,11 +2,11 @@
 
 import { useState, useTransition } from "react";
 
-import { postUpdateUserNotifications } from "@/api/post";
 import { Button } from "@/app/components/ui/button";
 import { CheckboxWithLabel } from "@/app/components/ui/control-with-label";
 import { Input } from "@/app/components/ui/input";
 import { Title } from "@/app/components/ui/title";
+import { postUpdateUserNotifications } from "@/services/post";
 
 import type { UserNotifications } from "@/types/user";
 

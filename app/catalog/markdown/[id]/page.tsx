@@ -1,12 +1,12 @@
 import { getTranslations } from "next-intl/server";
 
-import { getProductByLink } from "@/api/get";
 import { ChartPrices } from "@/app/components/chart-prices";
 import { LLMReport } from "@/app/components/llm-report";
 import { ProductCard } from "@/app/components/product-card";
 import { Alert, AlertDescription, AlertTitle } from "@/app/components/ui/alert";
 import { PageTitle } from "@/app/components/ui/page-title";
 import { Title } from "@/app/components/ui/title";
+import { getProductByLink } from "@/services/get";
 
 import type { Metadata } from "next";
 

@@ -5,7 +5,7 @@ import {
   getLast30ReportsByCity,
   getTotalUniqProductsCount,
   getArchiveListDates
-} from "@/api/get";
+} from "@/services/get";
 
 import { getAnalysisData } from "../get-analysis-data";
 
@@ -18,7 +18,7 @@ jest.mock("@/app/helpers/format", () => ({
   formatDateShort: jest.fn(date => new Date(date).toLocaleDateString("ru-RU"))
 }));
 
-jest.mock("@/api/get", () => ({
+jest.mock("@/services/get", () => ({
   getPriceListCity: jest.fn(),
   getLast30DiffsReportByCity: jest.fn(),
   getLast30ArchiveProductsCount: jest.fn(),

@@ -2,11 +2,11 @@
 
 import { startTransition, useOptimistic, useState } from "react";
 
-import { postToggleFavoriteShownBought } from "@/api/post";
 import { ProductCard } from "@/app/components/product-card";
 import { Alert, AlertDescription, AlertTitle } from "@/app/components/ui/alert";
 import { CheckboxWithLabel } from "@/app/components/ui/control-with-label";
 import { PageTitle } from "@/app/components/ui/page-title";
+import { postToggleFavoriteShownBought } from "@/services/post";
 import { Favorite } from "@/types/user";
 
 import { FavoritesEmpty } from "./favorites-empty";

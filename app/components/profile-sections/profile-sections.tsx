@@ -1,13 +1,13 @@
 "use client";
+import { PageTitle } from "@/app/components/ui/page-title";
+import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/app/components/ui/tabs";
+import { Title } from "@/app/components/ui/title";
 import {
   postAddToFavoriteSections,
   postAddToHiddenSections,
   postRemoveFromFavoriteSection,
   postRemoveFromHiddenSections
-} from "@/api/user";
-import { PageTitle } from "@/app/components/ui/page-title";
-import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/app/components/ui/tabs";
-import { Title } from "@/app/components/ui/title";
+} from "@/services/user";
 
 import { ProfileNotifications } from "./profile-notifications";
 import { ProfileUpdateSections } from "./profile-update-sections";

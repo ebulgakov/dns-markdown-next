@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 
-import { getLastDiffByCity } from "@/api/get";
+import { getLastDiffByCity } from "@/services/get";
 
 export async function GET() {
   try {

@@ -1,9 +1,9 @@
-import { getLastPriceList } from "@/api/get";
-import { getGuest } from "@/api/guest";
-import { getUser } from "@/api/user";
-import { getSessionInfo } from "@/api/user";
 import { FavoritesPageClient } from "@/app/components/favorites";
 import { getFlatPriceList } from "@/app/helpers/pricelist";
+import { getLastPriceList } from "@/services/get";
+import { getGuest } from "@/services/guest";
+import { getUser } from "@/services/user";
+import { getSessionInfo } from "@/services/user";
 
 import type { Favorite } from "@/types/user";
 

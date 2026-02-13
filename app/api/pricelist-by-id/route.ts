@@ -1,6 +1,6 @@
 import { type NextRequest, NextResponse } from "next/server";
 
-import { getPriceListById } from "@/api/get";
+import { getPriceListById } from "@/services/get";
 
 export async function GET(req: NextRequest) {
   const id = req?.nextUrl?.searchParams.get("id");
