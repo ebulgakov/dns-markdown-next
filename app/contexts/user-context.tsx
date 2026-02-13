@@ -10,32 +10,39 @@ import {
 } from "react";
 
 import {
+  postAddToFavorites,
   postAddToFavoriteSections,
   postAddToHiddenSections,
+  postRemoveFromFavorites,
   postRemoveFromFavoriteSection,
   postRemoveFromHiddenSections
 } from "@/services/post";
+import { Goods } from "@/types/pricelist";
 
 import type { Favorite, UserSections } from "@/types/user";
 
 type FilterContextType = {
+  loadingStates?: string[];
   hiddenSections: UserSections;
   favoriteSections: UserSections;
   favorites: Favorite[];
   city: string;
   onToggleHiddenSection?: (title: string) => void;
   onToggleFavoriteSection?: (title: string) => void;
-  onFavorite?: (title: string) => void;
+  onAddFavorite?: (goods: Goods) => void;
+  onRemoveFavorite?: (link: string) => void;
 };
 
 const UserContext = createContext<FilterContextType>({
+  loadingStates: [],
   hiddenSections: [],
   favoriteSections: [],
   favorites: [],
   city: "",
   onToggleHiddenSection: () => {},
   onToggleFavoriteSection: () => {},
-  onFavorite: () => {}
+  onAddFavorite: () => {},
+  onRemoveFavorite: () => {}
 });
 
 export function UserProvider({
@@ -45,8 +52,10 @@ export function UserProvider({
   children: ReactNode;
   value: FilterContextType;
 }) {
+  const [loadingStates, setLoadingStates] = useState(value.loadingStates);
   const [hiddenSections, setHiddenSections] = useState(value.hiddenSections);
   const [favoriteSections, setFavoriteSections] = useState(value.favoriteSections);
+  const [favorites, setFavorites] = useState(value.favorites);
 
   useEffect(() => {
     setHiddenSections(value.hiddenSections);
@@ -129,13 +138,46 @@ export function UserProvider({
     });
   };
 
+  const onAddFavorite = async (goods: Goods) => {
+    try {
+      setLoadingStates(prev => [...(prev || []), `favorite-${goods.link}`]);
+      const result = await postAddToFavorites(goods);
+
+      if (result) {
+        setFavorites(result.favorites);
+      }
+    } catch (error) {
+      console.error("Failed to add favorite:", error);
+    } finally {
+      setLoadingStates(prev => (prev || []).filter(state => state !== `favorite-${goods.link}`));
+    }
+  };
+
+  const onRemoveFavorite = async (link: string) => {
+    try {
+      setLoadingStates(prev => [...(prev || []), `favorite-${link}`]);
+      const result = await postRemoveFromFavorites(link);
+
+      if (result) {
+        setFavorites(result.favorites);
+      }
+    } catch (error) {
+      console.error("Failed to remove favorite:", error);
+    } finally {
+      setLoadingStates(prev => (prev || []).filter(state => state !== `favorite-${link}`));
+    }
+  };
+
   const contextValue: FilterContextType = {
     ...value,
+    loadingStates,
+    favorites,
     hiddenSections: optimisticHiddenSections,
     favoriteSections: optimisticFavoriteSections,
     onToggleHiddenSection,
     onToggleFavoriteSection,
-    onFavorite: value.onFavorite ?? (() => {})
+    onAddFavorite,
+    onRemoveFavorite
   };
 
   return <UserContext.Provider value={contextValue}>{children}</UserContext.Provider>;
