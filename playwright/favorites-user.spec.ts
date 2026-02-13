@@ -34,7 +34,7 @@ test.describe("Favorites", () => {
     expect(itemCount).toBeGreaterThan(0);
 
     await removeFromFavoritesFirstGoods(page);
-    await page.reload();
+    await clickToFavoritesLink(page);
 
     const noFavoritesMessage = page.getByTestId("favorites-empty-message");
     await expect(noFavoritesMessage).toBeVisible();

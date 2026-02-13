@@ -25,3 +25,8 @@ export const clickToCatalogLink = async (page: Page) => {
   await catalogLink.click();
   await page.waitForLoadState("networkidle");
 };
+
+export const reloadPage = async (page: Page) => {
+  await page.reload();
+  await page.waitForLoadState("networkidle");
+};
