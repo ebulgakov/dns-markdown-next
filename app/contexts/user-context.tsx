@@ -62,6 +62,10 @@ export function UserProvider({
     setFavoriteSections(value.favoriteSections);
   }, [value.favoriteSections]);
 
+  useEffect(() => {
+    setFavorites(value.favorites);
+  }, [value.favorites]);
+
   type OptimisticAction = {
     action: "add" | "remove";
     title: string;
