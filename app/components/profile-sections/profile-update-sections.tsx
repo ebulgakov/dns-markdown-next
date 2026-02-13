@@ -10,7 +10,7 @@ import { ScrollArea } from "@/app/components/ui/scroll-area";
 import { Separator } from "@/app/components/ui/separator";
 import { uniqAbcSort } from "@/app/helpers/sort";
 
-import type { SectionsResponse } from "@/api/user";
+import type { SectionsResponse } from "@/services/user";
 import type { UserSections as UserSectionsType } from "@/types/user";
 
 type ProfileUpdateSectionsProps = {

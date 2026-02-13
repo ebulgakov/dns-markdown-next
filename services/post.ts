@@ -1,6 +1,6 @@
 "use server";
 
-import { getPriceListCity } from "@/api/get";
+import { getPriceListCity } from "@/services/get";
 import {
   getGuest,
   addToHiddenSections as addToHiddenSectionsGuest,
@@ -11,7 +11,7 @@ import {
   removeFromFavorites as removeFromFavoritesGuest,
   toggleShownBoughtFavorites as toggleShownBoughtFavoritesGuest,
   changeCity as changeCityGuest
-} from "@/api/guest";
+} from "@/services/guest";
 
 import {
   postUpdateUserNotifications as postUpdateUserNotificationsUser,
@@ -136,4 +136,4 @@ export const getUser = async () => {
   }
 };
 
-export type { SectionsResponse } from "@/api/user";
+export type { SectionsResponse } from "@/services/user";

@@ -2,7 +2,7 @@
 
 import { unstable_cache as cacheToken } from "next/cache";
 
-import { apiClient } from "@/api/client";
+import { apiClient } from "@/services/client";
 
 import { getUser } from "./post";
 

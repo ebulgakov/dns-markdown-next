@@ -4,7 +4,6 @@ import { useRouter } from "next/navigation";
 import { useTranslations } from "next-intl";
 import { useContext, startTransition } from "react";
 
-import { postChangeUserCity } from "@/api/post";
 import { Button } from "@/app/components/ui/button";
 import {
   DropdownMenu,
@@ -16,6 +15,7 @@ import {
 } from "@/app/components/ui/dropdown-menu";
 import { UserContext } from "@/app/contexts/user-context";
 import { sendGAEvent } from "@/app/lib/sendGAEvent";
+import { postChangeUserCity } from "@/services/post";
 
 function Logo() {
   const router = useRouter();

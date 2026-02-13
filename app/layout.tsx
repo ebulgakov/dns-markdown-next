@@ -9,8 +9,6 @@ import { StrictMode, type ReactNode } from "react";
 
 import "./globals.css";
 
-import { getUser as getGenericUser } from "@/api/post";
-import { getSessionInfo } from "@/api/user";
 import { ClerkError } from "@/app/components/clerk-error";
 import { Footer } from "@/app/components/footer";
 import { Navbar } from "@/app/components/navbar";
@@ -18,6 +16,8 @@ import { UserProvider } from "@/app/contexts/user-context";
 import { cn } from "@/app/lib/utils";
 import { QueryProvider } from "@/app/providers/query-provider";
 import { ThemeProvider } from "@/app/providers/theme-provider";
+import { getUser as getGenericUser } from "@/services/post";
+import { getSessionInfo } from "@/services/user";
 import { User } from "@/types/user";
 
 import type { Metadata } from "next";

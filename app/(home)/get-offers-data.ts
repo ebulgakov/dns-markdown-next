@@ -4,7 +4,7 @@ import {
   getMostProfitableProducts,
   getArchiveListDates,
   getPriceListCity
-} from "@/api/get";
+} from "@/services/get";
 
 import type { CustomDate } from "@/types/common";
 import type { Goods } from "@/types/pricelist";

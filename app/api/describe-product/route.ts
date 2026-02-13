@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 
-import { getLLMDescribeProduct } from "@/api/get";
+import { getLLMDescribeProduct } from "@/services/get";
 
 export async function GET(req: NextRequest) {
   const link = req?.nextUrl?.searchParams.get("link");

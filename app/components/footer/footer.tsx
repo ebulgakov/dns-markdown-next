@@ -7,7 +7,6 @@ import { useTranslations } from "next-intl";
 import { ChangeLocationSelector } from "@/app/components/change-location-selector";
 import { ChangeThemeSelector } from "@/app/components/change-theme-selector";
 import { sendGAEvent } from "@/app/lib/sendGAEvent";
-import { version } from "@/lib/version";
 
 type FooterProps = {
   locate?: string;
@@ -28,7 +27,7 @@ function Footer({ locate }: FooterProps) {
   return (
     <footer className="mt-auto flex h-13 items-center justify-between border-t border-neutral-300">
       <div className="text-sm text-gray-500">
-        2018–2026 V{version}&nbsp;
+        2018–2026&nbsp;
         <a
           href="https://github.com/ebulgakov/dns-markdown-next"
           target="_blank"

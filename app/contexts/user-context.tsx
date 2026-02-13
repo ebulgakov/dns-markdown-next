@@ -14,7 +14,7 @@ import {
   postAddToHiddenSections,
   postRemoveFromFavoriteSection,
   postRemoveFromHiddenSections
-} from "@/api/post";
+} from "@/services/post";
 
 import type { Favorite, UserSections } from "@/types/user";
 
