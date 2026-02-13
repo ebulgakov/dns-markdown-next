@@ -1,7 +1,7 @@
 "use client";
 
 import { Star } from "lucide-react";
-import { useContext } from "react";
+import { startTransition, useContext, useOptimistic, useState } from "react";
 
 import { UserContext } from "@/app/contexts/user-context";
 import { sendGAEvent } from "@/app/lib/sendGAEvent";
@@ -13,38 +13,58 @@ type PriceListFavoriteToggleProps = {
 };
 
 function ProductCardFavoriteToggle({ goods }: PriceListFavoriteToggleProps) {
-  const { favorites, onAddFavorite, onRemoveFavorite, loadingStates } = useContext(UserContext);
-  const loading = loadingStates?.includes(`favorite-${goods.link}`);
-  const inFavorites = favorites.some(fav => fav.item.link === goods.link);
+  const { favorites, onAddFavorite, onRemoveFavorite } = useContext(UserContext);
+  const [inFavorites, setInFavorites] = useState<boolean>(
+    favorites.some(fav => fav.item.link === goods.link)
+  );
+  const [inFavoritesOptimistic, setInFavoritesOptimistic] = useOptimistic<boolean, boolean>(
+    inFavorites,
+    (_, newInFavorites) => newInFavorites
+  );
 
   const handleRemoveFromFavorites = () => {
     if (onRemoveFavorite) {
-      sendGAEvent({
-        event: "pricelist_goods_remove_from_favorites",
-        value: goods.title,
-        category: "PriceListGoods",
-        action: "click"
+      startTransition(async () => {
+        setInFavoritesOptimistic(false);
+        try {
+          sendGAEvent({
+            event: "pricelist_goods_remove_from_favorites",
+            value: goods.title,
+            category: "PriceListGoods",
+            action: "click"
+          });
+          await onRemoveFavorite(goods.link);
+          setInFavorites(false);
+        } catch (error) {
+          window.alert(error);
+        }
       });
-      onRemoveFavorite(goods.link);
     }
   };
   const handleAddToFavorites = () => {
     if (onAddFavorite) {
-      sendGAEvent({
-        event: "pricelist_goods_add_to_favorites",
-        value: goods.title,
-        category: "PriceListGoods",
-        action: "click"
+      startTransition(async () => {
+        setInFavoritesOptimistic(true);
+        try {
+          sendGAEvent({
+            event: "pricelist_goods_add_to_favorites",
+            value: goods.title,
+            category: "PriceListGoods",
+            action: "click"
+          });
+          await onAddFavorite(goods);
+          setInFavorites(true);
+        } catch (error) {
+          window.alert(error);
+        }
       });
-      onAddFavorite(goods);
     }
   };
 
-  return inFavorites ? (
+  return inFavoritesOptimistic ? (
     <button
       data-testid="remove-from-favorites"
-      disabled={loading}
-      className="text-favorite text-xl disabled:cursor-not-allowed disabled:opacity-50"
+      className="text-favorite text-xl"
       title="Убрать из избранного"
       onClick={handleRemoveFromFavorites}
     >
@@ -52,9 +72,8 @@ function ProductCardFavoriteToggle({ goods }: PriceListFavoriteToggleProps) {
     </button>
   ) : (
     <button
-      disabled={loading}
       data-testid="add-to-favorites"
-      className="text-favorite block text-xl disabled:cursor-not-allowed disabled:opacity-50"
+      className="text-favorite block text-xl"
       title="Добавить в избранное"
       onClick={handleAddToFavorites}
     >
