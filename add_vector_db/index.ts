@@ -74,7 +74,7 @@ async function addVectorDb() {
             // Техническая инфа
             link: `https://dns-shop.ru${item.link}`,
             image: item.image, // Полезно вернуть сразу с вектором, чтобы показать картинку
-            reasons: reasonsString,
+            reasons: item.reasons,
             city: "samara", // Если планируешь несколько городов
             code: item.code,
             createdAt: lastPriceList.createdAt
