@@ -2,12 +2,12 @@ import { resolve } from "node:path";
 
 import { clerk, setupClerkTestingToken } from "@clerk/testing/playwright";
 
-import type { Page } from "@playwright/test";
+import type { BrowserContext, Page } from "@playwright/test";
 
 const authFile = resolve("playwright/.clerk/user.json");
 
-export const authUser = async (page: Page) => {
-  await setupClerkTestingToken({ page });
+export const authUser = async (page: Page, context: BrowserContext) => {
+  await setupClerkTestingToken({ context, page });
 
   // Navigate to the app to establish the session
   await page.goto("/");
