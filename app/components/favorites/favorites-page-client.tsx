@@ -56,7 +56,7 @@ function FavoritesPageClient({
   }
 
   return (
-    <div>
+    <div data-testid="favorites-page">
       <PageTitle title="Избранное">
         <div className="mt-2 md:mt-0">
           <CheckboxWithLabel

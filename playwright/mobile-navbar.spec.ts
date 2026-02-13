@@ -1,6 +1,6 @@
 import { test, expect } from "@playwright/test";
 
-import { authUser } from "@/tests/helpers/auth-user";
+import { authUser } from "@/playwright/helpers/auth-user";
 
 import type { Page } from "@playwright/test";
 
@@ -9,24 +9,19 @@ test.use({ viewport: { width: 375, height: 667 } });
 test.describe("Mobile Navbar", () => {
   const getDialog = (page: Page) => page.getByTestId("mobile-navbar-user");
 
-  test("should open mobile navbar dialog on menu button click", async ({ page }) => {
+  test.beforeEach(async ({ page }) => {
     await page.goto("/");
-
-    // Initially, the dialog should not be visible
-    await expect(getDialog(page)).toHaveCount(0);
+    await expect(getDialog(page)).toHaveCount(0); // Initially, the dialog should not be visible
 
     const menuButton = page.getByLabel("Меню");
     await menuButton.click();
+  });
 
+  test("should open mobile navbar dialog on menu button click", async ({ page }) => {
     await expect(getDialog(page)).toHaveCount(1);
   });
 
   test("should display navbar links", async ({ page }) => {
-    await page.goto("/");
-
-    const menuButton = page.getByLabel("Меню");
-    await menuButton.click();
-
     const catalogLink = getDialog(page).getByRole("link", { name: "Прайслист" });
     const archiveLink = getDialog(page).getByRole("link", { name: "Архив" });
     const updatesLink = getDialog(page).getByRole("link", { name: "Обновления" });
@@ -39,11 +34,6 @@ test.describe("Mobile Navbar", () => {
   });
 
   test("should display navbar auth buttons", async ({ page }) => {
-    await page.goto("/");
-
-    const menuButton = page.getByLabel("Меню");
-    await menuButton.click();
-
     const signInLink = getDialog(page).getByRole("button", { name: "Войти" });
     const signUpLink = getDialog(page).getByRole("button", { name: "Зарегистрироваться" });
 
@@ -51,10 +41,8 @@ test.describe("Mobile Navbar", () => {
     await expect(signUpLink).toBeVisible();
   });
 
-  test("should display user links when signed in", async ({ page }) => {
-    await authUser(page);
-
-    await page.goto("/");
+  test("should display user links when signed in", async ({ page, context }) => {
+    await authUser(page, context);
 
     const menuButton = page.getByLabel("Меню");
     await menuButton.click();

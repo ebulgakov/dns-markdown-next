@@ -1,6 +1,6 @@
 import { test, expect, type Page } from "@playwright/test";
 
-import { authUser } from "@/tests/helpers/auth-user";
+import { authUser } from "@/playwright/helpers/auth-user";
 
 test.use({ viewport: { width: 1280, height: 720 } });
 
@@ -36,8 +36,8 @@ test.describe("Desktop Navbar", () => {
     await expect(menuButton).not.toBeVisible();
   });
 
-  test("should display user links when signed in on Desktop", async ({ page }) => {
-    await authUser(page);
+  test("should display user links when signed in on Desktop", async ({ page, context }) => {
+    await authUser(page, context);
 
     await page.goto("/");
 
