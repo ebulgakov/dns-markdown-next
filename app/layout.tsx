@@ -9,7 +9,6 @@ import { StrictMode, type ReactNode } from "react";
 
 import "./globals.css";
 
-import { ClerkError } from "@/app/components/clerk-error";
 import { Footer } from "@/app/components/footer";
 import { Navbar } from "@/app/components/navbar";
 import { UserProvider } from "@/app/contexts/user-context";
@@ -100,8 +99,6 @@ export default async function RootLayout({
                     <div className="px-4">
                       <div className="mx-auto grid min-h-screen md:container">
                         <div className="mb-10">
-                          <ClerkError />
-
                           <Navbar locate={locale} isUserLoggedIn={!!userId} />
 
                           {children}
