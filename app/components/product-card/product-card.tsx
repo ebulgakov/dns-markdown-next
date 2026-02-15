@@ -5,6 +5,7 @@ import Link from "next/link";
 import { NumericFormat } from "react-number-format";
 import { useShallow } from "zustand/react/shallow";
 
+import { Button } from "@/app/components/ui/button";
 import { formatDate, formatDateShort } from "@/app/helpers/format";
 import { sendGAEvent } from "@/app/lib/sendGAEvent";
 import { usePriceListStore } from "@/app/stores/pricelist-store";
@@ -57,11 +58,9 @@ function ProductCard({
         }
       )}
     >
-      <a
-        target="_blank"
-        rel="noopener noreferrer"
-        href={`https://dns-shop.ru${item.link}`}
+      <Link
         className="flex flex-none items-center justify-center gap-5 rounded bg-white [grid-area:image] lg:size-55 dark:opacity-70"
+        href={item.link}
         onClick={() => handleSendGAEvent("pricelist_goods_image_click")}
       >
         <Image
@@ -71,18 +70,16 @@ function ProductCard({
           width={200}
           height={200}
         />
-      </a>
+      </Link>
       <div className="mt-3 [grid-area:description] md:mt-0">
         <div className="mb-2.5 text-base">
-          <a
-            target="_blank"
-            rel="noopener noreferrer"
-            href={`https://dns-shop.ru${item.link}`}
+          <Link
+            href={item.link}
             className="text-primary break-all md:break-normal"
             onClick={() => handleSendGAEvent("pricelist_goods_title_click")}
           >
             {item.title}
-          </a>
+          </Link>
           &nbsp;
           <small className="text-[75%] leading-none font-normal whitespace-nowrap text-[#777777]">
             {item.code}
@@ -140,19 +137,25 @@ function ProductCard({
         ) : (
           <>
             {item.link && (
-              <Link
-                className="text-primary"
-                href={item.link}
-                onClick={() => handleSendGAEvent("pricelist_goods_price_analysis_click")}
-              >
-                Анализ цены
-              </Link>
+              <Button asChild className="mt-2 block w-full">
+                <a
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  href={`https://dns-shop.ru${item.link}`}
+                  onClick={() => handleSendGAEvent("pricelist_goods_buy_click")}
+                >
+                  Купить
+                </a>
+              </Button>
             )}
           </>
         )}
       </div>
 
-      <div className="text-center [grid-area:store]">{item.available}</div>
+      <div className="text-center [grid-area:store]">
+        <div className="text-sm text-gray-400">В наличии:</div>
+        {item.available}
+      </div>
 
       <div className="flex flex-col gap-4 [grid-area:image] lg:[grid-area:favorites]">
         {shownFavorites && <ProductCardFavoriteToggle goods={item} />}
