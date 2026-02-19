@@ -1,3 +1,5 @@
+import { describe, it, expect, vi, afterEach, type Mock } from "vitest";
+
 import {
   getPriceListCity,
   getLast30ArchiveProductsCount,
@@ -13,32 +15,27 @@ import type { AnalysisDiffReport } from "@/types/analysis-diff";
 import type { PriceListsArchiveCount } from "@/types/pricelist";
 import type { ReportsResponse } from "@/types/reports";
 
-jest.mock("@/app/helpers/format", () => ({
-  formatDate: jest.fn(date => new Date(date).toISOString().split("T")[0]),
-  formatDateShort: jest.fn(date => new Date(date).toLocaleDateString("ru-RU"))
+vi.mock("@/services/get", () => ({
+  getPriceListCity: vi.fn(),
+  getLast30DiffsReportByCity: vi.fn(),
+  getLast30ArchiveProductsCount: vi.fn(),
+  getLast30ReportsByCity: vi.fn(),
+  getTotalUniqProductsCount: vi.fn(),
+  getArchiveListDates: vi.fn()
 }));
 
-jest.mock("@/services/get", () => ({
-  getPriceListCity: jest.fn(),
-  getLast30DiffsReportByCity: jest.fn(),
-  getLast30ArchiveProductsCount: jest.fn(),
-  getLast30ReportsByCity: jest.fn(),
-  getTotalUniqProductsCount: jest.fn(),
-  getArchiveListDates: jest.fn()
-}));
+const mockedGetPriceListCity = getPriceListCity as Mock;
+const mockedGetArchiveGoodsCount = getLast30ArchiveProductsCount as Mock;
+const mockedGetAllDiffsReportByCity = getLast30DiffsReportByCity as Mock;
+const mockedGetAllReportsByCity = getLast30ReportsByCity as Mock;
+const mockedGetUniqueAnalysisGoodsCount = getTotalUniqProductsCount as Mock;
+const mockedGetArchiveListDates = getArchiveListDates as Mock;
 
-const mockedGetPriceListCity = getPriceListCity as jest.Mock;
-const mockedGetArchiveGoodsCount = getLast30ArchiveProductsCount as jest.Mock;
-const mockedGetAllDiffsReportByCity = getLast30DiffsReportByCity as jest.Mock;
-const mockedGetAllReportsByCity = getLast30ReportsByCity as jest.Mock;
-const mockedGetUniqueAnalysisGoodsCount = getTotalUniqProductsCount as jest.Mock;
-const mockedGetArchiveListDates = getArchiveListDates as jest.Mock;
-
-console.error = jest.fn();
+console.error = vi.fn();
 
 describe("getAnalysisData", () => {
   afterEach(() => {
-    jest.clearAllMocks();
+    vi.clearAllMocks();
   });
 
   it("should return analysis data successfully", async () => {

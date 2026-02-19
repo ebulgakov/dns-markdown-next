@@ -2,6 +2,7 @@ import path from "node:path";
 import { fileURLToPath } from "node:url";
 
 import { storybookTest } from "@storybook/addon-vitest/vitest-plugin";
+import react from "@vitejs/plugin-react";
 import { playwright } from "@vitest/browser-playwright";
 import { defineConfig } from "vitest/config";
 
@@ -11,7 +12,26 @@ const dirname =
 // More info at: https://storybook.js.org/docs/next/writing-tests/integrations/vitest-addon
 export default defineConfig({
   test: {
+    coverage: {
+      provider: "v8",
+      reportsDirectory: "coverage"
+    },
+    clearMocks: true,
+
     projects: [
+      {
+        plugins: [react()],
+        test: {
+          name: "unit",
+          environment: "jsdom",
+          include: ["**/*.test.{ts,tsx}"],
+          exclude: ["**/node_modules/**", "**/playwright/**", "**/.next/**"],
+          alias: {
+            "@": path.resolve(dirname, "./")
+          }
+        }
+      },
+
       {
         extends: true,
         plugins: [
