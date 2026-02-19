@@ -6,9 +6,9 @@ import { useTranslations } from "next-intl";
 import { useEffect } from "react";
 import { useShallow } from "zustand/react/shallow";
 
-import { Catalog } from "@/app/components/catalog";
-import { JumpToSection } from "@/app/components/jump-to-section";
-import { PageLoader } from "@/app/components/page-loader";
+import { Catalog } from "@/app/components/catalog/catalog";
+import { JumpToSection } from "@/app/components/jump-to-section/jump-to-section";
+import { PageLoader } from "@/app/components/page-loader/page-loader";
 import { ScrollToTop } from "@/app/components/scroll-to-top";
 import { Search } from "@/app/components/search";
 import { Alert, AlertDescription, AlertTitle } from "@/app/components/ui/alert";

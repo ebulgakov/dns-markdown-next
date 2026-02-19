@@ -2,7 +2,7 @@
 
 import { startTransition, useOptimistic, useState } from "react";
 
-import { ProductCard } from "@/app/components/product-card";
+import { ProductCard } from "@/app/components/product-card/product-card";
 import { Alert, AlertDescription, AlertTitle } from "@/app/components/ui/alert";
 import { CheckboxWithLabel } from "@/app/components/ui/control-with-label";
 import { PageTitle } from "@/app/components/ui/page-title";

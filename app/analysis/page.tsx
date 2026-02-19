@@ -1,10 +1,8 @@
 import { getAnalysisData } from "@/app/analysis/get-analysis-data";
 import AnalysisPageTitle from "@/app/analysis/page-title";
-import {
-  AnalyticsGoodsCountChart,
-  AnalyticsGoodsChangesChart,
-  AnalyticsReports
-} from "@/app/components/analytics";
+import { AnalyticsGoodsChangesChart } from "@/app/components/analytics/analytics-goods-changes-chart";
+import { AnalyticsGoodsCountChart } from "@/app/components/analytics/analytics-goods-count-chart";
+import { AnalyticsReports } from "@/app/components/analytics/analytics-reports";
 import { Alert, AlertDescription, AlertTitle } from "@/app/components/ui/alert";
 import { Title } from "@/app/components/ui/title";
 import { formatDate } from "@/app/helpers/format";

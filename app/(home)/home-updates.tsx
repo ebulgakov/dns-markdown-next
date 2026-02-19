@@ -5,8 +5,8 @@ import Link from "next/link";
 import { useTranslations } from "next-intl";
 import { Fragment } from "react";
 
-import { HotOffer } from "@/app/components/hot-offer";
-import { MoreLink } from "@/app/components/more-link";
+import { HotOffer } from "@/app/components/hot-offer/hot-offer";
+import { MoreLink } from "@/app/components/more-link/more-link";
 import { Alert, AlertDescription, AlertTitle } from "@/app/components/ui/alert";
 import { Title } from "@/app/components/ui/title";
 import { formatDate } from "@/app/helpers/format";

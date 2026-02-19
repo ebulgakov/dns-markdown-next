@@ -3,10 +3,10 @@
 import { useDebounce } from "@uidotdev/usehooks";
 import { useEffect, useRef, useState } from "react";
 
-import { CatalogFavoritesEmptyAlert } from "@/app/components/catalog/catalog-favorites-empty-alert";
+import { CatalogFavoritesEmptyAlert } from "@/app/components/alerts/catalog-favorites-empty-alert";
 import { getCurrentCatalogTitle } from "@/app/components/catalog/helpers/get-current-catalog-title";
 import { CatalogComponentVariant } from "@/app/components/catalog/types";
-import { ProductCard } from "@/app/components/product-card";
+import { ProductCard } from "@/app/components/product-card/product-card";
 import { Title } from "@/app/components/ui/title";
 import { useCatalogVirtualizer } from "@/app/hooks/use-catalog-virtualizer";
 import { useFilteredGoods } from "@/app/hooks/use-filtered-goods";

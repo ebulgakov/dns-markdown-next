@@ -4,10 +4,10 @@ import axios from "axios";
 import { useContext, useEffect } from "react";
 import { useShallow } from "zustand/react/shallow";
 
-import { Catalog } from "@/app/components/catalog";
-import { JumpToSection } from "@/app/components/jump-to-section";
-import { LLMReport } from "@/app/components/llm-report";
-import { PageLoader } from "@/app/components/page-loader";
+import { Catalog } from "@/app/components/catalog/catalog";
+import { JumpToSection } from "@/app/components/jump-to-section/jump-to-section";
+import { LLMReport } from "@/app/components/llm-report/llm-report";
+import { PageLoader } from "@/app/components/page-loader/page-loader";
 import { ScrollToTop } from "@/app/components/scroll-to-top";
 import { Search } from "@/app/components/search";
 import { SortGoods } from "@/app/components/sort-goods";

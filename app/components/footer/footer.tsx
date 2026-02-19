@@ -4,8 +4,8 @@ import { Github } from "lucide-react";
 import Link from "next/link";
 import { useTranslations } from "next-intl";
 
-import { ChangeLocationSelector } from "@/app/components/change-location-selector";
-import { ChangeThemeSelector } from "@/app/components/change-theme-selector";
+import { ChangeLocationSelector } from "@/app/components/change-location-selector/change-location-selector";
+import { ChangeThemeSelector } from "@/app/components/change-theme-selector/change-theme-selector";
 import { sendGAEvent } from "@/app/lib/sendGAEvent";
 
 type FooterProps = {
