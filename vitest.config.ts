@@ -11,8 +11,6 @@ const dirname =
 
 // More info at: https://storybook.js.org/docs/next/writing-tests/integrations/vitest-addon
 export default defineConfig({
-  plugins: [react()],
-
   test: {
     coverage: {
       provider: "v8",
@@ -22,6 +20,7 @@ export default defineConfig({
 
     projects: [
       {
+        plugins: [react()],
         test: {
           name: "unit",
           environment: "jsdom",
