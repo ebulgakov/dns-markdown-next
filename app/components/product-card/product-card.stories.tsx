@@ -10,7 +10,7 @@ import { ProductCard } from "./product-card";
 import type { Meta, StoryObj } from "@storybook/react";
 
 const meta: Meta<typeof ProductCard> = {
-  title: "Components/ProductCard/ProductCard",
+  title: "Components/ProductCard",
   component: ProductCard,
   tags: ["autodocs"],
   argTypes: {
