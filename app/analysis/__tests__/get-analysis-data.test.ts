@@ -15,11 +15,6 @@ import type { AnalysisDiffReport } from "@/types/analysis-diff";
 import type { PriceListsArchiveCount } from "@/types/pricelist";
 import type { ReportsResponse } from "@/types/reports";
 
-vi.mock("@/app/helpers/format", () => ({
-  formatDate: vi.fn(date => new Date(date).toISOString().split("T")[0]),
-  formatDateShort: vi.fn(date => new Date(date).toLocaleDateString("ru-RU"))
-}));
-
 vi.mock("@/services/get", () => ({
   getPriceListCity: vi.fn(),
   getLast30DiffsReportByCity: vi.fn(),
