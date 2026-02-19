@@ -3,7 +3,7 @@ import { ProductCardDiff } from "./product-card-diff";
 import type { Meta, StoryObj } from "@storybook/react";
 
 const meta: Meta<typeof ProductCardDiff> = {
-  title: "Components/PriceList/ProductCardDiff",
+  title: "Components/ProductCard/ProductCardDiff",
   component: ProductCardDiff,
   parameters: {
     layout: "centered"

@@ -1,13 +1,16 @@
+import { ReactNode, useEffect } from "react";
+
 import { defaultContext } from "@/app/components/product-card/__mocks__/context";
 import { UserProvider } from "@/app/contexts/user-context";
+import { usePriceListStore } from "@/app/stores/pricelist-store";
 
-import { mockGoodsList } from "./__mocks__/goods";
+import { mockDiff, mockGoodsList } from "./__mocks__/goods";
 import { ProductCard } from "./product-card";
 
 import type { Meta, StoryObj } from "@storybook/react";
 
 const meta: Meta<typeof ProductCard> = {
-  title: "Components/PriceList/PriceListGoods",
+  title: "Components/ProductCard/ProductCard",
   component: ProductCard,
   tags: ["autodocs"],
   argTypes: {
@@ -15,6 +18,18 @@ const meta: Meta<typeof ProductCard> = {
     status: { control: "object" }
   }
 };
+
+function DiffsStoreInitializer({ children }: { children: ReactNode }) {
+  const updatePriceListDiffs = usePriceListStore(state => state.updatePriceListDiffs);
+
+  useEffect(() => {
+    updatePriceListDiffs({
+      g1: mockDiff
+    });
+  }, [updatePriceListDiffs]);
+
+  return <>{children}</>;
+}
 
 export default meta;
 type Story = StoryObj<typeof ProductCard>;
@@ -44,9 +59,11 @@ export const WithStar: Story = {
 
 export const WithDiff: Story = {
   render: args => (
-    <UserProvider value={defaultContext}>
-      <ProductCard {...args} />
-    </UserProvider>
+    <DiffsStoreInitializer>
+      <UserProvider value={defaultContext}>
+        <ProductCard {...args} />
+      </UserProvider>
+    </DiffsStoreInitializer>
   ),
   args: {
     item: mockGoodsList[0],
