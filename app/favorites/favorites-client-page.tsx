@@ -9,14 +9,12 @@ import { PageTitle } from "@/app/components/ui/page-title";
 import { postToggleFavoriteShownBought } from "@/services/post";
 import { Favorite } from "@/types/user";
 
-import { FavoritesEmpty } from "./favorites-empty";
-
 type FavoritesPageClientProps = {
   favorites: Favorite[];
   shownBoughtFavorites: boolean;
 };
 
-function FavoritesPageClient({
+function FavoritesClientPage({
   favorites = [],
 
   shownBoughtFavorites: defaultVisibility = false
@@ -50,10 +48,6 @@ function FavoritesPageClient({
       }
     });
   };
-
-  if (favorites.length === 0) {
-    return <FavoritesEmpty />;
-  }
 
   return (
     <div data-testid="favorites-page">
@@ -90,4 +84,4 @@ function FavoritesPageClient({
   );
 }
 
-export { FavoritesPageClient };
+export { FavoritesClientPage };
