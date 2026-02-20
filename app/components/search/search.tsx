@@ -15,6 +15,7 @@ function Search() {
     <div className="bg-background sticky top-14 z-20 mb-4 flex h-[var(--nav-bar-height)] items-center gap-4">
       <div className="flex-1">
         <Input
+          data-testid="search-input"
           inputSize="xl"
           role="search"
           type="text"
@@ -33,6 +34,7 @@ function Search() {
             <TooltipTrigger asChild>
               <div>
                 <Button
+                  data-testid="clear-search-button"
                   type="button"
                   aria-label="Очистить поиск"
                   onClick={() => {
