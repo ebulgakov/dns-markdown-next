@@ -20,7 +20,7 @@ const meta: Meta<typeof Navbar> = {
   decorators: [
     Story => (
       <NextIntlClientProvider locale="ru" messages={messages}>
-        <UserProvider value={defaultContext}>
+        <UserProvider value={{ ...defaultContext, city: "samara" }}>
           <Story />
         </UserProvider>
       </NextIntlClientProvider>

@@ -35,13 +35,18 @@ type ChartPricesProps = {
 };
 
 function ChartPrices({ chartData }: ChartPricesProps) {
+  const formattedData = chartData.map(item => ({
+    ...item,
+    dateAdded: formatDateMonthDay(item.dateAdded)
+  }));
+
   return (
     <Card>
       <CardContent className="p-0 md:px-2 md:pt-4">
         <ChartContainer config={chartConfig} className="aspect-auto h-[250px] w-full">
           <AreaChart
             accessibilityLayer
-            data={chartData}
+            data={formattedData}
             margin={{
               left: 12,
               right: 12
@@ -54,7 +59,6 @@ function ChartPrices({ chartData }: ChartPricesProps) {
               axisLine={false}
               tickMargin={8}
               minTickGap={32}
-              tickFormatter={date => formatDateMonthDay(date)}
             />
             <YAxis tickLine={false} axisLine={false} tickMargin={8} tickCount={3} />
             <ChartTooltip cursor={false} content={<ChartTooltipContent indicator="line" />} />

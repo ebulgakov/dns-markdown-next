@@ -1,9 +1,11 @@
-import { FavoritesPageClient } from "@/app/components/favorites";
+import { FavoritesEmptyAlert } from "@/app/components/alerts/favorites-empty-alert";
 import { getFlatPriceList } from "@/app/helpers/pricelist";
 import { getLastPriceList } from "@/services/get";
 import { getGuest } from "@/services/guest";
 import { getUser } from "@/services/user";
 import { getSessionInfo } from "@/services/user";
+
+import { FavoritesClientPage } from "./favorites-client-page";
 
 import type { Favorite } from "@/types/user";
 
@@ -41,5 +43,9 @@ export default async function FavoritesPage() {
     }
   }
 
-  return <FavoritesPageClient favorites={favorites} shownBoughtFavorites={shownBoughtFavorites} />;
+  if (favorites.length === 0) {
+    return <FavoritesEmptyAlert />;
+  }
+
+  return <FavoritesClientPage favorites={favorites} shownBoughtFavorites={shownBoughtFavorites} />;
 }

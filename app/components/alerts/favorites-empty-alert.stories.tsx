@@ -1,10 +1,10 @@
-import { FavoritesEmpty } from "./favorites-empty";
+import { FavoritesEmptyAlert } from "./favorites-empty-alert";
 
 import type { Meta, StoryObj } from "@storybook/react";
 
-const meta: Meta<typeof FavoritesEmpty> = {
-  title: "Components/Favorites/FavoritesEmpty",
-  component: FavoritesEmpty,
+const meta: Meta<typeof FavoritesEmptyAlert> = {
+  title: "Components/Alerts/FavoritesEmptyAlert",
+  component: FavoritesEmptyAlert,
   tags: ["autodocs"],
   parameters: {
     layout: "padded"
@@ -16,6 +16,6 @@ const meta: Meta<typeof FavoritesEmpty> = {
 };
 
 export default meta;
-type Story = StoryObj<typeof FavoritesEmpty>;
+type Story = StoryObj<typeof FavoritesEmptyAlert>;
 
 export const Default: Story = {};

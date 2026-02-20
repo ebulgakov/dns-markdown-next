@@ -1,4 +1,4 @@
-import { ChartPrices } from "../chart-prices";
+import { ChartPrices } from "./chart-prices";
 
 import type { Meta, StoryObj } from "@storybook/react";
 

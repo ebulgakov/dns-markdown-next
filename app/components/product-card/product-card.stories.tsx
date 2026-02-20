@@ -1,13 +1,13 @@
 import { defaultContext } from "@/app/components/product-card/__mocks__/context";
 import { UserProvider } from "@/app/contexts/user-context";
 
-import { mockGoodsList } from "./__mocks__/goods";
+import { mockDiff, mockGoodsList } from "./__mocks__/goods";
 import { ProductCard } from "./product-card";
 
 import type { Meta, StoryObj } from "@storybook/react";
 
 const meta: Meta<typeof ProductCard> = {
-  title: "Components/PriceList/PriceListGoods",
+  title: "Components/ProductCard",
   component: ProductCard,
   tags: ["autodocs"],
   argTypes: {
@@ -49,6 +49,7 @@ export const WithDiff: Story = {
     </UserProvider>
   ),
   args: {
+    diff: mockDiff,
     item: mockGoodsList[0],
     shownFavorites: true
   }

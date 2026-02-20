@@ -9,8 +9,8 @@ import { StrictMode, type ReactNode } from "react";
 
 import "./globals.css";
 
-import { Footer } from "@/app/components/footer";
-import { Navbar } from "@/app/components/navbar";
+import { Footer } from "@/app/components/footer/footer";
+import { Navbar } from "@/app/components/navbar/navbar";
 import { UserProvider } from "@/app/contexts/user-context";
 import { cn } from "@/app/lib/utils";
 import { QueryProvider } from "@/app/providers/query-provider";

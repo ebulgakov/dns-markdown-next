@@ -5,9 +5,9 @@ import axios from "axios";
 import { useContext, useEffect } from "react";
 import { useShallow } from "zustand/react/shallow";
 
-import { Catalog } from "@/app/components/catalog";
-import { PageLoader } from "@/app/components/page-loader";
-import { ScrollToTop } from "@/app/components/scroll-to-top";
+import { Catalog } from "@/app/components/catalog/catalog";
+import { PageLoader } from "@/app/components/page-loader/page-loader";
+import { ScrollToTop } from "@/app/components/scroll-to-top/scroll-to-top";
 import { Alert, AlertDescription, AlertTitle } from "@/app/components/ui/alert";
 import { PageTitle } from "@/app/components/ui/page-title";
 import { UserContext } from "@/app/contexts/user-context";

@@ -6,8 +6,8 @@ import Link from "next/link";
 import { useTranslations } from "next-intl";
 import { Fragment } from "react";
 
-import { ChangeLocationSelector } from "@/app/components/change-location-selector";
-import { ChangeThemeSelector } from "@/app/components/change-theme-selector";
+import { ChangeLocationSelector } from "@/app/components/change-location-selector/change-location-selector";
+import { ChangeThemeSelector } from "@/app/components/change-theme-selector/change-theme-selector";
 import { Button } from "@/app/components/ui/button";
 import {
   Dialog,

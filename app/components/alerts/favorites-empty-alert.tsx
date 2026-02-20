@@ -2,7 +2,7 @@ import { Star } from "lucide-react";
 
 import { Alert, AlertDescription, AlertTitle } from "@/app/components/ui/alert";
 
-function FavoritesEmpty() {
+function FavoritesEmptyAlert() {
   return (
     <Alert>
       <AlertTitle>Избранное пусто</AlertTitle>
@@ -16,4 +16,4 @@ function FavoritesEmpty() {
   );
 }
 
-export { FavoritesEmpty };
+export { FavoritesEmptyAlert };
