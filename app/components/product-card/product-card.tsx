@@ -3,22 +3,22 @@ import clsx from "clsx";
 import Image from "next/image";
 import Link from "next/link";
 import { NumericFormat } from "react-number-format";
-import { useShallow } from "zustand/react/shallow";
 
 import { Button } from "@/app/components/ui/button";
 import { formatDate, formatDateShort } from "@/app/helpers/format";
 import { sendGAEvent } from "@/app/lib/sendGAEvent";
-import { usePriceListStore } from "@/app/stores/pricelist-store";
 
 import { ProductCardCompareButton } from "./product-card-compare-button";
 import { ProductCardDiff } from "./product-card-diff";
 import { ProductCardFavoriteToggle } from "./product-card-favorite-toggle";
 
+import type { Diff } from "@/types/analysis-diff";
 import type { Goods as GoodsType } from "@/types/pricelist";
 import type { FavoriteStatus } from "@/types/user";
 
 type PriceListGoodsProps = {
   item: GoodsType;
+  diff?: Diff;
   shownFavorites?: boolean;
   shownCompares?: boolean;
   sectionTitle?: string;
@@ -26,19 +26,12 @@ type PriceListGoodsProps = {
 };
 function ProductCard({
   item,
+  diff,
   status,
   shownFavorites,
   shownCompares,
   sectionTitle
 }: PriceListGoodsProps) {
-  const { priceListDiffs } = usePriceListStore(
-    useShallow(state => ({
-      priceListDiffs: state.priceListDiffs
-    }))
-  );
-
-  const diff = priceListDiffs ? priceListDiffs[`${item._id}`] : undefined;
-
   const handleSendGAEvent = (event: string) => {
     sendGAEvent({
       event,

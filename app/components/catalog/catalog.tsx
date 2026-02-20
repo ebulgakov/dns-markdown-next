@@ -11,15 +11,19 @@ import { Title } from "@/app/components/ui/title";
 import { useCatalogVirtualizer } from "@/app/hooks/use-catalog-virtualizer";
 import { useFilteredGoods } from "@/app/hooks/use-filtered-goods";
 import { cn } from "@/app/lib/utils";
+import { usePriceListStore } from "@/app/stores/pricelist-store";
 import { useSearchStore } from "@/app/stores/search-store";
 
 import { CatalogHeader } from "./catalog-header";
+
+import type { DiffsCollection } from "@/types/analysis-diff";
 
 type PriceListPageProps = {
   variant: CatalogComponentVariant;
 };
 
 function Catalog({ variant }: PriceListPageProps) {
+  const priceListDiffs: DiffsCollection = usePriceListStore(state => state.priceListDiffs) || {};
   const searchTerm = useDebounce<string>(useSearchStore(state => state.searchTerm).trim(), 100);
   const { flattenList, flattenTitles } = useFilteredGoods({
     filterTerm: searchTerm,
@@ -125,6 +129,7 @@ function Catalog({ variant }: PriceListPageProps) {
                   shownCompares={variant === "default"}
                   sectionTitle={item.sectionTitle}
                   item={item}
+                  diff={priceListDiffs[`${item._id}`]}
                 />
               </div>
             )}
