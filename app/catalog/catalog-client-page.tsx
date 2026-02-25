@@ -65,7 +65,7 @@ function CatalogClientPage({ city: cityFromUrl }: CatalogClientPageProps) {
   return (
     <>
       <PageTitle title={priceListCreatedDate} subTitle={priceListCreatedTime}>
-        <div className="mt-4 flex items-center justify-between gap-4 md:mt-0">
+        <div className="relative z-10 mt-4 flex items-center justify-between gap-4 md:mt-0">
           <div>
             Количество: <b>{priceListCount}</b>
           </div>
