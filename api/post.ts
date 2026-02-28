@@ -33,11 +33,7 @@ export const deleteReportByCityDate = async (params: {
   return await wrapApiCall("/service/delete-analysis-report-by-city-date", params);
 };
 
-export const addNewReportByCity = async (params: {
-  city: string;
-  report: string;
-  dateAdded: string;
-}): Promise<null> => {
+export const addNewReportByCity = async (params: { city: string }): Promise<null> => {
   return await wrapApiCall("/service/add-analysis-report", params);
 };
 
