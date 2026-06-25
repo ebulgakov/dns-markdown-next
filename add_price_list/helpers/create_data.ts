@@ -41,10 +41,10 @@ export default function createData(html: string, pricesSet: PricesSet) {
 
       // Metadata
       const $$title = $$product.find(".catalog-product__name").first();
-      const titleWithDescriptionString = $$title.find("span").html();
-      const titleWithDescription = titleWithDescriptionString?.split("<br>") || ["", ""];
+      const titleWithDescriptionString = $$title.find("span").text() || "";
+      const titleWithDescription = titleWithDescriptionString?.split(" [") || ["", ""];
       productObj.title = `${titleWithDescription[0] ?? ""}`.trim();
-      productObj.description = `${titleWithDescription[1] ?? ""}`.trim();
+      productObj.description = "";
       productObj.link = $$title.attr("href") || "";
       productObj.code = `${$$product.data("code")}`;
       productObj.image =
@@ -53,12 +53,11 @@ export default function createData(html: string, pricesSet: PricesSet) {
 
       // Reasons
       productObj.reasons = [];
-      const $$reasons = $$product
-        .find(".catalog-product__reasons")
-        .children(".catalog-product__reasons-new-item");
+      const $$reasons = $$product.find(".catalog-product__spec");
       $$reasons.each((_, $reason) => {
         const $$reason = $($reason);
-        const [label, text] = $$reason.text().split(": ");
+        const label = $$reason.find(".catalog-product__spec-label").text();
+        const text = $$reason.find(".catalog-product__spec-value").text();
         productObj.reasons.push({
           _id: new ObjectId().toHexString(),
           label: `${label}`.trim(),
