@@ -101,9 +101,11 @@ export const useFilteredGoods = ({
 
     return { flattenList: flattenOptimizedPriceList, flattenTitles: [] };
   } else if (sortGoods === "date") {
-    flattenOptimizedPriceList = flattenOptimizedPriceList.sort(
-      (a, b) => new Date(`${a.dateAdded}`).getTime() - new Date(`${b.dateAdded}`).getTime()
-    );
+    flattenOptimizedPriceList = flattenOptimizedPriceList.sort((a, b) => {
+      const timeA = a.dateAdded ? new Date(a.dateAdded).getTime() : 0;
+      const timeB = b.dateAdded ? new Date(b.dateAdded).getTime() : 0;
+      return timeB - timeA;
+    });
 
     return { flattenList: flattenOptimizedPriceList, flattenTitles: [] };
   }
