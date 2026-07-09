@@ -94,6 +94,10 @@ export const useFilteredGoods = ({
     profitableItems.sort((a, b) => Number(b.profit) - Number(a.profit));
 
     flattenOptimizedPriceList = [...profitableItems, ...nonProfitableItems];
+  } else if (sortGoods === "date") {
+    flattenOptimizedPriceList = flattenOptimizedPriceList.sort(
+      (a, b) => new Date(`${a.dateAdded}`).getTime() - new Date(`${b.dateAdded}`).getTime()
+    );
   }
 
   const flattenList = getOptimizedOutput(flattenOptimizedPriceList, flattenTitles, {

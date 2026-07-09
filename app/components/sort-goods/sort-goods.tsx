@@ -38,6 +38,9 @@ function SortGoods() {
           <p>
             <b>По максимальной выгоде</b>&nbsp;&mdash; по максимальной выгоде в рублях
           </p>
+          <p>
+            <b>По дате добавления</b>&nbsp;&mdash; по дате добавления товара
+          </p>
         </TooltipContent>
       </Tooltip>
       <Select onValueChange={(e: SortGoodsOptions) => onChange(e)} value={sortGoods}>
@@ -51,6 +54,7 @@ function SortGoods() {
             <SelectItem value="price">По цене</SelectItem>
             <SelectItem value="discount">По размеру скидки</SelectItem>
             <SelectItem value="profit">По максимальной выгоде</SelectItem>
+            <SelectItem value="date">По дате добавления</SelectItem>
           </SelectGroup>
         </SelectContent>
       </Select>
