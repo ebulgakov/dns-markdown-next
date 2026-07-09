@@ -5,6 +5,7 @@ import { UserContext } from "@/app/contexts/user-context";
 import { cn } from "@/app/lib/utils";
 import { usePriceListStore } from "@/app/stores/pricelist-store";
 import { useSearchStore } from "@/app/stores/search-store";
+import { useSortGoodsStore } from "@/app/stores/sort-goods-store";
 
 type JumpToSectionContainerProps = {
   onClose: () => void;
@@ -13,7 +14,8 @@ type JumpToSectionContainerProps = {
 
 function JumpToSectionContainer({ onClose }: JumpToSectionContainerProps) {
   const { favoriteSections, hiddenSections, onToggleHiddenSection } = useContext(UserContext);
-  const onChange = useSearchStore(state => state.updateSearchTerm);
+  const onChangeSearch = useSearchStore(state => state.updateSearchTerm);
+  const onChangeSort = useSortGoodsStore(state => state.updateSortGoods);
   const priceListSections = usePriceListStore(
     useShallow(state => state.getPriceListSections(favoriteSections, hiddenSections))
   );
@@ -23,7 +25,8 @@ function JumpToSectionContainer({ onClose }: JumpToSectionContainerProps) {
       onToggleHiddenSection?.(section);
     }
 
-    onChange("");
+    onChangeSearch("");
+    onChangeSort("default");
     onClose();
     window.location.assign(`#${encodeURIComponent(section)}`);
   };
