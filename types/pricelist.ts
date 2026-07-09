@@ -22,6 +22,7 @@ export interface Goods {
   code: string;
   image: string;
   available: string;
+  dateAdded?: string | null;
 }
 
 export interface RemovedGoods {

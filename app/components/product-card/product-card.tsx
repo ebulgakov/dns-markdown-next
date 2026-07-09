@@ -90,10 +90,8 @@ function ProductCard({
           </div>
         )}
 
-        {status?.createdAt && (
-          <div className="mt-2 text-sm text-gray-500">
-            Добавлен: {formatDate(status?.createdAt)}
-          </div>
+        {item.dateAdded && (
+          <div className="mt-2 text-sm text-gray-500">Добавлен: {formatDate(item.dateAdded)}</div>
         )}
       </div>
 

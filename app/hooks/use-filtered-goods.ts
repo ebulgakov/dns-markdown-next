@@ -71,6 +71,8 @@ export const useFilteredGoods = ({
     flattenOptimizedPriceList = flattenOptimizedPriceList.sort(
       (a, b) => Number(a.price) - Number(b.price)
     );
+
+    return { flattenList: flattenOptimizedPriceList, flattenTitles: [] };
   } else if (sortGoods === "discount") {
     const withOldPrice = flattenOptimizedPriceList.filter(
       item => Number(item.priceOld) && Number(item.priceOld) > 0
@@ -84,6 +86,8 @@ export const useFilteredGoods = ({
     );
 
     flattenOptimizedPriceList = [...withOldPrice, ...withoutOldPrice];
+
+    return { flattenList: flattenOptimizedPriceList, flattenTitles: [] };
   } else if (sortGoods === "profit") {
     const profitableItems = flattenOptimizedPriceList.filter(
       item => Number(item.profit) && Number(item.profit) > 0
@@ -94,6 +98,16 @@ export const useFilteredGoods = ({
     profitableItems.sort((a, b) => Number(b.profit) - Number(a.profit));
 
     flattenOptimizedPriceList = [...profitableItems, ...nonProfitableItems];
+
+    return { flattenList: flattenOptimizedPriceList, flattenTitles: [] };
+  } else if (sortGoods === "date") {
+    flattenOptimizedPriceList = flattenOptimizedPriceList.sort((a, b) => {
+      const timeA = a.dateAdded ? new Date(a.dateAdded).getTime() : 0;
+      const timeB = b.dateAdded ? new Date(b.dateAdded).getTime() : 0;
+      return timeB - timeA;
+    });
+
+    return { flattenList: flattenOptimizedPriceList, flattenTitles: [] };
   }
 
   const flattenList = getOptimizedOutput(flattenOptimizedPriceList, flattenTitles, {
