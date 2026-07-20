@@ -57,3 +57,11 @@ node_modules/
 /playwright/.cache/
 /playwright/.auth/
 /playwright/.clerk/
+
+# design-sync
+.design-sync/sb-reference/
+.design-sync/learnings/
+.design-sync/.cache/
+.design-sync/node_modules
+.ds-sync/
+ds-bundle/
