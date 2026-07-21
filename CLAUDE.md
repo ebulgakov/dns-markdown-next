@@ -60,7 +60,7 @@ Read-only catalog/analysis data (pricelists, products, diffs, LLM reports) goes 
 
 ### Route structure
 
-`app/` follows Next.js App Router conventions with route groups: `(home)`, plus `catalog`, `analysis`, `archive/[id]`, `favorites`, `profile`, `about`, `today`, `sign-in`/`sign-up`. API route handlers live under `app/api/*/route.ts` and are thin wrappers that call `services/get.ts`/`services/post.ts` and shape the HTTP response — business/caching logic belongs in `services/`, not in route handlers.
+`app/` follows Next.js App Router conventions with route groups: `(home)`, plus `catalog` (with `catalog/markdown/[id]` for a single product), `analysis`, `archive/[id]`, `favorites`, `profile`, `about`, `today`, `sign-in`/`sign-up`. API route handlers live under `app/api/*/route.ts` and are thin wrappers that call `services/get.ts`/`services/post.ts` and shape the HTTP response — business/caching logic belongs in `services/`, not in route handlers.
 
 `proxy.ts` is the Clerk middleware entry point (protects `/profile(.*)`; note this project uses `proxy.ts` rather than the conventional `middleware.ts` filename).
 
