@@ -38,7 +38,7 @@ you review, plan, delegate, and gatekeep.
    - Business/caching logic is in `services/`, NOT in route handlers or components.
    - User-scoped actions have BOTH `services/user.ts` and `services/guest.ts`
      implementations, branched in `services/post.ts` — never special-cased in components.
-   - Mutations in `services/user.ts` call `revalidateTag(`user-${userId}`)`.
+   - Mutations in `services/user.ts` call ``revalidateTag(`user-${userId}`)``.
    - New catalog reads in `services/get.ts` are wrapped in `unstable_cache`
      with the `daily-data` (or `llm-report`) tag.
    - Import order and Prettier rules respected (`pnpm lint:fix` was run).

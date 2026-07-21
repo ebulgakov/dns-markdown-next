@@ -20,7 +20,7 @@ Upstash Redis (guests, keyed by a `guestId` cookie with 30-day TTL).
 
 1. **Dual-path contract.** Every user-scoped action exists in THREE places:
    - `services/user.ts` — external API call with Clerk token; after every
-     mutation call `revalidateTag(`user-${userId}`)`.
+     mutation call ``revalidateTag(`user-${userId}`)``.
    - `services/guest.ts` — read/modify/write the `User` object in Upstash
      Redis; no external API calls, preserve the 30-day TTL.
    - `services/post.ts` — the ONLY public entry point; branch on
