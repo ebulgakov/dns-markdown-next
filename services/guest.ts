@@ -2,6 +2,7 @@
 
 import { Redis } from "@upstash/redis";
 import { cookies } from "next/headers";
+import { cache } from "react";
 
 import { Goods } from "@/types/pricelist";
 
@@ -20,7 +21,9 @@ const redis = new Redis({
   token: process.env.UPSTASH_REDIS_REST_TOKEN
 });
 
-export const getGuest = async (): Promise<User> => {
+// cache() dedupes calls within one request (layout.tsx + a page both call this),
+// so a guest render doesn't hit Redis twice for the same request.
+export const getGuest = cache(async (): Promise<User> => {
   const defaultGuest: User = {
     _id: "0",
     userId: "0",
@@ -46,7 +49,7 @@ export const getGuest = async (): Promise<User> => {
   } else {
     return defaultGuest;
   }
-};
+});
 
 export const setGuest = async (guest: User) => {
   const cookieStore = await cookies();
