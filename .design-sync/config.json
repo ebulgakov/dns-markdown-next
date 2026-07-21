@@ -9,7 +9,9 @@
   "tsconfig": ".design-sync/tsconfig.entry.json",
   "extraEntries": ["./.design-sync/entry.ts"],
   "cssEntry": ".design-sync/tailwind-snapshot.css",
-  "buildCmd": "cp .design-sync/sb-reference/assets/iframe-*.css .design-sync/tailwind-snapshot.css  # run AFTER rebuilding sb-reference, BEFORE package-build.mjs — see NOTES.md \"Tailwind CSS missing\"",
+  "extraFonts": [".design-sync/shims/fonts/roboto.css", ".design-sync/shims/fonts/roboto-mono.css"],
+  "readmeHeader": ".design-sync/conventions.md",
+  "buildCmd": "cp .design-sync/sb-reference/assets/iframe-*.css .design-sync/tailwind-snapshot.css && printf '\\n:root{--font-roboto-sans:\"Roboto\",\"Roboto Fallback\";--font-roboto-mono:\"Roboto Mono\",\"Roboto Mono Fallback\";}\\n' >> .design-sync/tailwind-snapshot.css && node .design-sync/shims/inject-roboto-into-sb-reference.mjs  # run AFTER rebuilding sb-reference, BEFORE package-build.mjs — see NOTES.md \"Tailwind CSS missing\" and \"Roboto font shipped via cfg.extraFonts\"",
   "titleMap": {
     "Navbar": null,
     "Notifications": "ProfileNotifications",
@@ -25,6 +27,7 @@
     "JumpToSection": { "cardMode": "single", "primaryStory": "Default" },
     "Dialog": { "cardMode": "single", "primaryStory": "Default" },
     "SortGoods": { "cardMode": "single", "primaryStory": "Default state" },
-    "ChartPrices": { "cardMode": "single" }
+    "ChartPrices": { "cardMode": "single" },
+    "JumpToSectionToggle": { "skip": ["components-jumptosection-jumptosectiontoggle--default", "components-jumptosection-jumptosectiontoggle--active"] }
   }
 }

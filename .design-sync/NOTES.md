@@ -234,6 +234,68 @@ headless-specific, (b) checking for a `ResizeObserver loop limit exceeded`
 console error, (c) trying `overscan` > 0 or a mocked `window.innerHeight` in
 a story decorator override.
 
+## Roboto font shipped via cfg.extraFonts — real brand font, not a fallback
+
+`package-validate.mjs` flagged `[TOKENS_MISSING]` (`--font-roboto-sans`,
+`--font-roboto-mono` undefined) and `[FONT_MISSING]` (Geist/JetBrains
+Mono/Source Serif 4 — the FALLBACK stack names in `:root`, not the real
+font). Per the skill: **this is the one warning the visual compare loop
+cannot see** — checked and confirmed `.design-sync/sb-reference` (storybook's
+OWN build) ALSO has zero Roboto font files or `@font-face` rules (`find
+.design-sync/sb-reference -iname "*roboto*"` → nothing), because
+`.storybook/preview.tsx` never imports `app/layout.tsx` (where
+`next/font/google` actually loads Roboto via `variable: "--font-roboto-sans"`)
+— so every "match" grade on text-heavy components (Title, Label, ProductCard,
+…) was judged with BOTH sides silently falling back to a generic sans-serif,
+not real Roboto. Do not trust that class of "match" as proof the real brand
+font renders — it only proves both sides fall back the same way.
+
+**Fix**: harvested the real Roboto/Roboto Mono `@font-face` declarations +
+woff2 files from `next/font/google`'s own build cache
+(`.next/dev/static/chunks/[next]_internal_font_google_roboto_*.css` for the
+CSS, `.next/dev/static/media/*.woff2` for the files — these appear after
+`pnpm dev` has run at least once; they are NOT committed/durable on their
+own). Copied into `.design-sync/shims/fonts/{roboto,roboto-mono}.css` +
+sibling `.woff2` files (15 files, ~340 KB total, all unicode-range subsets
+incl. Cyrillic — this app is Russian-primary) — this directory IS committed
+(not gitignored) so re-syncs don't need a fresh `.next/dev` build to find
+them again. Wired via `cfg.extraFonts`.
+
+**`cfg.extraFonts` alone was not enough** — it only extracts `@font-face`
+blocks (regex-matched in `lib/css.mjs`), so it ships the font FILES and the
+`font-family: Roboto` declarations, but the actual CSS variable
+(`--font-roboto-sans`, consumed by `--font-sans: var(--font-roboto-sans)` in
+`app/globals.css`) is set by Next at runtime via a generated
+`.variable { --font-roboto-sans: "Roboto", "Roboto Fallback"; }` class
+applied to `<html>`/`<body>` in `layout.tsx` — that class never ships to
+storybook OR design-sync. Fix: `cfg.buildCmd` now ALSO appends a
+`:root{--font-roboto-sans:"Roboto","Roboto Fallback";--font-roboto-mono:"Roboto Mono","Roboto Mono Fallback";}`
+block to `.design-sync/tailwind-snapshot.css` after the CSS copy step
+(`cssEntry` content ships verbatim into `_ds_bundle.css`, unlike
+`extraFonts`'s @font-face-only extraction) — **both halves of `buildCmd` must
+run together** on every re-sync, not just the CSS copy.
+
+**To revisit**: if `.design-sync/shims/fonts/*.woff2` ever needs
+regenerating (e.g. Google updates the Roboto files, or more unicode subsets
+are needed), run `pnpm dev`, open any page once, then re-harvest from
+`.next/dev/static/chunks/[next]_internal_font_google_roboto*.css` +
+`.next/dev/static/media/` following the same pattern.
+
+**The compare oracle needed the SAME fix, or grading would go backwards.**
+Fixing only the ds bundle would make our side show real Roboto while
+`.design-sync/sb-reference` (gitignored, rebuilt from scratch each time)
+kept falling back — turning a false "both sides fall back the same" pass
+into a real mismatch. `.design-sync/shims/inject-roboto-into-sb-reference.mjs`
+injects the identical `@font-face` + `--font-roboto-sans`/`--font-roboto-mono`
+CSS into `.design-sync/sb-reference/iframe.html` (plus copies the woff2s to
+`sb-reference/assets/roboto-fonts/`) so the oracle judges against the real
+font too. **This does not survive an `sb-reference` rebuild** (gitignored,
+wiped every `npx storybook build`) — `cfg.buildCmd` now runs this script
+every time right after the sb-reference build, alongside the existing
+Tailwind CSS snapshot copy. If a re-sync shows Roboto-related grading
+regressions, check this script actually ran after the most recent
+`sb-reference` rebuild before re-diagnosing.
+
 ## ChartPrices — clipped Area chart, fixed via cardMode: "single"
 
 The generated preview's `AreaChart` (recharts, `type="natural"`, stacked
@@ -286,12 +348,22 @@ the shared card/capture template (`emit.mjs` single-story wrapper or
 `preview-gen-storybook.mjs`) to reproduce storybook's `layout: "centered"`
 flex-centering for `?story=` captures generally — out of scope for a
 per-repo sync to fork given the blast radius (shared template, one
-component affected here). **Accepted as `mismatch`** — real usage via
-`JumpToSection` (which wraps it correctly) grades `match`, so the compiled
-component itself is not broken, only its standalone preview card. Watch for
-this pattern (Tailwind `size-full`/`h-full`/`w-full` on a root-rendered
-element with no sizing decorator in its own story) on any future component —
-same failure mode.
+component affected here). **Resolved via `cfg.overrides.JumpToSectionToggle.skip`** (both story ids) —
+not `mismatch`: the compare tool's `fullyGraded` check only accepts
+`match`/`close` (see `storybook/compare.mjs` line ~214), so a `mismatch`
+verdict never carries forward — it recaptures and shows in the driver's
+`pendingGrade` on every single run, forever. Skipping both stories drops the
+component out of `compare.mjs`'s roster entirely (0 visible stories, same
+mechanism as `Catalog` above) — it still ships in `_ds_bundle.js` with a
+real `.d.ts`/`.prompt.md` (via the emit-time floor card), just without a
+storybook-verified preview grid. This is the right tradeoff here: real usage
+via `JumpToSection` (which supplies the real sized wrapper) already grades
+`match` and is what a design agent will actually compose with — the
+standalone Toggle card had near-zero value and, left as `mismatch`, would
+have permanently failed the sync's done-gate. Watch for this pattern
+(Tailwind `size-full`/`h-full`/`w-full` on a root-rendered element with no
+sizing decorator in its own story) on any future component — same failure
+mode, same fix if a per-component wrapper isn't worth authoring.
 
 ## PageLoader — spinner image broken in the reference storybook too (not a design-sync artifact)
 

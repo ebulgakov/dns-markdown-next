@@ -12,6 +12,13 @@
 // which is exactly what made the first attempt at this fix a no-op.
 import "./shims/node-globals-polyfill";
 
+// UserProvider is not itself a storied component (no .stories.tsx), but the
+// conventions header needs it as a real bundle export — several storied
+// components (Catalog, ProductCard, CatalogHeader, JumpToSectionContainer)
+// read app/contexts/user-context.tsx and need this wrapper to render
+// favorites/hidden-sections state correctly in a design agent's build.
+export { UserProvider } from "../app/contexts/user-context";
+
 export * from "../app/components/alerts/catalog-favorites-empty-alert";
 export * from "../app/components/alerts/favorites-empty-alert";
 export * from "../app/components/analytics/analytics-goods-changes-chart";
