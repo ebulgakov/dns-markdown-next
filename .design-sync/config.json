@@ -1,0 +1,33 @@
+{
+  "projectId": "3301003c-46a0-474f-929c-4a00e6ef2718",
+  "shape": "storybook",
+  "storybookConfigDir": ".storybook",
+  "storybookStatic": ".design-sync/sb-reference",
+  "pkg": "dns-markdown-next",
+  "globalName": "DnsMarkdown",
+  "entry": ".design-sync/entry.ts",
+  "tsconfig": ".design-sync/tsconfig.entry.json",
+  "extraEntries": ["./.design-sync/entry.ts"],
+  "cssEntry": ".design-sync/tailwind-snapshot.css",
+  "extraFonts": [".design-sync/shims/fonts/roboto.css", ".design-sync/shims/fonts/roboto-mono.css"],
+  "readmeHeader": ".design-sync/conventions.md",
+  "buildCmd": "cp .design-sync/sb-reference/assets/iframe-*.css .design-sync/tailwind-snapshot.css && printf '\\n:root{--font-roboto-sans:\"Roboto\",\"Roboto Fallback\";--font-roboto-mono:\"Roboto Mono\",\"Roboto Mono Fallback\";}\\n' >> .design-sync/tailwind-snapshot.css && node .design-sync/shims/inject-roboto-into-sb-reference.mjs  # run AFTER rebuilding sb-reference, BEFORE package-build.mjs — see NOTES.md \"Tailwind CSS missing\" and \"Roboto font shipped via cfg.extraFonts\"",
+  "titleMap": {
+    "Navbar": null,
+    "Notifications": "ProfileNotifications",
+    "Chart": "ChartContainer"
+  },
+  "overrides": {
+    "AnalyticsGoodsChangesChart": { "cardMode": "column" },
+    "AnalyticsReports": { "cardMode": "column", "skip": ["components-analytics-analyticsreports--empty-reports"] },
+    "Catalog": { "cardMode": "column", "skip": ["components-catalog-catalog--default", "components-catalog-catalog--archive", "components-catalog-catalog--updates", "components-catalog-catalog--with-search", "components-catalog-catalog--with-favorite-sections", "components-catalog-catalog--with-hidden-sections"] },
+    "ProductCard": { "cardMode": "column" },
+    "Alert": { "cardMode": "column" },
+    "JumpToSectionContainer": { "cardMode": "column" },
+    "JumpToSection": { "cardMode": "single", "primaryStory": "Default" },
+    "Dialog": { "cardMode": "single", "primaryStory": "Default" },
+    "SortGoods": { "cardMode": "single", "primaryStory": "Default state" },
+    "ChartPrices": { "cardMode": "single" },
+    "JumpToSectionToggle": { "skip": ["components-jumptosection-jumptosectiontoggle--default", "components-jumptosection-jumptosectiontoggle--active"] }
+  }
+}

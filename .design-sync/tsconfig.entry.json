@@ -1,0 +1,30 @@
+{
+  "compilerOptions": {
+    "baseUrl": "..",
+    "paths": {
+      "@/services/post": ["./.design-sync/shims/services-post.ts"],
+      "@/services/user": ["./.design-sync/shims/services-user.ts"],
+      "@/app/components/profile-sections": ["./app/components/profile-sections/profile-sections.tsx"],
+      "@/app/components/sort-goods": ["./app/components/sort-goods/sort-goods.tsx"],
+      "@/app/components/ui/alert": ["./app/components/ui/alert/alert.tsx"],
+      "@/app/components/ui/button": ["./app/components/ui/button/button.tsx"],
+      "@/app/components/ui/card": ["./app/components/ui/card/card.tsx"],
+      "@/app/components/ui/chart": ["./app/components/ui/chart/chart.tsx"],
+      "@/app/components/ui/checkbox": ["./app/components/ui/checkbox/checkbox.tsx"],
+      "@/app/components/ui/control-with-label": ["./app/components/ui/control-with-label/control-with-label.tsx"],
+      "@/app/components/ui/dialog": ["./app/components/ui/dialog/dialog.tsx"],
+      "@/app/components/ui/input": ["./app/components/ui/input/input.tsx"],
+      "@/app/components/ui/label": ["./app/components/ui/label/label.tsx"],
+      "@/app/components/ui/navigation-menu": ["./app/components/ui/navigation-menu/navigation-menu.tsx"],
+      "@/app/components/ui/page-title": ["./app/components/ui/page-title/page-title.tsx"],
+      "@/app/components/ui/scroll-area": ["./app/components/ui/scroll-area/scroll-area.tsx"],
+      "@/app/components/ui/select": ["./app/components/ui/select/select.tsx"],
+      "@/app/components/ui/separator": ["./app/components/ui/separator/separator.tsx"],
+      "@/app/components/ui/tabs": ["./app/components/ui/tabs/tabs.tsx"],
+      "@/app/components/ui/title": ["./app/components/ui/title/title.tsx"],
+      "@/app/components/ui/tooltip": ["./app/components/ui/tooltip/tooltip.tsx"],
+      "@/app/logo": ["./app/logo/logo.tsx"],
+      "@/*": ["./*"]
+    }
+  }
+}

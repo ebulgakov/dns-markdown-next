@@ -9,8 +9,11 @@ const eslintConfig = defineConfig([
   // Override default ignores of eslint-config-next.
   globalIgnores([
     // Default ignores of eslint-config-next:
+    ".design-sync/**",
+    ".ds-sync/**",
     ".next/**",
     "out/**",
+    "ds-bundle/**",
     "build/**",
     "storybook-static/**",
     "coverage/**",
