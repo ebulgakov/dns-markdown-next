@@ -3,6 +3,7 @@ import { useShallow } from "zustand/react/shallow";
 
 import { Button } from "@/app/components/ui/button";
 import { Tooltip, TooltipContent, TooltipTrigger } from "@/app/components/ui/tooltip";
+import { useLlmReport } from "@/app/hooks/use-llm-report";
 import { useLlmStore } from "@/app/stores/llm-store";
 
 import type { Goods as GoodsType } from "@/types/pricelist";
@@ -12,23 +13,14 @@ type ProductCardCompareButtonProps = {
   sectionTitle: string;
 };
 function ProductCardCompareButton({ item, sectionTitle }: ProductCardCompareButtonProps) {
-  const {
-    compareGoodsLinks,
-    updateCompareGoodsLinks,
-    setCompareGoodsLinks,
-    compareGoods,
-    describeGoods,
-    isReportLoading
-  } = useLlmStore(
+  const { compareGoodsLinks, updateCompareGoodsLinks, setCompareGoodsLinks } = useLlmStore(
     useShallow(state => ({
       setCompareGoodsLinks: state.setCompareGoodsLinks,
       compareGoodsLinks: state.compareGoodsLinks,
-      updateCompareGoodsLinks: state.updateCompareGoodsLinks,
-      isReportLoading: state.isReportLoading,
-      compareGoods: state.compareGoods,
-      describeGoods: state.describeGoods
+      updateCompareGoodsLinks: state.updateCompareGoodsLinks
     }))
   );
+  const { compareGoods, describeGoods, isReportLoading } = useLlmReport();
 
   const isInCompare = compareGoodsLinks.some(link => link.link === item.link);
   const isEqualTitles = compareGoodsLinks.every(link => link.sectionTitle === sectionTitle);
@@ -46,11 +38,11 @@ function ProductCardCompareButton({ item, sectionTitle }: ProductCardCompareButt
     }
   };
 
-  const handleClickCompare = async () => {
+  const handleClickCompare = () => {
     if (compareGoodsLinks.length < 2) {
-      await describeGoods(comparePayload);
+      describeGoods(comparePayload);
     } else {
-      await compareGoods(compareGoodsLinks);
+      compareGoods(compareGoodsLinks);
     }
   };
 

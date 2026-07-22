@@ -6,7 +6,6 @@ import type { Meta, StoryObj } from "@storybook/react";
 const meta: Meta<typeof AnalyticsGoodsChangesChart> = {
   title: "Components/Analytics/AnalyticsGoodsChangesChart",
   component: AnalyticsGoodsChangesChart,
-  tags: ["autodocs"],
   argTypes: {
     chartData: {
       control: "object",

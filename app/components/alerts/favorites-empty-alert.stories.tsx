@@ -5,7 +5,6 @@ import type { Meta, StoryObj } from "@storybook/react";
 const meta: Meta<typeof FavoritesEmptyAlert> = {
   title: "Components/Alerts/FavoritesEmptyAlert",
   component: FavoritesEmptyAlert,
-  tags: ["autodocs"],
   parameters: {
     layout: "padded"
   },

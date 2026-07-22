@@ -28,7 +28,6 @@ function StoreInitializer({ children }: { children: ReactNode }) {
 const meta: Meta<typeof JumpToSection> = {
   title: "Components/JumpToSection",
   component: JumpToSection,
-  tags: ["autodocs"],
   parameters: {
     layout: "fullscreen"
   },

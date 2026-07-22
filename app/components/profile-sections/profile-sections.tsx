@@ -7,7 +7,7 @@ import {
   postAddToHiddenSections,
   postRemoveFromFavoriteSection,
   postRemoveFromHiddenSections
-} from "@/services/user";
+} from "@/services/post";
 
 import { ProfileNotifications } from "./profile-notifications";
 import { ProfileUpdateSections } from "./profile-update-sections";

@@ -13,7 +13,6 @@ import type { Meta, StoryObj } from "@storybook/react";
 const meta: Meta<typeof Select> = {
   title: "UI/Select",
   component: Select,
-  tags: ["autodocs"],
   argTypes: {}
 };
 

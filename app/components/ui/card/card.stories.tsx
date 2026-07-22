@@ -1,4 +1,3 @@
-
 import { Button } from "@/app/components/ui/button/button";
 
 import {
@@ -16,7 +15,6 @@ import type { Meta, StoryObj } from "@storybook/react";
 const meta: Meta<typeof Card> = {
   title: "UI/Card",
   component: Card,
-  tags: ["autodocs"],
   argTypes: {}
 };
 

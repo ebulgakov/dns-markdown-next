@@ -26,6 +26,7 @@
     "JumpToSectionContainer": { "cardMode": "column" },
     "JumpToSection": { "cardMode": "single", "primaryStory": "Default" },
     "Dialog": { "cardMode": "single", "primaryStory": "Default" },
+    "DropdownMenu": { "cardMode": "single", "primaryStory": "Default" },
     "SortGoods": { "cardMode": "single", "primaryStory": "Default state" },
     "ChartPrices": { "cardMode": "single" },
     "JumpToSectionToggle": { "skip": ["components-jumptosection-jumptosectiontoggle--default", "components-jumptosection-jumptosectiontoggle--active"] }

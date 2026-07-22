@@ -36,6 +36,9 @@ export const postUpdateUserNotifications = async (notifications: UserNotificatio
   if (userId) {
     return await postUpdateUserNotificationsUser(notifications);
   } else {
+    // No guest counterpart by design: notifications are tied to a real email
+    // (see ProfileNotifications), which guests don't have, and this action is
+    // only reachable from /profile, which proxy.ts already gates behind auth.
     return null;
   }
 };

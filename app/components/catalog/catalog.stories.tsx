@@ -3,6 +3,7 @@ import { useEffect } from "react";
 import { defaultContext } from "@/app/components/product-card/__mocks__/context";
 import { mockPriceList } from "@/app/components/product-card/__mocks__/goods";
 import { UserProvider } from "@/app/contexts/user-context";
+import { QueryProvider } from "@/app/providers/query-provider";
 import { usePriceListStore } from "@/app/stores/pricelist-store";
 import { useSearchStore } from "@/app/stores/search-store";
 
@@ -36,18 +37,19 @@ function StoreInitializer({
 const meta: Meta<typeof Catalog> = {
   title: "Components/Catalog/Catalog",
   component: Catalog,
-  tags: ["autodocs"],
   parameters: {
     layout: "fullscreen"
   },
   decorators: [
     Story => (
       <StoreInitializer>
-        <UserProvider value={defaultContext}>
-          <div style={{ minHeight: "100vh" }}>
-            <Story />
-          </div>
-        </UserProvider>
+        <QueryProvider>
+          <UserProvider value={defaultContext}>
+            <div style={{ minHeight: "100vh" }}>
+              <Story />
+            </div>
+          </UserProvider>
+        </QueryProvider>
       </StoreInitializer>
     )
   ],

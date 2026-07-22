@@ -9,7 +9,6 @@ import type { Meta, StoryObj } from "@storybook/react";
 const meta: Meta<typeof ProductCardFavoriteToggle> = {
   component: ProductCardFavoriteToggle,
   title: "Components/ProductCard/ProductCardFavoriteToggle",
-  tags: ["autodocs"],
   parameters: {
     layout: "centered"
   },

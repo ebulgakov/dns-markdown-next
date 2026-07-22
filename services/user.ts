@@ -124,9 +124,11 @@ export const postRemoveFromFavoriteSection = async (
 const fetchUser = async (token: string) => wrapApiCall("/api/user", token);
 const getCachedUserForId = (userId: string, token: string) =>
   cacheToken(async () => fetchUser(token), ["user-profile", userId], { tags: [`user-${userId}`] });
-export const getUser = async (): Promise<User | null> => {
+// react cache() dedupes calls within one request (layout.tsx + a page both call this);
+// the unstable_cache above only dedupes across requests, not concurrent calls in the same one.
+export const getUser = cache(async (): Promise<User | null> => {
   const { token, userId } = await getSessionInfo();
   if (!userId || !token) return null;
 
   return getCachedUserForId(userId, token)();
-};
+});

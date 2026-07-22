@@ -398,6 +398,33 @@ image and needs a shell with wider network egress to verify it properly —
 see the `[ASSETS_BLOCKED]` row in `../non-storybook/SKILL.md` §3 /
 `storybook/SKILL.md` §3 for the re-verify procedure.
 
+## DropdownMenu and Spinner — added this sync, needed `entry.ts` lines; DropdownMenu is a portal like Dialog
+
+Both `app/components/ui/dropdown-menu/dropdown-menu.tsx` and
+`app/components/ui/spinner/spinner.tsx` were flat files with no
+`.stories.tsx` until this sync (a design-sync inspection flagged them as
+dead structure — no folder/index.ts/story — and they were restructured to
+match every other `ui/` primitive, with stories added). Since `.design-sync/entry.ts`
+is hand-maintained (not regenerated — see Re-sync risks below), both needed
+a new `export * from "../app/components/ui/<name>/<name>"` line added before
+they were picked up as storied components at all.
+
+`DropdownMenu` renders via a Radix portal to `document.body`, same class as
+`Dialog`/`SortGoods`/`JumpToSection`: the storybook reference's own capture
+clips the open menu to a one-line sliver (only the trigger button is
+visible; see raw `ui__DropdownMenu__uidropdownmenudefault__sb.png`), while
+the preview renders the full menu correctly — graded `match` per the
+rubric's gated-reference rule (the reference is the artifact here, not the
+preview). Fixed with `cfg.overrides.DropdownMenu: {"cardMode": "single",
+"primaryStory": "Default"}` so the Design System pane card doesn't paint the
+open menu over sibling cells.
+
+`Spinner` has no stories anywhere else in the app to compare against — it is
+currently unused dead code in the repo itself (`PageLoader` renders its own
+`next/image`-based spinner instead). Synced anyway since it's a real,
+correctly-rendering shadcn primitive, not a broken one; worth revisiting if
+the repo ever removes it as unused.
+
 ## Re-sync risks
 
 - The `@clerk/nextjs` resolution issue could recur if any OTHER component
