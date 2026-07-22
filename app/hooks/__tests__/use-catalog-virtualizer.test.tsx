@@ -38,6 +38,8 @@ const flattenList: VisualizationOutputList = [
   { type: "title", category: "favorite" }
 ];
 
+let currentUnmount: (() => void) | undefined;
+
 function renderVirtualizer(withStickySearch = false) {
   let options: Record<string, unknown> = {};
   mockedUseWindowVirtualizer.mockImplementation(opts => {
@@ -48,16 +50,25 @@ function renderVirtualizer(withStickySearch = false) {
   const view = renderHook(() =>
     useCatalogVirtualizer({ flattenList, listRef: emptyRef, withStickySearch })
   );
+  currentUnmount = view.unmount;
 
   return { ...view, getOptions: () => options };
 }
 
 beforeEach(() => {
+  // Fake timers must be active before the hook's effect runs, otherwise its
+  // internal setTimeout is a real timer that can fire after this test (and
+  // jsdom) has already been torn down, throwing "window is not defined".
+  vi.useFakeTimers();
   window.scrollTo = vi.fn();
   window.location.hash = "";
 });
 
 afterEach(() => {
+  // Unmount so the hook's effect cleanup clears any pending timeout/listener
+  // before we switch timer implementations.
+  currentUnmount?.();
+  currentUnmount = undefined;
   vi.clearAllMocks();
   vi.useRealTimers();
 });
@@ -83,7 +94,6 @@ describe("useCatalogVirtualizer", () => {
   });
 
   it("scrolls to the matching header when the URL hash matches a section title", async () => {
-    vi.useFakeTimers();
     window.location.hash = "#Ноутбуки";
 
     renderVirtualizer();
@@ -93,7 +103,6 @@ describe("useCatalogVirtualizer", () => {
   });
 
   it("doubles the nav-height offset when a sticky search bar is also present", async () => {
-    vi.useFakeTimers();
     window.location.hash = "#Ноутбуки";
 
     renderVirtualizer(true);
@@ -103,7 +112,6 @@ describe("useCatalogVirtualizer", () => {
   });
 
   it("does not scroll when the hash does not match any section", async () => {
-    vi.useFakeTimers();
     window.location.hash = "#DoesNotExist";
 
     renderVirtualizer();
@@ -113,7 +121,6 @@ describe("useCatalogVirtualizer", () => {
   });
 
   it("stops re-checking the scroll position once the hash is cleared", async () => {
-    vi.useFakeTimers();
     window.location.hash = "#Ноутбуки";
 
     renderVirtualizer();
