@@ -10,7 +10,6 @@ const meta: Meta<typeof PageTitle> = {
   parameters: {
     layout: "fullscreen"
   },
-  tags: ["autodocs"],
   argTypes: {
     title: { control: "text" },
     subTitle: { control: "text" },

@@ -5,7 +5,6 @@ import type { Meta, StoryObj } from "@storybook/react";
 const meta: Meta<typeof Input> = {
   title: "UI/Input",
   component: Input,
-  tags: ["autodocs"],
   argTypes: {
     inputSize: {
       options: ["sm", "md", "lg"],

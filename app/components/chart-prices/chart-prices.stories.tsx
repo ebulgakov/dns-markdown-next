@@ -5,7 +5,6 @@ import type { Meta, StoryObj } from "@storybook/react";
 const meta: Meta<typeof ChartPrices> = {
   title: "Components/ChartPrices",
   component: ChartPrices,
-  tags: ["autodocs"],
   argTypes: {
     chartData: {
       control: "object",

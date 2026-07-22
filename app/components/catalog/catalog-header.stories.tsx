@@ -34,7 +34,6 @@ const sampleHeader: VisualizationHeader = {
 const meta: Meta<typeof CatalogHeader> = {
   title: "Components/Catalog/CatalogHeader",
   component: CatalogHeader,
-  tags: ["autodocs"],
   decorators: [
     Story => (
       <PriceListStoreInitializer city="Test City">

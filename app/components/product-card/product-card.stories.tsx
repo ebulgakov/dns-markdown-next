@@ -9,7 +9,6 @@ import type { Meta, StoryObj } from "@storybook/react";
 const meta: Meta<typeof ProductCard> = {
   title: "Components/ProductCard",
   component: ProductCard,
-  tags: ["autodocs"],
   argTypes: {
     item: { control: "object" },
     status: { control: "object" }

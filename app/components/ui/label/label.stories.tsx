@@ -5,7 +5,6 @@ import type { Meta, StoryObj } from "@storybook/react";
 const meta: Meta<typeof Label> = {
   title: "UI/Label",
   component: Label,
-  tags: ["autodocs"],
   argTypes: {
     children: {
       control: "text"

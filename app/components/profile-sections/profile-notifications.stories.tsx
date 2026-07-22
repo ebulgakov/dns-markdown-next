@@ -5,7 +5,6 @@ import type { Meta, StoryObj } from "@storybook/react";
 const meta: Meta<typeof ProfileNotifications> = {
   title: "Components/Profile/Notifications",
   component: ProfileNotifications,
-  tags: ["autodocs"],
   parameters: {
     layout: "fullscreen"
   }

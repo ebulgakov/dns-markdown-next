@@ -7,7 +7,6 @@ import type { Meta, StoryObj } from "@storybook/react";
 const meta: Meta<typeof BarChart> = {
   title: "UI/Chart",
   component: BarChart,
-  tags: ["autodocs"],
   args: {
     width: 600,
     height: 300,

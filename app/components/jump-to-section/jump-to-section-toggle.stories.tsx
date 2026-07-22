@@ -5,7 +5,6 @@ import type { Meta, StoryObj } from "@storybook/react";
 const meta: Meta<typeof JumpToSectionToggle> = {
   title: "Components/JumpToSection/JumpToSectionToggle",
   component: JumpToSectionToggle,
-  tags: ["autodocs"],
   parameters: {
     layout: "centered"
   }

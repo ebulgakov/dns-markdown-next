@@ -5,7 +5,6 @@ import type { Meta, StoryObj } from "@storybook/react";
 const meta: Meta<typeof CheckboxWithLabel> = {
   title: "UI/ControlWithLabel/CheckboxWithLabel",
   component: CheckboxWithLabel,
-  tags: ["autodocs"],
   argTypes: {
     label: {
       control: "text",

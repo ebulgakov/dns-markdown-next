@@ -5,7 +5,6 @@ import type { Meta, StoryObj } from "@storybook/react";
 const meta: Meta<typeof ProfileUpdateSections> = {
   title: "Components/Profile/ProfileUpdateSections",
   component: ProfileUpdateSections,
-  tags: ["autodocs"],
   parameters: {
     layout: "fullscreen"
   }
