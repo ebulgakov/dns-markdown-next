@@ -2,7 +2,7 @@ import * as cheerio from "cheerio";
 import { ObjectId } from "mongodb";
 import type { Goods, Position } from "#types/pricelist.ts";
 
-export type SourcePrice = { data: { id: string; price: { previous: number; current: number } } };
+export type SourcePrice = { id: string, data: { id: string; price: { previous: number; current: number } } };
 
 export type PricesSet = {
   states: SourcePrice[];
@@ -66,8 +66,8 @@ export default function createData(html: string, pricesSet: PricesSet) {
       });
 
       // Prices
-      const productId = $$product.data("entity") as string;
-      const prices = pricesSet.states.find(state => state.data.id === productId);
+      const productId = $$product.find(".catalog-product__buy").attr("id") as string;
+      const prices = pricesSet.states.find(state => state.id === productId);
       if (prices) {
         productObj.priceOld = String(prices.data.price.previous);
         productObj.price = String(prices.data.price.current);
