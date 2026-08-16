@@ -31,14 +31,14 @@ Run a single unit test file: `TZ=UTC vitest run --project unit path/to/file.test
 
 Playwright e2e tests live in `playwright/` (config in `playwright.config.ts`). They build+start the app and run against `http://localhost:3000`: `npx playwright test`. These require Clerk test credentials and Upstash Redis env vars (see CI workflow `.github/workflows/playwright.yml`) — they are not expected to run without that setup.
 
-Unit tests (`vitest`) use the `unit` project defined in `vitest.config.ts`: jsdom environment, files matched by `**/*.test.{ts,tsx}`, colocated with source under `__tests__/` directories (e.g. `app/helpers/__tests__/format.test.ts`). A second `storybook` project runs Storybook interaction tests in a real browser (Playwright provider) — this is exercised via `pnpm build-storybook`/Chromatic CI, not `pnpm test`.
+Unit tests (`vitest`) use the `unit` project defined in `vitest.config.ts`: jsdom environment, files matched by `**/*.test.{ts,tsx}`, colocated with source under `__tests__/` directories (e.g. `src/shared/lib/__tests__/format.test.ts`). A second `storybook` project runs Storybook interaction tests in a real browser (Playwright provider) — this is exercised via `pnpm build-storybook`/Chromatic CI, not `pnpm test`.
 
 CI runs ESLint, `tsc --noEmit` ("TSLint" workflow), Vitest, and Playwright as separate GitHub Actions workflows on push/PR to `main`. Chromatic runs only when a PR is labeled `chromatic`.
 
 ## Environment
 
 Copy `.env-example` to `.env` and fill in values. Key variables:
-- `API_URL` / `API_SECRET_KEY` — external backend that owns pricelist/product/analysis data (called via `services/client.ts`'s `apiClient`, an axios instance sending `X-Internal-API-Secret`).
+- `API_URL` / `API_SECRET_KEY` — external backend that owns pricelist/product/analysis data (called via `src/shared/api/client.ts`'s `apiClient`, an axios instance sending `X-Internal-API-Secret`).
 - `CLERK_SECRET_KEY` / `NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY` / `NEXT_PUBLIC_CLERK_*_URL` — Clerk auth.
 - `UPSTASH_REDIS_REST_URL` / `UPSTASH_REDIS_REST_TOKEN` — guest user state storage.
 - `DEFAULT_CITY` — fallback city (e.g. `samara`) used when a user/guest has none set.
@@ -46,35 +46,38 @@ Copy `.env-example` to `.env` and fill in values. Key variables:
 
 ## Architecture
 
-### Data layer: user vs. guest, always behind `services/post.ts`
+The codebase follows Feature-Sliced Design (FSD) under `src/` (`shared → entities → features → widgets`), enforced by `import/no-restricted-paths` zones in `eslint.config.mjs`. Next's own `app/` directory stays at the project root and is routing-only: `page.tsx`/`layout.tsx`/`app/api/*/route.ts` are intentionally out of scope for FSD restructuring — they compose the `src/` layers but are not moved into them. Route-local UI with a single consumer (e.g. `app/analysis/analytics-*.tsx`, `app/profile/profile-sections.tsx`) is colocated directly next to its `page.tsx` rather than promoted to a shared layer.
 
-Almost all mutating/user-scoped reads go through `services/post.ts`, which branches on whether a Clerk session exists (`getSessionInfo()` from `services/user.ts`, memoized per-request via React's `cache()`):
-- **Logged-in** → delegates to `services/user.ts`, which calls the external API with the Clerk bearer token and calls `revalidateTag(`user-${userId}`)` after every mutation.
-- **Guest** → delegates to `services/guest.ts`, which reads/writes a `User` object in Upstash Redis keyed by a `guestId` cookie (30-day TTL), with no external API involvement.
+### Data layer: user vs. guest, always behind `src/entities/user`'s `post.ts`
 
-Both paths converge on the same shape (`User`, `Favorite`, `SectionsResponse`, etc. from `types/user.ts`), so components/pages consuming `getUser()` etc. don't need to know which backend served the request. When adding a new user-scoped action, add matching functions to both `services/user.ts` and `services/guest.ts`, then branch on `userId` in `services/post.ts` — don't special-case guest/user logic in components.
+Almost all mutating/user-scoped reads go through `src/entities/user/api/post.ts` (re-exported via `src/entities/user/index.ts`), which branches on whether a Clerk session exists (`getSessionInfo()` from `src/entities/user/api/user.ts`, memoized per-request via React's `cache()`):
+- **Logged-in** → delegates to `api/user.ts`, which calls the external API with the Clerk bearer token and calls `revalidateTag(`user-${userId}`)` after every mutation.
+- **Guest** → delegates to `api/guest.ts`, which reads/writes a `User` object in Upstash Redis keyed by a `guestId` cookie (30-day TTL), with no external API involvement.
 
-### Data layer: catalog/analysis reads via `services/get.ts`
+Both paths converge on the same shape (`User`, `Favorite`, `SectionsResponse`, etc. from `src/entities/user/model/user.ts`), so components/pages consuming `getUser()` etc. don't need to know which backend served the request. When adding a new user-scoped action, add matching functions to both `api/user.ts` and `api/guest.ts`, then branch on `userId` in `api/post.ts` — don't special-case guest/user logic in components. `api/user.ts`/`api/guest.ts` are private internals of the slice; only `post.ts`'s exports (and `getSessionInfo`/`getUser` from `api/user.ts`, used directly by `app/layout.tsx`, `app/favorites/page.tsx`, `app/profile/page.tsx`) are re-exported through the slice's public `index.ts`.
 
-Read-only catalog/analysis data (pricelists, products, diffs, LLM reports) goes through `services/get.ts`, where every fetch is wrapped in `unstable_cache` with a `daily-data` (or `llm-report`) tag. `app/api/revalidate/route.ts` is the webhook the external backend calls (with `WEBHOOK_SECRET_KEY`) to bust these tags when new data lands — this is how the app picks up new pricelists without redeploying.
+### Data layer: catalog/analysis reads via `src/entities/product`'s `get.ts`
+
+Read-only catalog/analysis data (pricelists, products, diffs, LLM reports) goes through `src/entities/product/api/get.ts`, where every fetch is wrapped in `unstable_cache` with a `daily-data` (or `llm-report`) tag. `app/api/revalidate/route.ts` is the webhook the external backend calls (with `WEBHOOK_SECRET_KEY`) to bust these tags when new data lands — this is how the app picks up new pricelists without redeploying.
 
 ### Route structure
 
-`app/` follows Next.js App Router conventions with route groups: `(home)`, plus `catalog` (with `catalog/markdown/[id]` for a single product), `analysis`, `archive/[id]`, `favorites`, `profile`, `about`, `today`, `sign-in`/`sign-up`. API route handlers live under `app/api/*/route.ts` and are thin wrappers that call `services/get.ts`/`services/post.ts` and shape the HTTP response — business/caching logic belongs in `services/`, not in route handlers.
+`app/` follows Next.js App Router conventions with route groups: `(home)`, plus `catalog` (with `catalog/markdown/[id]` for a single product), `analysis`, `archive/[id]`, `favorites`, `profile`, `about`, `today`, `sign-in`/`sign-up`. API route handlers live under `app/api/*/route.ts` and are thin wrappers that call into `src/entities/{user,product}`'s public APIs and shape the HTTP response — business/caching logic belongs in `src/entities/`, not in route handlers.
 
 `proxy.ts` is the Clerk middleware entry point (protects `/profile(.*)`; note this project uses `proxy.ts` rather than the conventional `middleware.ts` filename).
 
 ### State
 
-- `app/contexts/user-context.tsx` — server-populated user data (favorites, hidden/favorite sections, city) is fetched once in `app/layout.tsx` and provided via React context, avoiding a client-side refetch on every page.
-- `app/stores/*` (zustand) — client-only UI state: search, sort-goods, llm, pricelist stores.
-- `app/providers/` — `QueryProvider` (TanStack Query) and `ThemeProvider` (next-themes) wrap the tree in `app/layout.tsx`.
+- `src/entities/user/model/user-context.tsx` — server-populated user data (favorites, hidden/favorite sections, city) is fetched once in `app/layout.tsx` and provided via React context, avoiding a client-side refetch on every page.
+- Zustand stores live with the layer/slice that owns them, not in one shared folder: `src/entities/product/model/pricelist-store.ts` (genuine domain data, read by multiple routes/features — hence `entities`, not a feature); `src/features/search/model/search-store.ts`, `src/features/sort-goods/model/sort-goods-store.ts`, `src/features/llm-report/model/llm-store.ts` (feature-owned UI/interaction state, consumed cross-feature only through that feature's public `index.ts`).
+- `src/shared/providers/` — `QueryProvider` (TanStack Query) and `ThemeProvider` (next-themes) wrap the tree in `app/layout.tsx`. Pure infra wrappers, no business logic, hence `shared` rather than app-shell code.
+- `src/widgets/{navbar,footer}/` — app-shell chrome rendered once from `app/layout.tsx` (navbar includes the folded-in `logo`).
 
 ### UI conventions
 
-- shadcn/ui ("new-york" style) is configured in `components.json`; primitives live in `app/components/ui`, with path aliases `@/app/components`, `@/app/lib`, `@/app/hooks` etc. — use these aliases, don't add new ones.
+- shadcn/ui ("new-york" style) is configured in `components.json`; primitives live in `src/shared/ui`, with path aliases `@/shared/*`, `@/entities/{user,product}`, `@/features/{product-catalog,search,sort-goods,jump-to-section,llm-report,change-city}`, `@/widgets/{navbar,footer}`, plus the catch-all `@/*` for anything not yet under `src/` (notably all of `app/`, `types/`) — use these aliases, don't add new ones.
 - i18n via `next-intl`; translation strings live in `i18n/locates/{en,ru}.json`, loaded through `i18n/request.ts`. Russian (`ru`) is the primary/default locale (see README).
-- Storybook stories are colocated with components (`*.stories.tsx`); Chromatic is wired for visual regression but only runs in CI when a PR carries the `chromatic` label.
+- Storybook stories are colocated with components (`*.stories.tsx`), both under `src/**` and route-local under `app/**`; Chromatic is wired for visual regression but only runs in CI when a PR carries the `chromatic` label.
 - Sentry (`@sentry/nextjs`) is wired via `next.config.ts` (`withSentryConfig`) and `sentry.server.config.ts`/`sentry.edge.config.ts`/`instrumentation*.ts`.
 
 ### Import ordering & formatting
