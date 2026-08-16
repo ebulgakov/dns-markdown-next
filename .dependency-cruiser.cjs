@@ -52,6 +52,15 @@ module.exports = {
     },
     doNotFollow: {
       path: "node_modules"
-    }
+    },
+    // Neither forbidden rule below needs orphan/dependents derivation, so this
+    // is dependency-cruiser's own documented opt-out for skipping it. Without
+    // it, orphan is still computed for every module (even though no rule uses
+    // it) and leaks into dep-graph:archi's SVG: a module reachable only via
+    // type-only imports (e.g. a model/*.ts that exports just a type) gets
+    // flagged orphan:true, and --collapse's naive last-file-wins merge
+    // (consolidateModules) can let that paint an entire feature/entity folder
+    // node the same "orphan" green as a genuinely unused module.
+    skipAnalysisNotInRules: true
   }
 };

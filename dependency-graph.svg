@@ -321,7 +321,7 @@
 <g id="node8" class="node">
 <title>src/entities/product</title>
 <g id="a_node8"><a xlink:href="src/entities/product" xlink:title="product">
-<polygon fill="#ccffcc" stroke="black" points="720.12,-2073.59 668.1,-2073.59 666.12,-2071.61 666.12,-2055.84 718.15,-2055.84 720.12,-2057.81 720.12,-2073.59"/>
+<polygon fill="#ffffcc" stroke="black" points="720.12,-2073.59 668.1,-2073.59 666.12,-2071.61 666.12,-2055.84 718.15,-2055.84 720.12,-2057.81 720.12,-2073.59"/>
 <polyline fill="none" stroke="black" points="718.15,-2071.61 666.12,-2071.61"/>
 <polyline fill="none" stroke="black" points="718.15,-2071.61 718.15,-2055.84"/>
 <polyline fill="none" stroke="black" points="718.15,-2071.61 720.12,-2073.59"/>
@@ -339,7 +339,7 @@
 <g id="node9" class="node">
 <title>src/entities/user</title>
 <g id="a_node9"><a xlink:href="src/entities/user" xlink:title="user">
-<polygon fill="#ccffcc" stroke="black" points="720.12,-2103.59 668.1,-2103.59 666.12,-2101.61 666.12,-2085.84 718.15,-2085.84 720.12,-2087.81 720.12,-2103.59"/>
+<polygon fill="#ffffcc" stroke="black" points="720.12,-2103.59 668.1,-2103.59 666.12,-2101.61 666.12,-2085.84 718.15,-2085.84 720.12,-2087.81 720.12,-2103.59"/>
 <polyline fill="none" stroke="black" points="718.15,-2101.61 666.12,-2101.61"/>
 <polyline fill="none" stroke="black" points="718.15,-2101.61 718.15,-2085.84"/>
 <polyline fill="none" stroke="black" points="718.15,-2101.61 720.12,-2103.59"/>
@@ -603,7 +603,7 @@
 <g id="node18" class="node">
 <title>app/global&#45;error.tsx</title>
 <g id="a_node18"><a xlink:href="app/global-error.tsx" xlink:title="global&#45;error.tsx">
-<path fill="#ccffcc" stroke="black" d="M87.58,-2531.59C87.58,-2531.59 21.92,-2531.59 21.92,-2531.59 18.96,-2531.59 16,-2528.63 16,-2525.67 16,-2525.67 16,-2519.75 16,-2519.75 16,-2516.79 18.96,-2513.84 21.92,-2513.84 21.92,-2513.84 87.58,-2513.84 87.58,-2513.84 90.54,-2513.84 93.5,-2516.79 93.5,-2519.75 93.5,-2519.75 93.5,-2525.67 93.5,-2525.67 93.5,-2528.63 90.54,-2531.59 87.58,-2531.59"/>
+<path fill="#bbfeff" stroke="black" d="M87.58,-2531.59C87.58,-2531.59 21.92,-2531.59 21.92,-2531.59 18.96,-2531.59 16,-2528.63 16,-2525.67 16,-2525.67 16,-2519.75 16,-2519.75 16,-2516.79 18.96,-2513.84 21.92,-2513.84 21.92,-2513.84 87.58,-2513.84 87.58,-2513.84 90.54,-2513.84 93.5,-2516.79 93.5,-2519.75 93.5,-2519.75 93.5,-2525.67 93.5,-2525.67 93.5,-2528.63 90.54,-2531.59 87.58,-2531.59"/>
 <text xml:space="preserve" text-anchor="start" x="24" y="-2520.09" font-family="Helvetica,sans-Serif" font-size="9.00">global&#45;error.tsx</text>
 </a>
 </g>
@@ -1077,7 +1077,7 @@
 <g id="node43" class="node">
 <title>src/features/product&#45;catalog</title>
 <g id="a_node43"><a xlink:href="src/features/product-catalog" xlink:title="product&#45;catalog">
-<polygon fill="#ccffcc" stroke="black" points="599.88,-541.59 522.1,-541.59 520.12,-539.61 520.12,-523.84 597.9,-523.84 599.88,-525.81 599.88,-541.59"/>
+<polygon fill="#ffffcc" stroke="black" points="599.88,-541.59 522.1,-541.59 520.12,-539.61 520.12,-523.84 597.9,-523.84 599.88,-525.81 599.88,-541.59"/>
 <polyline fill="none" stroke="black" points="597.9,-539.61 520.12,-539.61"/>
 <polyline fill="none" stroke="black" points="597.9,-539.61 597.9,-523.84"/>
 <polyline fill="none" stroke="black" points="597.9,-539.61 599.88,-541.59"/>
