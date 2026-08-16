@@ -58,6 +58,9 @@ node_modules/
 /playwright/.auth/
 /playwright/.clerk/
 
+# dependency-cruiser
+dependency-graph.svg
+
 # design-sync
 .design-sync/sb-reference/
 .design-sync/learnings/

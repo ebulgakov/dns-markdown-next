@@ -13,7 +13,10 @@
     "test:watch": "TZ=UTC vitest  --project unit",
     "test:coverage": "TZ=UTC vitest --project unit --coverage",
     "storybook": "storybook dev -p 6006",
-    "build-storybook": "storybook build"
+    "build-storybook": "storybook build",
+    "dep-check": "depcruise --config .dependency-cruiser.cjs --output-type err app src",
+    "dep-graph": "depcruise --config .dependency-cruiser.cjs --output-type mermaid --collapse \"^(src/features/[^/]+|src/entities/[^/]+|src/widgets/[^/]+|src/shared|app/[^/]+)\" app src",
+    "dep-graph:archi": "depcruise --config .dependency-cruiser.cjs --output-type archi --collapse \"^(src/features/[^/]+|src/entities/[^/]+|src/widgets/[^/]+|src/shared|app/[^/]+)\" app src | dot -T svg -o dependency-graph.svg"
   },
   "dependencies": {
     "@clerk/nextjs": "^6.36.5",
@@ -78,6 +81,7 @@
     "@vitejs/plugin-react": "^5.1.4",
     "@vitest/browser-playwright": "^4.0.16",
     "@vitest/coverage-v8": "^4.0.16",
+    "dependency-cruiser": "^18.2.0",
     "eslint": "^9",
     "eslint-config-next": "16.1.1",
     "eslint-plugin-boundaries": "^7.2.0",
