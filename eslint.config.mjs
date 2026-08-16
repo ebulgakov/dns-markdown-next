@@ -239,25 +239,16 @@ const eslintConfig = defineConfig([
             },
             ...featureSlicePolicies,
 
-            // entities: compose shared; entities/product <-> entities/user
-            // is a documented, single-direction-per-symbol exception (see
-            // recursive-hugging-finch.md for the decoupling this replaced —
-            // product needs user's getPriceListCity, user needs product's
-            // Goods/Favorite/FavoriteStatus), never a deep import.
+            // entities: compose shared; entities/user -> entities/product
+            // is a documented, single-direction exception (user needs
+            // product's Goods/Favorite/FavoriteStatus types), never a deep
+            // import. entities/product -> entities/user was removed by
+            // pushing city resolution (getPriceListCity) up to the
+            // app/_pages callers instead.
             {
               from: { element: { type: "entity" } },
               allow: [
                 { to: { element: { type: "shared", fileInternalPath: SHARED_ENTRY_POINTS } } }
-              ]
-            },
-            {
-              from: { element: { type: "entity", captured: { slice: "product" } } },
-              allow: [
-                {
-                  to: {
-                    element: { type: "entity", captured: { slice: "user" }, fileInternalPath: "index.ts" }
-                  }
-                }
               ]
             },
             {

@@ -19,10 +19,10 @@ export async function getOffersData() {
 
   try {
     city = await getPriceListCity();
-    const priceListDates = await getArchiveListDates();
-    const mostCheapArr = await getMostCheapProducts();
-    const mostDiscountedArr = await getMostDiscountedProducts();
-    const mostProfitableArr = await getMostProfitableProducts();
+    const priceListDates = await getArchiveListDates(city);
+    const mostCheapArr = await getMostCheapProducts(city);
+    const mostDiscountedArr = await getMostDiscountedProducts(city);
+    const mostProfitableArr = await getMostProfitableProducts(city);
 
     mostCheap = mostCheapArr[0];
     mostDiscounted = mostDiscountedArr[0];

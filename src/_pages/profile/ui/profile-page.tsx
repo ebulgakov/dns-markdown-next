@@ -1,5 +1,5 @@
 import { getLastPriceList } from "@/entities/product";
-import { getRealUser } from "@/entities/user"; // I need exactly the real user, not the guest
+import { getPriceListCity, getRealUser } from "@/entities/user"; // I need exactly the real user, not the guest
 import { ErrorAlert } from "@/shared/ui/error-alert";
 
 import { ProfileSections } from "./profile-sections";
@@ -12,7 +12,7 @@ async function ProfilePage() {
     user = await getRealUser();
     if (!user) throw new Error("User not found");
 
-    const lastPriceList = await getLastPriceList(user.city);
+    const lastPriceList = await getLastPriceList(user.city || (await getPriceListCity()));
     if (!lastPriceList) throw new Error("Price list not found for user's city");
     allSections = lastPriceList.positions.map(position => position.title);
   } catch (e) {

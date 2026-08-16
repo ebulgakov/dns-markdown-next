@@ -1,5 +1,5 @@
 import { getFlatPriceList, getLastPriceList } from "@/entities/product";
-import { getSessionInfo, getUser } from "@/entities/user";
+import { getPriceListCity, getSessionInfo, getUser } from "@/entities/user";
 
 import type { Favorite } from "@/entities/user";
 
@@ -17,7 +17,7 @@ export async function getFavoritesData() {
         favorites = user.favorites;
         shownBoughtFavorites = user.shownBoughtFavorites;
       } else {
-        const lastPriceList = await getLastPriceList();
+        const lastPriceList = await getLastPriceList(user.city || (await getPriceListCity()));
         if (!lastPriceList) throw new Error("Price list not found for guests's city");
 
         const flatCatalog = getFlatPriceList(lastPriceList);
