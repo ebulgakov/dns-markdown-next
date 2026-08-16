@@ -34,6 +34,10 @@ pnpm test:coverage       # vitest --project unit --coverage
 
 pnpm storybook           # storybook dev on :6006
 pnpm build-storybook     # static storybook build
+
+pnpm dep-check           # dependency-cruiser: circular imports, unresolvable paths
+pnpm dep-graph           # dependency-cruiser: mermaid dependency graph
+pnpm dep-graph:archi     # dependency-cruiser: svg architecture diagram (needs graphviz `dot`)
 ```
 
 Run a single unit test file: `TZ=UTC vitest run --project unit path/to/file.test.ts`.
@@ -42,7 +46,7 @@ Playwright e2e tests live in `playwright/` (config in `playwright.config.ts`). T
 
 Unit tests (`vitest`) use the `unit` project defined in `vitest.config.ts`: jsdom environment, files matched by `**/*.test.{ts,tsx}`, colocated with source under `__tests__/` directories (e.g. `src/shared/lib/__tests__/format.test.ts`). A second `storybook` project runs Storybook interaction tests in a real browser (Playwright provider) — this is exercised via `pnpm build-storybook`/Chromatic CI, not `pnpm test`.
 
-CI runs ESLint, `tsc --noEmit` ("TSLint" workflow), Vitest, and Playwright as separate GitHub Actions workflows on push/PR to `main`. Chromatic runs only when a PR is labeled `chromatic`.
+CI runs ESLint, `tsc --noEmit` ("TSLint" workflow), Vitest, Playwright, and `pnpm dep-check` (`.github/workflows/dependency-check.yml`) as separate GitHub Actions workflows on push/PR to `main`. Chromatic runs only when a PR is labeled `chromatic`.
 
 ## Environment
 
@@ -92,6 +96,14 @@ Read-only catalog/analysis data (pricelists, products, diffs, LLM reports) goes 
 ### Import ordering & formatting
 
 ESLint enforces `import/order` (builtin → external → internal → parent → sibling → index → object → type, alphabetized, blank line between groups) — see `eslint.config.mjs`. Prettier config (`.prettierrc`): no trailing commas, double quotes, no semicolon-omission changes needed (semi: true), `arrowParens: avoid`, tailwind class sorting via `prettier-plugin-tailwindcss`. Run `pnpm lint:fix` after edits touching imports.
+
+## Code style
+
+- No `any` (`@typescript-eslint/no-explicit-any`, `eslint.config.mjs`) — if you're reaching for `any`, the real fix is usually a proper type or a narrower `unknown`.
+- No unjustified `eslint-disable`. Zero exist in the repo today — a new one needs a genuine conflict between two tools/rules, stated inline, not "the linter was annoying here."
+- `max-lines-per-function` is enforced at 80, and `max-lines` (whole file) at 250, both `skipBlankLines`/`skipComments` (`eslint.config.mjs`). `max-lines-per-function` is scoped to `.ts` files only, never `.tsx`: JSX lives inside a React function body (unlike a Vue SFC, where the template sits outside `<script>`), so counting `.tsx` lines here would measure markup, not logic sprawl. `__tests__/` files are exempt from both (arrange-act-assert blocks legitimately run long); `max-lines` also exempts `*.stories.tsx`. Two files are grandfathered by filename: `src/features/sort-goods/lib/use-filtered-goods.ts` (`max-lines-per-function`) and `src/shared/ui/chart/chart.tsx` (`max-lines`, shadcn-generated). That list should only shrink (refactor one below its threshold, drop the entry), never grow.
+- **FSD layer boundaries** are enforced by `eslint-plugin-boundaries` — see Architecture above for the full policy graph. `**/*.stories.tsx`, `**/__mocks__/**`, and `**/__tests__/**` are exempt from the `boundaries/dependencies` check entirely (`eslint.config.mjs`'s boundaries block `ignores`): those files legitimately reach into internals (mocking a store, rendering a component directly) that production code must not.
+- `dependency-cruiser` (`.dependency-cruiser.cjs`, `pnpm dep-check`, see Commands) covers what `eslint-plugin-boundaries` structurally can't: circular imports anywhere in `app/**`/`src/**`, and unresolvable import paths (a canary against a misconfigured resolver silently passing `no-circular` while checking nothing).
 
 ## Subagents
 

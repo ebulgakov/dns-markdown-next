@@ -100,7 +100,48 @@ const eslintConfig = defineConfig([
         }
       ],
       // Allow setState in useEffect for hydration handling
-      "react-hooks/set-state-in-effect": "off"
+      "react-hooks/set-state-in-effect": "off",
+      "@typescript-eslint/no-explicit-any": "error"
+    }
+  },
+  {
+    // Guardrail against sprawling logic functions. Scoped to .ts only, not
+    // .tsx: JSX lives inside a React function body (unlike a Vue SFC, where
+    // <template> sits outside <script>), so measuring .tsx here would count
+    // markup as logic, not sprawl. Test files exempt: assertion-heavy
+    // arrange-act-assert blocks legitimately run long.
+    files: ["app/**/*.ts", "src/**/*.ts"],
+    ignores: ["**/__tests__/**"],
+    rules: {
+      "max-lines-per-function": [
+        "error",
+        { max: 80, skipBlankLines: true, skipComments: true, IIFEs: true }
+      ]
+    }
+  },
+  {
+    // Guardrail against sprawling files. Tests and stories exempt for the
+    // same reason as max-lines-per-function above.
+    files: ["app/**/*.{ts,tsx}", "src/**/*.{ts,tsx}"],
+    ignores: ["**/__tests__/**", "**/*.stories.tsx"],
+    rules: {
+      "max-lines": ["error", { max: 250, skipBlankLines: true, skipComments: true }]
+    }
+  },
+  {
+    // Grandfathered: predates max-lines-per-function. Shrink this list
+    // (refactor below 80 lines, drop the entry) rather than growing it.
+    files: ["src/features/sort-goods/lib/use-filtered-goods.ts"],
+    rules: {
+      "max-lines-per-function": "off"
+    }
+  },
+  {
+    // Grandfathered: shadcn/ui-generated primitive, predates max-lines.
+    // Shrink this list rather than growing it.
+    files: ["src/shared/ui/chart/chart.tsx"],
+    rules: {
+      "max-lines": "off"
     }
   },
   {
