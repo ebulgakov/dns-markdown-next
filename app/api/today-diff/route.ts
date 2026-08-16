@@ -1,10 +1,12 @@
 import { NextResponse } from "next/server";
 
 import { getLastDiffByCity } from "@/entities/product";
+import { getPriceListCity } from "@/entities/user";
 
 export async function GET() {
   try {
-    const collection = await getLastDiffByCity();
+    const city = await getPriceListCity();
+    const collection = await getLastDiffByCity(city);
 
     if (!collection) {
       return NextResponse.json({ message: "No diff found for the city" }, { status: 404 });

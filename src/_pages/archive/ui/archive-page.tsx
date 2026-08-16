@@ -1,6 +1,7 @@
 import { getTranslations } from "next-intl/server";
 
 import { getArchiveListDates } from "@/entities/product";
+import { getPriceListCity } from "@/entities/user";
 import { ErrorAlert } from "@/shared/ui/error-alert";
 import { PageTitle } from "@/shared/ui/page-title";
 
@@ -24,7 +25,8 @@ async function ArchivePage() {
   let archiveCollection;
 
   try {
-    archiveCollection = await getArchiveListDates();
+    const city = await getPriceListCity();
+    archiveCollection = await getArchiveListDates(city);
   } catch (e) {
     const { message } = e as Error;
     return <ErrorAlert title="Ошибка загрузки архива прайслистов" message={message} />;
