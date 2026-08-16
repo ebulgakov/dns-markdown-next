@@ -26,9 +26,30 @@ export default defineConfig({
           environment: "jsdom",
           include: ["**/*.test.{ts,tsx}"],
           exclude: ["**/node_modules/**", "**/playwright/**", "**/.next/**"],
-          alias: {
-            "@": path.resolve(dirname, "./")
-          }
+          alias: [
+            { find: "@/shared", replacement: path.resolve(dirname, "./src/shared") },
+            { find: "@/entities/user", replacement: path.resolve(dirname, "./src/entities/user") },
+            { find: "@/entities/product", replacement: path.resolve(dirname, "./src/entities/product") },
+            {
+              find: "@/features/favorite-toggle",
+              replacement: path.resolve(dirname, "./src/features/favorite-toggle")
+            },
+            {
+              find: "@/features/product-catalog",
+              replacement: path.resolve(dirname, "./src/features/product-catalog")
+            },
+            { find: "@/features/search", replacement: path.resolve(dirname, "./src/features/search") },
+            { find: "@/features/sort-goods", replacement: path.resolve(dirname, "./src/features/sort-goods") },
+            {
+              find: "@/features/jump-to-section",
+              replacement: path.resolve(dirname, "./src/features/jump-to-section")
+            },
+            { find: "@/features/llm-report", replacement: path.resolve(dirname, "./src/features/llm-report") },
+            { find: "@/features/change-city", replacement: path.resolve(dirname, "./src/features/change-city") },
+            { find: "@/widgets/navbar", replacement: path.resolve(dirname, "./src/widgets/navbar") },
+            { find: "@/widgets/footer", replacement: path.resolve(dirname, "./src/widgets/footer") },
+            { find: "@", replacement: path.resolve(dirname, "./") }
+          ]
         }
       },
 

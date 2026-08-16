@@ -9,15 +9,14 @@ import { StrictMode, type ReactNode } from "react";
 
 import "./globals.css";
 
-import { Footer } from "@/app/components/footer/footer";
-import { Navbar } from "@/app/components/navbar/navbar";
-import { UserProvider } from "@/app/contexts/user-context";
-import { cn } from "@/app/lib/utils";
-import { QueryProvider } from "@/app/providers/query-provider";
-import { ThemeProvider } from "@/app/providers/theme-provider";
-import { getUser as getGenericUser } from "@/services/post";
-import { getSessionInfo } from "@/services/user";
-import { User } from "@/types/user";
+import { UserProvider } from "@/entities/user";
+import { getUser as getGenericUser } from "@/entities/user";
+import { getSessionInfo } from "@/entities/user";
+import { User } from "@/entities/user";
+import { cn } from "@/shared/lib";
+import { QueryProvider, ThemeProvider } from "@/shared/providers";
+import { Footer } from "@/widgets/footer";
+import { Navbar } from "@/widgets/navbar";
 
 import type { Metadata } from "next";
 

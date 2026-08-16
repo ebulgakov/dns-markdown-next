@@ -2,12 +2,12 @@
 
 import { startTransition, useOptimistic, useState } from "react";
 
-import { ProductCard } from "@/app/components/product-card/product-card";
-import { Alert, AlertDescription, AlertTitle } from "@/app/components/ui/alert";
-import { CheckboxWithLabel } from "@/app/components/ui/control-with-label";
-import { PageTitle } from "@/app/components/ui/page-title";
-import { postToggleFavoriteShownBought } from "@/services/post";
-import { Favorite } from "@/types/user";
+import { ProductCard } from "@/entities/product";
+import { postToggleFavoriteShownBought } from "@/entities/user";
+import { Favorite } from "@/entities/user";
+import { Alert, AlertDescription, AlertTitle } from "@/shared/ui/alert";
+import { CheckboxWithLabel } from "@/shared/ui/control-with-label";
+import { PageTitle } from "@/shared/ui/page-title";
 
 type FavoritesPageClientProps = {
   favorites: Favorite[];

@@ -1,14 +1,14 @@
 import {
-  getPriceListCity,
   getLast30ArchiveProductsCount,
   getLast30DiffsReportByCity,
   getLast30ReportsByCity,
   getTotalUniqProductsCount,
   getArchiveListDates
-} from "@/services/get";
+} from "@/entities/product";
+import { getPriceListCity } from "@/entities/user";
 
+import type { PriceListsArchiveCount } from "@/entities/product";
 import type { AnalysisDiffReport as AnalysisDiffReportType } from "@/types/analysis-diff";
-import type { PriceListsArchiveCount } from "@/types/pricelist";
 import type { ReportsResponse } from "@/types/reports";
 
 export async function getAnalysisData() {

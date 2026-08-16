@@ -1,0 +1,51 @@
+"use client";
+
+import { Github } from "lucide-react";
+import Link from "next/link";
+import { useTranslations } from "next-intl";
+
+import { ChangeLocationSelector } from "@/features/change-city";
+import { sendGAEvent } from "@/shared/lib";
+import { ChangeThemeSelector } from "@/shared/ui/change-theme-selector";
+
+type FooterProps = {
+  locate?: string;
+};
+
+function Footer({ locate }: FooterProps) {
+  const t = useTranslations("About");
+
+  const handleSendGAEvent = () => {
+    sendGAEvent({
+      event: "nav_click",
+      value: t("title"),
+      category: "Footer",
+      action: "click"
+    });
+  };
+
+  return (
+    <footer className="mt-auto flex h-13 items-center justify-between border-t border-neutral-300">
+      <div className="text-sm text-gray-500">
+        2018–2026&nbsp;
+        <a
+          href="https://github.com/ebulgakov/dns-markdown-next"
+          target="_blank"
+          rel="noopener noreferrer"
+          className="text-primary inline-flex items-center justify-center gap-1"
+        >
+          <span className="underline">GitHub</span> <Github className="size-4" />
+        </a>
+      </div>
+      <div className="hidden gap-4 text-sm text-gray-500 md:flex">
+        <ChangeThemeSelector />
+        <ChangeLocationSelector locate={locate} />
+        <Link href="/about" onClick={handleSendGAEvent}>
+          <span className="text-blue-500 hover:underline">{t("title")}</span>
+        </Link>
+      </div>
+    </footer>
+  );
+}
+
+export { Footer };

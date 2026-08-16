@@ -6,16 +6,16 @@ import { useTranslations } from "next-intl";
 import { useEffect } from "react";
 import { useShallow } from "zustand/react/shallow";
 
-import { Catalog } from "@/app/components/catalog/catalog";
-import { JumpToSection } from "@/app/components/jump-to-section/jump-to-section";
-import { PageLoader } from "@/app/components/page-loader/page-loader";
-import { ScrollToTop } from "@/app/components/scroll-to-top/scroll-to-top";
-import { Search } from "@/app/components/search/search";
-import { Alert, AlertDescription, AlertTitle } from "@/app/components/ui/alert";
-import { PageTitle } from "@/app/components/ui/page-title";
-import { usePriceListStore } from "@/app/stores/pricelist-store";
+import { usePriceListStore } from "@/entities/product";
+import { JumpToSection } from "@/features/jump-to-section";
+import { Catalog } from "@/features/product-catalog";
+import { Search } from "@/features/search";
+import { Alert, AlertDescription, AlertTitle } from "@/shared/ui/alert";
+import { PageLoader } from "@/shared/ui/page-loader";
+import { PageTitle } from "@/shared/ui/page-title";
+import { ScrollToTop } from "@/shared/ui/scroll-to-top";
 
-import type { PriceList } from "@/types/pricelist";
+import type { PriceList } from "@/entities/product";
 
 type ArchiveItemClientPageProps = {
   id: string;

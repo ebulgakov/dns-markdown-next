@@ -1,6 +1,6 @@
 import { type NextRequest, NextResponse } from "next/server";
 
-import { getLastPriceList } from "@/services/get";
+import { getLastPriceList } from "@/entities/product";
 
 export async function GET(req: NextRequest) {
   const city = req?.nextUrl?.searchParams.get("city");

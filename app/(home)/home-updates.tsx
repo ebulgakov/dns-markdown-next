@@ -5,15 +5,15 @@ import Link from "next/link";
 import { useTranslations } from "next-intl";
 import { Fragment } from "react";
 
-import { HotOffer } from "@/app/components/hot-offer/hot-offer";
-import { MoreLink } from "@/app/components/more-link/more-link";
-import { Alert, AlertDescription, AlertTitle } from "@/app/components/ui/alert";
-import { Title } from "@/app/components/ui/title";
-import { formatDate } from "@/app/helpers/format";
-import { sendGAEvent } from "@/app/lib/sendGAEvent";
+import { formatDate, sendGAEvent } from "@/shared/lib";
+import { Alert, AlertDescription, AlertTitle } from "@/shared/ui/alert";
+import { Title } from "@/shared/ui/title";
 
+import { HotOffer } from "./hot-offer";
+import { MoreLink } from "./more-link";
+
+import type { Goods } from "@/entities/product";
 import type { CustomDate } from "@/types/common";
-import type { Goods } from "@/types/pricelist";
 
 type HomeUpdatesProps = {
   city?: string;

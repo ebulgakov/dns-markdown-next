@@ -1,12 +1,12 @@
-import { FavoritesEmptyAlert } from "@/app/components/alerts/favorites-empty-alert";
-import { getFlatPriceList } from "@/app/helpers/pricelist";
-import { getLastPriceList } from "@/services/get";
-import { getUser } from "@/services/post";
-import { getSessionInfo } from "@/services/user";
+import { getFlatPriceList } from "@/entities/product";
+import { getLastPriceList } from "@/entities/product";
+import { getUser } from "@/entities/user";
+import { getSessionInfo } from "@/entities/user";
 
 import { FavoritesClientPage } from "./favorites-client-page";
+import { FavoritesEmptyAlert } from "./favorites-empty-alert";
 
-import type { Favorite } from "@/types/user";
+import type { Favorite } from "@/entities/user";
 
 export default async function FavoritesPage() {
   const { userId } = await getSessionInfo();
@@ -28,7 +28,8 @@ export default async function FavoritesPage() {
         const flatCatalog = getFlatPriceList(lastPriceList);
         favorites = user.favorites.map(fav => {
           const found = flatCatalog.find(i => i.link === fav.item.link);
-          fav.status.deleted = !found && (!fav.status.city || fav.status.city === lastPriceList.city); // mark as deleted if not found in the price list and city matches
+          fav.status.deleted =
+            !found && (!fav.status.city || fav.status.city === lastPriceList.city); // mark as deleted if not found in the price list and city matches
           return fav;
         });
         shownBoughtFavorites = user.shownBoughtFavorites;

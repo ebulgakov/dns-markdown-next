@@ -2,10 +2,9 @@
 
 import Link from "next/link";
 
-import { formatDate } from "@/app/helpers/format";
-import { sendGAEvent } from "@/app/lib/sendGAEvent";
+import { formatDate, sendGAEvent } from "@/shared/lib";
 
-import type { PriceListDate } from "@/types/pricelist";
+import type { PriceListDate } from "@/entities/product";
 
 type ArchiveListProps = {
   archiveCollection: PriceListDate[];
