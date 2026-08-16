@@ -32,7 +32,8 @@ const meta: Meta<typeof JumpToSectionContainer> = {
     layout: "centered"
   },
   args: {
-    onClose: () => {}
+    onClose: () => {},
+    onReset: () => {}
   },
   decorators: [
     Story => (

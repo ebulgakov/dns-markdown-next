@@ -31,6 +31,9 @@ const meta: Meta<typeof JumpToSection> = {
   parameters: {
     layout: "fullscreen"
   },
+  args: {
+    onReset: () => {}
+  },
   decorators: [
     Story => (
       <StoreInitializer>

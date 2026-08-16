@@ -5,10 +5,12 @@ import { defaultContext } from "@/entities/product/ui/__mocks__/context";
 import { mockPriceList } from "@/entities/product/ui/__mocks__/goods";
 import { UserProvider } from "@/entities/user";
 import { useSearchStore } from "@/features/search";
+import { useFilteredGoods } from "@/features/sort-goods";
 import { QueryProvider } from "@/shared/providers";
 
 import { Catalog } from "./catalog";
 
+import type { CatalogComponentVariant } from "../model/types";
 import type { Meta, StoryObj } from "@storybook/react";
 import type { ReactNode } from "react";
 
@@ -34,9 +36,28 @@ function StoreInitializer({
   return <>{children}</>;
 }
 
-const meta: Meta<typeof Catalog> = {
+// Mirrors the composition `_pages` callers now do — Catalog itself no
+// longer reaches into search/sort-goods (Strategy C, not D).
+function ComposedCatalog({ variant }: { variant: CatalogComponentVariant }) {
+  const searchTerm = useSearchStore(state => state.searchTerm);
+  const { flattenList, flattenTitles } = useFilteredGoods({
+    filterTerm: searchTerm,
+    hasNoModifyOutput: variant === "updates"
+  });
+
+  return (
+    <Catalog
+      variant={variant}
+      flattenList={flattenList}
+      flattenTitles={flattenTitles}
+      disabledCollapse={variant !== "updates" && searchTerm.length > 0}
+    />
+  );
+}
+
+const meta: Meta<typeof ComposedCatalog> = {
   title: "Components/Catalog/Catalog",
-  component: Catalog,
+  component: ComposedCatalog,
   parameters: {
     layout: "fullscreen"
   },
@@ -63,7 +84,7 @@ const meta: Meta<typeof Catalog> = {
 };
 
 export default meta;
-type Story = StoryObj<typeof Catalog>;
+type Story = StoryObj<typeof ComposedCatalog>;
 
 export const Default: Story = {
   args: {

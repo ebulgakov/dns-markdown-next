@@ -1,6 +1,7 @@
 "use client";
 
 import { useQuery } from "@tanstack/react-query";
+import { useDebounce } from "@uidotdev/usehooks";
 import axios from "axios";
 import { useTranslations } from "next-intl";
 import { useEffect } from "react";
@@ -9,7 +10,8 @@ import { useShallow } from "zustand/react/shallow";
 import { usePriceListStore } from "@/entities/product";
 import { JumpToSection } from "@/features/jump-to-section";
 import { Catalog } from "@/features/product-catalog";
-import { Search } from "@/features/search";
+import { Search, useSearchStore } from "@/features/search";
+import { useFilteredGoods, useSortGoodsStore } from "@/features/sort-goods";
 import { ErrorAlert } from "@/shared/ui/error-alert";
 import { PageLoader } from "@/shared/ui/page-loader";
 import { PageTitle } from "@/shared/ui/page-title";
@@ -30,6 +32,17 @@ function ArchiveItemClientPage({ id }: ArchiveItemClientPageProps) {
       updatePriceList: state.updatePriceList
     }))
   );
+  const searchTerm = useDebounce<string>(useSearchStore(state => state.searchTerm).trim(), 100);
+  const { flattenList, flattenTitles } = useFilteredGoods({
+    filterTerm: searchTerm,
+    hasNoModifyOutput: false
+  });
+  const updateSearchTerm = useSearchStore(state => state.updateSearchTerm);
+  const updateSortGoods = useSortGoodsStore(state => state.updateSortGoods);
+  const handleResetSearchAndSort = () => {
+    updateSearchTerm("");
+    updateSortGoods("default");
+  };
   const {
     data: priceListResponse,
     isPending,
@@ -64,8 +77,13 @@ function ArchiveItemClientPage({ id }: ArchiveItemClientPageProps) {
         </div>
       </PageTitle>
       <Search />
-      <Catalog variant="archive" />
-      <JumpToSection />
+      <Catalog
+        variant="archive"
+        flattenList={flattenList}
+        flattenTitles={flattenTitles}
+        disabledCollapse={searchTerm.length > 0}
+      />
+      <JumpToSection onReset={handleResetSearchAndSort} />
       <ScrollToTop variant="with-jump-to-search" />
     </div>
   );

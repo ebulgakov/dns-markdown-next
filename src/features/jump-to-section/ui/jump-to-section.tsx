@@ -7,7 +7,11 @@ import { cn } from "@/shared/lib";
 import { JumpToSectionContainer } from "./jump-to-section-container";
 import { JumpToSectionToggle } from "./jump-to-section-toggle";
 
-function JumpToSection() {
+type JumpToSectionProps = {
+  onReset: () => void;
+};
+
+function JumpToSection({ onReset }: JumpToSectionProps) {
   const containerRef = useRef<HTMLDivElement>(null);
   const [isShownContainer, setIsShownContainer] = useState<boolean>(false);
 
@@ -39,7 +43,7 @@ function JumpToSection() {
           }
         )}
       >
-        <JumpToSectionContainer onClose={handleClose} />
+        <JumpToSectionContainer onClose={handleClose} onReset={onReset} />
       </div>
       <div
         className={cn("fixed right-3 bottom-3 z-20 size-10 md:size-14", {

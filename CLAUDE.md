@@ -86,7 +86,7 @@ Read-only catalog/analysis data (pricelists, products, diffs, LLM reports) goes 
 ### State
 
 - `src/entities/user/model/user-context.tsx` — server-populated user data (favorites, hidden/favorite sections, city) is fetched once in `app/layout.tsx` and provided via React context, avoiding a client-side refetch on every page.
-- Zustand stores live with the layer/slice that owns them, not in one shared folder: `src/entities/product/model/pricelist-store.ts` (genuine domain data, read by multiple routes/features — hence `entities`, not a feature); `src/features/search/model/search-store.ts`, `src/features/sort-goods/model/sort-goods-store.ts`, `src/features/llm-report/model/llm-store.ts` (feature-owned UI/interaction state, consumed cross-feature only through that feature's public `index.ts`).
+- Zustand stores live with the layer/slice that owns them, not in one shared folder: `src/entities/product/model/pricelist-store.ts` (genuine domain data, read by multiple routes/features — hence `entities`, not a feature); `src/features/search/model/search-store.ts`, `src/features/sort-goods/model/sort-goods-store.ts`, `src/features/llm-report/model/llm-store.ts` (feature-owned UI/interaction state — no feature reads another feature's store; `search`/`sort-goods` state that `product-catalog`/`jump-to-section` need is composed one layer up, in `src/_pages/*`, and passed down as props/callbacks).
 - `src/shared/providers/` — `QueryProvider` (TanStack Query) and `ThemeProvider` (next-themes) wrap the tree in `app/layout.tsx`. Pure infra wrappers, no business logic, hence `shared` rather than app-shell code.
 - `src/widgets/{navbar,footer}/` — app-shell chrome rendered once from `app/layout.tsx` (navbar includes the folded-in `logo`).
 

@@ -35,18 +35,6 @@ const elements = [
 // third-party client components), so they keep one barrel each.
 const SHARED_ENTRY_POINTS = "{ui/*/index.ts,lib/index.ts,api/index.ts,providers/index.ts}";
 
-// Known cross-feature reuse today: product-catalog and jump-to-section both
-// read search's and sort-goods' store state through their public API
-// (Strategy D, FSD skill §7).
-const allowedFeatureSliceImports = {
-  "product-catalog": ["search", "sort-goods"],
-  "jump-to-section": ["search", "sort-goods"]
-};
-const featureSlicePolicies = Object.entries(allowedFeatureSliceImports).map(([from, to]) => ({
-  from: { element: { type: "feature", captured: { slice: from } } },
-  allow: [{ to: { element: { type: "feature", captured: { slice: to }, fileInternalPath: "index.ts" } } }]
-}));
-
 // Pragmatic entities -> features exceptions (only product-card.tsx does this
 // today): the compare-to-LLM-report button and the favorite-toggle button
 // are each owned by a feature, but ProductCard renders them directly rather
@@ -225,8 +213,7 @@ const eslintConfig = defineConfig([
               ]
             },
 
-            // features: compose entities/shared; cross-feature only via the
-            // documented pairs above, through the target's public API.
+            // features: compose entities/shared only — no cross-feature imports.
             {
               from: { element: { type: "feature" } },
               allow: [
@@ -237,7 +224,6 @@ const eslintConfig = defineConfig([
               from: { element: { type: "feature" } },
               allow: [{ to: { element: { type: "entity", fileInternalPath: "index.ts" } } }]
             },
-            ...featureSlicePolicies,
 
             // entities: compose shared; entities/user -> entities/product
             // is a documented, single-direction exception (user needs
