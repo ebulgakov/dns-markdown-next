@@ -8,6 +8,7 @@ import { useShallow } from "zustand/react/shallow";
 import { usePriceListStore } from "@/entities/product";
 import { UserContext } from "@/entities/user";
 import { Catalog } from "@/features/product-catalog";
+import { useFilteredGoods } from "@/features/sort-goods";
 import { ErrorAlert } from "@/shared/ui/error-alert";
 import { PageLoader } from "@/shared/ui/page-loader";
 import { PageTitle } from "@/shared/ui/page-title";
@@ -44,6 +45,11 @@ function TodayClientPage() {
     }
   }, [diff, city, updatePriceList, updatePriceListDiffs]);
 
+  const { flattenList, flattenTitles } = useFilteredGoods({
+    filterTerm: "",
+    hasNoModifyOutput: true
+  });
+
   if (isPending) return <PageLoader />;
 
   if (error || !diff)
@@ -52,7 +58,12 @@ function TodayClientPage() {
   return (
     <>
       <PageTitle title={`Обновления на ${priceListCreatedDate}`} />
-      <Catalog variant="updates" />
+      <Catalog
+        variant="updates"
+        flattenList={flattenList}
+        flattenTitles={flattenTitles}
+        disabledCollapse={false}
+      />
       <ScrollToTop />
     </>
   );

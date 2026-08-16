@@ -1,12 +1,9 @@
 "use client";
 
-import { useDebounce } from "@uidotdev/usehooks";
 import { useEffect, useRef, useState } from "react";
 
 import { usePriceListStore } from "@/entities/product";
 import { ProductCard } from "@/entities/product";
-import { useSearchStore } from "@/features/search";
-import { useFilteredGoods } from "@/features/sort-goods";
 import { cn } from "@/shared/lib";
 import { Title } from "@/shared/ui/title";
 
@@ -18,20 +15,18 @@ import { CatalogFavoritesEmptyAlert } from "./catalog-favorites-empty-alert";
 import { CatalogHeader } from "./catalog-header";
 
 import type { DiffsCollection } from "@/types/analysis-diff";
+import type { VisualizationHeader, VisualizationOutputList } from "@/types/visualization";
 
 type PriceListPageProps = {
   variant: CatalogComponentVariant;
+  flattenList: VisualizationOutputList;
+  flattenTitles: VisualizationHeader[];
+  disabledCollapse: boolean;
 };
 
-function Catalog({ variant }: PriceListPageProps) {
+function Catalog({ variant, flattenList, flattenTitles, disabledCollapse }: PriceListPageProps) {
   const priceListDiffs: DiffsCollection = usePriceListStore(state => state.priceListDiffs) || {};
-  const searchTerm = useDebounce<string>(useSearchStore(state => state.searchTerm).trim(), 100);
-  const { flattenList, flattenTitles } = useFilteredGoods({
-    filterTerm: searchTerm,
-    hasNoModifyOutput: variant === "updates"
-  });
   const [scrollHeight, setScrollHeight] = useState(0);
-  const disabledCollapse = variant !== "updates" && searchTerm.length > 0;
 
   // Virtualization setup
   const listRef = useRef<HTMLDivElement>(null);

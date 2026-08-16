@@ -1,5 +1,6 @@
 "use client";
 import { useQuery } from "@tanstack/react-query";
+import { useDebounce } from "@uidotdev/usehooks";
 import axios from "axios";
 import { useContext, useEffect } from "react";
 import { useShallow } from "zustand/react/shallow";
@@ -10,8 +11,8 @@ import { UserContext } from "@/entities/user";
 import { JumpToSection } from "@/features/jump-to-section";
 import { LLMReport } from "@/features/llm-report";
 import { Catalog } from "@/features/product-catalog";
-import { Search } from "@/features/search";
-import { SortGoods } from "@/features/sort-goods";
+import { Search, useSearchStore } from "@/features/search";
+import { SortGoods, useFilteredGoods, useSortGoodsStore } from "@/features/sort-goods";
 import { ErrorAlert } from "@/shared/ui/error-alert";
 import { PageLoader } from "@/shared/ui/page-loader";
 import { PageTitle } from "@/shared/ui/page-title";
@@ -33,6 +34,17 @@ function CatalogClientPage({ city: cityFromUrl }: CatalogClientPageProps) {
     );
   const { city: cityFromUser } = useContext(UserContext);
   const city = cityFromUrl || cityFromUser;
+  const searchTerm = useDebounce<string>(useSearchStore(state => state.searchTerm).trim(), 100);
+  const { flattenList, flattenTitles } = useFilteredGoods({
+    filterTerm: searchTerm,
+    hasNoModifyOutput: false
+  });
+  const updateSearchTerm = useSearchStore(state => state.updateSearchTerm);
+  const updateSortGoods = useSortGoodsStore(state => state.updateSortGoods);
+  const handleResetSearchAndSort = () => {
+    updateSearchTerm("");
+    updateSortGoods("default");
+  };
   const {
     data: priceListResponse,
     isPending,
@@ -68,8 +80,13 @@ function CatalogClientPage({ city: cityFromUrl }: CatalogClientPageProps) {
         </div>
       </PageTitle>
       <Search />
-      <Catalog variant="default" />
-      <JumpToSection />
+      <Catalog
+        variant="default"
+        flattenList={flattenList}
+        flattenTitles={flattenTitles}
+        disabledCollapse={searchTerm.length > 0}
+      />
+      <JumpToSection onReset={handleResetSearchAndSort} />
       <ScrollToTop variant="with-jump-to-search" />
       <LLMReport />
     </>

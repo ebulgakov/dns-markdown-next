@@ -3,19 +3,16 @@ import { useShallow } from "zustand/react/shallow";
 
 import { usePriceListStore } from "@/entities/product";
 import { UserContext } from "@/entities/user";
-import { useSearchStore } from "@/features/search";
-import { useSortGoodsStore } from "@/features/sort-goods";
 import { cn } from "@/shared/lib";
 
 type JumpToSectionContainerProps = {
   onClose: () => void;
+  onReset: () => void;
   foundCount?: number;
 };
 
-function JumpToSectionContainer({ onClose }: JumpToSectionContainerProps) {
+function JumpToSectionContainer({ onClose, onReset }: JumpToSectionContainerProps) {
   const { favoriteSections, hiddenSections, onToggleHiddenSection } = useContext(UserContext);
-  const onChangeSearch = useSearchStore(state => state.updateSearchTerm);
-  const onChangeSort = useSortGoodsStore(state => state.updateSortGoods);
   const priceListSections = usePriceListStore(
     useShallow(state => state.getPriceListSections(favoriteSections, hiddenSections))
   );
@@ -25,8 +22,7 @@ function JumpToSectionContainer({ onClose }: JumpToSectionContainerProps) {
       onToggleHiddenSection?.(section);
     }
 
-    onChangeSearch("");
-    onChangeSort("default");
+    onReset();
     onClose();
     window.location.assign(`#${encodeURIComponent(section)}`);
   };
