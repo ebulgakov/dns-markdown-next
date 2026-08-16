@@ -8,8 +8,8 @@ import ReactMarkdown from "react-markdown";
 import rehypeRaw from "rehype-raw";
 
 import { MoreLink } from "@/app/components/more-link/more-link";
-import { PageTitle } from "@/app/components/ui/page-title";
-import { sendGAEvent } from "@/app/lib/sendGAEvent";
+import { sendGAEvent } from "@/shared/lib/send-ga-event";
+import { PageTitle } from "@/shared/ui/page-title";
 
 export function HomeIntro() {
   const t = useTranslations("HomePage");

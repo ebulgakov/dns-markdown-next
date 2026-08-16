@@ -1,10 +1,10 @@
 import { Square, SquareCheckBig } from "lucide-react";
 import { useShallow } from "zustand/react/shallow";
 
-import { Button } from "@/app/components/ui/button";
-import { Tooltip, TooltipContent, TooltipTrigger } from "@/app/components/ui/tooltip";
 import { useLlmReport } from "@/app/hooks/use-llm-report";
 import { useLlmStore } from "@/app/stores/llm-store";
+import { Button } from "@/shared/ui/button";
+import { Tooltip, TooltipContent, TooltipTrigger } from "@/shared/ui/tooltip";
 
 import type { Goods as GoodsType } from "@/types/pricelist";
 

@@ -3,7 +3,7 @@
 import Link from "next/link";
 
 import { formatDate } from "@/app/helpers/format";
-import { sendGAEvent } from "@/app/lib/sendGAEvent";
+import { sendGAEvent } from "@/shared/lib/send-ga-event";
 
 import type { PriceListDate } from "@/types/pricelist";
 

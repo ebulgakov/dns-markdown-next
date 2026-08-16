@@ -1,7 +1,7 @@
 import { ClerkFailed } from "@clerk/nextjs";
 import { useTranslations } from "next-intl";
 
-import { Alert, AlertDescription, AlertTitle } from "@/app/components/ui/alert";
+import { Alert, AlertDescription, AlertTitle } from "@/shared/ui/alert";
 
 function ClerkError() {
   const t = useTranslations("errors");

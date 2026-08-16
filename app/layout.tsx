@@ -12,11 +12,11 @@ import "./globals.css";
 import { Footer } from "@/app/components/footer/footer";
 import { Navbar } from "@/app/components/navbar/navbar";
 import { UserProvider } from "@/app/contexts/user-context";
-import { cn } from "@/app/lib/utils";
 import { QueryProvider } from "@/app/providers/query-provider";
 import { ThemeProvider } from "@/app/providers/theme-provider";
 import { getUser as getGenericUser } from "@/services/post";
 import { getSessionInfo } from "@/services/user";
+import { cn } from "@/shared/lib/utils";
 import { User } from "@/types/user";
 
 import type { Metadata } from "next";

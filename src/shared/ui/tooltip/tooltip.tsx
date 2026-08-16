@@ -3,7 +3,7 @@
 import * as TooltipPrimitive from "@radix-ui/react-tooltip";
 import * as React from "react";
 
-import { cn } from "@/app/lib/utils";
+import { cn } from "@/shared/lib/utils";
 
 import type { ComponentProps } from "react";
 

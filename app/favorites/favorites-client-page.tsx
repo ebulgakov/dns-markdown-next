@@ -3,10 +3,10 @@
 import { startTransition, useOptimistic, useState } from "react";
 
 import { ProductCard } from "@/app/components/product-card/product-card";
-import { Alert, AlertDescription, AlertTitle } from "@/app/components/ui/alert";
-import { CheckboxWithLabel } from "@/app/components/ui/control-with-label";
-import { PageTitle } from "@/app/components/ui/page-title";
 import { postToggleFavoriteShownBought } from "@/services/post";
+import { Alert, AlertDescription, AlertTitle } from "@/shared/ui/alert";
+import { CheckboxWithLabel } from "@/shared/ui/control-with-label";
+import { PageTitle } from "@/shared/ui/page-title";
 import { Favorite } from "@/types/user";
 
 type FavoritesPageClientProps = {

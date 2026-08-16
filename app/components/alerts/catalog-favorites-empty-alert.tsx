@@ -1,4 +1,4 @@
-import { Alert, AlertDescription, AlertTitle } from "@/app/components/ui/alert";
+import { Alert, AlertDescription, AlertTitle } from "@/shared/ui/alert";
 
 function CatalogFavoritesEmptyAlert() {
   return (

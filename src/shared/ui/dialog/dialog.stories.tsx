@@ -1,4 +1,4 @@
-import { Button } from "@/app/components/ui/button";
+import { Button } from "@/shared/ui/button";
 
 import {
   Dialog,

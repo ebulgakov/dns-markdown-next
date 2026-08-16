@@ -2,15 +2,15 @@
 
 import { Bar, BarChart, CartesianGrid, XAxis } from "recharts";
 
-import { Card, CardContent } from "@/app/components/ui/card";
+import { formatDateShort } from "@/app/helpers/format";
+import { Card, CardContent } from "@/shared/ui/card";
 import {
   ChartContainer,
   ChartLegend,
   ChartLegendContent,
   ChartTooltip,
   ChartTooltipContent
-} from "@/app/components/ui/chart";
-import { formatDateShort } from "@/app/helpers/format";
+} from "@/shared/ui/chart";
 
 import type { AnalysisDiffReport as AnalysisDiffReportType } from "@/types/analysis-diff";
 

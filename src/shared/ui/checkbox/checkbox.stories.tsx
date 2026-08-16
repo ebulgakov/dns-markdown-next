@@ -1,4 +1,4 @@
-import { Label } from "@/app/components/ui/label";
+import { Label } from "@/shared/ui/label";
 
 import { Checkbox } from "./checkbox";
 

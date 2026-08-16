@@ -4,7 +4,10 @@ import { useRouter } from "next/navigation";
 import { useTranslations } from "next-intl";
 import { useContext, startTransition } from "react";
 
-import { Button } from "@/app/components/ui/button";
+import { UserContext } from "@/app/contexts/user-context";
+import { postChangeUserCity } from "@/services/post";
+import { sendGAEvent } from "@/shared/lib/send-ga-event";
+import { Button } from "@/shared/ui/button";
 import {
   DropdownMenu,
   DropdownMenuTrigger,
@@ -12,10 +15,7 @@ import {
   DropdownMenuGroup,
   DropdownMenuLabel,
   DropdownMenuCheckboxItem
-} from "@/app/components/ui/dropdown-menu";
-import { UserContext } from "@/app/contexts/user-context";
-import { sendGAEvent } from "@/app/lib/sendGAEvent";
-import { postChangeUserCity } from "@/services/post";
+} from "@/shared/ui/dropdown-menu";
 
 function Logo() {
   const router = useRouter();

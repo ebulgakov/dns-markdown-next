@@ -5,8 +5,8 @@ import Link from "next/link";
 import { useTranslations } from "next-intl";
 
 import { ChangeLocationSelector } from "@/app/components/change-location-selector/change-location-selector";
-import { ChangeThemeSelector } from "@/app/components/change-theme-selector/change-theme-selector";
-import { sendGAEvent } from "@/app/lib/sendGAEvent";
+import { sendGAEvent } from "@/shared/lib/send-ga-event";
+import { ChangeThemeSelector } from "@/shared/ui/change-theme-selector/change-theme-selector";
 
 type FooterProps = {
   locate?: string;

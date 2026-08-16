@@ -2,10 +2,10 @@ import { useContext } from "react";
 import { useShallow } from "zustand/react/shallow";
 
 import { UserContext } from "@/app/contexts/user-context";
-import { cn } from "@/app/lib/utils";
 import { usePriceListStore } from "@/app/stores/pricelist-store";
 import { useSearchStore } from "@/app/stores/search-store";
 import { useSortGoodsStore } from "@/app/stores/sort-goods-store";
+import { cn } from "@/shared/lib/utils";
 
 type JumpToSectionContainerProps = {
   onClose: () => void;

@@ -4,9 +4,9 @@ import Image from "next/image";
 import Link from "next/link";
 import { NumericFormat } from "react-number-format";
 
-import { Button } from "@/app/components/ui/button";
 import { formatDate, formatDateShort } from "@/app/helpers/format";
-import { sendGAEvent } from "@/app/lib/sendGAEvent";
+import { sendGAEvent } from "@/shared/lib/send-ga-event";
+import { Button } from "@/shared/ui/button";
 
 import { ProductCardCompareButton } from "./product-card-compare-button";
 import { ProductCardDiff } from "./product-card-diff";

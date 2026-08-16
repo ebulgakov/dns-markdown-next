@@ -3,12 +3,12 @@
 import { X, ArrowRight } from "lucide-react";
 import { useState, useTransition, useOptimistic, Fragment } from "react";
 
-import { Alert, AlertDescription, AlertTitle } from "@/app/components/ui/alert";
-import { Card } from "@/app/components/ui/card";
-import { Label } from "@/app/components/ui/label";
-import { ScrollArea } from "@/app/components/ui/scroll-area";
-import { Separator } from "@/app/components/ui/separator";
 import { uniqAbcSort } from "@/app/helpers/sort";
+import { Alert, AlertDescription, AlertTitle } from "@/shared/ui/alert";
+import { Card } from "@/shared/ui/card";
+import { Label } from "@/shared/ui/label";
+import { ScrollArea } from "@/shared/ui/scroll-area";
+import { Separator } from "@/shared/ui/separator";
 
 import type { SectionsResponse } from "@/services/post";
 import type { UserSections as UserSectionsType } from "@/types/user";

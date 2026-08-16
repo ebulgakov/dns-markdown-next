@@ -1,9 +1,9 @@
 import { getTranslations } from "next-intl/server";
 
 import { ArchiveList } from "@/app/archive/ArchiveList";
-import { Alert, AlertDescription, AlertTitle } from "@/app/components/ui/alert";
-import { PageTitle } from "@/app/components/ui/page-title";
 import { getArchiveListDates } from "@/services/get";
+import { Alert, AlertDescription, AlertTitle } from "@/shared/ui/alert";
+import { PageTitle } from "@/shared/ui/page-title";
 
 import type { Metadata } from "next";
 

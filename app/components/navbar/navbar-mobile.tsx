@@ -7,8 +7,10 @@ import { useTranslations } from "next-intl";
 import { Fragment } from "react";
 
 import { ChangeLocationSelector } from "@/app/components/change-location-selector/change-location-selector";
-import { ChangeThemeSelector } from "@/app/components/change-theme-selector/change-theme-selector";
-import { Button } from "@/app/components/ui/button";
+import { Logo } from "@/app/logo";
+import { sendGAEvent } from "@/shared/lib/send-ga-event";
+import { Button } from "@/shared/ui/button";
+import { ChangeThemeSelector } from "@/shared/ui/change-theme-selector/change-theme-selector";
 import {
   Dialog,
   DialogClose,
@@ -16,9 +18,7 @@ import {
   DialogHeader,
   DialogTitle,
   DialogTrigger
-} from "@/app/components/ui/dialog";
-import { sendGAEvent } from "@/app/lib/sendGAEvent";
-import { Logo } from "@/app/logo";
+} from "@/shared/ui/dialog";
 
 import type { NavbarLinks } from "@/types/common";
 

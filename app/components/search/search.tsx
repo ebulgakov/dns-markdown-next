@@ -2,10 +2,10 @@
 
 import { X } from "lucide-react";
 
-import { Button } from "@/app/components/ui/button";
-import { Input } from "@/app/components/ui/input";
-import { Tooltip, TooltipContent, TooltipTrigger } from "@/app/components/ui/tooltip";
 import { useSearchStore } from "@/app/stores/search-store";
+import { Button } from "@/shared/ui/button";
+import { Input } from "@/shared/ui/input";
+import { Tooltip, TooltipContent, TooltipTrigger } from "@/shared/ui/tooltip";
 
 function Search() {
   const onChange = useSearchStore(state => state.updateSearchTerm);

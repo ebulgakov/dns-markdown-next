@@ -2,7 +2,7 @@
 
 import { useEffect, useRef, useState } from "react";
 
-import { cn } from "@/app/lib/utils";
+import { cn } from "@/shared/lib/utils";
 
 import { JumpToSectionContainer } from "./jump-to-section-container";
 import { JumpToSectionToggle } from "./jump-to-section-toggle";

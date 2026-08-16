@@ -1,5 +1,5 @@
-import { Button } from "@/app/components/ui/button";
-import { Tooltip, TooltipContent, TooltipTrigger } from "@/app/components/ui/tooltip/tooltip";
+import { Button } from "@/shared/ui/button";
+import { Tooltip, TooltipContent, TooltipTrigger } from "@/shared/ui/tooltip/tooltip";
 
 import type { Meta, StoryObj } from "@storybook/react";
 

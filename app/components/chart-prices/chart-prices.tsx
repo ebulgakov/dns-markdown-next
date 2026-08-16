@@ -2,7 +2,8 @@
 
 import { Area, AreaChart, CartesianGrid, XAxis, YAxis } from "recharts";
 
-import { Card, CardContent } from "@/app/components/ui/card";
+import { formatDateMonthDay } from "@/app/helpers/format";
+import { Card, CardContent } from "@/shared/ui/card";
 import {
   ChartContainer,
   ChartTooltip,
@@ -10,8 +11,7 @@ import {
   type ChartConfig,
   ChartLegend,
   ChartLegendContent
-} from "@/app/components/ui/chart";
-import { formatDateMonthDay } from "@/app/helpers/format";
+} from "@/shared/ui/chart";
 
 import type { DiffHistory } from "@/types/analysis-diff";
 

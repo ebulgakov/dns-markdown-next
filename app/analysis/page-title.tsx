@@ -1,7 +1,7 @@
 "use client";
 import { useTranslations } from "next-intl";
 
-import { PageTitle } from "@/app/components/ui/page-title";
+import { PageTitle } from "@/shared/ui/page-title";
 
 export default function AnalysisPageTitle({ city }: { city: string }) {
   const cities = useTranslations("cities");

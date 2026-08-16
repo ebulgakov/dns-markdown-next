@@ -2,9 +2,9 @@
 
 import { Bar, BarChart, CartesianGrid, XAxis } from "recharts";
 
-import { Card, CardContent } from "@/app/components/ui/card";
-import { ChartContainer, ChartTooltip, ChartTooltipContent } from "@/app/components/ui/chart";
 import { formatDateShort } from "@/app/helpers/format";
+import { Card, CardContent } from "@/shared/ui/card";
+import { ChartContainer, ChartTooltip, ChartTooltipContent } from "@/shared/ui/chart";
 
 type AnalyticsGoodsChartProps = {
   chartData: {

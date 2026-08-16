@@ -1,6 +1,6 @@
 import { Star } from "lucide-react";
 
-import { Alert, AlertDescription, AlertTitle } from "@/app/components/ui/alert";
+import { Alert, AlertDescription, AlertTitle } from "@/shared/ui/alert";
 
 function FavoritesEmptyAlert() {
   return (

@@ -7,12 +7,12 @@ import { CatalogFavoritesEmptyAlert } from "@/app/components/alerts/catalog-favo
 import { getCurrentCatalogTitle } from "@/app/components/catalog/helpers/get-current-catalog-title";
 import { CatalogComponentVariant } from "@/app/components/catalog/types";
 import { ProductCard } from "@/app/components/product-card/product-card";
-import { Title } from "@/app/components/ui/title";
 import { useCatalogVirtualizer } from "@/app/hooks/use-catalog-virtualizer";
 import { useFilteredGoods } from "@/app/hooks/use-filtered-goods";
-import { cn } from "@/app/lib/utils";
 import { usePriceListStore } from "@/app/stores/pricelist-store";
 import { useSearchStore } from "@/app/stores/search-store";
+import { cn } from "@/shared/lib/utils";
+import { Title } from "@/shared/ui/title";
 
 import { CatalogHeader } from "./catalog-header";
 

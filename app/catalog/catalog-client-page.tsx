@@ -7,14 +7,14 @@ import { useShallow } from "zustand/react/shallow";
 import { Catalog } from "@/app/components/catalog/catalog";
 import { JumpToSection } from "@/app/components/jump-to-section/jump-to-section";
 import { LLMReport } from "@/app/components/llm-report/llm-report";
-import { PageLoader } from "@/app/components/page-loader/page-loader";
-import { ScrollToTop } from "@/app/components/scroll-to-top/scroll-to-top";
 import { Search } from "@/app/components/search/search";
 import { SortGoods } from "@/app/components/sort-goods";
-import { Alert, AlertDescription, AlertTitle } from "@/app/components/ui/alert";
-import { PageTitle } from "@/app/components/ui/page-title";
 import { UserContext } from "@/app/contexts/user-context";
 import { usePriceListStore } from "@/app/stores/pricelist-store";
+import { Alert, AlertDescription, AlertTitle } from "@/shared/ui/alert";
+import { PageLoader } from "@/shared/ui/page-loader/page-loader";
+import { PageTitle } from "@/shared/ui/page-title";
+import { ScrollToTop } from "@/shared/ui/scroll-to-top/scroll-to-top";
 import { PriceList } from "@/types/pricelist";
 
 type CatalogClientPageProps = {

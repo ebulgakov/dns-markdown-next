@@ -1,7 +1,7 @@
 import { useTranslations } from "next-intl";
 
-import { PageTitle } from "@/app/components/ui/page-title";
-import { Title } from "@/app/components/ui/title";
+import { PageTitle } from "@/shared/ui/page-title";
+import { Title } from "@/shared/ui/title";
 
 export default function DisclaimerPage() {
   const t = useTranslations("About");

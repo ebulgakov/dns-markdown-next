@@ -8,8 +8,8 @@ import rehypeSanitize from "rehype-sanitize";
 import remarkGfm from "remark-gfm";
 import { useShallow } from "zustand/react/shallow";
 
-import { Button } from "@/app/components/ui/button";
 import { useLlmStore } from "@/app/stores/llm-store";
+import { Button } from "@/shared/ui/button";
 
 import styles from "./llm-report.module.css";
 

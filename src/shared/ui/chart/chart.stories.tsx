@@ -1,6 +1,6 @@
 import { Bar, BarChart, CartesianGrid, XAxis } from "recharts";
 
-import { ChartContainer, ChartTooltip, ChartTooltipContent } from "@/app/components/ui/chart/chart";
+import { ChartContainer, ChartTooltip, ChartTooltipContent } from "@/shared/ui/chart/chart";
 
 import type { Meta, StoryObj } from "@storybook/react";
 

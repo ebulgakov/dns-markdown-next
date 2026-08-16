@@ -1,6 +1,7 @@
 "use client";
 import { Info } from "lucide-react";
 
+import { useSortGoodsStore } from "@/app/stores/sort-goods-store";
 import {
   Select,
   SelectContent,
@@ -9,9 +10,8 @@ import {
   SelectLabel,
   SelectTrigger,
   SelectValue
-} from "@/app/components/ui/select";
-import { Tooltip, TooltipContent, TooltipTrigger } from "@/app/components/ui/tooltip";
-import { useSortGoodsStore } from "@/app/stores/sort-goods-store";
+} from "@/shared/ui/select";
+import { Tooltip, TooltipContent, TooltipTrigger } from "@/shared/ui/tooltip";
 
 import type { SortGoodsOptions } from "@/types/common";
 

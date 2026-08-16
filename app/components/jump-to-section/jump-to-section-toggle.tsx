@@ -1,7 +1,7 @@
 import { X, Menu } from "lucide-react";
 
-import { Button } from "@/app/components/ui/button";
-import { Tooltip, TooltipTrigger, TooltipContent } from "@/app/components/ui/tooltip";
+import { Button } from "@/shared/ui/button";
+import { Tooltip, TooltipTrigger, TooltipContent } from "@/shared/ui/tooltip";
 
 type JumpToSectionToggleProps = {
   isActive?: boolean;

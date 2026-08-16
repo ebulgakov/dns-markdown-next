@@ -5,10 +5,10 @@ import { Plus, Minus, Heart, Hash } from "lucide-react";
 import { useContext, useEffect, useState } from "react";
 import { useShallow } from "zustand/react/shallow";
 
-import { Tooltip, TooltipTrigger, TooltipContent } from "@/app/components/ui/tooltip";
 import { UserContext } from "@/app/contexts/user-context";
-import { cn } from "@/app/lib/utils";
 import { usePriceListStore } from "@/app/stores/pricelist-store";
+import { cn } from "@/shared/lib/utils";
+import { Tooltip, TooltipTrigger, TooltipContent } from "@/shared/ui/tooltip";
 import { VisualizationHeader } from "@/types/visualization";
 
 type CatalogHeaderProps = {
