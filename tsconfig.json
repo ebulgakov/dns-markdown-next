@@ -20,16 +20,10 @@
     ],
     "paths": {
       "@/shared/*": ["./src/shared/*"],
-      "@/services/post": ["./src/entities/user/api/post"],
-      "@/services/user": ["./src/entities/user/api/user"],
-      "@/services/guest": ["./src/entities/user/api/guest"],
-      "@/types/user": ["./src/entities/user/model/user"],
-      "@/app/contexts/user-context": ["./src/entities/user/model/user-context"],
-      "@/services/get": ["./src/entities/product/api/get"],
-      "@/types/product": ["./src/entities/product/model/product"],
-      "@/types/pricelist": ["./src/entities/product/model/pricelist"],
-      "@/app/stores/pricelist-store": ["./src/entities/product/model/pricelist-store"],
-      "@/app/components/product-card/*": ["./src/entities/product/ui/*"],
+      "@/entities/user": ["./src/entities/user"],
+      "@/entities/user/*": ["./src/entities/user/*"],
+      "@/entities/product": ["./src/entities/product"],
+      "@/entities/product/*": ["./src/entities/product/*"],
       "@/*": ["./*"]
     }
   },

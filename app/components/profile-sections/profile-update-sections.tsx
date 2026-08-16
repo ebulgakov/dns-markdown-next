@@ -3,15 +3,15 @@
 import { X, ArrowRight } from "lucide-react";
 import { useState, useTransition, useOptimistic, Fragment } from "react";
 
-import { uniqAbcSort } from "@/app/helpers/sort";
+import { uniqAbcSort } from "@/shared/lib/sort";
 import { Alert, AlertDescription, AlertTitle } from "@/shared/ui/alert";
 import { Card } from "@/shared/ui/card";
 import { Label } from "@/shared/ui/label";
 import { ScrollArea } from "@/shared/ui/scroll-area";
 import { Separator } from "@/shared/ui/separator";
 
-import type { SectionsResponse } from "@/services/post";
-import type { UserSections as UserSectionsType } from "@/types/user";
+import type { SectionsResponse } from "@/entities/user";
+import type { UserSections as UserSectionsType } from "@/entities/user";
 
 type ProfileUpdateSectionsProps = {
   userSections: UserSectionsType;

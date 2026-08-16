@@ -2,12 +2,12 @@
 
 import { unstable_cache as cacheToken } from "next/cache";
 
-import { getPriceListCity } from "@/services/post";
+import { getPriceListCity } from "@/entities/user";
 import { apiClient } from "@/shared/api/client";
 
+import type { Goods, PriceList, PriceListDate, PriceListsArchiveCount } from "../model/pricelist";
+import type { ProductPayload } from "../model/product";
 import type { AnalysisDiff, AnalysisDiffReport } from "@/types/analysis-diff";
-import type { Goods, PriceList, PriceListDate, PriceListsArchiveCount } from "@/types/pricelist";
-import type { ProductPayload } from "@/types/product";
 import type { ReportsResponse } from "@/types/reports";
 
 type LLMResponse = {

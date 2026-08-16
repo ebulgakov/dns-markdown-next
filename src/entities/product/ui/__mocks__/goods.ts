@@ -1,4 +1,4 @@
-import type { Goods, Position, PriceList } from "@/types/pricelist";
+import type { Goods, Position, PriceList } from "../../model/pricelist";
 
 export const mockGoodsList: Goods[] = [
   {

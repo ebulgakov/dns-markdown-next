@@ -4,15 +4,15 @@ import { Redis } from "@upstash/redis";
 import { cookies } from "next/headers";
 import { cache } from "react";
 
-import { Goods } from "@/types/pricelist";
+import { Goods } from "@/entities/product";
 
 import type {
   CityStatusResponse,
   FavoritesResponse,
   FavoritesStatusResponse,
   SectionsResponse
-} from "@/services/user";
-import type { Favorite, User } from "@/types/user";
+} from "./user";
+import type { Favorite, User } from "../model/user";
 
 const GUEST_TTL_SECONDS = 60 * 60 * 24 * 30; // 30 days
 

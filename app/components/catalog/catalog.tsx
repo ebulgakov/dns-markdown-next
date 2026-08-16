@@ -6,11 +6,11 @@ import { useEffect, useRef, useState } from "react";
 import { CatalogFavoritesEmptyAlert } from "@/app/components/alerts/catalog-favorites-empty-alert";
 import { getCurrentCatalogTitle } from "@/app/components/catalog/helpers/get-current-catalog-title";
 import { CatalogComponentVariant } from "@/app/components/catalog/types";
-import { ProductCard } from "@/app/components/product-card/product-card";
 import { useCatalogVirtualizer } from "@/app/hooks/use-catalog-virtualizer";
 import { useFilteredGoods } from "@/app/hooks/use-filtered-goods";
-import { usePriceListStore } from "@/app/stores/pricelist-store";
 import { useSearchStore } from "@/app/stores/search-store";
+import { usePriceListStore } from "@/entities/product";
+import { ProductCard } from "@/entities/product";
 import { cn } from "@/shared/lib/utils";
 import { Title } from "@/shared/ui/title";
 

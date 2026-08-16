@@ -1,8 +1,8 @@
 import { NextIntlClientProvider } from "next-intl";
 import React from "react";
 
-import { defaultContext } from "@/app/components/product-card/__mocks__/context";
-import { UserProvider } from "@/app/contexts/user-context";
+import { defaultContext } from "@/entities/product/ui/__mocks__/context";
+import { UserProvider } from "@/entities/user";
 import messages from "@/i18n/locates/ru.json";
 
 import { Navbar } from "./navbar";

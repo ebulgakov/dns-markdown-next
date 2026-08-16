@@ -1,15 +1,15 @@
 import Fuse from "fuse.js";
 import { useContext } from "react";
 
-import { UserContext } from "@/app/contexts/user-context";
 import {
   getOptimizedFlatPriceListWithTitle,
   getOptimizedFlatTitles,
   getOptimizedFlatTitlesFromGoods,
   getOptimizedOutput
 } from "@/app/helpers/pricelist";
-import { usePriceListStore } from "@/app/stores/pricelist-store";
 import { useSortGoodsStore } from "@/app/stores/sort-goods-store";
+import { usePriceListStore } from "@/entities/product";
+import { UserContext } from "@/entities/user";
 import {
   VisualizationFoundTitle,
   VisualizationHeader,

@@ -5,8 +5,8 @@ import { Plus, Minus, Heart, Hash } from "lucide-react";
 import { useContext, useEffect, useState } from "react";
 import { useShallow } from "zustand/react/shallow";
 
-import { UserContext } from "@/app/contexts/user-context";
-import { usePriceListStore } from "@/app/stores/pricelist-store";
+import { usePriceListStore } from "@/entities/product";
+import { UserContext } from "@/entities/user";
 import { cn } from "@/shared/lib/utils";
 import { Tooltip, TooltipTrigger, TooltipContent } from "@/shared/ui/tooltip";
 import { VisualizationHeader } from "@/types/visualization";

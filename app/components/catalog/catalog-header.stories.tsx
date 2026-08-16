@@ -1,8 +1,8 @@
 import { useEffect } from "react";
 
-import { defaultContext } from "@/app/components/product-card/__mocks__/context";
-import { UserProvider } from "@/app/contexts/user-context";
-import { usePriceListStore } from "@/app/stores/pricelist-store";
+import { usePriceListStore } from "@/entities/product";
+import { defaultContext } from "@/entities/product/ui/__mocks__/context";
+import { UserProvider } from "@/entities/user";
 
 import { CatalogHeader } from "./catalog-header";
 

@@ -7,13 +7,13 @@ import { Fragment } from "react";
 
 import { HotOffer } from "@/app/components/hot-offer/hot-offer";
 import { MoreLink } from "@/app/components/more-link/more-link";
-import { formatDate } from "@/app/helpers/format";
+import { formatDate } from "@/shared/lib/format";
 import { sendGAEvent } from "@/shared/lib/send-ga-event";
 import { Alert, AlertDescription, AlertTitle } from "@/shared/ui/alert";
 import { Title } from "@/shared/ui/title";
 
+import type { Goods } from "@/entities/product";
 import type { CustomDate } from "@/types/common";
-import type { Goods } from "@/types/pricelist";
 
 type HomeUpdatesProps = {
   city?: string;

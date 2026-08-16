@@ -10,8 +10,7 @@ import {
   removeFromFavorites as removeFromFavoritesGuest,
   toggleShownBoughtFavorites as toggleShownBoughtFavoritesGuest,
   changeCity as changeCityGuest
-} from "@/services/guest";
-
+} from "./guest";
 import {
   postUpdateUserNotifications as postUpdateUserNotificationsUser,
   postToggleFavoriteShownBought as postToggleFavoriteShownBoughtUser,
@@ -26,8 +25,8 @@ import {
   getSessionInfo
 } from "./user";
 
-import type { Goods } from "@/types/pricelist";
-import type { UserNotifications } from "@/types/user";
+import type { UserNotifications } from "../model/user";
+import type { Goods } from "@/entities/product";
 
 export const postUpdateUserNotifications = async (notifications: UserNotifications) => {
   const { userId } = await getSessionInfo();
@@ -143,4 +142,4 @@ export const getPriceListCity = async (): Promise<string> => {
   return user?.city || process.env.DEFAULT_CITY!;
 };
 
-export type { SectionsResponse } from "@/services/user";
+export type { SectionsResponse } from "./user";

@@ -3,7 +3,7 @@ import AnalysisPageTitle from "@/app/analysis/page-title";
 import { AnalyticsGoodsChangesChart } from "@/app/components/analytics/analytics-goods-changes-chart";
 import { AnalyticsGoodsCountChart } from "@/app/components/analytics/analytics-goods-count-chart";
 import { AnalyticsReports } from "@/app/components/analytics/analytics-reports";
-import { formatDate } from "@/app/helpers/format";
+import { formatDate } from "@/shared/lib/format";
 import { Alert, AlertDescription, AlertTitle } from "@/shared/ui/alert";
 import { Title } from "@/shared/ui/title";
 

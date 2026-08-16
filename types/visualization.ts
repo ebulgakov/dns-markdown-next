@@ -1,4 +1,4 @@
-import type { Goods } from "@/types/pricelist";
+import type { Goods } from "@/entities/product";
 
 export type VisualizationGoods = Goods & {
   type: "goods";

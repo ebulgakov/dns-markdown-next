@@ -6,8 +6,8 @@ import { cache } from "react";
 
 import { apiClient } from "@/shared/api/client";
 
-import type { Goods } from "@/types/pricelist";
-import type { Favorite, User, UserNotifications, UserSections } from "@/types/user";
+import type { Goods } from "@/entities/product";
+import type { Favorite, User, UserNotifications, UserSections } from "@/entities/user";
 
 export type FavoritesResponse = { message: string; favorites: Favorite[] };
 export type FavoritesStatusResponse = { message: string; shownBoughtFavorites: boolean };

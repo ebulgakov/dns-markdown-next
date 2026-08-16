@@ -1,5 +1,5 @@
-import { invertTranslation } from "@/app/helpers/fix-keyboard-layout";
-import { UserSections } from "@/types/user";
+import { UserSections } from "@/entities/user";
+import { invertTranslation } from "@/shared/lib/fix-keyboard-layout";
 import {
   VisualizationGoods,
   VisualizationHeader,
@@ -7,7 +7,7 @@ import {
   VisualizationSectionTitle
 } from "@/types/visualization";
 
-import type { PriceList } from "@/types/pricelist";
+import type { PriceList } from "@/entities/product";
 
 export const getFlatPriceList = (priceList: PriceList) => {
   return priceList.positions.flatMap(position => position.items);

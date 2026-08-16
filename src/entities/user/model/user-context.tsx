@@ -9,6 +9,8 @@ import {
   useState
 } from "react";
 
+import { Goods } from "@/entities/product";
+
 import {
   postAddToFavorites,
   postAddToFavoriteSections,
@@ -16,10 +18,9 @@ import {
   postRemoveFromFavorites,
   postRemoveFromFavoriteSection,
   postRemoveFromHiddenSections
-} from "@/services/post";
-import { Goods } from "@/types/pricelist";
+} from "../api/post";
 
-import type { Favorite, UserSections } from "@/types/user";
+import type { Favorite, UserSections } from "./user";
 
 type FilterContextType = {
   hiddenSections: UserSections;

@@ -1,7 +1,7 @@
 import { getTranslations } from "next-intl/server";
 
 import { ArchiveList } from "@/app/archive/ArchiveList";
-import { getArchiveListDates } from "@/services/get";
+import { getArchiveListDates } from "@/entities/product";
 import { Alert, AlertDescription, AlertTitle } from "@/shared/ui/alert";
 import { PageTitle } from "@/shared/ui/page-title";
 

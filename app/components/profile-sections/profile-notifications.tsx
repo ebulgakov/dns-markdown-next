@@ -2,13 +2,13 @@
 
 import { useState, useTransition } from "react";
 
-import { postUpdateUserNotifications } from "@/services/post";
+import { postUpdateUserNotifications } from "@/entities/user";
 import { Button } from "@/shared/ui/button";
 import { CheckboxWithLabel } from "@/shared/ui/control-with-label";
 import { Input } from "@/shared/ui/input";
 import { Title } from "@/shared/ui/title";
 
-import type { UserNotifications } from "@/types/user";
+import type { UserNotifications } from "@/entities/user";
 
 type ProfileNotificationsProps = {
   notifications: UserNotifications;

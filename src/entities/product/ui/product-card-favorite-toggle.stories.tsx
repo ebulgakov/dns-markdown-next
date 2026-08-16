@@ -1,7 +1,7 @@
-import { mockGoodsList } from "@/app/components/product-card/__mocks__/goods";
-import { UserProvider } from "@/app/contexts/user-context";
+import { UserProvider } from "@/entities/user";
 
 import { filledWithFavoritesContext, defaultContext } from "./__mocks__/context";
+import { mockGoodsList } from "./__mocks__/goods";
 import { ProductCardFavoriteToggle } from "./product-card-favorite-toggle";
 
 import type { Meta, StoryObj } from "@storybook/react";

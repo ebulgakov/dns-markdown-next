@@ -1,10 +1,10 @@
 import { useContext } from "react";
 import { useShallow } from "zustand/react/shallow";
 
-import { UserContext } from "@/app/contexts/user-context";
-import { usePriceListStore } from "@/app/stores/pricelist-store";
 import { useSearchStore } from "@/app/stores/search-store";
 import { useSortGoodsStore } from "@/app/stores/sort-goods-store";
+import { usePriceListStore } from "@/entities/product";
+import { UserContext } from "@/entities/user";
 import { cn } from "@/shared/lib/utils";
 
 type JumpToSectionContainerProps = {

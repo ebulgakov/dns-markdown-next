@@ -4,7 +4,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { NumericFormat } from "react-number-format";
 
-import { formatDate, formatDateShort } from "@/app/helpers/format";
+import { formatDate, formatDateShort } from "@/shared/lib/format";
 import { sendGAEvent } from "@/shared/lib/send-ga-event";
 import { Button } from "@/shared/ui/button";
 
@@ -12,9 +12,9 @@ import { ProductCardCompareButton } from "./product-card-compare-button";
 import { ProductCardDiff } from "./product-card-diff";
 import { ProductCardFavoriteToggle } from "./product-card-favorite-toggle";
 
+import type { Goods as GoodsType } from "../model/pricelist";
+import type { FavoriteStatus } from "@/entities/user";
 import type { Diff } from "@/types/analysis-diff";
-import type { Goods as GoodsType } from "@/types/pricelist";
-import type { FavoriteStatus } from "@/types/user";
 
 type PriceListGoodsProps = {
   item: GoodsType;

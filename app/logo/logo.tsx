@@ -4,8 +4,8 @@ import { useRouter } from "next/navigation";
 import { useTranslations } from "next-intl";
 import { useContext, startTransition } from "react";
 
-import { UserContext } from "@/app/contexts/user-context";
-import { postChangeUserCity } from "@/services/post";
+import { UserContext } from "@/entities/user";
+import { postChangeUserCity } from "@/entities/user";
 import { sendGAEvent } from "@/shared/lib/send-ga-event";
 import { Button } from "@/shared/ui/button";
 import {

@@ -1,13 +1,13 @@
 import { renderHook } from "@testing-library/react";
 import { afterEach, describe, expect, it } from "vitest";
 
-import { UserContext } from "@/app/contexts/user-context";
-import { usePriceListStore } from "@/app/stores/pricelist-store";
 import { useSortGoodsStore } from "@/app/stores/sort-goods-store";
+import { usePriceListStore } from "@/entities/product";
+import { UserContext } from "@/entities/user";
 
 import { useFilteredGoods } from "../use-filtered-goods";
 
-import type { Goods, PriceList } from "@/types/pricelist";
+import type { Goods, PriceList } from "@/entities/product";
 import type { ComponentProps, ReactNode } from "react";
 
 const goods = (overrides: Partial<Goods> & Pick<Goods, "_id" | "title" | "link">): Goods => ({

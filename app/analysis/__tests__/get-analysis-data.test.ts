@@ -6,16 +6,16 @@ import {
   getLast30ReportsByCity,
   getTotalUniqProductsCount,
   getArchiveListDates
-} from "@/services/get";
-import { getPriceListCity } from "@/services/post";
+} from "@/entities/product";
+import { getPriceListCity } from "@/entities/user";
 
 import { getAnalysisData } from "../get-analysis-data";
 
+import type { PriceListsArchiveCount } from "@/entities/product";
 import type { AnalysisDiffReport } from "@/types/analysis-diff";
-import type { PriceListsArchiveCount } from "@/types/pricelist";
 import type { ReportsResponse } from "@/types/reports";
 
-vi.mock("@/services/get", () => ({
+vi.mock("@/entities/product", () => ({
   getLast30DiffsReportByCity: vi.fn(),
   getLast30ArchiveProductsCount: vi.fn(),
   getLast30ReportsByCity: vi.fn(),
@@ -23,7 +23,7 @@ vi.mock("@/services/get", () => ({
   getArchiveListDates: vi.fn()
 }));
 
-vi.mock("@/services/post", () => ({
+vi.mock("@/entities/user", () => ({
   getPriceListCity: vi.fn()
 }));
 

@@ -1,6 +1,6 @@
 import { ProfileSections } from "@/app/components/profile-sections";
-import { getLastPriceList } from "@/services/get";
-import { getUser } from "@/services/user"; // I need exactly the real user, not the guest
+import { getLastPriceList } from "@/entities/product";
+import { getRealUser } from "@/entities/user"; // I need exactly the real user, not the guest
 import { Alert, AlertDescription, AlertTitle } from "@/shared/ui/alert";
 
 export default async function ProfilePage() {
@@ -8,7 +8,7 @@ export default async function ProfilePage() {
   let allSections;
 
   try {
-    user = await getUser();
+    user = await getRealUser();
     if (!user) throw new Error("User not found");
 
     const lastPriceList = await getLastPriceList(user.city);

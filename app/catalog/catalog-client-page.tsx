@@ -9,13 +9,13 @@ import { JumpToSection } from "@/app/components/jump-to-section/jump-to-section"
 import { LLMReport } from "@/app/components/llm-report/llm-report";
 import { Search } from "@/app/components/search/search";
 import { SortGoods } from "@/app/components/sort-goods";
-import { UserContext } from "@/app/contexts/user-context";
-import { usePriceListStore } from "@/app/stores/pricelist-store";
+import { usePriceListStore } from "@/entities/product";
+import { PriceList } from "@/entities/product";
+import { UserContext } from "@/entities/user";
 import { Alert, AlertDescription, AlertTitle } from "@/shared/ui/alert";
 import { PageLoader } from "@/shared/ui/page-loader";
 import { PageTitle } from "@/shared/ui/page-title";
 import { ScrollToTop } from "@/shared/ui/scroll-to-top";
-import { PriceList } from "@/types/pricelist";
 
 type CatalogClientPageProps = {
   city?: string;

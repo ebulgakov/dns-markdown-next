@@ -6,7 +6,7 @@ import { useLlmStore } from "@/app/stores/llm-store";
 import { Button } from "@/shared/ui/button";
 import { Tooltip, TooltipContent, TooltipTrigger } from "@/shared/ui/tooltip";
 
-import type { Goods as GoodsType } from "@/types/pricelist";
+import type { Goods as GoodsType } from "../model/pricelist";
 
 type ProductCardCompareButtonProps = {
   item: GoodsType;

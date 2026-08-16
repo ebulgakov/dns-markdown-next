@@ -2,7 +2,7 @@
 
 import { Area, AreaChart, CartesianGrid, XAxis, YAxis } from "recharts";
 
-import { formatDateMonthDay } from "@/app/helpers/format";
+import { formatDateMonthDay } from "@/shared/lib/format";
 import { Card, CardContent } from "@/shared/ui/card";
 import {
   ChartContainer,

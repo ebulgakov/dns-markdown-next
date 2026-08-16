@@ -4,7 +4,7 @@ import {
   postAddToHiddenSections,
   postRemoveFromFavoriteSection,
   postRemoveFromHiddenSections
-} from "@/services/post";
+} from "@/entities/user";
 import { PageTitle } from "@/shared/ui/page-title";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/shared/ui/tabs";
 import { Title } from "@/shared/ui/title";
@@ -12,7 +12,7 @@ import { Title } from "@/shared/ui/title";
 import { ProfileNotifications } from "./profile-notifications";
 import { ProfileUpdateSections } from "./profile-update-sections";
 
-import type { UserNotifications, UserSections } from "@/types/user";
+import type { UserNotifications, UserSections } from "@/entities/user";
 
 type ProfileSectionsProps = {
   notifications: UserNotifications;

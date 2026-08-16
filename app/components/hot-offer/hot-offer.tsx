@@ -6,7 +6,7 @@ import { NumericFormat } from "react-number-format";
 
 import { sendGAEvent } from "@/shared/lib/send-ga-event";
 
-import type { Goods } from "@/types/pricelist";
+import type { Goods } from "@/entities/product";
 
 type HotOfferProps = {
   goods: Goods;

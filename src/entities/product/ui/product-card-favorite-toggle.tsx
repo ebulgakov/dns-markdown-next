@@ -3,10 +3,10 @@
 import { Star } from "lucide-react";
 import { startTransition, useContext, useOptimistic, useState } from "react";
 
-import { UserContext } from "@/app/contexts/user-context";
+import { UserContext } from "@/entities/user";
 import { sendGAEvent } from "@/shared/lib/send-ga-event";
 
-import type { Goods as GoodsType } from "@/types/pricelist";
+import type { Goods as GoodsType } from "../model/pricelist";
 
 type PriceListFavoriteToggleProps = {
   goods: GoodsType;

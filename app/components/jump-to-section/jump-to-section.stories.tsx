@@ -1,14 +1,14 @@
 import { useEffect } from "react";
 
+import { usePriceListStore } from "@/entities/product";
 import {
   defaultContext,
   filledWithFavoritesSectionsContext,
   filledWithHiddenSectionsContext,
   filledWithHiddenAndFavoritesSectionsContext
-} from "@/app/components/product-card/__mocks__/context";
-import { mockPriceList } from "@/app/components/product-card/__mocks__/goods";
-import { UserProvider } from "@/app/contexts/user-context";
-import { usePriceListStore } from "@/app/stores/pricelist-store";
+} from "@/entities/product/ui/__mocks__/context";
+import { mockPriceList } from "@/entities/product/ui/__mocks__/goods";
+import { UserProvider } from "@/entities/user";
 
 import { JumpToSection } from "./jump-to-section";
 

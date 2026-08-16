@@ -138,6 +138,45 @@ const eslintConfig = defineConfig([
         }
       ]
     }
+  },
+  {
+    // FSD `entities` layer: must never depend on app/ (routes/features are
+    // above entities in the layer order). Cross-imports between
+    // entities/product and entities/user are deliberately NOT restricted
+    // here: "favorite" is inherently a product+user relationship (Favorite
+    // embeds a Goods; a product page shows its FavoriteStatus; the
+    // favorite-toggle button reads UserContext; entities/product's get.ts
+    // needs entities/user's getPriceListCity), so the two entities cross
+    //-reference each other in ~10 places, most of them type-only. Enumerating
+    // each as a separate except zone (as done for app/components/* features
+    // above) would be pure lint-maintenance overhead for a single
+    // -contributor, ~10k-LOC app with exactly two entities — see FSD skill
+    // §7 on cross-import strictness being a deliberate, project-scale-
+    // dependent choice, and recursive-hugging-finch.md for the fuller
+    // rationale.
+    files: ["src/entities/**/*.{ts,tsx}"],
+    ignores: ["src/entities/**/*.stories.tsx", "src/entities/**/__mocks__/**"],
+    plugins: {
+      import: importPlugin
+    },
+    rules: {
+      "import/no-restricted-paths": [
+        "error",
+        {
+          zones: [
+            {
+              // product-card-compare-button's dependency on the llm-report
+              // feature (not yet migrated out of app/) is a pre-existing
+              // upward dependency, not one this migration introduces —
+              // resolved when Stage 3 moves llm-report out of app/.
+              target: ["./src/entities/product", "./src/entities/user"],
+              from: ["./app"],
+              except: ["./stores/llm-store.ts", "./hooks/use-llm-report.ts"]
+            }
+          ]
+        }
+      ]
+    }
   }
 ]);
 

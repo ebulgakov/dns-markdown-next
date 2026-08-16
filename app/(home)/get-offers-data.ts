@@ -3,11 +3,11 @@ import {
   getMostDiscountedProducts,
   getMostProfitableProducts,
   getArchiveListDates
-} from "@/services/get";
-import { getPriceListCity } from "@/services/post";
+} from "@/entities/product";
+import { getPriceListCity } from "@/entities/user";
 
+import type { Goods } from "@/entities/product";
 import type { CustomDate } from "@/types/common";
-import type { Goods } from "@/types/pricelist";
 
 export async function getOffersData() {
   let catalogDate: CustomDate | undefined;

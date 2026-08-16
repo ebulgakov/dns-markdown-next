@@ -1,7 +1,7 @@
 "use client";
 import ReactMarkdown from "react-markdown";
 
-import { formatDateShort } from "@/app/helpers/format";
+import { formatDateShort } from "@/shared/lib/format";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/shared/ui/tabs";
 
 import styles from "./analytics-reports.module.css";

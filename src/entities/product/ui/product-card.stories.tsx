@@ -1,6 +1,6 @@
-import { defaultContext } from "@/app/components/product-card/__mocks__/context";
-import { UserProvider } from "@/app/contexts/user-context";
+import { UserProvider } from "@/entities/user";
 
+import { defaultContext } from "./__mocks__/context";
 import { mockDiff, mockGoodsList } from "./__mocks__/goods";
 import { ProductCard } from "./product-card";
 

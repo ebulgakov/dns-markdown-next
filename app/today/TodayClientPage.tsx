@@ -6,14 +6,14 @@ import { useContext, useEffect } from "react";
 import { useShallow } from "zustand/react/shallow";
 
 import { Catalog } from "@/app/components/catalog/catalog";
-import { UserContext } from "@/app/contexts/user-context";
-import { usePriceListStore } from "@/app/stores/pricelist-store";
+import { usePriceListStore } from "@/entities/product";
+import { PriceList } from "@/entities/product";
+import { UserContext } from "@/entities/user";
 import { Alert, AlertDescription, AlertTitle } from "@/shared/ui/alert";
 import { PageLoader } from "@/shared/ui/page-loader";
 import { PageTitle } from "@/shared/ui/page-title";
 import { ScrollToTop } from "@/shared/ui/scroll-to-top";
 import { AnalysisDiff, DiffsCollection as DiffsType } from "@/types/analysis-diff";
-import { PriceList } from "@/types/pricelist";
 
 const transformDiffData = (diff: AnalysisDiff, city: string) => {
   const digestList: PriceList = {

@@ -1,4 +1,4 @@
-import { mockFavorites } from "@/app/components/product-card/__mocks__/favorites";
+import { mockFavorites } from "./favorites";
 
 export const defaultContext = {
   hiddenSections: [],

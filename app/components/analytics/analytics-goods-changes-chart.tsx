@@ -2,7 +2,7 @@
 
 import { Bar, BarChart, CartesianGrid, XAxis } from "recharts";
 
-import { formatDateShort } from "@/app/helpers/format";
+import { formatDateShort } from "@/shared/lib/format";
 import { Card, CardContent } from "@/shared/ui/card";
 import {
   ChartContainer,
