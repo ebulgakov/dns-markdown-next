@@ -1,48 +1,45 @@
 import { defineConfig, globalIgnores } from "eslint/config";
 import nextVitals from "eslint-config-next/core-web-vitals";
 import nextTs from "eslint-config-next/typescript";
+import boundaries from "eslint-plugin-boundaries";
 import importPlugin from "eslint-plugin-import";
 
-// FSD `features` layer. Each slice may freely import shared/entities
-// (downward, unrestricted) but not app/ (routes sit above features) and not
-// another feature's internals — only its public index.ts (Strategy D: "public
-// API access" for genuinely-shared feature state, FSD skill §7).
-const featureSliceDirs = [
-  "product-catalog",
-  "search",
-  "sort-goods",
-  "jump-to-section",
-  "llm-report",
-  "change-city",
-  "favorite-toggle"
+// FSD layer/slice boundaries, enforced by eslint-plugin-boundaries instead of
+// hand-rolled import/no-restricted-paths zones. `shared` is intentionally
+// left WITHOUT per-file entry-point enforcement below (see the note on the
+// `shared` element and recursive-hugging-finch.md): it has per-component
+// barrels (e.g. shared/ui/change-theme-selector/index.ts) but no top-level
+// shared/{ui,lib,api}/index.ts yet, so `@/shared/lib/utils`-style deep
+// imports are still normal today. Tightening that is a deliberately separate,
+// larger follow-up (would touch every shared import site in the repo), not
+// bundled into this pass.
+const elements = [
+  { type: "app", pattern: "app/**" },
+  { type: "widget", pattern: "src/widgets/*", capture: ["slice"] },
+  { type: "feature", pattern: "src/features/*", capture: ["slice"] },
+  { type: "entity", pattern: "src/entities/*", capture: ["slice"] },
+  { type: "shared", pattern: "src/shared/**" }
 ];
 
 // Known cross-feature reuse today: product-catalog and jump-to-section both
-// read search's and sort-goods' store state through their public API.
+// read search's and sort-goods' store state through their public API
+// (Strategy D, FSD skill §7).
 const allowedFeatureSliceImports = {
   "product-catalog": ["search", "sort-goods"],
   "jump-to-section": ["search", "sort-goods"]
 };
+const featureSlicePolicies = Object.entries(allowedFeatureSliceImports).map(([from, to]) => ({
+  from: { element: { type: "feature", captured: { slice: from } } },
+  allow: [{ to: { element: { type: "feature", captured: { slice: to }, fileInternalPath: "index.ts" } } }]
+}));
 
-const featureSliceZones = featureSliceDirs.flatMap(dir => {
-  const allowed = allowedFeatureSliceImports[dir] ?? [];
-  const blocked = featureSliceDirs.filter(d => d !== dir && !allowed.includes(d));
-  const zones = [];
-  if (blocked.length > 0) {
-    zones.push({
-      target: `./src/features/${dir}`,
-      from: blocked.map(d => `./src/features/${d}`)
-    });
-  }
-  for (const from of allowed) {
-    zones.push({
-      target: `./src/features/${dir}`,
-      from: `./src/features/${from}`,
-      except: ["./index.ts"]
-    });
-  }
-  return zones;
-});
+// Pragmatic entities -> features exceptions (only product-card.tsx does this
+// today): the compare-to-LLM-report button and the favorite-toggle button
+// are each owned by a feature, but ProductCard renders them directly rather
+// than via slot/IoC composition from a higher layer — not worth a full
+// Strategy-C refactor at this project's scale. `fileInternalPath: "index.ts"`
+// only opens each feature's public API, never its internals.
+const entityToFeatureExceptions = ["llm-report", "favorite-toggle"];
 
 const eslintConfig = defineConfig([
   ...nextVitals,
@@ -94,127 +91,117 @@ const eslintConfig = defineConfig([
     }
   },
   {
-    // FSD `shared` layer: infra only, must never depend on business code.
-    files: ["src/shared/**/*.{ts,tsx}"],
-    ignores: ["src/shared/**/*.stories.tsx"],
+    // FSD layer/slice boundaries. Covers both Next's app/ (routing-only,
+    // never restructured — see recursive-hugging-finch.md) and every FSD
+    // layer under src/. Stories/mocks/tests are exempt: they legitimately
+    // reach into internals (mock a store, render a component directly) that
+    // production code must not.
+    files: ["app/**/*.{ts,tsx}", "src/**/*.{ts,tsx}"],
+    ignores: ["**/*.stories.tsx", "**/__mocks__/**", "**/__tests__/**"],
     plugins: {
-      import: importPlugin
+      boundaries
+    },
+    settings: {
+      "boundaries/elements": elements
     },
     rules: {
-      "import/no-restricted-paths": [
+      "boundaries/dependencies": [
         "error",
         {
-          zones: [
+          default: "disallow",
+          policies: [
+            // app/ (routing) composes every layer through its public API;
+            // shared has no forced entry point (see note above).
             {
-              target: "./src/shared",
-              from: ["./app"]
+              from: { element: { type: "app" } },
+              allow: [{ to: { element: { type: "shared" } } }]
+            },
+            {
+              from: { element: { type: "app" } },
+              allow: [
+                {
+                  to: {
+                    element: { type: ["widget", "feature", "entity"], fileInternalPath: "index.ts" }
+                  }
+                }
+              ]
+            },
+
+            // widgets: app-shell chrome, composes features/entities/shared.
+            {
+              from: { element: { type: "widget" } },
+              allow: [{ to: { element: { type: "shared" } } }]
+            },
+            {
+              from: { element: { type: "widget" } },
+              allow: [
+                { to: { element: { type: ["feature", "entity"], fileInternalPath: "index.ts" } } }
+              ]
+            },
+
+            // features: compose entities/shared; cross-feature only via the
+            // documented pairs above, through the target's public API.
+            {
+              from: { element: { type: "feature" } },
+              allow: [{ to: { element: { type: "shared" } } }]
+            },
+            {
+              from: { element: { type: "feature" } },
+              allow: [{ to: { element: { type: "entity", fileInternalPath: "index.ts" } } }]
+            },
+            ...featureSlicePolicies,
+
+            // entities: compose shared; entities/product <-> entities/user
+            // is a documented, single-direction-per-symbol exception (see
+            // recursive-hugging-finch.md for the decoupling this replaced —
+            // product needs user's getPriceListCity, user needs product's
+            // Goods/Favorite/FavoriteStatus), never a deep import.
+            {
+              from: { element: { type: "entity" } },
+              allow: [{ to: { element: { type: "shared" } } }]
+            },
+            {
+              from: { element: { type: "entity", captured: { slice: "product" } } },
+              allow: [
+                {
+                  to: {
+                    element: { type: "entity", captured: { slice: "user" }, fileInternalPath: "index.ts" }
+                  }
+                }
+              ]
+            },
+            {
+              from: { element: { type: "entity", captured: { slice: "user" } } },
+              allow: [
+                {
+                  to: {
+                    element: {
+                      type: "entity",
+                      captured: { slice: "product" },
+                      fileInternalPath: "index.ts"
+                    }
+                  }
+                }
+              ]
+            },
+            {
+              from: { element: { type: "entity" } },
+              allow: [
+                {
+                  to: {
+                    element: {
+                      type: "feature",
+                      captured: { slice: entityToFeatureExceptions },
+                      fileInternalPath: "index.ts"
+                    }
+                  }
+                }
+              ]
             }
-          ]
-        }
-      ]
-    }
-  },
-  {
-    // FSD `widgets` layer: app-shell chrome (navbar/footer, rendered once
-    // from root app/layout.tsx) — not a page, not a reusable feature action.
-    // Must never depend on app/ (routes sit above widgets).
-    files: ["src/widgets/**/*.{ts,tsx}"],
-    ignores: ["src/widgets/**/*.stories.tsx"],
-    plugins: {
-      import: importPlugin
-    },
-    rules: {
-      "import/no-restricted-paths": [
-        "error",
-        {
-          zones: [
-            {
-              target: "./src/widgets",
-              from: ["./app"]
-            }
-          ]
-        }
-      ]
-    }
-  },
-  {
-    // FSD `entities` layer: must never depend on app/ (routes/features are
-    // above entities in the layer order). Cross-imports between
-    // entities/product and entities/user are narrowed to each other's public
-    // index.ts only (never deep internals) — see recursive-hugging-finch.md
-    // for the decoupling this replaced. The two directions are asymmetric by
-    // design, not just by usage count:
-    //  - entities/product -> entities/user: exactly one symbol,
-    //    `getPriceListCity` in api/get.ts (product needs to know which
-    //    city's pricelist to fetch; this is a genuine one-off dependency,
-    //    not worth inventing a third entity for).
-    //  - entities/user -> entities/product: `Goods` (Favorite.item, and
-    //    postAddToFavorites/etc.'s parameter type) and the re-exported
-    //    `Favorite`/`FavoriteStatus` types themselves, which are now defined
-    //    in entities/product/model/favorite.ts (a favorite embeds a full
-    //    Goods; the metadata has no user-specific fields) and merely
-    //    re-exported from entities/user/model/user.ts so existing consumers
-    //    of @/entities/user keep working unchanged.
-    files: ["src/entities/**/*.{ts,tsx}"],
-    ignores: ["src/entities/**/*.stories.tsx", "src/entities/**/__mocks__/**"],
-    plugins: {
-      import: importPlugin
-    },
-    rules: {
-      "import/no-restricted-paths": [
-        "error",
-        {
-          zones: [
-            {
-              target: ["./src/entities/product", "./src/entities/user"],
-              from: ["./app"]
-            },
-            {
-              target: "./src/entities/product",
-              from: "./src/entities/user",
-              except: ["./index.ts"]
-            },
-            {
-              target: "./src/entities/user",
-              from: "./src/entities/product",
-              except: ["./index.ts"]
-            },
-            {
-              // Pragmatic entities -> features exception (only product-card.tsx
-              // actually does this today): the compare-to-LLM-report button and
-              // the favorite-toggle button are each owned by a feature, but
-              // ProductCard renders them directly rather than via slot/IoC
-              // composition from a higher layer — not worth a full Strategy-C
-              // refactor at this project's scale. `except` only opens each
-              // feature's public index.ts, not its internals.
-              target: ["./src/entities/product", "./src/entities/user"],
-              from: ["./src/features/llm-report", "./src/features/favorite-toggle"],
-              except: ["./index.ts"]
-            }
-          ]
-        }
-      ]
-    }
-  },
-  {
-    // FSD `features` layer: must never depend on app/ (routes sit above
-    // features); cross-slice imports go through the other slice's public
-    // index.ts only (see featureSliceZones above).
-    files: ["src/features/**/*.{ts,tsx}"],
-    ignores: ["src/features/**/*.stories.tsx", "src/features/**/__mocks__/**"],
-    plugins: {
-      import: importPlugin
-    },
-    rules: {
-      "import/no-restricted-paths": [
-        "error",
-        {
-          zones: [
-            {
-              target: featureSliceDirs.map(dir => `./src/features/${dir}`),
-              from: ["./app"]
-            },
-            ...featureSliceZones
+
+            // shared: no policies — it must not import app/widget/feature/
+            // entity at all, which the "disallow" default already enforces
+            // without needing to spell it out.
           ]
         }
       ]
