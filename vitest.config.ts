@@ -28,6 +28,24 @@ export default defineConfig({
           exclude: ["**/node_modules/**", "**/playwright/**", "**/.next/**"],
           alias: [
             { find: "@/shared", replacement: path.resolve(dirname, "./src/shared") },
+            { find: "@/pages/home", replacement: path.resolve(dirname, "./src/_pages/home") },
+            { find: "@/pages/about", replacement: path.resolve(dirname, "./src/_pages/about") },
+            { find: "@/pages/analysis", replacement: path.resolve(dirname, "./src/_pages/analysis") },
+            { find: "@/pages/archive", replacement: path.resolve(dirname, "./src/_pages/archive") },
+            {
+              find: "@/pages/archive-item",
+              replacement: path.resolve(dirname, "./src/_pages/archive-item")
+            },
+            { find: "@/pages/catalog", replacement: path.resolve(dirname, "./src/_pages/catalog") },
+            {
+              find: "@/pages/catalog-item",
+              replacement: path.resolve(dirname, "./src/_pages/catalog-item")
+            },
+            { find: "@/pages/favorites", replacement: path.resolve(dirname, "./src/_pages/favorites") },
+            { find: "@/pages/profile", replacement: path.resolve(dirname, "./src/_pages/profile") },
+            { find: "@/pages/today", replacement: path.resolve(dirname, "./src/_pages/today") },
+            { find: "@/pages/sign-in", replacement: path.resolve(dirname, "./src/_pages/sign-in") },
+            { find: "@/pages/sign-up", replacement: path.resolve(dirname, "./src/_pages/sign-up") },
             { find: "@/entities/user", replacement: path.resolve(dirname, "./src/entities/user") },
             { find: "@/entities/product", replacement: path.resolve(dirname, "./src/entities/product") },
             {

@@ -4,8 +4,8 @@ import { X, ArrowRight } from "lucide-react";
 import { useState, useTransition, useOptimistic, Fragment } from "react";
 
 import { uniqAbcSort } from "@/shared/lib";
-import { Alert, AlertDescription, AlertTitle } from "@/shared/ui/alert";
 import { Card } from "@/shared/ui/card";
+import { ErrorAlert } from "@/shared/ui/error-alert";
 import { Label } from "@/shared/ui/label";
 import { ScrollArea } from "@/shared/ui/scroll-area";
 import { Separator } from "@/shared/ui/separator";
@@ -76,10 +76,7 @@ function ProfileUpdateSections({
     <div>
       {errorMessage && (
         <div className="mb-4">
-          <Alert variant="destructive">
-            <AlertTitle>Ошибка обновления разделов</AlertTitle>
-            <AlertDescription>{errorMessage.message}</AlertDescription>
-          </Alert>
+          <ErrorAlert title="Ошибка обновления разделов" message={errorMessage.message} />
         </div>
       )}
       <div className="flex flex-col gap-4 md:flex-row">

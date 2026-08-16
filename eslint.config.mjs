@@ -16,6 +16,7 @@ import importPlugin from "eslint-plugin-import";
 // here.
 const elements = [
   { type: "app", pattern: "app/**" },
+  { type: "pages", pattern: "src/_pages/*", capture: ["slice"] },
   { type: "widget", pattern: "src/widgets/*", capture: ["slice"] },
   { type: "feature", pattern: "src/features/*", capture: ["slice"] },
   { type: "entity", pattern: "src/entities/*", capture: ["slice"] },
@@ -131,10 +132,10 @@ const eslintConfig = defineConfig([
     // (refactor below 80 lines, drop the entry) rather than growing it.
     files: [
       "src/features/sort-goods/lib/use-filtered-goods.ts",
-      "app/(home)/home-updates.tsx",
-      "app/(home)/hot-offer.tsx",
-      "app/about/page.tsx",
-      "app/profile/profile-update-sections.tsx",
+      "src/_pages/home/ui/home-updates.tsx",
+      "src/_pages/home/ui/hot-offer.tsx",
+      "src/_pages/about/ui/about-page.tsx",
+      "src/_pages/profile/ui/profile-update-sections.tsx",
       "src/entities/product/ui/product-card.tsx",
       "src/entities/user/model/user-context.tsx",
       "src/features/product-catalog/ui/catalog-header.tsx",
@@ -187,9 +188,26 @@ const eslintConfig = defineConfig([
               allow: [
                 {
                   to: {
-                    element: { type: ["widget", "feature", "entity"], fileInternalPath: "index.ts" }
+                    element: {
+                      type: ["pages", "widget", "feature", "entity"],
+                      fileInternalPath: "index.ts"
+                    }
                   }
                 }
+              ]
+            },
+
+            // pages: route-level composition, composes widgets/features/entities/shared.
+            {
+              from: { element: { type: "pages" } },
+              allow: [
+                { to: { element: { type: "shared", fileInternalPath: SHARED_ENTRY_POINTS } } }
+              ]
+            },
+            {
+              from: { element: { type: "pages" } },
+              allow: [
+                { to: { element: { type: ["widget", "feature", "entity"], fileInternalPath: "index.ts" } } }
               ]
             },
 
