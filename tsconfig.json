@@ -19,6 +19,13 @@
       }
     ],
     "paths": {
+      "@/app/components/ui/*": ["./src/shared/ui/*"],
+      "@/app/components/page-loader/*": ["./src/shared/ui/page-loader/*"],
+      "@/app/components/scroll-to-top/*": ["./src/shared/ui/scroll-to-top/*"],
+      "@/app/components/clerk-error/*": ["./src/shared/ui/clerk-error/*"],
+      "@/app/components/change-theme-selector/*": ["./src/shared/ui/change-theme-selector/*"],
+      "@/app/lib/*": ["./src/shared/lib/*"],
+      "@/services/client": ["./src/shared/api/client"],
       "@/*": ["./*"]
     }
   },

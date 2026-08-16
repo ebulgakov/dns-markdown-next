@@ -26,9 +26,28 @@ export default defineConfig({
           environment: "jsdom",
           include: ["**/*.test.{ts,tsx}"],
           exclude: ["**/node_modules/**", "**/playwright/**", "**/.next/**"],
-          alias: {
-            "@": path.resolve(dirname, "./")
-          }
+          alias: [
+            { find: "@/app/components/ui", replacement: path.resolve(dirname, "./src/shared/ui") },
+            {
+              find: "@/app/components/page-loader",
+              replacement: path.resolve(dirname, "./src/shared/ui/page-loader")
+            },
+            {
+              find: "@/app/components/scroll-to-top",
+              replacement: path.resolve(dirname, "./src/shared/ui/scroll-to-top")
+            },
+            {
+              find: "@/app/components/clerk-error",
+              replacement: path.resolve(dirname, "./src/shared/ui/clerk-error")
+            },
+            {
+              find: "@/app/components/change-theme-selector",
+              replacement: path.resolve(dirname, "./src/shared/ui/change-theme-selector")
+            },
+            { find: "@/app/lib", replacement: path.resolve(dirname, "./src/shared/lib") },
+            { find: "@/services/client", replacement: path.resolve(dirname, "./src/shared/api/client") },
+            { find: "@", replacement: path.resolve(dirname, "./") }
+          ]
         }
       },
 

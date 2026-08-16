@@ -3,7 +3,10 @@ import nextVitals from "eslint-config-next/core-web-vitals";
 import nextTs from "eslint-config-next/typescript";
 import importPlugin from "eslint-plugin-import";
 
-// `app/components/*` feature folders (everything except the shared `ui` primitives).
+// `app/components/*` feature folders still pending FSD migration (moved
+// folders are dropped from this list as each migration stage lands — see
+// the plan at recursive-hugging-finch.md step 6 for the eventual FSD-layer
+// replacement of this whole ESLint block).
 // Each folder may only be imported from `ui`/hooks/lib/stores/contexts by default —
 // cross-feature imports must be explicitly whitelisted below, matching what's
 // actually reused in production code today.
@@ -12,19 +15,15 @@ const featureDirs = [
   "analytics",
   "catalog",
   "change-location-selector",
-  "change-theme-selector",
   "chart-prices",
-  "clerk-error",
   "footer",
   "hot-offer",
   "jump-to-section",
   "llm-report",
   "more-link",
   "navbar",
-  "page-loader",
   "product-card",
   "profile-sections",
-  "scroll-to-top",
   "search",
   "sort-goods"
 ];
@@ -34,14 +33,8 @@ const featureDirs = [
 // whitelists the specific file actually reused, not the whole directory.
 const allowedCrossFeatureImports = {
   catalog: { alerts: "./catalog-favorites-empty-alert.tsx", "product-card": "./product-card.tsx" },
-  navbar: {
-    "change-location-selector": "./change-location-selector.tsx",
-    "change-theme-selector": "./change-theme-selector.tsx"
-  },
-  footer: {
-    "change-location-selector": "./change-location-selector.tsx",
-    "change-theme-selector": "./change-theme-selector.tsx"
-  }
+  navbar: { "change-location-selector": "./change-location-selector.tsx" },
+  footer: { "change-location-selector": "./change-location-selector.tsx" }
 };
 
 const featureZones = featureDirs.map(dir => ({
@@ -119,15 +112,7 @@ const eslintConfig = defineConfig([
       "import/no-restricted-paths": [
         "error",
         {
-          zones: [
-            // Shared `ui` primitives must never depend on feature code.
-            {
-              target: "./app/components/ui",
-              from: featureDirs.map(dir => `./app/components/${dir}`)
-            },
-            ...featureZones,
-            ...exceptionZones
-          ]
+          zones: [...featureZones, ...exceptionZones]
         }
       ]
     }
