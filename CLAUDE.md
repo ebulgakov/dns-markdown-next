@@ -34,6 +34,10 @@ pnpm test:coverage       # vitest --project unit --coverage
 
 pnpm storybook           # storybook dev on :6006
 pnpm build-storybook     # static storybook build
+
+pnpm dep-check           # dependency-cruiser: circular imports, unresolvable paths
+pnpm dep-graph           # dependency-cruiser: mermaid dependency graph
+pnpm dep-graph:archi     # dependency-cruiser: svg architecture diagram (needs graphviz `dot`)
 ```
 
 Run a single unit test file: `TZ=UTC vitest run --project unit path/to/file.test.ts`.
@@ -42,7 +46,7 @@ Playwright e2e tests live in `playwright/` (config in `playwright.config.ts`). T
 
 Unit tests (`vitest`) use the `unit` project defined in `vitest.config.ts`: jsdom environment, files matched by `**/*.test.{ts,tsx}`, colocated with source under `__tests__/` directories (e.g. `src/shared/lib/__tests__/format.test.ts`). A second `storybook` project runs Storybook interaction tests in a real browser (Playwright provider) — this is exercised via `pnpm build-storybook`/Chromatic CI, not `pnpm test`.
 
-CI runs ESLint, `tsc --noEmit` ("TSLint" workflow), Vitest, and Playwright as separate GitHub Actions workflows on push/PR to `main`. Chromatic runs only when a PR is labeled `chromatic`.
+CI runs ESLint, `tsc --noEmit` ("TSLint" workflow), Vitest, Playwright, and `pnpm dep-check` (`.github/workflows/dependency-check.yml`) as separate GitHub Actions workflows on push/PR to `main`. Chromatic runs only when a PR is labeled `chromatic`.
 
 ## Environment
 
@@ -56,6 +60,10 @@ Copy `.env-example` to `.env` and fill in values. Key variables:
 ## Architecture
 
 The codebase follows Feature-Sliced Design (FSD) under `src/` (`shared → entities → features → widgets`), enforced by `eslint-plugin-boundaries` in `eslint.config.mjs`: `app`/`widget`/`feature`/`entity` are declared as elements (the latter three captured per slice), and a single `boundaries/dependencies` policy set (default: disallow) requires every cross-slice import to go through the target slice's public `index.ts` (`fileInternalPath: "index.ts"`). `shared` also has a forced entry point, but a segment-level one rather than one top-level barrel: `shared/{lib,api,providers}/index.ts` (single barrel per segment) and `shared/ui/<component>/index.ts` (per-component — deliberately no single `shared/ui/index.ts`, because that was tried and broke `next build` by pulling every UI component, including recharts/Radix-heavy ones, into one eagerly-evaluated module graph). Documented single-direction exceptions exist for `entities/product ⇄ entities/user` (asymmetric: product needs exactly one function from user, user needs product's `Goods`/`Favorite` types) and for two entities → features cases (`product-card-compare-button`, `product-card-favorite-toggle`) that a higher-layer slot/IoC refactor isn't worth at this project's scale — see `eslint.config.mjs`'s inline comments for the exact policies. Next's own `app/` directory stays at the project root and is routing-only: `page.tsx`/`layout.tsx`/`app/api/*/route.ts` are intentionally out of scope for FSD restructuring — they compose the `src/` layers but are not moved into them. Route-local UI with a single consumer (e.g. `app/analysis/analytics-*.tsx`, `app/profile/profile-sections.tsx`) is colocated directly next to its `page.tsx` rather than promoted to a shared layer.
+
+### File naming
+
+Files under `src/` and `app/` use kebab-case — lowercase words separated by hyphens, no uppercase letters in the file name — for every file type, including components: `src/entities/product/ui/product-card.tsx`, `app/archive/archive-list.tsx`. The exported identifier stays normal JS/React convention (PascalCase for components — `ProductCard`, `ArchiveList` — camelCase for hooks/functions); only the on-disk file name is constrained to kebab-case.
 
 ### Data layer: user vs. guest, always behind `src/entities/user`'s `post.ts`
 
@@ -93,6 +101,18 @@ Read-only catalog/analysis data (pricelists, products, diffs, LLM reports) goes 
 
 ESLint enforces `import/order` (builtin → external → internal → parent → sibling → index → object → type, alphabetized, blank line between groups) — see `eslint.config.mjs`. Prettier config (`.prettierrc`): no trailing commas, double quotes, no semicolon-omission changes needed (semi: true), `arrowParens: avoid`, tailwind class sorting via `prettier-plugin-tailwindcss`. Run `pnpm lint:fix` after edits touching imports.
 
+## Code style
+
+- No `any` (`@typescript-eslint/no-explicit-any`, `eslint.config.mjs`) — if you're reaching for `any`, the real fix is usually a proper type or a narrower `unknown`.
+- No unjustified `eslint-disable`. Zero exist in the repo today — a new one needs a genuine conflict between two tools/rules, stated inline, not "the linter was annoying here."
+- `max-lines-per-function` is enforced at 80, and `max-lines` (whole file) at 250, both `skipBlankLines`/`skipComments`, both across `.ts` and `.tsx` (`eslint.config.mjs`). `__tests__/` files are exempt from both (arrange-act-assert blocks legitimately run long); both also exempt `*.stories.tsx`. Eleven files are grandfathered by filename for `max-lines-per-function` (mostly React components — a JSX-heavy render body trips this rule at a much lower true "logic" size than a `.ts` file would); `src/shared/ui/chart/chart.tsx` (shadcn-generated) is additionally grandfathered for `max-lines`. That list should only shrink (refactor one below its threshold, drop the entry), never grow — see `eslint.config.mjs` for the exact file list.
+- **FSD layer boundaries** are enforced by `eslint-plugin-boundaries` — see Architecture above for the full policy graph. `**/*.stories.tsx`, `**/__mocks__/**`, and `**/__tests__/**` are exempt from the `boundaries/dependencies` check entirely (`eslint.config.mjs`'s boundaries block `ignores`): those files legitimately reach into internals (mocking a store, rendering a component directly) that production code must not.
+- `dependency-cruiser` (`.dependency-cruiser.cjs`, `pnpm dep-check`, see Commands) covers what `eslint-plugin-boundaries` structurally can't: circular imports anywhere in `app/**`/`src/**`, and unresolvable import paths (a canary against a misconfigured resolver silently passing `no-circular` while checking nothing).
+
 ## Subagents
 
 Subagent roster and routing are defined in AGENTS.md (single source of truth for Claude Code and other CLIs): @AGENTS.md
+
+## Worktree policy
+
+Never use `EnterWorktree` in this repo — always work directly in the current branch/checkout. This is enforced by a `PreToolUse` hook (`.claude/hooks/block-worktree.sh`, wired up in `.claude/settings.json`) that denies every `EnterWorktree` call: if it detects only the main checkout (`git worktree list --porcelain`), it explains the policy; if it detects an extra worktree, it warns that a previous agent session may still have work in progress there and to close/merge that first. `settings.json` also sets `worktree.bgIsolation: "none"` so background sessions can still edit files directly without ever needing `EnterWorktree` to unlock that.

@@ -1,6 +1,6 @@
 import { getTranslations } from "next-intl/server";
 
-import { TodayClientPage } from "@/app/today/TodayClientPage";
+import { TodayClientPage } from "@/app/today/today-client-page";
 
 import type { Metadata } from "next";
 

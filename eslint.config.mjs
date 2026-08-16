@@ -100,7 +100,58 @@ const eslintConfig = defineConfig([
         }
       ],
       // Allow setState in useEffect for hydration handling
-      "react-hooks/set-state-in-effect": "off"
+      "react-hooks/set-state-in-effect": "off",
+      "@typescript-eslint/no-explicit-any": "error"
+    }
+  },
+  {
+    // Guardrail against sprawling functions/components. Test files and
+    // stories exempt: assertion-heavy arrange-act-assert blocks and story
+    // render functions legitimately run long.
+    files: ["app/**/*.{ts,tsx}", "src/**/*.{ts,tsx}"],
+    ignores: ["**/__tests__/**", "**/*.stories.tsx"],
+    rules: {
+      "max-lines-per-function": [
+        "error",
+        { max: 80, skipBlankLines: true, skipComments: true, IIFEs: true }
+      ]
+    }
+  },
+  {
+    // Guardrail against sprawling files. Tests and stories exempt for the
+    // same reason as max-lines-per-function above.
+    files: ["app/**/*.{ts,tsx}", "src/**/*.{ts,tsx}"],
+    ignores: ["**/__tests__/**", "**/*.stories.tsx"],
+    rules: {
+      "max-lines": ["error", { max: 250, skipBlankLines: true, skipComments: true }]
+    }
+  },
+  {
+    // Grandfathered: predate max-lines-per-function. Shrink this list
+    // (refactor below 80 lines, drop the entry) rather than growing it.
+    files: [
+      "src/features/sort-goods/lib/use-filtered-goods.ts",
+      "app/(home)/home-updates.tsx",
+      "app/(home)/hot-offer.tsx",
+      "app/about/page.tsx",
+      "app/profile/profile-update-sections.tsx",
+      "src/entities/product/ui/product-card.tsx",
+      "src/entities/user/model/user-context.tsx",
+      "src/features/product-catalog/ui/catalog-header.tsx",
+      "src/features/product-catalog/ui/catalog.tsx",
+      "src/shared/ui/chart/chart.tsx",
+      "src/widgets/navbar/navbar-mobile.tsx"
+    ],
+    rules: {
+      "max-lines-per-function": "off"
+    }
+  },
+  {
+    // Grandfathered: shadcn/ui-generated primitive, predates max-lines.
+    // Shrink this list rather than growing it.
+    files: ["src/shared/ui/chart/chart.tsx"],
+    rules: {
+      "max-lines": "off"
     }
   },
   {
