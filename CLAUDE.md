@@ -61,6 +61,10 @@ Copy `.env-example` to `.env` and fill in values. Key variables:
 
 The codebase follows Feature-Sliced Design (FSD) under `src/` (`shared → entities → features → widgets`), enforced by `eslint-plugin-boundaries` in `eslint.config.mjs`: `app`/`widget`/`feature`/`entity` are declared as elements (the latter three captured per slice), and a single `boundaries/dependencies` policy set (default: disallow) requires every cross-slice import to go through the target slice's public `index.ts` (`fileInternalPath: "index.ts"`). `shared` also has a forced entry point, but a segment-level one rather than one top-level barrel: `shared/{lib,api,providers}/index.ts` (single barrel per segment) and `shared/ui/<component>/index.ts` (per-component — deliberately no single `shared/ui/index.ts`, because that was tried and broke `next build` by pulling every UI component, including recharts/Radix-heavy ones, into one eagerly-evaluated module graph). Documented single-direction exceptions exist for `entities/product ⇄ entities/user` (asymmetric: product needs exactly one function from user, user needs product's `Goods`/`Favorite` types) and for two entities → features cases (`product-card-compare-button`, `product-card-favorite-toggle`) that a higher-layer slot/IoC refactor isn't worth at this project's scale — see `eslint.config.mjs`'s inline comments for the exact policies. Next's own `app/` directory stays at the project root and is routing-only: `page.tsx`/`layout.tsx`/`app/api/*/route.ts` are intentionally out of scope for FSD restructuring — they compose the `src/` layers but are not moved into them. Route-local UI with a single consumer (e.g. `app/analysis/analytics-*.tsx`, `app/profile/profile-sections.tsx`) is colocated directly next to its `page.tsx` rather than promoted to a shared layer.
 
+### File naming
+
+Files under `src/` and `app/` use kebab-case — lowercase words separated by hyphens, no uppercase letters in the file name — for every file type, including components: `src/entities/product/ui/product-card.tsx`, `app/archive/archive-list.tsx`. The exported identifier stays normal JS/React convention (PascalCase for components — `ProductCard`, `ArchiveList` — camelCase for hooks/functions); only the on-disk file name is constrained to kebab-case.
+
 ### Data layer: user vs. guest, always behind `src/entities/user`'s `post.ts`
 
 Almost all mutating/user-scoped reads go through `src/entities/user/api/post.ts` (re-exported via `src/entities/user/index.ts`), which branches on whether a Clerk session exists (`getSessionInfo()` from `src/entities/user/api/user.ts`, memoized per-request via React's `cache()`):
@@ -108,3 +112,7 @@ ESLint enforces `import/order` (builtin → external → internal → parent →
 ## Subagents
 
 Subagent roster and routing are defined in AGENTS.md (single source of truth for Claude Code and other CLIs): @AGENTS.md
+
+## Worktree policy
+
+Never use `EnterWorktree` in this repo — always work directly in the current branch/checkout. This is enforced by a `PreToolUse` hook (`.claude/hooks/block-worktree.sh`, wired up in `.claude/settings.json`) that denies every `EnterWorktree` call: if it detects only the main checkout (`git worktree list --porcelain`), it explains the policy; if it detects an extra worktree, it warns that a previous agent session may still have work in progress there and to close/merge that first. `settings.json` also sets `worktree.bgIsolation: "none"` so background sessions can still edit files directly without ever needing `EnterWorktree` to unlock that.
