@@ -116,6 +116,29 @@ const eslintConfig = defineConfig([
         }
       ]
     }
+  },
+  {
+    // FSD `shared` layer: infra only, must never depend on business code.
+    // Enforced separately from the app/components zones above since this
+    // rule targets the new src/shared/ location, not the legacy app/ tree.
+    files: ["src/shared/**/*.{ts,tsx}"],
+    ignores: ["src/shared/**/*.stories.tsx"],
+    plugins: {
+      import: importPlugin
+    },
+    rules: {
+      "import/no-restricted-paths": [
+        "error",
+        {
+          zones: [
+            {
+              target: "./src/shared",
+              from: ["./app", "./services"]
+            }
+          ]
+        }
+      ]
+    }
   }
 ]);
 

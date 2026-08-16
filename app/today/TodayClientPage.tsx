@@ -9,9 +9,9 @@ import { Catalog } from "@/app/components/catalog/catalog";
 import { UserContext } from "@/app/contexts/user-context";
 import { usePriceListStore } from "@/app/stores/pricelist-store";
 import { Alert, AlertDescription, AlertTitle } from "@/shared/ui/alert";
-import { PageLoader } from "@/shared/ui/page-loader/page-loader";
+import { PageLoader } from "@/shared/ui/page-loader";
 import { PageTitle } from "@/shared/ui/page-title";
-import { ScrollToTop } from "@/shared/ui/scroll-to-top/scroll-to-top";
+import { ScrollToTop } from "@/shared/ui/scroll-to-top";
 import { AnalysisDiff, DiffsCollection as DiffsType } from "@/types/analysis-diff";
 import { PriceList } from "@/types/pricelist";
 

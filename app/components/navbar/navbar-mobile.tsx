@@ -10,7 +10,7 @@ import { ChangeLocationSelector } from "@/app/components/change-location-selecto
 import { Logo } from "@/app/logo";
 import { sendGAEvent } from "@/shared/lib/send-ga-event";
 import { Button } from "@/shared/ui/button";
-import { ChangeThemeSelector } from "@/shared/ui/change-theme-selector/change-theme-selector";
+import { ChangeThemeSelector } from "@/shared/ui/change-theme-selector";
 import {
   Dialog,
   DialogClose,

@@ -11,9 +11,9 @@ import { JumpToSection } from "@/app/components/jump-to-section/jump-to-section"
 import { Search } from "@/app/components/search/search";
 import { usePriceListStore } from "@/app/stores/pricelist-store";
 import { Alert, AlertDescription, AlertTitle } from "@/shared/ui/alert";
-import { PageLoader } from "@/shared/ui/page-loader/page-loader";
+import { PageLoader } from "@/shared/ui/page-loader";
 import { PageTitle } from "@/shared/ui/page-title";
-import { ScrollToTop } from "@/shared/ui/scroll-to-top/scroll-to-top";
+import { ScrollToTop } from "@/shared/ui/scroll-to-top";
 
 import type { PriceList } from "@/types/pricelist";
 
