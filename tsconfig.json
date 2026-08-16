@@ -36,6 +36,10 @@
       "@/features/llm-report/*": ["./src/features/llm-report/*"],
       "@/features/change-city": ["./src/features/change-city"],
       "@/features/change-city/*": ["./src/features/change-city/*"],
+      "@/widgets/navbar": ["./src/widgets/navbar"],
+      "@/widgets/navbar/*": ["./src/widgets/navbar/*"],
+      "@/widgets/footer": ["./src/widgets/footer"],
+      "@/widgets/footer/*": ["./src/widgets/footer/*"],
       "@/*": ["./*"]
     }
   },

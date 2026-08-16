@@ -1,12 +1,13 @@
 import { getTranslations } from "next-intl/server";
 
-import { ChartPrices } from "@/app/components/chart-prices/chart-prices";
 import { ProductCard } from "@/entities/product";
 import { getProductByLink } from "@/entities/product";
 import { LLMReport } from "@/features/llm-report";
 import { Alert, AlertDescription, AlertTitle } from "@/shared/ui/alert";
 import { PageTitle } from "@/shared/ui/page-title";
 import { Title } from "@/shared/ui/title";
+
+import { ChartPrices } from "./chart-prices";
 
 import type { Metadata } from "next";
 

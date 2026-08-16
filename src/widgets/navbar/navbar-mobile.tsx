@@ -6,7 +6,6 @@ import Link from "next/link";
 import { useTranslations } from "next-intl";
 import { Fragment } from "react";
 
-import { Logo } from "@/app/logo";
 import { ChangeLocationSelector } from "@/features/change-city";
 import { sendGAEvent } from "@/shared/lib/send-ga-event";
 import { Button } from "@/shared/ui/button";
@@ -19,6 +18,8 @@ import {
   DialogTitle,
   DialogTrigger
 } from "@/shared/ui/dialog";
+
+import { Logo } from "./logo";
 
 import type { NavbarLinks } from "@/types/common";
 

@@ -3,32 +3,6 @@ import nextVitals from "eslint-config-next/core-web-vitals";
 import nextTs from "eslint-config-next/typescript";
 import importPlugin from "eslint-plugin-import";
 
-// `app/components/*` feature folders still pending FSD migration (moved
-// folders are dropped from this list as each migration stage lands — see
-// the plan at recursive-hugging-finch.md step 6 for the eventual FSD-layer
-// replacement of this whole ESLint block).
-// Each folder may only be imported from `ui`/hooks/lib/stores/contexts by default —
-// cross-feature imports must be explicitly whitelisted below, matching what's
-// actually reused in production code today.
-const featureDirs = [
-  "alerts",
-  "analytics",
-  "chart-prices",
-  "footer",
-  "hot-offer",
-  "more-link",
-  "navbar",
-  "profile-sections"
-];
-
-// No cross-feature exceptions currently needed — the ones that existed
-// (catalog->alerts, navbar/footer->change-location-selector) were for
-// folders that have since migrated out of app/components/ entirely.
-const featureZones = featureDirs.map(dir => ({
-  target: `./app/components/${dir}`,
-  from: featureDirs.filter(d => d !== dir).map(d => `./app/components/${d}`)
-}));
-
 // FSD `features` layer. Each slice may freely import shared/entities
 // (downward, unrestricted) but not app/ (routes sit above features) and not
 // another feature's internals — only its public index.ts (Strategy D: "public
@@ -119,25 +93,7 @@ const eslintConfig = defineConfig([
     }
   },
   {
-    files: ["app/components/**/*.{ts,tsx}"],
-    // Stories/mocks are dev-only test fixtures, not production module boundaries.
-    ignores: ["app/components/**/*.stories.tsx", "app/components/**/__mocks__/**"],
-    plugins: {
-      import: importPlugin
-    },
-    rules: {
-      "import/no-restricted-paths": [
-        "error",
-        {
-          zones: featureZones
-        }
-      ]
-    }
-  },
-  {
     // FSD `shared` layer: infra only, must never depend on business code.
-    // Enforced separately from the app/components zones above since this
-    // rule targets the new src/shared/ location, not the legacy app/ tree.
     files: ["src/shared/**/*.{ts,tsx}"],
     ignores: ["src/shared/**/*.stories.tsx"],
     plugins: {
@@ -150,6 +106,29 @@ const eslintConfig = defineConfig([
           zones: [
             {
               target: "./src/shared",
+              from: ["./app"]
+            }
+          ]
+        }
+      ]
+    }
+  },
+  {
+    // FSD `widgets` layer: app-shell chrome (navbar/footer, rendered once
+    // from root app/layout.tsx) — not a page, not a reusable feature action.
+    // Must never depend on app/ (routes sit above widgets).
+    files: ["src/widgets/**/*.{ts,tsx}"],
+    ignores: ["src/widgets/**/*.stories.tsx"],
+    plugins: {
+      import: importPlugin
+    },
+    rules: {
+      "import/no-restricted-paths": [
+        "error",
+        {
+          zones: [
+            {
+              target: "./src/widgets",
               from: ["./app"]
             }
           ]

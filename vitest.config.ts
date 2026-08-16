@@ -42,6 +42,8 @@ export default defineConfig({
             },
             { find: "@/features/llm-report", replacement: path.resolve(dirname, "./src/features/llm-report") },
             { find: "@/features/change-city", replacement: path.resolve(dirname, "./src/features/change-city") },
+            { find: "@/widgets/navbar", replacement: path.resolve(dirname, "./src/widgets/navbar") },
+            { find: "@/widgets/footer", replacement: path.resolve(dirname, "./src/widgets/footer") },
             { find: "@", replacement: path.resolve(dirname, "./") }
           ]
         }

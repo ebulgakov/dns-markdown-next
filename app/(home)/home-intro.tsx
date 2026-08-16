@@ -7,9 +7,10 @@ import { Fragment } from "react";
 import ReactMarkdown from "react-markdown";
 import rehypeRaw from "rehype-raw";
 
-import { MoreLink } from "@/app/components/more-link/more-link";
 import { sendGAEvent } from "@/shared/lib/send-ga-event";
 import { PageTitle } from "@/shared/ui/page-title";
+
+import { MoreLink } from "./more-link";
 
 export function HomeIntro() {
   const t = useTranslations("HomePage");

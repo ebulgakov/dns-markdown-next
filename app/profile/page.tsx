@@ -1,7 +1,8 @@
-import { ProfileSections } from "@/app/components/profile-sections";
 import { getLastPriceList } from "@/entities/product";
 import { getRealUser } from "@/entities/user"; // I need exactly the real user, not the guest
 import { Alert, AlertDescription, AlertTitle } from "@/shared/ui/alert";
+
+import { ProfileSections } from "./profile-sections";
 
 export default async function ProfilePage() {
   let user;

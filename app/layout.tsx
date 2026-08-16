@@ -9,8 +9,6 @@ import { StrictMode, type ReactNode } from "react";
 
 import "./globals.css";
 
-import { Footer } from "@/app/components/footer/footer";
-import { Navbar } from "@/app/components/navbar/navbar";
 import { QueryProvider } from "@/app/providers/query-provider";
 import { ThemeProvider } from "@/app/providers/theme-provider";
 import { UserProvider } from "@/entities/user";
@@ -18,6 +16,8 @@ import { getUser as getGenericUser } from "@/entities/user";
 import { getSessionInfo } from "@/entities/user";
 import { User } from "@/entities/user";
 import { cn } from "@/shared/lib/utils";
+import { Footer } from "@/widgets/footer";
+import { Navbar } from "@/widgets/navbar";
 
 import type { Metadata } from "next";
 

@@ -1,7 +1,7 @@
 import { useTranslations } from "next-intl";
 
-import { NavbarDesktop } from "@/app/components/navbar/navbar-desktop";
-import { NavbarMobile } from "@/app/components/navbar/navbar-mobile";
+import { NavbarDesktop } from "./navbar-desktop";
+import { NavbarMobile } from "./navbar-mobile";
 
 import type { NavbarLinks } from "@/types/common";
 

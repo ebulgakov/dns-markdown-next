@@ -3,7 +3,6 @@
 import { SignedIn, SignInButton, SignUpButton, UserButton, ClerkLoaded } from "@clerk/nextjs";
 import { useTranslations } from "next-intl";
 
-import { Logo } from "@/app/logo";
 import { sendGAEvent } from "@/shared/lib/send-ga-event";
 import { Button } from "@/shared/ui/button";
 import {
@@ -12,6 +11,8 @@ import {
   NavigationMenuItem,
   NavigationMenuList
 } from "@/shared/ui/navigation-menu";
+
+import { Logo } from "./logo";
 
 import type { NavbarLinks } from "@/types/common";
 
