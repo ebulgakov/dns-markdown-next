@@ -2,9 +2,8 @@
 
 import { unstable_cache as cacheToken } from "next/cache";
 
+import { getPriceListCity } from "@/services/post";
 import { apiClient } from "@/shared/api/client";
-
-import { getPriceListCity } from "./post";
 
 import type { AnalysisDiff, AnalysisDiffReport } from "@/types/analysis-diff";
 import type { Goods, PriceList, PriceListDate, PriceListsArchiveCount } from "@/types/pricelist";

@@ -1,4 +1,4 @@
-import { Goods } from "./pricelist";
+import type { Goods } from "@/types/pricelist";
 
 export type FavoriteStatus = {
   updatedAt: string;

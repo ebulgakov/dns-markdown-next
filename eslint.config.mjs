@@ -22,7 +22,6 @@ const featureDirs = [
   "llm-report",
   "more-link",
   "navbar",
-  "product-card",
   "profile-sections",
   "search",
   "sort-goods"
@@ -32,7 +31,7 @@ const featureDirs = [
 // below (target/from/except on a single directory pair) so `except` only
 // whitelists the specific file actually reused, not the whole directory.
 const allowedCrossFeatureImports = {
-  catalog: { alerts: "./catalog-favorites-empty-alert.tsx", "product-card": "./product-card.tsx" },
+  catalog: { alerts: "./catalog-favorites-empty-alert.tsx" },
   navbar: { "change-location-selector": "./change-location-selector.tsx" },
   footer: { "change-location-selector": "./change-location-selector.tsx" }
 };
@@ -133,7 +132,7 @@ const eslintConfig = defineConfig([
           zones: [
             {
               target: "./src/shared",
-              from: ["./app", "./services"]
+              from: ["./app"]
             }
           ]
         }
