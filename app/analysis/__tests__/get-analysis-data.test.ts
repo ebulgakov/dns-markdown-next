@@ -1,13 +1,13 @@
 import { describe, it, expect, vi, afterEach, type Mock } from "vitest";
 
 import {
-  getPriceListCity,
   getLast30ArchiveProductsCount,
   getLast30DiffsReportByCity,
   getLast30ReportsByCity,
   getTotalUniqProductsCount,
   getArchiveListDates
 } from "@/services/get";
+import { getPriceListCity } from "@/services/post";
 
 import { getAnalysisData } from "../get-analysis-data";
 
@@ -16,12 +16,15 @@ import type { PriceListsArchiveCount } from "@/types/pricelist";
 import type { ReportsResponse } from "@/types/reports";
 
 vi.mock("@/services/get", () => ({
-  getPriceListCity: vi.fn(),
   getLast30DiffsReportByCity: vi.fn(),
   getLast30ArchiveProductsCount: vi.fn(),
   getLast30ReportsByCity: vi.fn(),
   getTotalUniqProductsCount: vi.fn(),
   getArchiveListDates: vi.fn()
+}));
+
+vi.mock("@/services/post", () => ({
+  getPriceListCity: vi.fn()
 }));
 
 const mockedGetPriceListCity = getPriceListCity as Mock;

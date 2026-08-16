@@ -1,11 +1,11 @@
 import {
-  getPriceListCity,
   getLast30ArchiveProductsCount,
   getLast30DiffsReportByCity,
   getLast30ReportsByCity,
   getTotalUniqProductsCount,
   getArchiveListDates
 } from "@/services/get";
+import { getPriceListCity } from "@/services/post";
 
 import type { AnalysisDiffReport as AnalysisDiffReportType } from "@/types/analysis-diff";
 import type { PriceListsArchiveCount } from "@/types/pricelist";

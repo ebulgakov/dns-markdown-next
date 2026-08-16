@@ -4,7 +4,7 @@ import { unstable_cache as cacheToken } from "next/cache";
 
 import { apiClient } from "@/shared/api/client";
 
-import { getUser } from "./post";
+import { getPriceListCity } from "./post";
 
 import type { AnalysisDiff, AnalysisDiffReport } from "@/types/analysis-diff";
 import type { Goods, PriceList, PriceListDate, PriceListsArchiveCount } from "@/types/pricelist";
@@ -56,11 +56,6 @@ const getCachedPriceListById = cacheToken(
   { tags: ["daily-data"] }
 );
 export const getPriceListById = async (id: string) => getCachedPriceListById(id);
-
-export const getPriceListCity = async (): Promise<string> => {
-  const user = await getUser();
-  return user?.city || process.env.DEFAULT_CITY!;
-};
 
 const getCachedProductByLink = cacheToken(
   async (link: string): Promise<ProductPayload> =>

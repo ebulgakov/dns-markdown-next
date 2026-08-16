@@ -1,6 +1,5 @@
 "use server";
 
-import { getPriceListCity } from "@/services/get";
 import {
   getGuest,
   addToHiddenSections as addToHiddenSectionsGuest,
@@ -137,6 +136,11 @@ export const getUser = async () => {
   } else {
     return await getGuest();
   }
+};
+
+export const getPriceListCity = async (): Promise<string> => {
+  const user = await getUser();
+  return user?.city || process.env.DEFAULT_CITY!;
 };
 
 export type { SectionsResponse } from "@/services/user";

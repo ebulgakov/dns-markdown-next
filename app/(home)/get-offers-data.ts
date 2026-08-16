@@ -2,9 +2,9 @@ import {
   getMostCheapProducts,
   getMostDiscountedProducts,
   getMostProfitableProducts,
-  getArchiveListDates,
-  getPriceListCity
+  getArchiveListDates
 } from "@/services/get";
+import { getPriceListCity } from "@/services/post";
 
 import type { CustomDate } from "@/types/common";
 import type { Goods } from "@/types/pricelist";
