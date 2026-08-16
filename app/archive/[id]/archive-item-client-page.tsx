@@ -6,10 +6,10 @@ import { useTranslations } from "next-intl";
 import { useEffect } from "react";
 import { useShallow } from "zustand/react/shallow";
 
-import { Catalog } from "@/app/components/catalog/catalog";
-import { JumpToSection } from "@/app/components/jump-to-section/jump-to-section";
-import { Search } from "@/app/components/search/search";
 import { usePriceListStore } from "@/entities/product";
+import { JumpToSection } from "@/features/jump-to-section";
+import { Catalog } from "@/features/product-catalog";
+import { Search } from "@/features/search";
 import { Alert, AlertDescription, AlertTitle } from "@/shared/ui/alert";
 import { PageLoader } from "@/shared/ui/page-loader";
 import { PageTitle } from "@/shared/ui/page-title";

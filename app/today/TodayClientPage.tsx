@@ -5,10 +5,10 @@ import axios from "axios";
 import { useContext, useEffect } from "react";
 import { useShallow } from "zustand/react/shallow";
 
-import { Catalog } from "@/app/components/catalog/catalog";
 import { usePriceListStore } from "@/entities/product";
 import { PriceList } from "@/entities/product";
 import { UserContext } from "@/entities/user";
+import { Catalog } from "@/features/product-catalog";
 import { Alert, AlertDescription, AlertTitle } from "@/shared/ui/alert";
 import { PageLoader } from "@/shared/ui/page-loader";
 import { PageTitle } from "@/shared/ui/page-title";

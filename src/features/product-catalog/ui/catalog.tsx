@@ -1,0 +1,150 @@
+"use client";
+
+import { useDebounce } from "@uidotdev/usehooks";
+import { useEffect, useRef, useState } from "react";
+
+import { usePriceListStore } from "@/entities/product";
+import { ProductCard } from "@/entities/product";
+import { useSearchStore } from "@/features/search";
+import { useFilteredGoods } from "@/features/sort-goods";
+import { cn } from "@/shared/lib/utils";
+import { Title } from "@/shared/ui/title";
+
+import { getCurrentCatalogTitle } from "../lib/get-current-catalog-title";
+import { useCatalogVirtualizer } from "../lib/use-catalog-virtualizer";
+import { CatalogComponentVariant } from "../model/types";
+
+import { CatalogFavoritesEmptyAlert } from "./catalog-favorites-empty-alert";
+import { CatalogHeader } from "./catalog-header";
+
+import type { DiffsCollection } from "@/types/analysis-diff";
+
+type PriceListPageProps = {
+  variant: CatalogComponentVariant;
+};
+
+function Catalog({ variant }: PriceListPageProps) {
+  const priceListDiffs: DiffsCollection = usePriceListStore(state => state.priceListDiffs) || {};
+  const searchTerm = useDebounce<string>(useSearchStore(state => state.searchTerm).trim(), 100);
+  const { flattenList, flattenTitles } = useFilteredGoods({
+    filterTerm: searchTerm,
+    hasNoModifyOutput: variant === "updates"
+  });
+  const [scrollHeight, setScrollHeight] = useState(0);
+  const disabledCollapse = variant !== "updates" && searchTerm.length > 0;
+
+  // Virtualization setup
+  const listRef = useRef<HTMLDivElement>(null);
+  const virtualizer = useCatalogVirtualizer({
+    flattenList,
+    withStickySearch: variant !== "updates",
+    listRef
+  });
+  const virtualItems = virtualizer.getVirtualItems();
+  const currentTitle = getCurrentCatalogTitle(virtualItems, flattenList, flattenTitles);
+
+  useEffect(() => {
+    // After filtering the list, we need to update the total scroll height for virtualization
+    setScrollHeight(virtualizer.getTotalSize());
+  }, [virtualizer, flattenList.length]);
+
+  return (
+    <div
+      ref={listRef}
+      data-testid="catalog-list"
+      className="relative -mt-38 w-full"
+      style={{ height: `${scrollHeight}px` }}
+    >
+      {currentTitle && (
+        <div
+          className={cn("fixed right-0 left-0 z-10 px-4", {
+            "top-[calc(var(--nav-bar-height)_*_2)]": variant !== "updates",
+            "top-[var(--nav-bar-height)]": variant === "updates"
+          })}
+        >
+          <div className="mx-auto md:container">
+            <CatalogHeader
+              disabledCollapse={disabledCollapse}
+              shownHeart={variant === "default"}
+              header={currentTitle}
+            />
+          </div>
+        </div>
+      )}
+
+      {virtualItems.map(virtualItem => {
+        const item = flattenList[virtualItem.index];
+        return (
+          <div
+            key={virtualItem.key}
+            data-index={virtualItem.index}
+            ref={virtualizer.measureElement}
+            style={{
+              position: "absolute",
+              top: 0,
+              left: 0,
+              width: "100%",
+              transform: `translateY(${virtualItem.start}px)`
+            }}
+          >
+            {item.type === "noFavsAlert" && <CatalogFavoritesEmptyAlert />}
+
+            {item.type === "foundTitle" && (
+              <div>
+                <Title variant="h3" className="mt-0 mb-5 flex h-12 items-center">
+                  Найдено товаров: &nbsp;
+                  <span className="font-normal">{item.goodsCount}</span>
+                </Title>
+
+                <div className="mb-10 grid gap-2 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+                  {item.titles.map(title => (
+                    <div key={title}>
+                      <a
+                        href={`#${encodeURIComponent(title)}`}
+                        className="hover:text-primary cursor-pointer text-sm text-gray-500"
+                        onClick={e => {
+                          e.preventDefault();
+                          window.location.assign(`#${encodeURIComponent(title)}`);
+                        }}
+                      >
+                        {title}
+                      </a>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )}
+
+            {item.type === "header" && (
+              <CatalogHeader
+                disabledCollapse={disabledCollapse}
+                shownHeart={variant === "default"}
+                header={item}
+              />
+            )}
+
+            {item.type === "goods" && (
+              <div className="border-b border-neutral-300">
+                <ProductCard
+                  shownFavorites={variant !== "archive"}
+                  shownCompares={variant === "default"}
+                  sectionTitle={item.sectionTitle}
+                  item={item}
+                  diff={priceListDiffs[`${item._id}`]}
+                />
+              </div>
+            )}
+
+            {item.type === "title" && variant !== "updates" && (
+              <Title variant="h2" className={cn("mb-2", { "mt-0": item.category === "favorite" })}>
+                {item.category === "favorite" ? "Избранные категории" : "Все категории"}
+              </Title>
+            )}
+          </div>
+        );
+      })}
+    </div>
+  );
+}
+
+export { Catalog };

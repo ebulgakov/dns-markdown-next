@@ -24,6 +24,18 @@
       "@/entities/user/*": ["./src/entities/user/*"],
       "@/entities/product": ["./src/entities/product"],
       "@/entities/product/*": ["./src/entities/product/*"],
+      "@/features/product-catalog": ["./src/features/product-catalog"],
+      "@/features/product-catalog/*": ["./src/features/product-catalog/*"],
+      "@/features/search": ["./src/features/search"],
+      "@/features/search/*": ["./src/features/search/*"],
+      "@/features/sort-goods": ["./src/features/sort-goods"],
+      "@/features/sort-goods/*": ["./src/features/sort-goods/*"],
+      "@/features/jump-to-section": ["./src/features/jump-to-section"],
+      "@/features/jump-to-section/*": ["./src/features/jump-to-section/*"],
+      "@/features/llm-report": ["./src/features/llm-report"],
+      "@/features/llm-report/*": ["./src/features/llm-report/*"],
+      "@/features/change-city": ["./src/features/change-city"],
+      "@/features/change-city/*": ["./src/features/change-city/*"],
       "@/*": ["./*"]
     }
   },

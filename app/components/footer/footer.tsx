@@ -4,7 +4,7 @@ import { Github } from "lucide-react";
 import Link from "next/link";
 import { useTranslations } from "next-intl";
 
-import { ChangeLocationSelector } from "@/app/components/change-location-selector/change-location-selector";
+import { ChangeLocationSelector } from "@/features/change-city";
 import { sendGAEvent } from "@/shared/lib/send-ga-event";
 import { ChangeThemeSelector } from "@/shared/ui/change-theme-selector";
 

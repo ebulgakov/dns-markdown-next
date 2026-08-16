@@ -13,43 +13,61 @@ import importPlugin from "eslint-plugin-import";
 const featureDirs = [
   "alerts",
   "analytics",
-  "catalog",
-  "change-location-selector",
   "chart-prices",
   "footer",
   "hot-offer",
-  "jump-to-section",
-  "llm-report",
   "more-link",
   "navbar",
-  "profile-sections",
-  "search",
-  "sort-goods"
+  "profile-sections"
 ];
 
-// Existing sanctioned cross-feature reuse — each pair gets its own narrow zone
-// below (target/from/except on a single directory pair) so `except` only
-// whitelists the specific file actually reused, not the whole directory.
-const allowedCrossFeatureImports = {
-  catalog: { alerts: "./catalog-favorites-empty-alert.tsx" },
-  navbar: { "change-location-selector": "./change-location-selector.tsx" },
-  footer: { "change-location-selector": "./change-location-selector.tsx" }
-};
-
+// No cross-feature exceptions currently needed — the ones that existed
+// (catalog->alerts, navbar/footer->change-location-selector) were for
+// folders that have since migrated out of app/components/ entirely.
 const featureZones = featureDirs.map(dir => ({
   target: `./app/components/${dir}`,
-  from: featureDirs
-    .filter(d => d !== dir && !(allowedCrossFeatureImports[dir]?.[d]))
-    .map(d => `./app/components/${d}`)
+  from: featureDirs.filter(d => d !== dir).map(d => `./app/components/${d}`)
 }));
 
-const exceptionZones = Object.entries(allowedCrossFeatureImports).flatMap(([target, fromDirs]) =>
-  Object.entries(fromDirs).map(([from, exceptFile]) => ({
-    target: `./app/components/${target}`,
-    from: `./app/components/${from}`,
-    except: [exceptFile]
-  }))
-);
+// FSD `features` layer. Each slice may freely import shared/entities
+// (downward, unrestricted) but not app/ (routes sit above features) and not
+// another feature's internals — only its public index.ts (Strategy D: "public
+// API access" for genuinely-shared feature state, FSD skill §7).
+const featureSliceDirs = [
+  "product-catalog",
+  "search",
+  "sort-goods",
+  "jump-to-section",
+  "llm-report",
+  "change-city"
+];
+
+// Known cross-feature reuse today: product-catalog and jump-to-section both
+// read search's and sort-goods' store state through their public API.
+const allowedFeatureSliceImports = {
+  "product-catalog": ["search", "sort-goods"],
+  "jump-to-section": ["search", "sort-goods"]
+};
+
+const featureSliceZones = featureSliceDirs.flatMap(dir => {
+  const allowed = allowedFeatureSliceImports[dir] ?? [];
+  const blocked = featureSliceDirs.filter(d => d !== dir && !allowed.includes(d));
+  const zones = [];
+  if (blocked.length > 0) {
+    zones.push({
+      target: `./src/features/${dir}`,
+      from: blocked.map(d => `./src/features/${d}`)
+    });
+  }
+  for (const from of allowed) {
+    zones.push({
+      target: `./src/features/${dir}`,
+      from: `./src/features/${from}`,
+      except: ["./index.ts"]
+    });
+  }
+  return zones;
+});
 
 const eslintConfig = defineConfig([
   ...nextVitals,
@@ -111,7 +129,7 @@ const eslintConfig = defineConfig([
       "import/no-restricted-paths": [
         "error",
         {
-          zones: [...featureZones, ...exceptionZones]
+          zones: featureZones
         }
       ]
     }
@@ -165,14 +183,45 @@ const eslintConfig = defineConfig([
         {
           zones: [
             {
-              // product-card-compare-button's dependency on the llm-report
-              // feature (not yet migrated out of app/) is a pre-existing
-              // upward dependency, not one this migration introduces —
-              // resolved when Stage 3 moves llm-report out of app/.
               target: ["./src/entities/product", "./src/entities/user"],
-              from: ["./app"],
-              except: ["./stores/llm-store.ts", "./hooks/use-llm-report.ts"]
+              from: ["./app"]
+            },
+            {
+              // Pragmatic entities -> features exception (only product-card.tsx
+              // actually does this today): the compare-to-LLM-report button is
+              // owned by features/llm-report, but ProductCard renders it
+              // directly rather than via slot/IoC composition from a higher
+              // layer — not worth a full Strategy-C refactor at this project's
+              // scale. `except` only opens the feature's public index.ts, not
+              // its internals.
+              target: ["./src/entities/product", "./src/entities/user"],
+              from: "./src/features/llm-report",
+              except: ["./index.ts"]
             }
+          ]
+        }
+      ]
+    }
+  },
+  {
+    // FSD `features` layer: must never depend on app/ (routes sit above
+    // features); cross-slice imports go through the other slice's public
+    // index.ts only (see featureSliceZones above).
+    files: ["src/features/**/*.{ts,tsx}"],
+    ignores: ["src/features/**/*.stories.tsx", "src/features/**/__mocks__/**"],
+    plugins: {
+      import: importPlugin
+    },
+    rules: {
+      "import/no-restricted-paths": [
+        "error",
+        {
+          zones: [
+            {
+              target: featureSliceDirs.map(dir => `./src/features/${dir}`),
+              from: ["./app"]
+            },
+            ...featureSliceZones
           ]
         }
       ]

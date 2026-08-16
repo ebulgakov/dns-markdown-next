@@ -1,5 +1,5 @@
 import { FavoritesEmptyAlert } from "@/app/components/alerts/favorites-empty-alert";
-import { getFlatPriceList } from "@/app/helpers/pricelist";
+import { getFlatPriceList } from "@/entities/product";
 import { getLastPriceList } from "@/entities/product";
 import { getUser } from "@/entities/user";
 import { getSessionInfo } from "@/entities/user";

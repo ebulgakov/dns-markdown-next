@@ -4,11 +4,11 @@ import Image from "next/image";
 import Link from "next/link";
 import { NumericFormat } from "react-number-format";
 
+import { ProductCardCompareButton } from "@/features/llm-report";
 import { formatDate, formatDateShort } from "@/shared/lib/format";
 import { sendGAEvent } from "@/shared/lib/send-ga-event";
 import { Button } from "@/shared/ui/button";
 
-import { ProductCardCompareButton } from "./product-card-compare-button";
 import { ProductCardDiff } from "./product-card-diff";
 import { ProductCardFavoriteToggle } from "./product-card-favorite-toggle";
 
@@ -150,6 +150,11 @@ function ProductCard({
 
       <div className="flex flex-col gap-4 [grid-area:image] lg:[grid-area:favorites]">
         {shownFavorites && <ProductCardFavoriteToggle goods={item} />}
+        {/* Pragmatic entities -> features exception (documented in eslint.config.mjs
+            and recursive-hugging-finch.md): compare-to-LLM-report is owned by
+            features/llm-report, but ProductCard renders it directly rather than
+            via slot/IoC composition from a higher layer — not worth a full
+            Strategy-C refactor at this project's scale. */}
         {shownCompares && sectionTitle && (
           <ProductCardCompareButton sectionTitle={sectionTitle} item={item} />
         )}
