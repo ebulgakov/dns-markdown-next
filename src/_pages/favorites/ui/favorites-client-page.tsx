@@ -5,8 +5,8 @@ import { startTransition, useOptimistic, useState } from "react";
 import { ProductCard } from "@/entities/product";
 import { postToggleFavoriteShownBought } from "@/entities/user";
 import { Favorite } from "@/entities/user";
-import { Alert, AlertDescription, AlertTitle } from "@/shared/ui/alert";
 import { CheckboxWithLabel } from "@/shared/ui/control-with-label";
+import { ErrorAlert } from "@/shared/ui/error-alert";
 import { PageTitle } from "@/shared/ui/page-title";
 
 type FavoritesPageClientProps = {
@@ -63,10 +63,10 @@ function FavoritesClientPage({
 
       {errorMessage && (
         <div className="mb-4">
-          <Alert variant="destructive">
-            <AlertTitle>Ошибка при обновлении видимости купленных избранных</AlertTitle>
-            <AlertDescription>{errorMessage.message}</AlertDescription>
-          </Alert>
+          <ErrorAlert
+            title="Ошибка при обновлении видимости купленных избранных"
+            message={errorMessage.message}
+          />
         </div>
       )}
 

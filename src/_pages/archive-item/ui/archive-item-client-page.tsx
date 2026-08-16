@@ -10,7 +10,7 @@ import { usePriceListStore } from "@/entities/product";
 import { JumpToSection } from "@/features/jump-to-section";
 import { Catalog } from "@/features/product-catalog";
 import { Search } from "@/features/search";
-import { Alert, AlertDescription, AlertTitle } from "@/shared/ui/alert";
+import { ErrorAlert } from "@/shared/ui/error-alert";
 import { PageLoader } from "@/shared/ui/page-loader";
 import { PageTitle } from "@/shared/ui/page-title";
 import { ScrollToTop } from "@/shared/ui/scroll-to-top";
@@ -51,13 +51,7 @@ function ArchiveItemClientPage({ id }: ArchiveItemClientPageProps) {
   }, [priceListResponse, updatePriceList]);
 
   if (isPending) return <PageLoader />;
-  if (error)
-    return (
-      <Alert variant="destructive">
-        <AlertTitle>Ошибка загрузки каталога</AlertTitle>
-        <AlertDescription>{error.message}</AlertDescription>
-      </Alert>
-    );
+  if (error) return <ErrorAlert title="Ошибка загрузки каталога" message={error.message} />;
 
   return (
     <div>

@@ -6,7 +6,7 @@ import { useTranslations } from "next-intl";
 import { Fragment } from "react";
 
 import { formatDate, sendGAEvent } from "@/shared/lib";
-import { Alert, AlertDescription, AlertTitle } from "@/shared/ui/alert";
+import { ErrorAlert } from "@/shared/ui/error-alert";
 import { Title } from "@/shared/ui/title";
 
 import { HotOffer } from "./hot-offer";
@@ -28,7 +28,7 @@ function EmptyOffer() {
   return <>-</>;
 }
 
-export default function HomeUpdates({
+function HomeUpdates({
   date,
   mostProfitable,
   mostDiscounted,
@@ -42,10 +42,11 @@ export default function HomeUpdates({
 
   if (error || !date || !city) {
     return (
-      <Alert variant="destructive" className="mt-4">
-        <AlertTitle>{t("error_title")}</AlertTitle>
-        <AlertDescription>{error?.message || t("error_text")}</AlertDescription>
-      </Alert>
+      <ErrorAlert
+        title={t("error_title")}
+        message={error?.message || t("error_text")}
+        className="mt-4"
+      />
     );
   }
 
@@ -127,3 +128,5 @@ export default function HomeUpdates({
     </Fragment>
   );
 }
+
+export { HomeUpdates };
