@@ -1,1 +1,1 @@
-export { AnalysisPage as default } from "@/_pages/analysis";
+export { AnalysisPage as default } from "@/pages/analysis";

@@ -1,1 +1,1 @@
-export { ArchivePage as default, generateMetadata } from "@/_pages/archive";
+export { ArchivePage as default, generateMetadata } from "@/pages/archive";

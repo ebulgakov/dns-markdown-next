@@ -1,1 +1,1 @@
-export { CatalogItemPage as default, generateMetadata } from "@/_pages/catalog-item";
+export { CatalogItemPage as default, generateMetadata } from "@/pages/catalog-item";
