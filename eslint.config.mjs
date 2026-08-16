@@ -105,13 +105,11 @@ const eslintConfig = defineConfig([
     }
   },
   {
-    // Guardrail against sprawling logic functions. Scoped to .ts only, not
-    // .tsx: JSX lives inside a React function body (unlike a Vue SFC, where
-    // <template> sits outside <script>), so measuring .tsx here would count
-    // markup as logic, not sprawl. Test files exempt: assertion-heavy
-    // arrange-act-assert blocks legitimately run long.
-    files: ["app/**/*.ts", "src/**/*.ts"],
-    ignores: ["**/__tests__/**"],
+    // Guardrail against sprawling functions/components. Test files and
+    // stories exempt: assertion-heavy arrange-act-assert blocks and story
+    // render functions legitimately run long.
+    files: ["app/**/*.{ts,tsx}", "src/**/*.{ts,tsx}"],
+    ignores: ["**/__tests__/**", "**/*.stories.tsx"],
     rules: {
       "max-lines-per-function": [
         "error",
@@ -129,9 +127,21 @@ const eslintConfig = defineConfig([
     }
   },
   {
-    // Grandfathered: predates max-lines-per-function. Shrink this list
+    // Grandfathered: predate max-lines-per-function. Shrink this list
     // (refactor below 80 lines, drop the entry) rather than growing it.
-    files: ["src/features/sort-goods/lib/use-filtered-goods.ts"],
+    files: [
+      "src/features/sort-goods/lib/use-filtered-goods.ts",
+      "app/(home)/home-updates.tsx",
+      "app/(home)/hot-offer.tsx",
+      "app/about/page.tsx",
+      "app/profile/profile-update-sections.tsx",
+      "src/entities/product/ui/product-card.tsx",
+      "src/entities/user/model/user-context.tsx",
+      "src/features/product-catalog/ui/catalog-header.tsx",
+      "src/features/product-catalog/ui/catalog.tsx",
+      "src/shared/ui/chart/chart.tsx",
+      "src/widgets/navbar/navbar-mobile.tsx"
+    ],
     rules: {
       "max-lines-per-function": "off"
     }
