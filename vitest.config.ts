@@ -31,6 +31,10 @@ export default defineConfig({
             { find: "@/entities/user", replacement: path.resolve(dirname, "./src/entities/user") },
             { find: "@/entities/product", replacement: path.resolve(dirname, "./src/entities/product") },
             {
+              find: "@/features/favorite-toggle",
+              replacement: path.resolve(dirname, "./src/features/favorite-toggle")
+            },
+            {
               find: "@/features/product-catalog",
               replacement: path.resolve(dirname, "./src/features/product-catalog")
             },

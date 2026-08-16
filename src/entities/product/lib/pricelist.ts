@@ -1,4 +1,3 @@
-import { UserSections } from "@/entities/user";
 import { invertTranslation } from "@/shared/lib/fix-keyboard-layout";
 import {
   VisualizationGoods,
@@ -65,8 +64,8 @@ export const getOptimizedOutput = (
     favoriteSections: initialFavoriteSections,
     hiddenSections: initialHiddenSections
   }: {
-    favoriteSections: UserSections;
-    hiddenSections: UserSections;
+    favoriteSections: string[];
+    hiddenSections: string[];
   }
 ): VisualizationOutputList => {
   const output: VisualizationOutputList = [];
@@ -93,7 +92,7 @@ export const getOptimizedOutput = (
     .filter(header => !favoriteSections.some(title => title === header.title))
     .map(header => header.title);
 
-  const titles: UserSections = [...favoriteSections, ...nonFavoriteSections];
+  const titles: string[] = [...favoriteSections, ...nonFavoriteSections];
 
   titles.forEach(title => {
     const header = headers.find(h => h.title === title);

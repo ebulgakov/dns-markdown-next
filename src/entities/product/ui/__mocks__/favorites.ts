@@ -1,4 +1,4 @@
-import type { Favorite } from "@/entities/user";
+import type { Favorite } from "../../model/favorite";
 
 export const mockFavorites: Favorite[] = [
   {

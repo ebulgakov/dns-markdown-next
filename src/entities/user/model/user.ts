@@ -1,11 +1,9 @@
-import type { Goods } from "@/entities/product";
+import type { Favorite } from "@/entities/product";
 
-export type FavoriteStatus = {
-  updatedAt: string;
-  createdAt: string;
-  deleted: boolean;
-  city: string;
-};
+// Favorite/FavoriteStatus are owned by entities/product (a favorite embeds
+// a full Goods object; the metadata itself has no user-specific fields) —
+// re-exported here so consumers of @/entities/user keep working unchanged.
+export type { Favorite, FavoriteStatus } from "@/entities/product";
 
 export type UserSections = string[];
 
@@ -14,12 +12,6 @@ export type UserNotifications = {
     enabled: boolean;
   };
 };
-
-export interface Favorite {
-  id: string;
-  status: FavoriteStatus;
-  item: Goods;
-}
 
 export interface User {
   _id: string;

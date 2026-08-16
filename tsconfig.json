@@ -24,6 +24,8 @@
       "@/entities/user/*": ["./src/entities/user/*"],
       "@/entities/product": ["./src/entities/product"],
       "@/entities/product/*": ["./src/entities/product/*"],
+      "@/features/favorite-toggle": ["./src/features/favorite-toggle"],
+      "@/features/favorite-toggle/*": ["./src/features/favorite-toggle/*"],
       "@/features/product-catalog": ["./src/features/product-catalog"],
       "@/features/product-catalog/*": ["./src/features/product-catalog/*"],
       "@/features/search": ["./src/features/search"],

@@ -4,16 +4,16 @@ import Image from "next/image";
 import Link from "next/link";
 import { NumericFormat } from "react-number-format";
 
+import { ProductCardFavoriteToggle } from "@/features/favorite-toggle";
 import { ProductCardCompareButton } from "@/features/llm-report";
 import { formatDate, formatDateShort } from "@/shared/lib/format";
 import { sendGAEvent } from "@/shared/lib/send-ga-event";
 import { Button } from "@/shared/ui/button";
 
 import { ProductCardDiff } from "./product-card-diff";
-import { ProductCardFavoriteToggle } from "./product-card-favorite-toggle";
 
+import type { FavoriteStatus } from "../model/favorite";
 import type { Goods as GoodsType } from "../model/pricelist";
-import type { FavoriteStatus } from "@/entities/user";
 import type { Diff } from "@/types/analysis-diff";
 
 type PriceListGoodsProps = {

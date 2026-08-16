@@ -1,6 +1,5 @@
 import { create } from "zustand";
 
-import { UserSections } from "@/entities/user";
 import { formatDate, formatTime } from "@/shared/lib/format";
 
 import type { PriceList } from "./pricelist";
@@ -10,7 +9,7 @@ export type PriceListStore = {
   priceList?: PriceList;
   priceListDiffs?: DiffsCollection;
   getPriceListCount: () => number;
-  getPriceListSections: (favoriteSections: UserSections, hiddenSections: UserSections) => string[];
+  getPriceListSections: (favoriteSections: string[], hiddenSections: string[]) => string[];
   getPriceListCreatedDate: () => string;
   getPriceListCreatedTime: () => string;
   getPriceListCity: () => string;

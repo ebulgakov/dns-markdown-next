@@ -13,7 +13,8 @@ const featureSliceDirs = [
   "sort-goods",
   "jump-to-section",
   "llm-report",
-  "change-city"
+  "change-city",
+  "favorite-toggle"
 ];
 
 // Known cross-feature reuse today: product-catalog and jump-to-section both
@@ -139,18 +140,21 @@ const eslintConfig = defineConfig([
   {
     // FSD `entities` layer: must never depend on app/ (routes/features are
     // above entities in the layer order). Cross-imports between
-    // entities/product and entities/user are deliberately NOT restricted
-    // here: "favorite" is inherently a product+user relationship (Favorite
-    // embeds a Goods; a product page shows its FavoriteStatus; the
-    // favorite-toggle button reads UserContext; entities/product's get.ts
-    // needs entities/user's getPriceListCity), so the two entities cross
-    //-reference each other in ~10 places, most of them type-only. Enumerating
-    // each as a separate except zone (as done for app/components/* features
-    // above) would be pure lint-maintenance overhead for a single
-    // -contributor, ~10k-LOC app with exactly two entities — see FSD skill
-    // §7 on cross-import strictness being a deliberate, project-scale-
-    // dependent choice, and recursive-hugging-finch.md for the fuller
-    // rationale.
+    // entities/product and entities/user are narrowed to each other's public
+    // index.ts only (never deep internals) — see recursive-hugging-finch.md
+    // for the decoupling this replaced. The two directions are asymmetric by
+    // design, not just by usage count:
+    //  - entities/product -> entities/user: exactly one symbol,
+    //    `getPriceListCity` in api/get.ts (product needs to know which
+    //    city's pricelist to fetch; this is a genuine one-off dependency,
+    //    not worth inventing a third entity for).
+    //  - entities/user -> entities/product: `Goods` (Favorite.item, and
+    //    postAddToFavorites/etc.'s parameter type) and the re-exported
+    //    `Favorite`/`FavoriteStatus` types themselves, which are now defined
+    //    in entities/product/model/favorite.ts (a favorite embeds a full
+    //    Goods; the metadata has no user-specific fields) and merely
+    //    re-exported from entities/user/model/user.ts so existing consumers
+    //    of @/entities/user keep working unchanged.
     files: ["src/entities/**/*.{ts,tsx}"],
     ignores: ["src/entities/**/*.stories.tsx", "src/entities/**/__mocks__/**"],
     plugins: {
@@ -166,15 +170,25 @@ const eslintConfig = defineConfig([
               from: ["./app"]
             },
             {
+              target: "./src/entities/product",
+              from: "./src/entities/user",
+              except: ["./index.ts"]
+            },
+            {
+              target: "./src/entities/user",
+              from: "./src/entities/product",
+              except: ["./index.ts"]
+            },
+            {
               // Pragmatic entities -> features exception (only product-card.tsx
-              // actually does this today): the compare-to-LLM-report button is
-              // owned by features/llm-report, but ProductCard renders it
-              // directly rather than via slot/IoC composition from a higher
-              // layer — not worth a full Strategy-C refactor at this project's
-              // scale. `except` only opens the feature's public index.ts, not
-              // its internals.
+              // actually does this today): the compare-to-LLM-report button and
+              // the favorite-toggle button are each owned by a feature, but
+              // ProductCard renders them directly rather than via slot/IoC
+              // composition from a higher layer — not worth a full Strategy-C
+              // refactor at this project's scale. `except` only opens each
+              // feature's public index.ts, not its internals.
               target: ["./src/entities/product", "./src/entities/user"],
-              from: "./src/features/llm-report",
+              from: ["./src/features/llm-report", "./src/features/favorite-toggle"],
               except: ["./index.ts"]
             }
           ]
