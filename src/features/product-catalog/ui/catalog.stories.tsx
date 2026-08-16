@@ -10,7 +10,7 @@ import { QueryProvider } from "@/shared/providers";
 
 import { Catalog } from "./catalog";
 
-import type { CatalogComponentVariant } from "../model/types";
+import type { CatalogComponentVariant } from "./catalog";
 import type { Meta, StoryObj } from "@storybook/react";
 import type { ReactNode } from "react";
 

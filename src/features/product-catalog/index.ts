@@ -1,2 +1,2 @@
 export { Catalog } from "./ui/catalog";
-export type { CatalogComponentVariant } from "./model/types";
+export type { CatalogComponentVariant } from "./ui/catalog";

@@ -9,13 +9,14 @@ import { Title } from "@/shared/ui/title";
 
 import { getCurrentCatalogTitle } from "../lib/get-current-catalog-title";
 import { useCatalogVirtualizer } from "../lib/use-catalog-virtualizer";
-import { CatalogComponentVariant } from "../model/types";
 
 import { CatalogFavoritesEmptyAlert } from "./catalog-favorites-empty-alert";
 import { CatalogHeader } from "./catalog-header";
 
 import type { DiffsCollection } from "@/types/analysis-diff";
 import type { VisualizationHeader, VisualizationOutputList } from "@/types/visualization";
+
+export type CatalogComponentVariant = "archive" | "updates" | "default";
 
 type PriceListPageProps = {
   variant: CatalogComponentVariant;
