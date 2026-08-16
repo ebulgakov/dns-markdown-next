@@ -4,7 +4,7 @@ import { Star } from "lucide-react";
 import { startTransition, useContext, useOptimistic, useState } from "react";
 
 import { UserContext } from "@/entities/user";
-import { sendGAEvent } from "@/shared/lib/send-ga-event";
+import { sendGAEvent } from "@/shared/lib";
 
 import type { Goods as GoodsType } from "@/entities/product";
 

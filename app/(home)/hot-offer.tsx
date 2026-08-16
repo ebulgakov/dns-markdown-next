@@ -4,7 +4,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { NumericFormat } from "react-number-format";
 
-import { sendGAEvent } from "@/shared/lib/send-ga-event";
+import { sendGAEvent } from "@/shared/lib";
 
 import type { Goods } from "@/entities/product";
 

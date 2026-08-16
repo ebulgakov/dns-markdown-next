@@ -5,8 +5,7 @@ import Link from "next/link";
 import { useTranslations } from "next-intl";
 import { Fragment } from "react";
 
-import { formatDate } from "@/shared/lib/format";
-import { sendGAEvent } from "@/shared/lib/send-ga-event";
+import { formatDate, sendGAEvent } from "@/shared/lib";
 import { Alert, AlertDescription, AlertTitle } from "@/shared/ui/alert";
 import { Title } from "@/shared/ui/title";
 

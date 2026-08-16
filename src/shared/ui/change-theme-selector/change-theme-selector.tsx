@@ -4,7 +4,7 @@ import { useTranslations } from "next-intl";
 import { useTheme } from "next-themes";
 import { useState, useEffect } from "react";
 
-import { sendGAEvent } from "@/shared/lib/send-ga-event";
+import { sendGAEvent } from "@/shared/lib";
 
 function ChangeThemeSelector() {
   const { theme, setTheme } = useTheme();

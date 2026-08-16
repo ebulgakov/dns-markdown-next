@@ -7,7 +7,7 @@ import { Fragment } from "react";
 import ReactMarkdown from "react-markdown";
 import rehypeRaw from "rehype-raw";
 
-import { sendGAEvent } from "@/shared/lib/send-ga-event";
+import { sendGAEvent } from "@/shared/lib";
 import { PageTitle } from "@/shared/ui/page-title";
 
 import { MoreLink } from "./more-link";

@@ -7,17 +7,10 @@ import { useTranslations } from "next-intl";
 import { Fragment } from "react";
 
 import { ChangeLocationSelector } from "@/features/change-city";
-import { sendGAEvent } from "@/shared/lib/send-ga-event";
+import { sendGAEvent } from "@/shared/lib";
 import { Button } from "@/shared/ui/button";
 import { ChangeThemeSelector } from "@/shared/ui/change-theme-selector";
-import {
-  Dialog,
-  DialogClose,
-  DialogContent,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger
-} from "@/shared/ui/dialog";
+import { Dialog, DialogClose, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/shared/ui/dialog";
 
 import { Logo } from "./logo";
 

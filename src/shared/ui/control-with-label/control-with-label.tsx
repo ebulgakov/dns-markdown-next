@@ -1,8 +1,8 @@
 import * as CheckboxPrimitive from "@radix-ui/react-checkbox";
 import { useId } from "react";
 
-import { Checkbox } from "@/shared/ui/checkbox";
-import { Label } from "@/shared/ui/label";
+import { Checkbox } from "../checkbox";
+import { Label } from "../label";
 
 import type { ComponentProps } from "react";
 

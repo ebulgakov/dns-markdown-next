@@ -1,4 +1,7 @@
-import { filledWithFavoritesContext, defaultContext } from "@/entities/product/ui/__mocks__/context";
+import {
+  filledWithFavoritesContext,
+  defaultContext
+} from "@/entities/product/ui/__mocks__/context";
 import { mockGoodsList } from "@/entities/product/ui/__mocks__/goods";
 import { UserProvider } from "@/entities/user";
 

@@ -1,6 +1,6 @@
 import { getAnalysisData } from "@/app/analysis/get-analysis-data";
 import AnalysisPageTitle from "@/app/analysis/page-title";
-import { formatDate } from "@/shared/lib/format";
+import { formatDate } from "@/shared/lib";
 import { Alert, AlertDescription, AlertTitle } from "@/shared/ui/alert";
 import { Title } from "@/shared/ui/title";
 

@@ -6,8 +6,7 @@ import { NumericFormat } from "react-number-format";
 
 import { ProductCardFavoriteToggle } from "@/features/favorite-toggle";
 import { ProductCardCompareButton } from "@/features/llm-report";
-import { formatDate, formatDateShort } from "@/shared/lib/format";
-import { sendGAEvent } from "@/shared/lib/send-ga-event";
+import { formatDate, formatDateShort, sendGAEvent } from "@/shared/lib";
 import { Button } from "@/shared/ui/button";
 
 import { ProductCardDiff } from "./product-card-diff";

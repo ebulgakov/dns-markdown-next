@@ -28,7 +28,8 @@ export default async function FavoritesPage() {
         const flatCatalog = getFlatPriceList(lastPriceList);
         favorites = user.favorites.map(fav => {
           const found = flatCatalog.find(i => i.link === fav.item.link);
-          fav.status.deleted = !found && (!fav.status.city || fav.status.city === lastPriceList.city); // mark as deleted if not found in the price list and city matches
+          fav.status.deleted =
+            !found && (!fav.status.city || fav.status.city === lastPriceList.city); // mark as deleted if not found in the price list and city matches
           return fav;
         });
         shownBoughtFavorites = user.shownBoughtFavorites;

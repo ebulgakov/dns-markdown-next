@@ -1,6 +1,6 @@
 import { create } from "zustand";
 
-import { formatDate, formatTime } from "@/shared/lib/format";
+import { formatDate, formatTime } from "@/shared/lib";
 
 import type { PriceList } from "./pricelist";
 import type { DiffsCollection } from "@/types/analysis-diff";

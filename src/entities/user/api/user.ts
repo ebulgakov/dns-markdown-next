@@ -4,7 +4,7 @@ import { auth } from "@clerk/nextjs/server";
 import { unstable_cache as cacheToken, revalidateTag } from "next/cache";
 import { cache } from "react";
 
-import { apiClient } from "@/shared/api/client";
+import { apiClient } from "@/shared/api";
 
 import type { Goods } from "@/entities/product";
 import type { Favorite, User, UserNotifications, UserSections } from "@/entities/user";

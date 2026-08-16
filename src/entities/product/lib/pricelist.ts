@@ -1,4 +1,4 @@
-import { invertTranslation } from "@/shared/lib/fix-keyboard-layout";
+import { invertTranslation } from "@/shared/lib";
 import {
   VisualizationGoods,
   VisualizationHeader,

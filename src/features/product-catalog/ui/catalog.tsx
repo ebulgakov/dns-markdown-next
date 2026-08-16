@@ -7,7 +7,7 @@ import { usePriceListStore } from "@/entities/product";
 import { ProductCard } from "@/entities/product";
 import { useSearchStore } from "@/features/search";
 import { useFilteredGoods } from "@/features/sort-goods";
-import { cn } from "@/shared/lib/utils";
+import { cn } from "@/shared/lib";
 import { Title } from "@/shared/ui/title";
 
 import { getCurrentCatalogTitle } from "../lib/get-current-catalog-title";

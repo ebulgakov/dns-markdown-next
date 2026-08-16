@@ -7,8 +7,8 @@ import { useShallow } from "zustand/react/shallow";
 
 import { usePriceListStore } from "@/entities/product";
 import { UserContext } from "@/entities/user";
-import { cn } from "@/shared/lib/utils";
-import { Tooltip, TooltipTrigger, TooltipContent } from "@/shared/ui/tooltip";
+import { cn } from "@/shared/lib";
+import { Tooltip, TooltipContent, TooltipTrigger } from "@/shared/ui/tooltip";
 import { VisualizationHeader } from "@/types/visualization";
 
 type CatalogHeaderProps = {

@@ -2,17 +2,11 @@
 
 import { Area, AreaChart, CartesianGrid, XAxis, YAxis } from "recharts";
 
-import { formatDateMonthDay } from "@/shared/lib/format";
+import { formatDateMonthDay } from "@/shared/lib";
 import { Card, CardContent } from "@/shared/ui/card";
-import {
-  ChartContainer,
-  ChartTooltip,
-  ChartTooltipContent,
-  type ChartConfig,
-  ChartLegend,
-  ChartLegendContent
-} from "@/shared/ui/chart";
+import { ChartContainer, ChartLegend, ChartLegendContent, ChartTooltip, ChartTooltipContent } from "@/shared/ui/chart";
 
+import type { ChartConfig } from "@/shared/ui/chart";
 import type { DiffHistory } from "@/types/analysis-diff";
 
 const chartConfig = {

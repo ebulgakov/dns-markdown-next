@@ -3,7 +3,7 @@
 import { createContext, useContext, useId, useMemo } from "react";
 import * as RechartsPrimitive from "recharts";
 
-import { cn } from "@/shared/lib/utils";
+import { cn } from "@/shared/lib";
 
 import type { ReactNode, ComponentType, ComponentProps, CSSProperties } from "react";
 

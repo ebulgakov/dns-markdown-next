@@ -5,7 +5,7 @@ import { usePriceListStore } from "@/entities/product";
 import { UserContext } from "@/entities/user";
 import { useSearchStore } from "@/features/search";
 import { useSortGoodsStore } from "@/features/sort-goods";
-import { cn } from "@/shared/lib/utils";
+import { cn } from "@/shared/lib";
 
 type JumpToSectionContainerProps = {
   onClose: () => void;

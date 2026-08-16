@@ -13,9 +13,8 @@ import { UserProvider } from "@/entities/user";
 import { getUser as getGenericUser } from "@/entities/user";
 import { getSessionInfo } from "@/entities/user";
 import { User } from "@/entities/user";
-import { cn } from "@/shared/lib/utils";
-import { QueryProvider } from "@/shared/providers/query-provider";
-import { ThemeProvider } from "@/shared/providers/theme-provider";
+import { cn } from "@/shared/lib";
+import { QueryProvider, ThemeProvider } from "@/shared/providers";
 import { Footer } from "@/widgets/footer";
 import { Navbar } from "@/widgets/navbar";
 

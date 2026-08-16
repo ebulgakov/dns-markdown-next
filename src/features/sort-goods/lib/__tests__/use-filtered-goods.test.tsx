@@ -75,7 +75,13 @@ function renderUseFilteredGoods(
 ) {
   const wrapper = ({ children }: { children: ReactNode }) => (
     <UserContext.Provider
-      value={{ hiddenSections: [], favoriteSections: [], favorites: [], city: "samara", ...contextValue }}
+      value={{
+        hiddenSections: [],
+        favoriteSections: [],
+        favorites: [],
+        city: "samara",
+        ...contextValue
+      }}
     >
       {children}
     </UserContext.Provider>
@@ -126,11 +132,9 @@ describe("useFilteredGoods", () => {
 
     const { result } = renderUseFilteredGoods({ filterTerm: "" });
 
-    expect(result.current.flattenList.map(item => (item.type === "goods" ? item._id : item.type))).toEqual([
-      "1",
-      "3",
-      "2"
-    ]);
+    expect(
+      result.current.flattenList.map(item => (item.type === "goods" ? item._id : item.type))
+    ).toEqual(["1", "3", "2"]);
     expect(result.current.flattenTitles).toEqual([]);
   });
 
@@ -140,7 +144,9 @@ describe("useFilteredGoods", () => {
 
     const { result } = renderUseFilteredGoods({ filterTerm: "" });
 
-    const ids = result.current.flattenList.map(item => (item.type === "goods" ? item._id : item.type));
+    const ids = result.current.flattenList.map(item =>
+      item.type === "goods" ? item._id : item.type
+    );
     // item "1": 10000/20000 = 50%, item "3": 30000/40000 = 75%, item "2" has no old price -> last
     expect(ids).toEqual(["1", "3", "2"]);
   });
@@ -151,7 +157,9 @@ describe("useFilteredGoods", () => {
 
     const { result } = renderUseFilteredGoods({ filterTerm: "" });
 
-    const ids = result.current.flattenList.map(item => (item.type === "goods" ? item._id : item.type));
+    const ids = result.current.flattenList.map(item =>
+      item.type === "goods" ? item._id : item.type
+    );
     // profit: "2"=20, "1"=5, "3"=0 (non-profitable, goes last)
     expect(ids).toEqual(["2", "1", "3"]);
   });
@@ -162,7 +170,9 @@ describe("useFilteredGoods", () => {
 
     const { result } = renderUseFilteredGoods({ filterTerm: "" });
 
-    const ids = result.current.flattenList.map(item => (item.type === "goods" ? item._id : item.type));
+    const ids = result.current.flattenList.map(item =>
+      item.type === "goods" ? item._id : item.type
+    );
     expect(ids).toEqual(["2", "3", "1"]);
   });
 

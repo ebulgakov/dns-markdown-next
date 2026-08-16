@@ -5,7 +5,7 @@ import { defaultContext } from "@/entities/product/ui/__mocks__/context";
 import { mockPriceList } from "@/entities/product/ui/__mocks__/goods";
 import { UserProvider } from "@/entities/user";
 import { useSearchStore } from "@/features/search";
-import { QueryProvider } from "@/shared/providers/query-provider";
+import { QueryProvider } from "@/shared/providers";
 
 import { Catalog } from "./catalog";
 

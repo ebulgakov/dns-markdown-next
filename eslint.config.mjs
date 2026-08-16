@@ -5,14 +5,15 @@ import boundaries from "eslint-plugin-boundaries";
 import importPlugin from "eslint-plugin-import";
 
 // FSD layer/slice boundaries, enforced by eslint-plugin-boundaries instead of
-// hand-rolled import/no-restricted-paths zones. `shared` is intentionally
-// left WITHOUT per-file entry-point enforcement below (see the note on the
-// `shared` element and recursive-hugging-finch.md): it has per-component
-// barrels (e.g. shared/ui/change-theme-selector/index.ts) but no top-level
-// shared/{ui,lib,api}/index.ts yet, so `@/shared/lib/utils`-style deep
-// imports are still normal today. Tightening that is a deliberately separate,
-// larger follow-up (would touch every shared import site in the repo), not
-// bundled into this pass.
+// hand-rolled import/no-restricted-paths zones. `shared` has no slices (per
+// FSD's own guidance — it's organized by segment, not slice) but does have a
+// forced entry point per segment: every consumer outside src/shared must
+// import through a path matched by SHARED_ENTRY_POINTS below, never an
+// arbitrary deep path like `@/shared/lib/utils` (see recursive-hugging-finch.md
+// for the migration that got every call site there). Imports WITHIN
+// src/shared (e.g. a ui component importing `cn` from shared/lib) stay
+// unchecked — `checkInternals` defaults to false, same as every other layer
+// here.
 const elements = [
   { type: "app", pattern: "app/**" },
   { type: "widget", pattern: "src/widgets/*", capture: ["slice"] },
@@ -20,6 +21,18 @@ const elements = [
   { type: "entity", pattern: "src/entities/*", capture: ["slice"] },
   { type: "shared", pattern: "src/shared/**" }
 ];
+
+// `ui` intentionally has no single top-level barrel: shared/ui/index.ts was
+// tried and reverted (see recursive-hugging-finch.md) — re-exporting every
+// component from one file made a `Button`-only import eagerly evaluate the
+// whole kit (recharts' chart, every Radix primitive, ...) in the same module
+// graph, which broke `next build`'s page-data collection on multiple routes
+// ("Super expression must either be null or a function, not undefined") even
+// though dependency-cruiser found no cycle — an eager-bundling failure, not
+// a circular-import one. Each ui component's own index.ts stays the entry
+// point instead. `lib`/`api`/`providers` have no such fan-out (no heavy
+// third-party client components), so they keep one barrel each.
+const SHARED_ENTRY_POINTS = "{ui/*/index.ts,lib/index.ts,api/index.ts,providers/index.ts}";
 
 // Known cross-feature reuse today: product-catalog and jump-to-section both
 // read search's and sort-goods' store state through their public API
@@ -110,11 +123,13 @@ const eslintConfig = defineConfig([
         {
           default: "disallow",
           policies: [
-            // app/ (routing) composes every layer through its public API;
-            // shared has no forced entry point (see note above).
+            // app/ (routing) composes every layer through its public API,
+            // shared included (see SHARED_ENTRY_POINTS above).
             {
               from: { element: { type: "app" } },
-              allow: [{ to: { element: { type: "shared" } } }]
+              allow: [
+                { to: { element: { type: "shared", fileInternalPath: SHARED_ENTRY_POINTS } } }
+              ]
             },
             {
               from: { element: { type: "app" } },
@@ -130,7 +145,9 @@ const eslintConfig = defineConfig([
             // widgets: app-shell chrome, composes features/entities/shared.
             {
               from: { element: { type: "widget" } },
-              allow: [{ to: { element: { type: "shared" } } }]
+              allow: [
+                { to: { element: { type: "shared", fileInternalPath: SHARED_ENTRY_POINTS } } }
+              ]
             },
             {
               from: { element: { type: "widget" } },
@@ -143,7 +160,9 @@ const eslintConfig = defineConfig([
             // documented pairs above, through the target's public API.
             {
               from: { element: { type: "feature" } },
-              allow: [{ to: { element: { type: "shared" } } }]
+              allow: [
+                { to: { element: { type: "shared", fileInternalPath: SHARED_ENTRY_POINTS } } }
+              ]
             },
             {
               from: { element: { type: "feature" } },
@@ -158,7 +177,9 @@ const eslintConfig = defineConfig([
             // Goods/Favorite/FavoriteStatus), never a deep import.
             {
               from: { element: { type: "entity" } },
-              allow: [{ to: { element: { type: "shared" } } }]
+              allow: [
+                { to: { element: { type: "shared", fileInternalPath: SHARED_ENTRY_POINTS } } }
+              ]
             },
             {
               from: { element: { type: "entity", captured: { slice: "product" } } },
@@ -199,9 +220,9 @@ const eslintConfig = defineConfig([
               ]
             }
 
-            // shared: no policies — it must not import app/widget/feature/
-            // entity at all, which the "disallow" default already enforces
-            // without needing to spell it out.
+            // shared: no "from: shared" policies — it must not import app/
+            // widget/feature/entity at all, which the "disallow" default
+            // already enforces without needing to spell it out.
           ]
         }
       ]

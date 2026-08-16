@@ -5,7 +5,7 @@ import Link from "next/link";
 import { useTranslations } from "next-intl";
 
 import { ChangeLocationSelector } from "@/features/change-city";
-import { sendGAEvent } from "@/shared/lib/send-ga-event";
+import { sendGAEvent } from "@/shared/lib";
 import { ChangeThemeSelector } from "@/shared/ui/change-theme-selector";
 
 type FooterProps = {

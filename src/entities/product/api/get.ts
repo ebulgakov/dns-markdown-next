@@ -3,7 +3,7 @@
 import { unstable_cache as cacheToken } from "next/cache";
 
 import { getPriceListCity } from "@/entities/user";
-import { apiClient } from "@/shared/api/client";
+import { apiClient } from "@/shared/api";
 
 import type { Goods, PriceList, PriceListDate, PriceListsArchiveCount } from "../model/pricelist";
 import type { ProductPayload } from "../model/product";

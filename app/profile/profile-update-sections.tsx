@@ -3,7 +3,7 @@
 import { X, ArrowRight } from "lucide-react";
 import { useState, useTransition, useOptimistic, Fragment } from "react";
 
-import { uniqAbcSort } from "@/shared/lib/sort";
+import { uniqAbcSort } from "@/shared/lib";
 import { Alert, AlertDescription, AlertTitle } from "@/shared/ui/alert";
 import { Card } from "@/shared/ui/card";
 import { Label } from "@/shared/ui/label";

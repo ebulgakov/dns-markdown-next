@@ -1,9 +1,10 @@
 import { ChevronUp } from "lucide-react";
 import ReactScrollUp from "react-scroll-up";
 
-import { cn } from "@/shared/lib/utils";
-import { Button } from "@/shared/ui/button";
-import { Tooltip, TooltipTrigger, TooltipContent } from "@/shared/ui/tooltip";
+import { cn } from "@/shared/lib";
+
+import { Button } from "../button";
+import { Tooltip, TooltipContent, TooltipTrigger } from "../tooltip";
 
 type ScrollToTopProps = {
   variant?: "with-jump-to-search";

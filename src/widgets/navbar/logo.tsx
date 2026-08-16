@@ -6,16 +6,9 @@ import { useContext, startTransition } from "react";
 
 import { UserContext } from "@/entities/user";
 import { postChangeUserCity } from "@/entities/user";
-import { sendGAEvent } from "@/shared/lib/send-ga-event";
+import { sendGAEvent } from "@/shared/lib";
 import { Button } from "@/shared/ui/button";
-import {
-  DropdownMenu,
-  DropdownMenuTrigger,
-  DropdownMenuContent,
-  DropdownMenuGroup,
-  DropdownMenuLabel,
-  DropdownMenuCheckboxItem
-} from "@/shared/ui/dropdown-menu";
+import { DropdownMenu, DropdownMenuCheckboxItem, DropdownMenuContent, DropdownMenuGroup, DropdownMenuLabel, DropdownMenuTrigger } from "@/shared/ui/dropdown-menu";
 
 function Logo() {
   const router = useRouter();

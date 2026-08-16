@@ -6,7 +6,7 @@ import {
   postRemoveFromHiddenSections
 } from "@/entities/user";
 import { PageTitle } from "@/shared/ui/page-title";
-import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/shared/ui/tabs";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/shared/ui/tabs";
 import { Title } from "@/shared/ui/title";
 
 import { ProfileNotifications } from "./profile-notifications";
