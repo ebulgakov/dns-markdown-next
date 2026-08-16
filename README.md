@@ -30,6 +30,18 @@ pnpm dev
 
 Chromatic Storybook настроен для этого проекта: https://www.chromatic.com/library?appId=695938b24c4c7f59436c970b
 
+## Граф зависимостей
+
+```bash
+pnpm dep-check         # CI-проверка: нет циклических импортов
+pnpm dep-graph         # выводит Mermaid-диаграмму в stdout — вставьте в PR/Markdown
+pnpm dep-graph:archi   # генерирует dependency-graph.svg (нужен `dot` из Graphviz)
+```
+
+Требуется Node `^22||^24||>=26` (диапазон, который поддерживает сам dependency-cruiser) — зафиксированная в [`.nvmrc`](./.nvmrc) версия проекта (`v26.7.0`) уже ему удовлетворяет. Что именно проверяют эти правила и почему — см. `.dependency-cruiser.cjs` и `CLAUDE.md`.
+
+![Граф зависимостей](./dependency-graph.svg)
+
 ## Используемые технологии
 
 - Next.js 16

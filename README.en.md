@@ -30,6 +30,18 @@ Rename the `.env-example` file to `.env` and fill in the required variables.
 
 Chromatic Storybook is set up for this project: https://www.chromatic.com/library?appId=695938b24c4c7f59436c970b
 
+## Dependency graph
+
+```bash
+pnpm dep-check         # CI gate: no circular imports
+pnpm dep-graph          # prints a Mermaid diagram to stdout — paste into a PR/Markdown
+pnpm dep-graph:archi    # renders dependency-graph.svg (needs Graphviz's `dot` locally)
+```
+
+Requires Node `^22||^24||>=26` (dependency-cruiser's own supported range) — the project's pinned version ([`.nvmrc`](./.nvmrc), `v26.7.0`) already satisfies this. See `.dependency-cruiser.cjs` and `CLAUDE.md` for what these rules cover and why.
+
+![Dependency graph](./dependency-graph.svg)
+
 ## Technologies
 
 - Next.js 16
