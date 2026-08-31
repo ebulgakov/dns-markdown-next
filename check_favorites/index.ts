@@ -31,4 +31,5 @@ getPerformance(checkFavorites)
   })
   .catch(err => {
     console.error("Error checking favorites:", err);
+    process.exit(1);
   });

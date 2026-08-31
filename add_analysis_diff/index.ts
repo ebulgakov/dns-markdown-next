@@ -61,4 +61,5 @@ getPerformance(addAnalysisDiff)
   })
   .catch(err => {
     console.error("Error adding analysis diff:", err);
+    process.exit(1);
   });

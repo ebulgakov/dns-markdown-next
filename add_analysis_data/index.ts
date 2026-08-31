@@ -9,7 +9,15 @@ async function addAnalysisData() {
 
   if (!city) throw new Error("No city found");
 
-  const priceListsCollections = await getAllPriceLists({ city });
+  const options: {
+    city: string;
+    limit?: number;
+  } = {
+    city,
+    ...(writeStrategy === "insert" ? { limit: 2 } : {})
+  };
+
+  const priceListsCollections = await getAllPriceLists(options);
 
   let usedPriceLists = [];
 
@@ -32,4 +40,5 @@ getPerformance(addAnalysisData)
   })
   .catch(err => {
     console.error("Error adding analysis data:", err);
+    process.exit(1);
   });

@@ -40,4 +40,5 @@ getPerformance(addPriceList)
   })
   .catch(err => {
     console.error("Error adding price list:", err);
+    process.exit(1);
   });

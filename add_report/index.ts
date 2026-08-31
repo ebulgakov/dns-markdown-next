@@ -13,4 +13,5 @@ getPerformance(addReport)
   })
   .catch(err => {
     console.error("Error adding report:", err);
+    process.exit(1);
   });
