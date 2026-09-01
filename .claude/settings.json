@@ -36,6 +36,16 @@
   },
   "permissions": {
     "allow": ["mcp__codegraph__*"],
-    "deny": ["Read(./.env)", "Read(./.env.*)"]
+    "deny": [
+      "Read(**/.env)",
+      "Read(**/.env.*)",
+
+      "Read(**/*.pem)",
+      "Read(**/id_rsa*)",
+
+      "Bash(cat *.env*)",
+      "Bash(printenv*)",
+      "Bash(env)"
+    ]
   }
 }
