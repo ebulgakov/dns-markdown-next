@@ -35,6 +35,7 @@
     "bgIsolation": "none"
   },
   "permissions": {
-    "allow": ["mcp__codegraph__*"]
+    "allow": ["mcp__codegraph__*"],
+    "deny": ["Read(./.env)", "Read(./.env.*)"]
   }
 }
