@@ -79,6 +79,10 @@ export const deleteAnalysisDiffByDate = async ({
   return await wrapApiCall("/service/delete-analysis-diff-by-date", { city, dateAdded: date });
 };
 
+export const deleteOldPriceLists = async (city: string): Promise<null> => {
+  return await wrapApiCall("/service/delete-old-price-lists", { city });
+};
+
 export const clearCacheByKeys = async (keys: string): Promise<null> => {
   return await wrapApiCall("/service/clear-cache-by-key", { keys });
 };
