@@ -1005,6 +1005,43 @@
         }
       }
     },
+    "/service/delete-old-price-lists": {
+      "post": {
+        "summary": "Delete all price lists for a city except the 30 most recent",
+        "tags": ["Service / Pricelist"],
+        "security": [
+          {
+            "serviceBearer": []
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "city": {
+                    "type": "string",
+                    "minLength": 1
+                  }
+                },
+                "required": ["city"],
+                "additionalProperties": false
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful response"
+          },
+          "400": {
+            "description": "Validation error"
+          }
+        }
+      }
+    },
     "/service/add-new-price-list": {
       "post": {
         "summary": "Insert a new price list",
