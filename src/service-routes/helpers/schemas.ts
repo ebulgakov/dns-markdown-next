@@ -131,6 +131,14 @@ export const serviceRouteDocs: RouteDoc[] = [
   },
   {
     method: "post",
+    path: "/service/delete-old-price-lists",
+    summary: "Delete all price lists for a city except the 30 most recent",
+    tags: ["Service / Pricelist"],
+    security: ["serviceBearer"],
+    body: citySchema
+  },
+  {
+    method: "post",
     path: "/service/add-new-price-list",
     summary: "Insert a new price list",
     tags: ["Service / Pricelist"],

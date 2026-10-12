@@ -11,6 +11,7 @@ import deleteAnalysisDiffHandler from "./delete-analysis-diff";
 import deleteAnalysisDiffByDateHandler from "./delete-analysis-diff-by-date";
 import deleteAnalysisReportByCityDateHandler from "./delete-analysis-report-by-city-date";
 import deleteLastPriceListHandler from "./delete-last-price-list";
+import deleteOldPriceListsHandler from "./delete-old-price-lists";
 import insertAnalysisDataHandler from "./insert-analysis-data";
 import insertAnalysisDiffHandler from "./insert-analysis-diff";
 import updateUsersFavoritesHandler from "./update-users-favorites";
@@ -19,6 +20,7 @@ const router = Router();
 
 router.get("/all-price-lists", allPriceListsHandler);
 router.post("/delete-last-price-list", deleteLastPriceListHandler);
+router.post("/delete-old-price-lists", deleteOldPriceListsHandler);
 router.post("/add-new-price-list", addNewPriceListHandler);
 
 router.post("/insert-analysis-data", insertAnalysisDataHandler);
