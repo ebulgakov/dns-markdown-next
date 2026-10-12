@@ -1,4 +1,3 @@
-import { formatDate } from "@/shared/lib";
 import { ErrorAlert } from "@/shared/ui/error-alert";
 import { Title } from "@/shared/ui/title";
 
@@ -10,13 +9,7 @@ import { AnalyticsGoodsCountChart } from "./analytics-goods-count-chart";
 import { AnalyticsReports } from "./analytics-reports";
 
 async function AnalysisPage() {
-  let city,
-    countUniqueGoods,
-    startFrom,
-    currentCountGoods,
-    goodsCountByDates,
-    goodsChangesByDates,
-    reports;
+  let city, countUniqueGoods, currentCountGoods, goodsCountByDates, goodsChangesByDates, reports;
 
   try {
     const data = await getAnalysisData();
@@ -24,7 +17,6 @@ async function AnalysisPage() {
     city = data.city;
     goodsCountByDates = data.goodsCountByDates;
     countUniqueGoods = data.countUniqueGoods;
-    startFrom = data.startFrom;
     currentCountGoods = goodsCountByDates[goodsCountByDates.length - 1].count;
     reports = data.reports;
     goodsChangesByDates = data.goodsChangesByDates;
@@ -39,7 +31,7 @@ async function AnalysisPage() {
 
       <div className="mt-4 text-lg">
         <p>
-          Аналитика ведётся с даты: <b>{formatDate(startFrom)}</b>
+          Аналитика ведётся с даты: <b>26 декабря 2025 г.</b>
         </p>
         <p>
           C этого времени в каталог было добавлено товаров: <b>{countUniqueGoods}</b>

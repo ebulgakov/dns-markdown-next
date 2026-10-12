@@ -34,7 +34,7 @@ async function ArchivePage() {
 
   return (
     <div>
-      <PageTitle title="Архив прайслистов" />
+      <PageTitle title="Архив прайслистов за последние 30 дней" />
       <ArchiveList archiveCollection={archiveCollection} />
     </div>
   );
