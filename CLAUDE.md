@@ -25,16 +25,17 @@ Environment files are loaded based on `NODE_ENV` (`development` → `.env.develo
 
 ## Architecture
 
-Express 5 app (`src/server.ts`) exported as default and started conditionally in `src/index.ts` (only calls `app.listen` outside of `production`, since production runs behind Vercel's serverless rewrite defined in `vercel.json`).
+Express 5 app (`src/server.ts`) exported as default and started conditionally in `src/index.ts` (only calls `app.listen` outside of `production`, since in production Vercel runs the bundled `dist/index.js` as a single serverless function. `vercel.json` pins `outputDirectory: "dist"` so the bundle is the entrypoint — without it Vercel runs unbundled `src/` and crashes with `ERR_UNSUPPORTED_DIR_IMPORT`. Do not add `rewrites` there: they change the path Express sees).
 
 ### Route layout
 
 Each route group is its own directory under `src/` with an `index.ts` that builds an Express `Router` and wires one file per handler (one handler per file is the convention — see `src/pricelist-routes`, `src/products-routes`, `src/analysis-routes`, `src/user-routes`, `src/service-routes`, `src/llm-routes`, `src/clerk-routes`). Route-specific helpers live in a `helpers/` subfolder next to the handlers that use them.
 
 Mounting order and auth layering happens in `src/server.ts`:
+
 - `/health` — no auth.
 - `/api/*` — double-gated: `clerkMiddleware()` (Clerk session) then `authPublicMiddleware` (requires `X-Internal-API-Secret` header matching `API_SECRET_KEY`). Mounted under this: `pricelist`, `products`, `analysis`, `llm`, `user`.
-- `/clerk/*` — Clerk webhooks (signature-verified via `svix`, not the two middlewares above). Note `/clerk/create-user` needs `express.raw()` body parsing (mounted *before* the global `express.json()` — order matters) so the webhook signature can be verified against the raw body.
+- `/clerk/*` — Clerk webhooks (signature-verified via `svix`, not the two middlewares above). Note `/clerk/create-user` needs `express.raw()` body parsing (mounted _before_ the global `express.json()` — order matters) so the webhook signature can be verified against the raw body.
 - `/service/*` — internal/background-job routes, gated by `authServiceMiddleware` (`Authorization: Bearer <API_SERVICE_KEY>`), used for cross-service writes (inserting price lists, analysis data/diffs, notification fan-out, cache invalidation) rather than public reads.
 - `ensureDbConnectionMiddleware` runs globally before routes and lazily opens the Mongoose connection (`src/db/database.ts`), caching the connection on `global.mongoose` so repeated invocations (e.g. serverless cold starts) reuse it.
 - A final Express error-handling middleware returns `{ error: "Internal Server Error" }`, and additionally `details` when `isDev()`. Route handlers should catch and call `next(error)` rather than handling errors themselves.
@@ -56,6 +57,7 @@ Mongoose models live in `src/db/models/*`, each backed by a schema in `src/db/sc
 ### Auth model
 
 Two independent, non-overlapping auth schemes coexist (`src/middleware/auth-middleware.ts`):
+
 - `authPublicMiddleware` — frontend-facing routes under `/api`, shared-secret header check, layered on top of Clerk session auth.
 - `authServiceMiddleware` — machine-to-machine routes under `/service`, bearer-token check.
 
