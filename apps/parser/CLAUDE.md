@@ -1,6 +1,6 @@
 # apps/parser — `@dns-markdown/parser`
 
-Paths below are relative to `apps/parser`. Monorepo-wide rules (commands, env files, code style) are in the root `CLAUDE.md`.
+Paths below are relative to `apps/parser`. All code lives in `src/` (same layout rules as `apps/api`: kebab-case names, `@src/*` alias); scraper runtime files and `public/` stay in the package root. Monorepo-wide rules (commands, env files, code style) are in the root `CLAUDE.md`.
 
 ## What this is
 
@@ -43,14 +43,14 @@ bun run cache:clear:local           # same for local:* keys
 
 ### No database here
 
-The parser never opens a database connection. **All persistence is HTTP** through two axios clients in `api/client.ts`:
+The parser never opens a database connection. **All persistence is HTTP** through two axios clients in `src/api/client.ts`:
 
-- `apiClient` → `API_URL` (`apps/api`), with `X-Internal-API-Secret` + `Authorization: Bearer`. Reads live in `api/get.ts`, writes in `api/post.ts`. Service-only endpoints are under `/service/*`, public ones under `/api/*`.
+- `apiClient` → `API_URL` (`apps/api`), with `X-Internal-API-Secret` + `Authorization: Bearer`. Reads live in `src/api/get.ts`, writes in `src/api/post.ts`. Service-only endpoints are under `/service/*`, public ones under `/api/*`.
 - `webClient` → `WEB_URL`, used only for `POST /api/revalidate` to bust Next.js cache tags.
 
 `mongodb` is a dependency **solely for `ObjectId`** — it generates hex ids and timestamps client-side before POSTing. Do not read it as a sign of a Mongo connection.
 
-So: to add a new data operation, add a wrapper to `api/get.ts` / `api/post.ts` and implement the matching endpoint in `apps/api` (usually under `/service/*`).
+So: to add a new data operation, add a wrapper to `src/api/get.ts` / `src/api/post.ts` and implement the matching endpoint in `apps/api` (usually under `/service/*`).
 
 Payload types (`PriceList`, `Goods`, `AnalysisData`, `AnalysisDiff`, `User`, …) come from `@dns-markdown/db/types/*` — the same types the API stores, imported with `import type` only (the parser has no mongoose runtime).
 
@@ -62,7 +62,7 @@ Payload types (`PriceList`, `Goods`, `AnalysisData`, `AnalysisDiff`, `User`, …
 2. `parser/crawler.ts` — concatenates every `html` field into `pages/body.html`, and `eval`s each page's `assets.inlineJs` against a fake `window.AjaxState` shim to harvest product-buy container ids into `pages/ids.json`. The `eval` and the stub `window` are deliberate, not leftovers.
 3. `parser/dns_shop_downloader_prices.sh` — POSTs `ids.json` back to DNS to get `pages/prices.html` (JSON, `{ data: { states: [...] } }`).
 
-Then `add_price_list/helpers/create_data.ts` cheerio-parses `body.html`, joins each product to its price by the `.catalog-product__buy` element id against `prices.html`'s `states`, groups by `.markdown-page__group-title`, and drops any item missing title/link/price/availability.
+Then `src/add-price-list/helpers/create-data.ts` cheerio-parses `body.html`, joins each product to its price by the `.catalog-product__buy` element id against `prices.html`'s `states`, groups by `.markdown-page__group-title`, and drops any item missing title/link/price/availability.
 
 ### Pipeline order
 
@@ -70,21 +70,21 @@ Then `add_price_list/helpers/create_data.ts` cheerio-parses `body.html`, joins e
 
 Data shape at each hop: scraped HTML → `PriceList` (nested `Position[]` → `Goods[]`, one per day per city) → `AnalysisData[]` (flat, `Goods` + city/category/dateAdded) → `AnalysisDiff` (newItems / removedItems / changesPrice / changesProfit, matched by `item.link`).
 
-Only one price list per city per day is allowed: `add_price_list` checks the last one with `isSameDay` and deletes it before saving.
+Only one price list per city per day is allowed: `src/add-price-list` checks the last one with `isSameDay` and deletes it before saving.
 
 ### Env contract
 
-All vars are validated by the zod schema in `env.ts` (`import { env } from "#env.ts"`) after `loadEnv()` loads the shared `.env` files from the monorepo root. Never read `process.env` elsewhere.
+All vars are validated by the zod schema in `src/env.ts` (`import { env } from "@src/env"`) after `loadEnv()` loads the shared `.env` files from the monorepo root. Never read `process.env` elsewhere.
 
 - **`CITY` is required**, not defaulted — almost every entrypoint does `if (!city) throw new Error("No city found")`. It's supplied by the `parse:samara` / `parse:moscow` / `add:*` wrapper scripts, so running a stage bare will fail. `CITY` must therefore **not** be put into the shared root `.env` (the API doesn't need it — its schema has a default).
 - **`WRITE_STRATEGY`** (`insert` default | `replace`) switches each analysis stage between incremental and full rebuild. `insert` fetches only the last 2 price lists and deletes-then-reinserts today's rows so reruns are idempotent; `replace` deletes everything for the city first and, for diffs, also emits a diff of the oldest price list against an empty previous state.
-- `KEYS` selects which API cache keys `cache_clear` wipes.
+- `KEYS` selects which API cache keys `src/cache-clear` wipes.
 - `PORT` is fixed to 3100 by the `start` script, so the API's `PORT` from the shared `.env` doesn't leak in.
 - Remaining vars are in the root `.env.example`.
 
-### Express control panel (`express/`)
+### Express control panel (`src/express/`)
 
-Not a public API — an ops UI rendered from `express/templates/*.html` via ejs:
+Not a public API — an ops UI rendered from `src/express/templates/*.html` via ejs (views dir resolved from cwd as `src/express/templates`); static files come from `public/` in the package root:
 
 - `GET /` + `POST /update-request` — edit and overwrite `request.sh` (the saved DNS curl request that carries the cookies/CSRF token the downloaders scrape out of it). POST redirects 307 to `/log`, which starts a run.
 - `GET|POST /config` — read and overwrite `parser/dns_shop_downloader*.sh` in place.
@@ -95,8 +95,8 @@ All three forms write files that are gitignored, so the panel is how a fresh che
 ## Gotchas
 
 - **Gitignored but required at runtime** (see `apps/parser/.gitignore`): `parser/` (both `.sh` files), `pages/`, `request.sh`, `parselog.txt`; plus the root `.env`. A fresh clone has no scraper scripts — the README says to pull them from a Gist and hand-write `request.sh`. Don't "fix" missing-file errors by recreating them from scratch.
-- **Imports use the `#*` subpath map** (`package.json` `"imports": { "#*": "./*" }`), rooted at `apps/parser`, with explicit `.ts` extensions: `import { getLastPriceList } from "#api/get.ts"`. Relative imports with `.ts` also appear and are fine. Cross-workspace imports use package names (`@dns-markdown/db/types/pricelist`, `@dns-markdown/env`).
+- **Imports** follow the api convention: `@src/*` (tsconfig `paths`, resolved by Bun at runtime) for cross-directory imports, relative `./…` within a stage's own folder (e.g. `./helpers/create-data`), no file extensions. Cross-workspace imports use package names (`@dns-markdown/db/types/pricelist`, `@dns-markdown/env`).
+- **Paths to runtime files are cwd-relative** (`resolve("pages")`, `resolve("parser")`, `resolve("request.sh")`, `resolve("parselog.txt")`, `express.static("public")`): scripts must run with cwd = `apps/parser` (Nx and `bun run` do). `lint` / `type-check` cover only `src/`, so the gitignored `parser/crawler.ts` is not checked.
 - **tsconfig extends the root `tsconfig.base.json` — strict and erasable-only:** `erasableSyntaxOnly` + `verbatimModuleSyntax` mean no enums, no `namespace`, no constructor parameter properties, and type-only imports must be written `import type`. `noUnusedLocals`/`noUnusedParameters` are on (hence the `_req` naming), and `noUncheckedIndexedAccess` means array/record indexing yields `T | undefined` — the existing `if (priceLists[0])` guards are there for that reason.
-- **Standalone scripts own their exit code.** Each `*/index.ts` wraps its work in `getPerformance(fn).then(...).catch(err => { console.error(...); process.exit(1) })` so a failing stage aborts the chained `parse` run. Keep that pattern when adding a stage. (`add_vector_db` and `cache_clear` deliberately don't exit 1.)
-- `express/middlewares/middlewares.ts` is dead code.
+- **Standalone scripts own their exit code.** Each `src/*/index.ts` stage wraps its work in `getPerformance(fn).then(...).catch(err => { console.error(...); process.exit(1) })` so a failing stage aborts the chained `parse` run. Keep that pattern when adding a stage. (`add-vector-db` and `cache-clear` deliberately don't exit 1.)
 - User-facing strings (emails, vector-index text) are Russian. Keep them Russian.

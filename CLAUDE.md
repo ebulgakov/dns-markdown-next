@@ -39,4 +39,4 @@ Env files are shared by all workspaces and live in the **monorepo root**: `.env.
 
 Enforced by the root `eslint.config.ts` and `.prettierrc` for all workspaces: no semicolon-trailing commas, double quotes, 100-char print width, arrow function params unparenthesized when single-arg. Import order is enforced (builtin → external → internal → parent → sibling → index → type) with alphabetization and mandatory blank lines between groups — let `bun run lint:fix` handle this rather than ordering imports by hand.
 
-Cross-workspace imports go through the workspace package name (`@dns-markdown/db/...`, `@dns-markdown/env`), never through relative paths into another workspace.
+Apps share one layout: code in `src/`, kebab-case file and folder names, `@src/*` → `src/*` alias (tsconfig `paths`) for cross-directory imports, relative imports within a folder, no file extensions in imports. Cross-workspace imports go through the workspace package name (`@dns-markdown/db/...`, `@dns-markdown/env`), never through relative paths into another workspace.
