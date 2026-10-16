@@ -1,2 +1,2 @@
 bunx lint-staged
-bunx nx affected -t type-check --base=HEAD
+bun run type-check
