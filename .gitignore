@@ -31,3 +31,7 @@ report.[0-9]_.[0-9]_.[0-9]_.[0-9]_.json
 
 # misc
 .vercel
+
+# nx
+.nx/cache
+.nx/workspace-data

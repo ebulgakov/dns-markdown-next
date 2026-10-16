@@ -2,22 +2,34 @@
 
 This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
 
+## Monorepo layout
+
+Bun workspaces (`apps/*`, `packages/*`) orchestrated by **Nx** (package-based: targets are inferred from each workspace's `package.json` scripts, no Nx plugins; caching/`dependsOn` live in `nx.json`). Single `bun.lock` at the root; `bunfig.toml` pins `linker = "hoisted"` so Vercel can trace external modules from the root `node_modules`.
+
+- `apps/api` (`@dns-markdown/api`) — the Express API, deployed to Vercel (Vercel project Root Directory = `apps/api`).
+- `packages/db` (`@dns-markdown/db`) — Mongoose models, schemas, payload types and `dbConnect(uri)`. Internal package: `exports` point straight at `.ts` sources (no build step), imported via subpaths like `@dns-markdown/db/models/pricelist`, `@dns-markdown/db/types/pricelist`, `@dns-markdown/db/database`. It must not read `process.env` — callers pass config in.
+
+`dns-markdown-parser-next` will later move into `apps/` as another workspace.
+
+Unless stated otherwise, `src/...` paths below are relative to `apps/api`.
+
 ## Commands
 
-This project uses **Bun** (not npm/node) as the package manager and runtime.
+This project uses **Bun** (not npm/node) as the package manager and runtime. Run from the repo root:
 
 ```bash
-bun install                 # install dependencies
-bun run dev                 # run dev server with watch mode (src/index.ts)
-bun test                    # run all tests
-bun test --watch            # run tests in watch mode
-bun test path/to/file.test.ts   # run a single test file
-bun run lint                # eslint check
-bun run lint:fix            # eslint with autofix
-bun run type-check          # tsc --noEmit
-bun run build               # bundle to dist/index.js (bun build, targets node)
-bun run start               # run the built dist/index.js
+bun install                 # install all workspaces
+bun run dev                 # api dev server with watch mode (apps/api/src/index.ts)
+bun run test                # nx run-many -t test
+bun run lint                # nx run-many -t lint
+bun run lint:fix            # eslint --fix across the repo
+bun run type-check          # nx run-many -t type-check
+bun run build               # nx run-many -t build (api -> apps/api/dist/index.js)
+bun run affected            # lint/type-check/test/build only for projects changed vs main
+bunx nx run @dns-markdown/api:<script>   # any single script of one project
 ```
+
+Inside `apps/api` the per-project commands still work (`bun test path/to/file.test.ts`, `bun test --watch`, `bun run start`, `bun run generate:openapi`). Nx runs every target with cwd = the project root, so `.env*` files belong in `apps/api/`.
 
 Tests are colocated in `__tests__` (or `__test__`) directories next to the code they cover, using `bun:test` (not Jest/Vitest) with `mock`/`mock.module` for mocking. Env vars required by `src/env.ts` must be present for tests to run — see `.github/workflows/test.yml` for the full list of vars and their dummy CI values.
 
@@ -37,14 +49,14 @@ Mounting order and auth layering happens in `src/server.ts`:
 - `/api/*` — double-gated: `clerkMiddleware()` (Clerk session) then `authPublicMiddleware` (requires `X-Internal-API-Secret` header matching `API_SECRET_KEY`). Mounted under this: `pricelist`, `products`, `analysis`, `llm`, `user`.
 - `/clerk/*` — Clerk webhooks (signature-verified via `svix`, not the two middlewares above). Note `/clerk/create-user` needs `express.raw()` body parsing (mounted _before_ the global `express.json()` — order matters) so the webhook signature can be verified against the raw body.
 - `/service/*` — internal/background-job routes, gated by `authServiceMiddleware` (`Authorization: Bearer <API_SERVICE_KEY>`), used for cross-service writes (inserting price lists, analysis data/diffs, notification fan-out, cache invalidation) rather than public reads.
-- `ensureDbConnectionMiddleware` runs globally before routes and lazily opens the Mongoose connection (`src/db/database.ts`), caching the connection on `global.mongoose` so repeated invocations (e.g. serverless cold starts) reuse it.
+- `ensureDbConnectionMiddleware` runs globally before routes and lazily opens the Mongoose connection (`packages/db/src/database.ts`, called with `env.DATABASE_URL` from `src/middleware/db-connection-middleware.ts`), caching the connection on `global.mongoose` so repeated invocations (e.g. serverless cold starts) reuse it.
 - A final Express error-handling middleware returns `{ error: "Internal Server Error" }`, and additionally `details` when `isDev()`. Route handlers should catch and call `next(error)` rather than handling errors themselves.
 
 Full endpoint-by-endpoint request/response contracts are documented in `API.md` (in Russian) — check it before changing route behavior, and update it when adding/changing endpoints.
 
 ### Data layer
 
-Mongoose models live in `src/db/models/*`, each backed by a schema in `src/db/schemas/*` (kept as separate files so schemas can be composed/reused, e.g. `pricelist.ts` schema embeds the `goods` schema). Corresponding hand-written TS types for API payloads live in `src/types/*` and are imported with `import type`.
+Mongoose models live in `packages/db/src/models/*`, each backed by a schema in `packages/db/src/schemas/*` (kept as separate files so schemas can be composed/reused, e.g. `pricelist.ts` schema embeds the `goods` schema). Corresponding hand-written TS types for the stored/API payloads live in `packages/db/src/types/*` and are imported with `import type` from `@dns-markdown/db/types/*`; `apps/api/src/types/*` keeps only API-local ambient declarations. Tests mock models by the package subpath, e.g. `mock.module("@dns-markdown/db/models/pricelist", ...)`.
 
 ### Cache
 
@@ -71,4 +83,4 @@ Do not conflate the two when adding new routes — pick based on whether the cal
 
 Enforced by `eslint.config.ts` and `.prettierrc`: no semicolon-trailing commas, double quotes, 100-char print width, arrow function params unparenthesized when single-arg. Import order is enforced (builtin → external → internal → parent → sibling → index → type) with alphabetization and mandatory blank lines between groups — let `bun run lint:fix` handle this rather than ordering imports by hand.
 
-Path alias `@src/*` maps to `src/*` (see `tsconfig.json`); prefer it over deep relative imports (`../../..`) for cross-directory imports, but sibling/parent-relative imports are used within a route group's own files (e.g. importing a handler's own `helpers/`).
+Path alias `@src/*` maps to `src/*` inside `apps/api` (see `apps/api/tsconfig.json`); cross-package imports go through the workspace package name instead; prefer it over deep relative imports (`../../..`) for cross-directory imports, but sibling/parent-relative imports are used within a route group's own files (e.g. importing a handler's own `helpers/`).
