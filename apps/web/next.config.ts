@@ -1,10 +1,19 @@
+import path from "node:path";
+
 import { withSentryConfig } from "@sentry/nextjs";
 import createNextIntlPlugin from "next-intl/plugin";
 
 import type { NextConfig } from "next";
 
+// Monorepo root: dependencies are hoisted into the root node_modules (bunfig.toml linker = "hoisted")
+const monorepoRoot = path.join(__dirname, "../..");
+
 const nextConfig: NextConfig = {
   reactCompiler: true,
+  outputFileTracingRoot: monorepoRoot,
+  turbopack: {
+    root: monorepoRoot
+  },
   images: {
     remotePatterns: [
       {

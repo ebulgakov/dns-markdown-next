@@ -1,0 +1,2228 @@
+{
+  "openapi": "3.0.3",
+  "info": {
+    "title": "DNS Markdown API",
+    "version": "1.0.0",
+    "description": "Generated from zod request schemas. See API.md for auth/CORS/error format."
+  },
+  "components": {
+    "securitySchemes": {
+      "clerkAndApiSecret": {
+        "type": "apiKey",
+        "in": "header",
+        "name": "X-Internal-API-Secret",
+        "description": "Requires an active Clerk session cookie plus this shared secret header."
+      },
+      "serviceBearer": {
+        "type": "http",
+        "scheme": "bearer",
+        "description": "Internal service-to-service token (API_SERVICE_KEY)."
+      },
+      "svixWebhook": {
+        "type": "apiKey",
+        "in": "header",
+        "name": "svix-signature",
+        "description": "Verified via svix; not usable from Swagger UI's Try it out."
+      }
+    }
+  },
+  "paths": {
+    "/api/pricelist": {
+      "get": {
+        "summary": "Get the latest price list for a city",
+        "tags": ["Pricelist"],
+        "security": [
+          {
+            "clerkAndApiSecret": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "city",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "minLength": 1
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful response"
+          },
+          "400": {
+            "description": "Validation error"
+          }
+        }
+      }
+    },
+    "/api/pricelist/list": {
+      "get": {
+        "summary": "List archived price list dates for a city",
+        "tags": ["Pricelist"],
+        "security": [
+          {
+            "clerkAndApiSecret": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "city",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "minLength": 1
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful response"
+          },
+          "400": {
+            "description": "Validation error"
+          }
+        }
+      }
+    },
+    "/api/pricelist/id/{id}": {
+      "get": {
+        "summary": "Get an archived price list by id",
+        "tags": ["Pricelist"],
+        "security": [
+          {
+            "clerkAndApiSecret": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "minLength": 1
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful response"
+          },
+          "400": {
+            "description": "Validation error"
+          }
+        }
+      }
+    },
+    "/api/products/link": {
+      "get": {
+        "summary": "Get a product's full history and status by its link",
+        "tags": ["Products"],
+        "security": [
+          {
+            "clerkAndApiSecret": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "link",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "minLength": 1
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful response"
+          },
+          "400": {
+            "description": "Validation error"
+          }
+        }
+      }
+    },
+    "/api/products/most-cheap-products": {
+      "get": {
+        "summary": "List products for a city sorted by price ascending",
+        "tags": ["Products"],
+        "security": [
+          {
+            "clerkAndApiSecret": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "city",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "minLength": 1
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful response"
+          },
+          "400": {
+            "description": "Validation error"
+          }
+        }
+      }
+    },
+    "/api/products/most-discounted-products": {
+      "get": {
+        "summary": "List products for a city sorted by discount",
+        "tags": ["Products"],
+        "security": [
+          {
+            "clerkAndApiSecret": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "city",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "minLength": 1
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful response"
+          },
+          "400": {
+            "description": "Validation error"
+          }
+        }
+      }
+    },
+    "/api/products/most-profitable-products": {
+      "get": {
+        "summary": "List products for a city sorted by profit",
+        "tags": ["Products"],
+        "security": [
+          {
+            "clerkAndApiSecret": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "city",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "minLength": 1
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful response"
+          },
+          "400": {
+            "description": "Validation error"
+          }
+        }
+      }
+    },
+    "/api/analysis/last-diff": {
+      "get": {
+        "summary": "Get the most recent analysis diff for a city",
+        "tags": ["Analysis"],
+        "security": [
+          {
+            "clerkAndApiSecret": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "city",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "minLength": 1
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful response"
+          },
+          "400": {
+            "description": "Validation error"
+          }
+        }
+      }
+    },
+    "/api/analysis/reports": {
+      "get": {
+        "summary": "List LLM analysis reports for a city",
+        "tags": ["Analysis"],
+        "security": [
+          {
+            "clerkAndApiSecret": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "city",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "minLength": 1
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful response"
+          },
+          "400": {
+            "description": "Validation error"
+          }
+        }
+      }
+    },
+    "/api/analysis/all-diffs": {
+      "get": {
+        "summary": "List analysis diff summaries for a city",
+        "tags": ["Analysis"],
+        "security": [
+          {
+            "clerkAndApiSecret": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "city",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "minLength": 1
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful response"
+          },
+          "400": {
+            "description": "Validation error"
+          }
+        }
+      }
+    },
+    "/api/analysis/all-analysis-goods-by-date-added": {
+      "get": {
+        "summary": "List analysis goods for a city on a given date",
+        "tags": ["Analysis"],
+        "security": [
+          {
+            "clerkAndApiSecret": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "city",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "minLength": 1
+            }
+          },
+          {
+            "name": "dateAdded",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string",
+                  "format": "date",
+                  "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))$"
+                },
+                {
+                  "type": "string",
+                  "format": "date-time",
+                  "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d(?::[0-5]\\d(?:\\.\\d+)?)?(?:Z))$"
+                }
+              ]
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful response"
+          },
+          "400": {
+            "description": "Validation error"
+          }
+        }
+      }
+    },
+    "/api/analysis/products-count": {
+      "get": {
+        "summary": "Get product counts per archived price list date for a city",
+        "tags": ["Analysis"],
+        "security": [
+          {
+            "clerkAndApiSecret": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "city",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "minLength": 1
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful response"
+          },
+          "400": {
+            "description": "Validation error"
+          }
+        }
+      }
+    },
+    "/api/analysis/total-uniq-products-count": {
+      "get": {
+        "summary": "Get the total count of unique products ever seen for a city",
+        "tags": ["Analysis"],
+        "security": [
+          {
+            "clerkAndApiSecret": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "city",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "minLength": 1
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful response"
+          },
+          "400": {
+            "description": "Validation error"
+          }
+        }
+      }
+    },
+    "/api/llm/compare-products": {
+      "get": {
+        "summary": "Compare 2-5 products via an LLM-generated report",
+        "tags": ["LLM"],
+        "security": [
+          {
+            "clerkAndApiSecret": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "links",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "description": "URL-encoded JSON array of 2-5 product links, e.g. links=%5B%22https%3A%2F%2Fexample.com%2Fa%22%2C%22https%3A%2F%2Fexample.com%2Fb%22%5D"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful response"
+          },
+          "400": {
+            "description": "Validation error"
+          }
+        }
+      }
+    },
+    "/api/llm/describe-product": {
+      "get": {
+        "summary": "Describe a product via an LLM-generated report",
+        "tags": ["LLM"],
+        "security": [
+          {
+            "clerkAndApiSecret": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "link",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "description": "URL-encoded product link, e.g. link=https%3A%2F%2Fexample.com%2Fa"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful response"
+          },
+          "400": {
+            "description": "Validation error"
+          }
+        }
+      }
+    },
+    "/api/user": {
+      "post": {
+        "summary": "Get the current user's profile",
+        "tags": ["User"],
+        "security": [
+          {
+            "clerkAndApiSecret": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful response"
+          },
+          "400": {
+            "description": "Validation error"
+          }
+        }
+      }
+    },
+    "/api/user/notifications-update": {
+      "post": {
+        "summary": "Update the current user's notification settings",
+        "tags": ["User"],
+        "security": [
+          {
+            "clerkAndApiSecret": []
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "notifications": {
+                    "type": "object",
+                    "properties": {
+                      "updates": {
+                        "type": "object",
+                        "properties": {
+                          "enabled": {
+                            "type": "boolean"
+                          }
+                        },
+                        "required": ["enabled"],
+                        "additionalProperties": false
+                      }
+                    },
+                    "required": ["updates"],
+                    "additionalProperties": false
+                  }
+                },
+                "required": ["notifications"],
+                "additionalProperties": false
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful response"
+          },
+          "400": {
+            "description": "Validation error"
+          }
+        }
+      }
+    },
+    "/api/user/toggle-shown-bought-favorites": {
+      "post": {
+        "summary": "Toggle whether bought favorites are shown",
+        "tags": ["User"],
+        "security": [
+          {
+            "clerkAndApiSecret": []
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "status": {
+                    "type": "boolean"
+                  }
+                },
+                "required": ["status"],
+                "additionalProperties": false
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful response"
+          },
+          "400": {
+            "description": "Validation error"
+          }
+        }
+      }
+    },
+    "/api/user/hidden-section-add": {
+      "post": {
+        "summary": "Add a hidden section for the current user",
+        "tags": ["User"],
+        "security": [
+          {
+            "clerkAndApiSecret": []
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "title": {
+                    "type": "string",
+                    "minLength": 1
+                  }
+                },
+                "required": ["title"],
+                "additionalProperties": false
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful response"
+          },
+          "400": {
+            "description": "Validation error"
+          }
+        }
+      }
+    },
+    "/api/user/hidden-section-remove": {
+      "post": {
+        "summary": "Remove a hidden section for the current user",
+        "tags": ["User"],
+        "security": [
+          {
+            "clerkAndApiSecret": []
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "title": {
+                    "type": "string",
+                    "minLength": 1
+                  }
+                },
+                "required": ["title"],
+                "additionalProperties": false
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful response"
+          },
+          "400": {
+            "description": "Validation error"
+          }
+        }
+      }
+    },
+    "/api/user/favorite-section-add": {
+      "post": {
+        "summary": "Add a favorite section for the current user",
+        "tags": ["User"],
+        "security": [
+          {
+            "clerkAndApiSecret": []
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "title": {
+                    "type": "string",
+                    "minLength": 1
+                  }
+                },
+                "required": ["title"],
+                "additionalProperties": false
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful response"
+          },
+          "400": {
+            "description": "Validation error"
+          }
+        }
+      }
+    },
+    "/api/user/favorite-section-remove": {
+      "post": {
+        "summary": "Remove a favorite section for the current user",
+        "tags": ["User"],
+        "security": [
+          {
+            "clerkAndApiSecret": []
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "title": {
+                    "type": "string",
+                    "minLength": 1
+                  }
+                },
+                "required": ["title"],
+                "additionalProperties": false
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful response"
+          },
+          "400": {
+            "description": "Validation error"
+          }
+        }
+      }
+    },
+    "/api/user/favorite-add": {
+      "post": {
+        "summary": "Add a product to the current user's favorites",
+        "tags": ["User"],
+        "security": [
+          {
+            "clerkAndApiSecret": []
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "product": {
+                    "type": "object",
+                    "properties": {
+                      "_id": {
+                        "type": "string"
+                      },
+                      "title": {
+                        "type": "string"
+                      },
+                      "link": {
+                        "type": "string"
+                      },
+                      "description": {
+                        "type": "string"
+                      },
+                      "reasons": {
+                        "type": "array",
+                        "items": {
+                          "type": "object",
+                          "properties": {
+                            "_id": {
+                              "type": "string"
+                            },
+                            "label": {
+                              "type": "string"
+                            },
+                            "text": {
+                              "type": "string"
+                            }
+                          },
+                          "required": ["_id", "label", "text"],
+                          "additionalProperties": false
+                        }
+                      },
+                      "priceOld": {
+                        "type": "string"
+                      },
+                      "price": {
+                        "type": "string"
+                      },
+                      "profit": {
+                        "type": "string"
+                      },
+                      "code": {
+                        "type": "string"
+                      },
+                      "image": {
+                        "type": "string"
+                      },
+                      "available": {
+                        "type": "string"
+                      },
+                      "city": {
+                        "type": "string"
+                      }
+                    },
+                    "required": [
+                      "_id",
+                      "title",
+                      "link",
+                      "description",
+                      "reasons",
+                      "priceOld",
+                      "price",
+                      "profit",
+                      "code",
+                      "image",
+                      "available",
+                      "city"
+                    ],
+                    "additionalProperties": false
+                  }
+                },
+                "required": ["product"],
+                "additionalProperties": false
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful response"
+          },
+          "400": {
+            "description": "Validation error"
+          }
+        }
+      }
+    },
+    "/api/user/favorite-remove": {
+      "post": {
+        "summary": "Remove a product from the current user's favorites",
+        "tags": ["User"],
+        "security": [
+          {
+            "clerkAndApiSecret": []
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "link": {
+                    "type": "string",
+                    "minLength": 1
+                  }
+                },
+                "required": ["link"],
+                "additionalProperties": false
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful response"
+          },
+          "400": {
+            "description": "Validation error"
+          }
+        }
+      }
+    },
+    "/api/user/change-city": {
+      "post": {
+        "summary": "Change the current user's city",
+        "tags": ["User"],
+        "security": [
+          {
+            "clerkAndApiSecret": []
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "city": {
+                    "type": "string",
+                    "minLength": 1
+                  }
+                },
+                "required": ["city"],
+                "additionalProperties": false
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful response"
+          },
+          "400": {
+            "description": "Validation error"
+          }
+        }
+      }
+    },
+    "/service/all-price-lists": {
+      "get": {
+        "summary": "List all price lists for a city",
+        "tags": ["Service / Pricelist"],
+        "security": [
+          {
+            "serviceBearer": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "city",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "minLength": 1
+            }
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "exclusiveMinimum": true,
+              "maximum": 9007199254740991
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful response"
+          },
+          "400": {
+            "description": "Validation error"
+          }
+        }
+      }
+    },
+    "/service/delete-last-price-list": {
+      "post": {
+        "summary": "Delete the most recent price list for a city",
+        "tags": ["Service / Pricelist"],
+        "security": [
+          {
+            "serviceBearer": []
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "city": {
+                    "type": "string",
+                    "minLength": 1
+                  }
+                },
+                "required": ["city"],
+                "additionalProperties": false
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful response"
+          },
+          "400": {
+            "description": "Validation error"
+          }
+        }
+      }
+    },
+    "/service/delete-old-price-lists": {
+      "post": {
+        "summary": "Delete all price lists for a city except the 30 most recent",
+        "tags": ["Service / Pricelist"],
+        "security": [
+          {
+            "serviceBearer": []
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "city": {
+                    "type": "string",
+                    "minLength": 1
+                  }
+                },
+                "required": ["city"],
+                "additionalProperties": false
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful response"
+          },
+          "400": {
+            "description": "Validation error"
+          }
+        }
+      }
+    },
+    "/service/add-new-price-list": {
+      "post": {
+        "summary": "Insert a new price list",
+        "tags": ["Service / Pricelist"],
+        "security": [
+          {
+            "serviceBearer": []
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "city": {
+                    "type": "string",
+                    "minLength": 1
+                  },
+                  "positions": {
+                    "minItems": 1,
+                    "type": "array",
+                    "items": {
+                      "type": "object",
+                      "properties": {
+                        "_id": {
+                          "type": "string"
+                        },
+                        "title": {
+                          "type": "string"
+                        },
+                        "items": {
+                          "type": "array",
+                          "items": {
+                            "type": "object",
+                            "properties": {
+                              "_id": {
+                                "type": "string"
+                              },
+                              "title": {
+                                "type": "string"
+                              },
+                              "link": {
+                                "type": "string"
+                              },
+                              "description": {
+                                "type": "string"
+                              },
+                              "reasons": {
+                                "type": "array",
+                                "items": {
+                                  "type": "object",
+                                  "properties": {
+                                    "_id": {
+                                      "type": "string"
+                                    },
+                                    "label": {
+                                      "type": "string"
+                                    },
+                                    "text": {
+                                      "type": "string"
+                                    }
+                                  },
+                                  "required": ["_id", "label", "text"],
+                                  "additionalProperties": false
+                                }
+                              },
+                              "priceOld": {
+                                "type": "string"
+                              },
+                              "price": {
+                                "type": "string"
+                              },
+                              "profit": {
+                                "type": "string"
+                              },
+                              "code": {
+                                "type": "string"
+                              },
+                              "image": {
+                                "type": "string"
+                              },
+                              "available": {
+                                "type": "string"
+                              },
+                              "dateAdded": {
+                                "nullable": true,
+                                "type": "string"
+                              }
+                            },
+                            "required": [
+                              "_id",
+                              "title",
+                              "link",
+                              "description",
+                              "reasons",
+                              "priceOld",
+                              "price",
+                              "profit",
+                              "code",
+                              "image",
+                              "available"
+                            ],
+                            "additionalProperties": false
+                          }
+                        }
+                      },
+                      "required": ["_id", "title", "items"],
+                      "additionalProperties": false
+                    }
+                  }
+                },
+                "required": ["city", "positions"],
+                "additionalProperties": false
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful response"
+          },
+          "400": {
+            "description": "Validation error"
+          }
+        }
+      }
+    },
+    "/service/insert-analysis-data": {
+      "post": {
+        "summary": "Bulk insert analysis data",
+        "tags": ["Service / Analysis"],
+        "security": [
+          {
+            "serviceBearer": []
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "analysisData": {
+                    "minItems": 1,
+                    "type": "array",
+                    "items": {
+                      "type": "object",
+                      "properties": {
+                        "_id": {
+                          "type": "string"
+                        },
+                        "title": {
+                          "type": "string"
+                        },
+                        "link": {
+                          "type": "string"
+                        },
+                        "description": {
+                          "type": "string"
+                        },
+                        "reasons": {
+                          "type": "array",
+                          "items": {
+                            "type": "object",
+                            "properties": {
+                              "_id": {
+                                "type": "string"
+                              },
+                              "label": {
+                                "type": "string"
+                              },
+                              "text": {
+                                "type": "string"
+                              }
+                            },
+                            "required": ["_id", "label", "text"],
+                            "additionalProperties": false
+                          }
+                        },
+                        "priceOld": {
+                          "type": "string"
+                        },
+                        "price": {
+                          "type": "string"
+                        },
+                        "profit": {
+                          "type": "string"
+                        },
+                        "code": {
+                          "type": "string"
+                        },
+                        "image": {
+                          "type": "string"
+                        },
+                        "available": {
+                          "type": "string"
+                        },
+                        "dateAdded": {
+                          "type": "string"
+                        },
+                        "city": {
+                          "type": "string"
+                        },
+                        "category": {
+                          "type": "string"
+                        }
+                      },
+                      "required": [
+                        "_id",
+                        "title",
+                        "link",
+                        "description",
+                        "reasons",
+                        "priceOld",
+                        "price",
+                        "profit",
+                        "code",
+                        "image",
+                        "available",
+                        "dateAdded",
+                        "city",
+                        "category"
+                      ],
+                      "additionalProperties": false
+                    }
+                  }
+                },
+                "required": ["analysisData"],
+                "additionalProperties": false
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful response"
+          },
+          "400": {
+            "description": "Validation error"
+          }
+        }
+      }
+    },
+    "/service/delete-analysis-data": {
+      "post": {
+        "summary": "Delete all analysis data for a city",
+        "tags": ["Service / Analysis"],
+        "security": [
+          {
+            "serviceBearer": []
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "city": {
+                    "type": "string",
+                    "minLength": 1
+                  }
+                },
+                "required": ["city"],
+                "additionalProperties": false
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful response"
+          },
+          "400": {
+            "description": "Validation error"
+          }
+        }
+      }
+    },
+    "/service/delete-analysis-data-by-date": {
+      "post": {
+        "summary": "Delete analysis data for a city on a given date",
+        "tags": ["Service / Analysis"],
+        "security": [
+          {
+            "serviceBearer": []
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "city": {
+                    "type": "string",
+                    "minLength": 1
+                  },
+                  "dateAdded": {
+                    "anyOf": [
+                      {
+                        "type": "string",
+                        "format": "date",
+                        "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))$"
+                      },
+                      {
+                        "type": "string",
+                        "format": "date-time",
+                        "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d(?::[0-5]\\d(?:\\.\\d+)?)?(?:Z))$"
+                      }
+                    ]
+                  }
+                },
+                "required": ["city", "dateAdded"],
+                "additionalProperties": false
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful response"
+          },
+          "400": {
+            "description": "Validation error"
+          }
+        }
+      }
+    },
+    "/service/insert-analysis-diff": {
+      "post": {
+        "summary": "Bulk insert analysis diffs",
+        "tags": ["Service / Analysis"],
+        "security": [
+          {
+            "serviceBearer": []
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "diff": {
+                    "minItems": 1,
+                    "type": "array",
+                    "items": {
+                      "type": "object",
+                      "properties": {
+                        "city": {
+                          "type": "string"
+                        },
+                        "dateAdded": {
+                          "type": "string"
+                        },
+                        "newItems": {
+                          "type": "array",
+                          "items": {
+                            "type": "object",
+                            "properties": {
+                              "_id": {
+                                "type": "string"
+                              },
+                              "title": {
+                                "type": "string"
+                              },
+                              "link": {
+                                "type": "string"
+                              },
+                              "description": {
+                                "type": "string"
+                              },
+                              "reasons": {
+                                "type": "array",
+                                "items": {
+                                  "type": "object",
+                                  "properties": {
+                                    "_id": {
+                                      "type": "string"
+                                    },
+                                    "label": {
+                                      "type": "string"
+                                    },
+                                    "text": {
+                                      "type": "string"
+                                    }
+                                  },
+                                  "required": ["_id", "label", "text"],
+                                  "additionalProperties": false
+                                }
+                              },
+                              "priceOld": {
+                                "type": "string"
+                              },
+                              "price": {
+                                "type": "string"
+                              },
+                              "profit": {
+                                "type": "string"
+                              },
+                              "code": {
+                                "type": "string"
+                              },
+                              "image": {
+                                "type": "string"
+                              },
+                              "available": {
+                                "type": "string"
+                              },
+                              "dateAdded": {
+                                "type": "string"
+                              },
+                              "city": {
+                                "type": "string"
+                              },
+                              "category": {
+                                "type": "string"
+                              }
+                            },
+                            "required": [
+                              "_id",
+                              "title",
+                              "link",
+                              "description",
+                              "reasons",
+                              "priceOld",
+                              "price",
+                              "profit",
+                              "code",
+                              "image",
+                              "available",
+                              "dateAdded",
+                              "city",
+                              "category"
+                            ],
+                            "additionalProperties": false
+                          }
+                        },
+                        "removedItems": {
+                          "type": "array",
+                          "items": {
+                            "type": "object",
+                            "properties": {
+                              "_id": {
+                                "type": "string"
+                              },
+                              "title": {
+                                "type": "string"
+                              },
+                              "link": {
+                                "type": "string"
+                              },
+                              "description": {
+                                "type": "string"
+                              },
+                              "reasons": {
+                                "type": "array",
+                                "items": {
+                                  "type": "object",
+                                  "properties": {
+                                    "_id": {
+                                      "type": "string"
+                                    },
+                                    "label": {
+                                      "type": "string"
+                                    },
+                                    "text": {
+                                      "type": "string"
+                                    }
+                                  },
+                                  "required": ["_id", "label", "text"],
+                                  "additionalProperties": false
+                                }
+                              },
+                              "priceOld": {
+                                "type": "string"
+                              },
+                              "price": {
+                                "type": "string"
+                              },
+                              "profit": {
+                                "type": "string"
+                              },
+                              "code": {
+                                "type": "string"
+                              },
+                              "image": {
+                                "type": "string"
+                              },
+                              "available": {
+                                "type": "string"
+                              },
+                              "dateAdded": {
+                                "type": "string"
+                              },
+                              "city": {
+                                "type": "string"
+                              },
+                              "category": {
+                                "type": "string"
+                              }
+                            },
+                            "required": [
+                              "_id",
+                              "title",
+                              "link",
+                              "description",
+                              "reasons",
+                              "priceOld",
+                              "price",
+                              "profit",
+                              "code",
+                              "image",
+                              "available",
+                              "dateAdded",
+                              "city",
+                              "category"
+                            ],
+                            "additionalProperties": false
+                          }
+                        },
+                        "changesPrice": {
+                          "type": "array",
+                          "items": {
+                            "type": "object",
+                            "properties": {
+                              "item": {
+                                "type": "object",
+                                "properties": {
+                                  "_id": {
+                                    "type": "string"
+                                  },
+                                  "title": {
+                                    "type": "string"
+                                  },
+                                  "link": {
+                                    "type": "string"
+                                  },
+                                  "description": {
+                                    "type": "string"
+                                  },
+                                  "reasons": {
+                                    "type": "array",
+                                    "items": {
+                                      "type": "object",
+                                      "properties": {
+                                        "_id": {
+                                          "type": "string"
+                                        },
+                                        "label": {
+                                          "type": "string"
+                                        },
+                                        "text": {
+                                          "type": "string"
+                                        }
+                                      },
+                                      "required": ["_id", "label", "text"],
+                                      "additionalProperties": false
+                                    }
+                                  },
+                                  "priceOld": {
+                                    "type": "string"
+                                  },
+                                  "price": {
+                                    "type": "string"
+                                  },
+                                  "profit": {
+                                    "type": "string"
+                                  },
+                                  "code": {
+                                    "type": "string"
+                                  },
+                                  "image": {
+                                    "type": "string"
+                                  },
+                                  "available": {
+                                    "type": "string"
+                                  },
+                                  "dateAdded": {
+                                    "type": "string"
+                                  },
+                                  "city": {
+                                    "type": "string"
+                                  },
+                                  "category": {
+                                    "type": "string"
+                                  }
+                                },
+                                "required": [
+                                  "_id",
+                                  "title",
+                                  "link",
+                                  "description",
+                                  "reasons",
+                                  "priceOld",
+                                  "price",
+                                  "profit",
+                                  "code",
+                                  "image",
+                                  "available",
+                                  "dateAdded",
+                                  "city",
+                                  "category"
+                                ],
+                                "additionalProperties": false
+                              },
+                              "diff": {
+                                "type": "object",
+                                "properties": {
+                                  "priceOld": {
+                                    "type": "string"
+                                  },
+                                  "price": {
+                                    "type": "string"
+                                  },
+                                  "profit": {
+                                    "type": "string"
+                                  }
+                                },
+                                "required": ["priceOld", "price", "profit"],
+                                "additionalProperties": false
+                              }
+                            },
+                            "required": ["item", "diff"],
+                            "additionalProperties": false
+                          }
+                        },
+                        "changesProfit": {
+                          "type": "array",
+                          "items": {
+                            "type": "object",
+                            "properties": {
+                              "item": {
+                                "type": "object",
+                                "properties": {
+                                  "_id": {
+                                    "type": "string"
+                                  },
+                                  "title": {
+                                    "type": "string"
+                                  },
+                                  "link": {
+                                    "type": "string"
+                                  },
+                                  "description": {
+                                    "type": "string"
+                                  },
+                                  "reasons": {
+                                    "type": "array",
+                                    "items": {
+                                      "type": "object",
+                                      "properties": {
+                                        "_id": {
+                                          "type": "string"
+                                        },
+                                        "label": {
+                                          "type": "string"
+                                        },
+                                        "text": {
+                                          "type": "string"
+                                        }
+                                      },
+                                      "required": ["_id", "label", "text"],
+                                      "additionalProperties": false
+                                    }
+                                  },
+                                  "priceOld": {
+                                    "type": "string"
+                                  },
+                                  "price": {
+                                    "type": "string"
+                                  },
+                                  "profit": {
+                                    "type": "string"
+                                  },
+                                  "code": {
+                                    "type": "string"
+                                  },
+                                  "image": {
+                                    "type": "string"
+                                  },
+                                  "available": {
+                                    "type": "string"
+                                  },
+                                  "dateAdded": {
+                                    "type": "string"
+                                  },
+                                  "city": {
+                                    "type": "string"
+                                  },
+                                  "category": {
+                                    "type": "string"
+                                  }
+                                },
+                                "required": [
+                                  "_id",
+                                  "title",
+                                  "link",
+                                  "description",
+                                  "reasons",
+                                  "priceOld",
+                                  "price",
+                                  "profit",
+                                  "code",
+                                  "image",
+                                  "available",
+                                  "dateAdded",
+                                  "city",
+                                  "category"
+                                ],
+                                "additionalProperties": false
+                              },
+                              "diff": {
+                                "type": "object",
+                                "properties": {
+                                  "priceOld": {
+                                    "type": "string"
+                                  },
+                                  "price": {
+                                    "type": "string"
+                                  },
+                                  "profit": {
+                                    "type": "string"
+                                  }
+                                },
+                                "required": ["priceOld", "price", "profit"],
+                                "additionalProperties": false
+                              }
+                            },
+                            "required": ["item", "diff"],
+                            "additionalProperties": false
+                          }
+                        }
+                      },
+                      "required": [
+                        "city",
+                        "dateAdded",
+                        "newItems",
+                        "removedItems",
+                        "changesPrice",
+                        "changesProfit"
+                      ],
+                      "additionalProperties": false
+                    }
+                  }
+                },
+                "required": ["diff"],
+                "additionalProperties": false
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful response"
+          },
+          "400": {
+            "description": "Validation error"
+          }
+        }
+      }
+    },
+    "/service/delete-analysis-diff": {
+      "post": {
+        "summary": "Delete all analysis diffs for a city",
+        "tags": ["Service / Analysis"],
+        "security": [
+          {
+            "serviceBearer": []
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "city": {
+                    "type": "string",
+                    "minLength": 1
+                  }
+                },
+                "required": ["city"],
+                "additionalProperties": false
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful response"
+          },
+          "400": {
+            "description": "Validation error"
+          }
+        }
+      }
+    },
+    "/service/delete-analysis-diff-by-date": {
+      "post": {
+        "summary": "Delete analysis diffs for a city on a given date",
+        "tags": ["Service / Analysis"],
+        "security": [
+          {
+            "serviceBearer": []
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "city": {
+                    "type": "string",
+                    "minLength": 1
+                  },
+                  "dateAdded": {
+                    "anyOf": [
+                      {
+                        "type": "string",
+                        "format": "date",
+                        "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))$"
+                      },
+                      {
+                        "type": "string",
+                        "format": "date-time",
+                        "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d(?::[0-5]\\d(?:\\.\\d+)?)?(?:Z))$"
+                      }
+                    ]
+                  }
+                },
+                "required": ["city", "dateAdded"],
+                "additionalProperties": false
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful response"
+          },
+          "400": {
+            "description": "Validation error"
+          }
+        }
+      }
+    },
+    "/service/add-analysis-report": {
+      "post": {
+        "summary": "Generate and store an LLM analysis report for a city",
+        "tags": ["Service / Analysis"],
+        "security": [
+          {
+            "serviceBearer": []
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "city": {
+                    "type": "string",
+                    "minLength": 1
+                  }
+                },
+                "required": ["city"],
+                "additionalProperties": false
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful response"
+          },
+          "400": {
+            "description": "Validation error"
+          }
+        }
+      }
+    },
+    "/service/delete-analysis-report-by-city-date": {
+      "post": {
+        "summary": "Delete an analysis report for a city on a given date",
+        "tags": ["Service / Analysis"],
+        "security": [
+          {
+            "serviceBearer": []
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "city": {
+                    "type": "string",
+                    "minLength": 1
+                  },
+                  "dateAdded": {
+                    "anyOf": [
+                      {
+                        "type": "string",
+                        "format": "date",
+                        "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))$"
+                      },
+                      {
+                        "type": "string",
+                        "format": "date-time",
+                        "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d(?::[0-5]\\d(?:\\.\\d+)?)?(?:Z))$"
+                      }
+                    ]
+                  }
+                },
+                "required": ["city", "dateAdded"],
+                "additionalProperties": false
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful response"
+          },
+          "400": {
+            "description": "Validation error"
+          }
+        }
+      }
+    },
+    "/service/all-notification-users": {
+      "get": {
+        "summary": "List users subscribed to update notifications for a city",
+        "tags": ["Service / Users"],
+        "security": [
+          {
+            "serviceBearer": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "city",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "minLength": 1
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful response"
+          },
+          "400": {
+            "description": "Validation error"
+          }
+        }
+      }
+    },
+    "/service/update-users-favorites": {
+      "post": {
+        "summary": "Bulk overwrite favorites for a set of users",
+        "tags": ["Service / Users"],
+        "security": [
+          {
+            "serviceBearer": []
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "users": {
+                    "type": "array",
+                    "items": {
+                      "type": "object",
+                      "properties": {
+                        "userId": {
+                          "type": "string",
+                          "minLength": 1
+                        },
+                        "favorites": {
+                          "type": "array",
+                          "items": {
+                            "type": "object",
+                            "properties": {
+                              "_id": {
+                                "type": "string"
+                              },
+                              "status": {
+                                "type": "object",
+                                "properties": {
+                                  "updatedAt": {
+                                    "type": "string"
+                                  },
+                                  "createdAt": {
+                                    "type": "string"
+                                  },
+                                  "deleted": {
+                                    "type": "boolean"
+                                  },
+                                  "city": {
+                                    "type": "string"
+                                  }
+                                },
+                                "required": ["updatedAt", "createdAt", "deleted", "city"],
+                                "additionalProperties": false
+                              },
+                              "item": {
+                                "type": "object",
+                                "properties": {
+                                  "_id": {
+                                    "type": "string"
+                                  },
+                                  "title": {
+                                    "type": "string"
+                                  },
+                                  "link": {
+                                    "type": "string"
+                                  },
+                                  "description": {
+                                    "type": "string"
+                                  },
+                                  "reasons": {
+                                    "type": "array",
+                                    "items": {
+                                      "type": "object",
+                                      "properties": {
+                                        "_id": {
+                                          "type": "string"
+                                        },
+                                        "label": {
+                                          "type": "string"
+                                        },
+                                        "text": {
+                                          "type": "string"
+                                        }
+                                      },
+                                      "required": ["_id", "label", "text"],
+                                      "additionalProperties": false
+                                    }
+                                  },
+                                  "priceOld": {
+                                    "type": "string"
+                                  },
+                                  "price": {
+                                    "type": "string"
+                                  },
+                                  "profit": {
+                                    "type": "string"
+                                  },
+                                  "code": {
+                                    "type": "string"
+                                  },
+                                  "image": {
+                                    "type": "string"
+                                  },
+                                  "available": {
+                                    "type": "string"
+                                  },
+                                  "dateAdded": {
+                                    "nullable": true,
+                                    "type": "string"
+                                  }
+                                },
+                                "required": [
+                                  "_id",
+                                  "title",
+                                  "link",
+                                  "description",
+                                  "reasons",
+                                  "priceOld",
+                                  "price",
+                                  "profit",
+                                  "code",
+                                  "image",
+                                  "available"
+                                ],
+                                "additionalProperties": false
+                              }
+                            },
+                            "required": ["_id", "status", "item"],
+                            "additionalProperties": false
+                          }
+                        }
+                      },
+                      "required": ["userId", "favorites"],
+                      "additionalProperties": false
+                    }
+                  }
+                },
+                "required": ["users"],
+                "additionalProperties": false
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful response"
+          },
+          "400": {
+            "description": "Validation error"
+          }
+        }
+      }
+    },
+    "/service/clear-cache-by-key": {
+      "post": {
+        "summary": "Invalidate cache entries matching a glob pattern",
+        "tags": ["Service / Cache"],
+        "security": [
+          {
+            "serviceBearer": []
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "keys": {
+                    "type": "string",
+                    "minLength": 1
+                  }
+                },
+                "required": ["keys"],
+                "additionalProperties": false
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful response"
+          },
+          "400": {
+            "description": "Validation error"
+          }
+        }
+      }
+    },
+    "/clerk/create-user": {
+      "post": {
+        "summary": "Clerk user.created webhook (svix-signed)",
+        "tags": ["Clerk"],
+        "security": [
+          {
+            "svixWebhook": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful response"
+          },
+          "400": {
+            "description": "Validation error"
+          }
+        }
+      }
+    }
+  }
+}

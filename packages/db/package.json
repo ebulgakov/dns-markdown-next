@@ -1,0 +1,19 @@
+{
+  "name": "@dns-markdown/db",
+  "private": true,
+  "type": "module",
+  "exports": {
+    "./database": "./src/database.ts",
+    "./models/*": "./src/models/*.ts",
+    "./schemas/*": "./src/schemas/*.ts",
+    "./types/*": "./src/types/*.ts"
+  },
+  "dependencies": {
+    "mongoose": "^9.1.5"
+  },
+  "scripts": {
+    "lint": "eslint",
+    "lint:fix": "eslint --fix",
+    "type-check": "tsc --noEmit"
+  }
+}

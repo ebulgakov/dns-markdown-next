@@ -1,0 +1,16 @@
+{
+  "name": "@dns-markdown/env",
+  "private": true,
+  "type": "module",
+  "exports": {
+    ".": "./src/index.ts"
+  },
+  "dependencies": {
+    "dotenv": "^17.2.3"
+  },
+  "scripts": {
+    "lint": "eslint",
+    "lint:fix": "eslint --fix",
+    "type-check": "tsc --noEmit"
+  }
+}

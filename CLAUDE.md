@@ -2,112 +2,48 @@
 
 This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
 
-## Project overview
+## Monorepo layout
 
-Next.js (App Router) frontend for an unofficial site that lets users browse discounted ("markdown") products from the DNS electronics retailer. It is a BFF (backend-for-frontend): all product/pricelist/analysis data comes from a separate external API (`API_URL`), and this app itself is not the system of record. Auth is via Clerk; guests (unauthenticated users) get equivalent functionality backed by Upstash Redis instead of the external API's user endpoints.
+Bun workspaces (`apps/*`, `packages/*`) orchestrated by **Nx** (package-based: targets are inferred from each workspace's `package.json` scripts, no Nx plugins; caching rules live in `nx.json`). Single `bun.lock` at the root; `bunfig.toml` pins `linker = "hoisted"` so Vercel can trace external modules from the root `node_modules`. Shared compiler options live in `tsconfig.base.json`; every workspace `tsconfig.json` extends it (the root `tsconfig.json` covers only root-level config files like `eslint.config.ts`).
 
-## CodeGraph
+Each workspace has its own `CLAUDE.md` with details — read it before working in that workspace:
 
-In repositories with a healthy CodeGraph index, reach for it BEFORE grep/find or reading files when you need to understand or locate code. Check with `codegraph status` — the `.codegraph/` directory alone isn't proof of an index: only `.codegraph/.gitignore` is tracked in git (see below), so the directory exists on every checkout even before this machine has run the daemon and built a database.
-
-- **MCP tool** (when available): `codegraph_explore` answers most code questions in one call — the relevant symbols' verbatim source plus the call paths between them, including dynamic-dispatch hops grep can't follow. Name a file or symbol in the query to read its current line-numbered source. If it's listed but deferred, load it by name via tool search.
-- **Shell** (always works): `codegraph explore "<symbol names or question>"` prints the same output.
-
-If `codegraph status` reports no index (or the command itself is unavailable), skip CodeGraph entirely — indexing is the user's decision.
+- `apps/api` (`@dns-markdown/api`) — the Express API, deployed to Vercel. See `apps/api/CLAUDE.md`.
+- `apps/web` (`@dns-markdown/web`) — the Next.js (App Router) frontend/BFF, deployed to Vercel; talks to the API over HTTP (`API_URL`). See `apps/web/CLAUDE.md`.
+- `apps/parser` (`@dns-markdown/parser`) — DNS markdown scraper/ETL (CLI pipeline); pushes data to the API over HTTP, runs locally only (not deployed). See `apps/parser/CLAUDE.md`.
+- `packages/db` (`@dns-markdown/db`) — Mongoose models, schemas, payload types and `dbConnect(uri)`. See `packages/db/CLAUDE.md`.
+- `packages/env` (`@dns-markdown/env`) — shared env-file loading and `NODE_ENV`/platform checks. See `packages/env/CLAUDE.md`.
 
 ## Commands
 
-Package manager is **bun** (see `bunfig.toml`, `bun.lock`; hoisted linker and `trustedDependencies` in `package.json`, matching the `dns-markdown-api` Nx monorepo this app will move into). Bun is the package manager/script runner and the unit-test runner (`bun test`); `next`, `storybook`, `eslint` (and Vitest for Storybook interaction tests) still run on Node, whose version is pinned in `.nvmrc`. Always invoke scripts as `bun run <script>`: `bun build` is Bun's built-in bundler, not this project's `build` script.
+This project uses **Bun** (not npm/node) as the package manager and runtime. Run from the repo root:
 
 ```bash
-bun run dev              # start dev server (localhost:3000)
-bun run build            # production build
-bun run start            # start production server
-
-bun run lint             # eslint
-bun run lint:fix         # eslint --fix
-bun run type-check       # tsc --noEmit
-
-bun run test             # bun test --isolate (TZ=UTC)
-bun run test:watch       # bun test --isolate --watch
-bun run test:coverage    # bun test --isolate --coverage
-
-bun run storybook        # storybook dev on :6006
-bun run build-storybook  # static storybook build
-
-bun run dep-check        # dependency-cruiser: circular imports, unresolvable paths
-bun run dep-graph        # dependency-cruiser: mermaid dependency graph
-bun run dep-graph:archi  # dependency-cruiser: svg architecture diagram (needs graphviz `dot`)
+bun install                 # install all workspaces
+bun run dev                 # api dev server with watch mode
+bun run dev:web             # web (Next.js) dev server on :3000
+bun run test                # nx run-many -t test (not cached: env files are not part of the cache key)
+bun run lint                # nx run-many -t lint
+bun run lint:fix            # eslint --fix across the repo (root config + apps/web's own config)
+bun run type-check          # nx run-many -t type-check
+bun run build               # nx run-many -t build
+bun run affected            # lint/type-check/test/build only for projects changed vs main
+bunx nx run <project>:<script>   # any single script of one project, e.g. @dns-markdown/api:dev:prod
 ```
 
-Run a single unit test file: `TZ=UTC bun test --isolate path/to/file.test.ts`.
+Nx runs every target with cwd = the project root. Root scripts set `NX_LOAD_DOT_ENV_FILES=false`: otherwise Nx injects the root `.env*` files into every task's environment, which leaks the API's vars (including `NODE_ENV`) into `apps/web` and breaks `next build` — so when calling `bunx nx` directly, prefix it the same way. Prefer `bun run test` (Nx, one process per project). A bare `bun test` from the root also works (runs all workspaces in one process); the parser's test preload is therefore set in both `bunfig.toml` (root) and `apps/parser/bunfig.toml` — keep them in sync.
 
-Playwright e2e tests live in `playwright/` (config in `playwright.config.ts`). They build+start the app and run against `http://localhost:3000`: `npx playwright test`. These require Clerk test credentials and Upstash Redis env vars (see CI workflow `.github/workflows/playwright.yml`) — they are not expected to run without that setup.
+## Env files
 
-Unit tests run on `bun test` (configured in `bunfig.toml`'s `[test]`): discovery is rooted at `src/` (`**/*.test.{ts,tsx}`, colocated under `__tests__/`, e.g. `src/shared/lib/__tests__/format.test.ts`), and `test/setup.ts` is preloaded to register happy-dom globals for React Testing Library. Import test APIs from `bun:test`. Unlike Vitest, plain `bun test` runs every file in one shared global and module registry, so module-level state (zustand stores) and `vi.mock` module mocks leak between files — the `test` scripts pass `--isolate` (Bun ≥ 1.4; the version is pinned in `package.json`'s `packageManager` and CI reads it via `bun-version-file`) to give each file a fresh global, matching Vitest's per-file isolation. Older Bun silently ignores the flag. Differences from Vitest to keep in mind: `vi.mock` is not hoisted (declare `vi.fn()` mocks first and close over them in the factory — no `as Mock` casts), and there is no `vi.advanceTimersByTimeAsync` (use `advanceTimersByTimeAsync` from `@/test/fake-timers`). `vitest.config.ts` now holds only the `storybook` project, which runs Storybook interaction tests in a real browser (Playwright provider) — this is exercised via `bun run build-storybook`/Chromatic CI, not `bun run test`.
+`apps/web` is the exception: Next.js loads its own env files from `apps/web/` (`.env`, see `apps/web/.env-example`) and does not use `@dns-markdown/env`. Everything below applies to the API, parser and packages.
 
-CI runs ESLint, `tsc --noEmit` ("TSLint" workflow), Bun tests, Playwright, and `bun run dep-check` (`.github/workflows/dependency-check.yml`) as separate GitHub Actions workflows on push/PR to `main`. Chromatic runs only when a PR is labeled `chromatic`.
-
-## Environment
-
-Copy `.env-example` to `.env` and fill in values. Key variables:
-- `API_URL` / `API_SECRET_KEY` — external backend that owns pricelist/product/analysis data (called via `src/shared/api/client.ts`'s `apiClient`, an axios instance sending `X-Internal-API-Secret`).
-- `CLERK_SECRET_KEY` / `NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY` / `NEXT_PUBLIC_CLERK_*_URL` — Clerk auth.
-- `UPSTASH_REDIS_REST_URL` / `UPSTASH_REDIS_REST_TOKEN` — guest user state storage.
-- `DEFAULT_CITY` — fallback city (e.g. `samara`) used when a user/guest has none set.
-- `WEBHOOK_SECRET_KEY` — bearer secret required by `app/api/revalidate/route.ts` to trigger cache revalidation from the external backend.
-
-## Architecture
-
-The codebase follows Feature-Sliced Design (FSD) under `src/` (`shared → entities → features → widgets`), enforced by `eslint-plugin-boundaries` in `eslint.config.mjs`: `app`/`widget`/`feature`/`entity` are declared as elements (the latter three captured per slice), and a single `boundaries/dependencies` policy set (default: disallow) requires every cross-slice import to go through the target slice's public `index.ts` (`fileInternalPath: "index.ts"`). `shared` also has a forced entry point, but a segment-level one rather than one top-level barrel: `shared/{lib,api,providers}/index.ts` (single barrel per segment) and `shared/ui/<component>/index.ts` (per-component — deliberately no single `shared/ui/index.ts`, because that was tried and broke `next build` by pulling every UI component, including recharts/Radix-heavy ones, into one eagerly-evaluated module graph). Documented single-direction exceptions exist for `entities/product ⇄ entities/user` (asymmetric: product needs exactly one function from user, user needs product's `Goods`/`Favorite` types) and for two entities → features cases (`product-card-compare-button`, `product-card-favorite-toggle`) that a higher-layer slot/IoC refactor isn't worth at this project's scale — see `eslint.config.mjs`'s inline comments for the exact policies. Next's own `app/` directory stays at the project root and is routing-only: `page.tsx`/`layout.tsx`/`app/api/*/route.ts` are intentionally out of scope for FSD restructuring — they compose the `src/` layers but are not moved into them. Route-local UI with a single consumer (e.g. `app/analysis/analytics-*.tsx`, `app/profile/profile-sections.tsx`) is colocated directly next to its `page.tsx` rather than promoted to a shared layer.
-
-### File naming
-
-Files under `src/` and `app/` use kebab-case — lowercase words separated by hyphens, no uppercase letters in the file name — for every file type, including components: `src/entities/product/ui/product-card.tsx`, `app/archive/archive-list.tsx`. The exported identifier stays normal JS/React convention (PascalCase for components — `ProductCard`, `ArchiveList` — camelCase for hooks/functions); only the on-disk file name is constrained to kebab-case.
-
-### Data layer: user vs. guest, always behind `src/entities/user`'s `post.ts`
-
-Almost all mutating/user-scoped reads go through `src/entities/user/api/post.ts` (re-exported via `src/entities/user/index.ts`), which branches on whether a Clerk session exists (`getSessionInfo()` from `src/entities/user/api/user.ts`, memoized per-request via React's `cache()`):
-- **Logged-in** → delegates to `api/user.ts`, which calls the external API with the Clerk bearer token and calls `revalidateTag(`user-${userId}`)` after every mutation.
-- **Guest** → delegates to `api/guest.ts`, which reads/writes a `User` object in Upstash Redis keyed by a `guestId` cookie (30-day TTL), with no external API involvement.
-
-Both paths converge on the same shape (`User`, `Favorite`, `SectionsResponse`, etc. from `src/entities/user/model/user.ts`), so components/pages consuming `getUser()` etc. don't need to know which backend served the request. When adding a new user-scoped action, add matching functions to both `api/user.ts` and `api/guest.ts`, then branch on `userId` in `api/post.ts` — don't special-case guest/user logic in components. `api/user.ts`/`api/guest.ts` are private internals of the slice; only `post.ts`'s exports (and `getSessionInfo`/`getUser` from `api/user.ts`, used directly by `app/layout.tsx`, `app/favorites/page.tsx`, `app/profile/page.tsx`) are re-exported through the slice's public `index.ts`.
-
-### Data layer: catalog/analysis reads via `src/entities/product`'s `get.ts`
-
-Read-only catalog/analysis data (pricelists, products, diffs, LLM reports) goes through `src/entities/product/api/get.ts`, where every fetch is wrapped in `unstable_cache` with a `daily-data` (or `llm-report`) tag. `app/api/revalidate/route.ts` is the webhook the external backend calls (with `WEBHOOK_SECRET_KEY`) to bust these tags when new data lands — this is how the app picks up new pricelists without redeploying.
-
-### Route structure
-
-`app/` follows Next.js App Router conventions with route groups: `(home)`, plus `catalog` (with `catalog/markdown/[id]` for a single product), `analysis`, `archive/[id]`, `favorites`, `profile`, `about`, `today`, `sign-in`/`sign-up`. API route handlers live under `app/api/*/route.ts` and are thin wrappers that call into `src/entities/{user,product}`'s public APIs and shape the HTTP response — business/caching logic belongs in `src/entities/`, not in route handlers.
-
-`proxy.ts` is the Clerk middleware entry point (protects `/profile(.*)`; note this project uses `proxy.ts` rather than the conventional `middleware.ts` filename).
-
-### State
-
-- `src/entities/user/model/user-context.tsx` — server-populated user data (favorites, hidden/favorite sections, city) is fetched once in `app/layout.tsx` and provided via React context, avoiding a client-side refetch on every page.
-- Zustand stores live with the layer/slice that owns them, not in one shared folder: `src/entities/product/model/pricelist-store.ts` (genuine domain data, read by multiple routes/features — hence `entities`, not a feature); `src/features/search/model/search-store.ts`, `src/features/sort-goods/model/sort-goods-store.ts`, `src/features/llm-report/model/llm-store.ts` (feature-owned UI/interaction state — no feature reads another feature's store; `search`/`sort-goods` state that `product-catalog`/`jump-to-section` need is composed one layer up, in `src/_pages/*`, and passed down as props/callbacks).
-- `src/shared/providers/` — `QueryProvider` (TanStack Query) and `ThemeProvider` (next-themes) wrap the tree in `app/layout.tsx`. Pure infra wrappers, no business logic, hence `shared` rather than app-shell code.
-- `src/widgets/{navbar,footer}/` — app-shell chrome rendered once from `app/layout.tsx` (navbar includes the folded-in `logo`).
-
-### UI conventions
-
-- shadcn/ui ("new-york" style) is configured in `components.json`; primitives live in `src/shared/ui`, with path aliases `@/shared/*`, `@/entities/{user,product}`, `@/features/{product-catalog,search,sort-goods,jump-to-section,llm-report,change-city}`, `@/widgets/{navbar,footer}`, plus the catch-all `@/*` for anything not yet under `src/` (notably all of `app/`, `types/`) — use these aliases, don't add new ones.
-- i18n via `next-intl`; translation strings live in `i18n/locates/{en,ru}.json`, loaded through `i18n/request.ts`. Russian (`ru`) is the primary/default locale (see README).
-- Storybook stories are colocated with components (`*.stories.tsx`), both under `src/**` and route-local under `app/**`; Chromatic is wired for visual regression but only runs in CI when a PR carries the `chromatic` label.
-- Sentry (`@sentry/nextjs`) is wired via `next.config.ts` (`withSentryConfig`) and `sentry.server.config.ts`/`sentry.edge.config.ts`/`instrumentation*.ts`.
-
-### Import ordering & formatting
-
-ESLint enforces `import/order` (builtin → external → internal → parent → sibling → index → object → type, alphabetized, blank line between groups) — see `eslint.config.mjs`. Prettier config (`.prettierrc`): no trailing commas, double quotes, no semicolon-omission changes needed (semi: true), `arrowParens: avoid`, tailwind class sorting via `prettier-plugin-tailwindcss`. Run `bun run lint:fix` after edits touching imports.
+Env files are shared by all workspaces and live in the **monorepo root**: `.env.<NODE_ENV>` (`.env.development`, `.env.test`, `.env.production`) is loaded first, then the common `.env` (already set vars are never overridden). Loading is done by `loadEnv()` from `@dns-markdown/env`; each app validates only its own variables with its own zod schema. In production there are no env files — Vercel injects the API's vars (the parser is not deployed). A key both apps share (`API_SECRET_KEY`, `API_SERVICE_KEY`, `UPSTASH_VECTOR_*`) lives once in the shared file; per-app differences go into the app's `package.json` scripts (e.g. the parser's `CITY` / `WRITE_STRATEGY`). Keep `CITY` out of the shared `.env` — parser stages rely on it being set only by their scripts. All keys are listed in the root `.env.example`. Never read `process.env` directly outside an app's env module or `packages/env`.
 
 ## Code style
 
-- No `any` (`@typescript-eslint/no-explicit-any`, `eslint.config.mjs`) — if you're reaching for `any`, the real fix is usually a proper type or a narrower `unknown`.
-- No unjustified `eslint-disable`. Zero exist in the repo today — a new one needs a genuine conflict between two tools/rules, stated inline, not "the linter was annoying here."
-- `max-lines-per-function` is enforced at 80, and `max-lines` (whole file) at 250, both `skipBlankLines`/`skipComments`, both across `.ts` and `.tsx` (`eslint.config.mjs`). `__tests__/` files are exempt from both (arrange-act-assert blocks legitimately run long); both also exempt `*.stories.tsx`. Eleven files are grandfathered by filename for `max-lines-per-function` (mostly React components — a JSX-heavy render body trips this rule at a much lower true "logic" size than a `.ts` file would); `src/shared/ui/chart/chart.tsx` (shadcn-generated) is additionally grandfathered for `max-lines`. That list should only shrink (refactor one below its threshold, drop the entry), never grow — see `eslint.config.mjs` for the exact file list.
-- **FSD layer boundaries** are enforced by `eslint-plugin-boundaries` — see Architecture above for the full policy graph. `**/*.stories.tsx`, `**/__mocks__/**`, and `**/__tests__/**` are exempt from the `boundaries/dependencies` check entirely (`eslint.config.mjs`'s boundaries block `ignores`): those files legitimately reach into internals (mocking a store, rendering a component directly) that production code must not.
-- `dependency-cruiser` (`.dependency-cruiser.cjs`, `bun run dep-check`, see Commands) covers what `eslint-plugin-boundaries` structurally can't: circular imports anywhere in `app/**`/`src/**`, and unresolvable import paths (a canary against a misconfigured resolver silently passing `no-circular` while checking nothing).
+Enforced by the root `eslint.config.ts` and `.prettierrc` for all workspaces except `apps/web`, which has its own `eslint.config.mjs` (Next, FSD boundaries, Storybook rules), `.prettierrc` (Tailwind plugin) and `.lintstagedrc.json`: no semicolon-trailing commas, double quotes, 100-char print width, arrow function params unparenthesized when single-arg. Import order is enforced (builtin → external → internal → parent → sibling → index → type) with alphabetization and mandatory blank lines between groups — let `bun run lint:fix` handle this rather than ordering imports by hand.
+
+Apps except `apps/web` (Next.js / Feature-Sliced Design layout, see its `CLAUDE.md`) share one layout: code in `src/`, kebab-case file and folder names, `@src/*` → `src/*` alias (tsconfig `paths`) for cross-directory imports, relative imports within a folder, no file extensions in imports. Cross-workspace imports go through the workspace package name (`@dns-markdown/db/...`, `@dns-markdown/env`), never through relative paths into another workspace.
 
 ## Subagents
 

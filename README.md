@@ -1,56 +1,37 @@
-Русский | [English](./README.en.md)
+# dns-markdown
 
-# Сервис по подбору уценённых товаров с магазина DNS
+Monorepo (Bun workspaces + Nx): `apps/web` — Next.js site ([README](apps/web/README.md)), `apps/api` — Express API, `apps/parser` — DNS markdown scraper ([README](apps/parser/README.md)), `packages/db` — shared Mongoose models, `packages/env` — shared env loading.
 
-## Адрес сайта
+<img width="2574" height="2342" alt="image" src="https://github.com/user-attachments/assets/a6922841-1aa0-4801-9577-50f47bc80b34" />
 
-https://dns.ebulgakov.com/
+## API docs
 
-## О сервисе
+- [API-Enpoints Documentation](apps/api/API.md)
+- [Swagger URL](https://dns-markdown-api.vercel.app/docs/)
 
-Это неофициальный сайт, связанный с компанией DNS. Он помогает просматривать уценённые товары из города Самара, представленные на сайте DNS.
+## Commands
 
-Сервис предоставляет удобный способ просмотра товаров из Самары на данный момент. Вы можете добавлять товары в избранное, чтобы отслеживать обновления, такие как изменения цен или наличие товара в магазинах.
-
-## Начало работы
-
-Запустите сервер разработки:
+Install:
 
 ```bash
-bun run dev
+bun install
 ```
 
-Откройте [http://localhost:3000](http://localhost:3000) в вашем браузере, чтобы увидеть локальный сайт.
-
-## .env файл
-
-Переименуйте `.env-example` файл в `.env` и заполните необходимые переменные.
-
-## Storybook
-
-Chromatic Storybook настроен для этого проекта: https://www.chromatic.com/library?appId=695938b24c4c7f59436c970b
-
-## Граф зависимостей
+Run dev build:
 
 ```bash
-bun run dep-check       # CI-проверка: нет циклических импортов
-bun run dep-graph       # выводит Mermaid-диаграмму в stdout — вставьте в PR/Markdown
-bun run dep-graph:archi # генерирует dependency-graph.svg (нужен `dot` из Graphviz)
+bun run dev       # api
+bun run dev:web   # web (Next.js, :3000)
 ```
 
-Требуется Node `^22||^24||>=26` (диапазон, который поддерживает сам dependency-cruiser) — зафиксированная в [`.nvmrc`](./.nvmrc) версия проекта (`v26.7.0`) уже ему удовлетворяет. Что именно проверяют эти правила и почему — см. `.dependency-cruiser.cjs` и `CLAUDE.md`.
+## Technologies
 
-![Граф зависимостей](./dependency-graph.svg)
-
-## Используемые технологии
-
-- Next.js 16
+- Express
+- Bun
+- MongoDB
 - Typescript
-- Tailwind CSS
-- Shadcn/UI
-- I18n
-- Storybook
-- Playwright
-- Jest
-- Sentry
+- Redis
 - Clerk Auth
+- Upstash Vector DB
+- OpenAI API
+- Swagger

@@ -1,0 +1,5 @@
+[test]
+# Boundary mocks (@src/env, @src/api/client, @src/email/index) must be registered before any
+# test file imports code that loads them. Bun reads bunfig.toml only from the cwd, so the same
+# preload is also set in the root bunfig.toml for a bare `bun test` from the repo root.
+preload = ["./src/__tests__/mocks.ts"]

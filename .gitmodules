@@ -1,0 +1,3 @@
+[submodule "apps/parser/src/dns-markdown-parser"]
+	path = apps/parser/src/dns-markdown-parser
+	url = git@github.com:ebulgakov/dns-markdown-parser.git
