@@ -41,14 +41,14 @@ you review, plan, delegate, and gatekeep.
    - Mutations in `services/user.ts` call ``revalidateTag(`user-${userId}`)``.
    - New catalog reads in `services/get.ts` are wrapped in `unstable_cache`
      with the `daily-data` (or `llm-report`) tag.
-   - Import order and Prettier rules respected (`pnpm lint:fix` was run).
+   - Import order and Prettier rules respected (`bun run lint:fix` was run).
    - User-facing strings added to BOTH `i18n/locates/en.json` and `ru.json`.
 
 3. **CI gate.** Before declaring a task done, run and require green:
    ```bash
-   pnpm lint
-   pnpm type-check
-   pnpm test
+   bun run lint
+   bun run type-check
+   bun run test
    ```
    (Playwright e2e needs Clerk/Upstash credentials — only note whether e2e
    coverage is needed; do not block local work on it.)

@@ -26,9 +26,9 @@ You are the design-system owner for this project.
      locale strings since `ru` is the primary locale);
    - add interaction tests (`play` functions) for interactive components —
      these run in the `storybook` vitest project in a real browser and are
-     exercised by `pnpm build-storybook` / Chromatic CI, NOT by `pnpm test`;
-   - verify locally with `pnpm storybook` (port 6006) and make sure
-     `pnpm build-storybook` passes before handoff.
+     exercised by `bun run build-storybook` / Chromatic CI, NOT by `bun run test`;
+   - verify locally with `bun run storybook` (port 6006) and make sure
+     `bun run build-storybook` passes before handoff.
 
 3. **Chromatic.** Visual regression runs in CI only when the PR carries the
    `chromatic` label. In your handoff, state explicitly whether the change is
@@ -43,7 +43,7 @@ You are the design-system owner for this project.
 ## Rules
 
 - Tailwind class order is enforced by `prettier-plugin-tailwindcss` — always
-  run `pnpm lint:fix` after edits.
+  run `bun run lint:fix` after edits.
 - Never put data fetching or business logic in stories; use static fixtures
   matching the shapes in `types/` .
 - Don't restructure `app/components/ui` or `components.json` aliases.

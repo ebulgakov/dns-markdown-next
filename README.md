@@ -17,7 +17,7 @@ https://dns.ebulgakov.com/
 Запустите сервер разработки:
 
 ```bash
-pnpm dev
+bun run dev
 ```
 
 Откройте [http://localhost:3000](http://localhost:3000) в вашем браузере, чтобы увидеть локальный сайт.
@@ -33,9 +33,9 @@ Chromatic Storybook настроен для этого проекта: https://w
 ## Граф зависимостей
 
 ```bash
-pnpm dep-check         # CI-проверка: нет циклических импортов
-pnpm dep-graph         # выводит Mermaid-диаграмму в stdout — вставьте в PR/Markdown
-pnpm dep-graph:archi   # генерирует dependency-graph.svg (нужен `dot` из Graphviz)
+bun run dep-check       # CI-проверка: нет циклических импортов
+bun run dep-graph       # выводит Mermaid-диаграмму в stdout — вставьте в PR/Markdown
+bun run dep-graph:archi # генерирует dependency-graph.svg (нужен `dot` из Graphviz)
 ```
 
 Требуется Node `^22||^24||>=26` (диапазон, который поддерживает сам dependency-cruiser) — зафиксированная в [`.nvmrc`](./.nvmrc) версия проекта (`v26.7.0`) уже ему удовлетворяет. Что именно проверяют эти правила и почему — см. `.dependency-cruiser.cjs` и `CLAUDE.md`.

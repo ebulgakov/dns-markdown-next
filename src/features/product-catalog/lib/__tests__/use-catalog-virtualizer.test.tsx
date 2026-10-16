@@ -1,17 +1,20 @@
-import { useWindowVirtualizer } from "@tanstack/react-virtual";
 import { renderHook } from "@testing-library/react";
-import { afterEach, beforeEach, describe, expect, it, vi, type Mock } from "vitest";
+import { afterEach, beforeEach, describe, expect, it, vi } from "bun:test";
+
+import { advanceTimersByTimeAsync } from "@/test/fake-timers";
 
 import { useCatalogVirtualizer } from "../use-catalog-virtualizer";
 
 import type { VisualizationGoods, VisualizationOutputList } from "@/types/visualization";
 import type { RefObject } from "react";
 
-vi.mock("@tanstack/react-virtual", () => ({
-  useWindowVirtualizer: vi.fn()
-}));
+// bun:test does not hoist vi.mock, so the factory can close over this mock.
+const mockedUseWindowVirtualizer = vi.fn();
+const mockedScrollTo = vi.fn();
 
-const mockedUseWindowVirtualizer = useWindowVirtualizer as Mock;
+vi.mock("@tanstack/react-virtual", () => ({
+  useWindowVirtualizer: mockedUseWindowVirtualizer
+}));
 const emptyRef = { current: null } as RefObject<HTMLDivElement | null>;
 
 const goods = (id: string): VisualizationGoods => ({
@@ -58,9 +61,9 @@ function renderVirtualizer(withStickySearch = false) {
 beforeEach(() => {
   // Fake timers must be active before the hook's effect runs, otherwise its
   // internal setTimeout is a real timer that can fire after this test (and
-  // jsdom) has already been torn down, throwing "window is not defined".
+  // the DOM) has already been torn down, throwing "window is not defined".
   vi.useFakeTimers();
-  window.scrollTo = vi.fn();
+  window.scrollTo = mockedScrollTo;
   window.location.hash = "";
 });
 
@@ -97,7 +100,7 @@ describe("useCatalogVirtualizer", () => {
     window.location.hash = "#Ноутбуки";
 
     renderVirtualizer();
-    await vi.advanceTimersByTimeAsync(100);
+    await advanceTimersByTimeAsync(100);
 
     expect(window.scrollTo).toHaveBeenCalledWith({ top: 454 }); // 500 + 0 - 56 + 10
   });
@@ -106,7 +109,7 @@ describe("useCatalogVirtualizer", () => {
     window.location.hash = "#Ноутбуки";
 
     renderVirtualizer(true);
-    await vi.advanceTimersByTimeAsync(100);
+    await advanceTimersByTimeAsync(100);
 
     expect(window.scrollTo).toHaveBeenCalledWith({ top: 398 }); // 500 + 0 - 112 + 10
   });
@@ -115,7 +118,7 @@ describe("useCatalogVirtualizer", () => {
     window.location.hash = "#DoesNotExist";
 
     renderVirtualizer();
-    await vi.advanceTimersByTimeAsync(100);
+    await advanceTimersByTimeAsync(100);
 
     expect(window.scrollTo).not.toHaveBeenCalled();
   });
@@ -124,12 +127,12 @@ describe("useCatalogVirtualizer", () => {
     window.location.hash = "#Ноутбуки";
 
     renderVirtualizer();
-    await vi.advanceTimersByTimeAsync(100);
-    await vi.advanceTimersByTimeAsync(100);
-    const callsAfterSettling = (window.scrollTo as Mock).mock.calls.length;
+    await advanceTimersByTimeAsync(100);
+    await advanceTimersByTimeAsync(100);
+    const callsAfterSettling = mockedScrollTo.mock.calls.length;
     expect(window.location.hash).toBe("");
 
-    await vi.advanceTimersByTimeAsync(1000);
+    await advanceTimersByTimeAsync(1000);
     expect(window.scrollTo).toHaveBeenCalledTimes(callsAfterSettling);
   });
 });

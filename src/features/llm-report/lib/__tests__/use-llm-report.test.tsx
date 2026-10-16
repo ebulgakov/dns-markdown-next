@@ -1,18 +1,20 @@
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { renderHook, waitFor } from "@testing-library/react";
-import axios from "axios";
-import { afterEach, beforeEach, describe, expect, it, vi, type Mock } from "vitest";
+import { afterEach, beforeEach, describe, expect, it, vi } from "bun:test";
+
+import { advanceTimersByTimeAsync } from "@/test/fake-timers";
 
 import { useLlmStore } from "../../model/llm-store";
 import { useLlmReport } from "../use-llm-report";
 
 import type { ReactNode } from "react";
 
-vi.mock("axios", () => ({
-  default: { get: vi.fn() }
-}));
+// bun:test does not hoist vi.mock, so the factory can close over this mock.
+const mockedGet = vi.fn();
 
-const mockedGet = axios.get as Mock;
+vi.mock("axios", () => ({
+  default: { get: mockedGet }
+}));
 const llmStoreInitialState = useLlmStore.getState();
 
 function renderUseLlmReport() {
@@ -110,7 +112,7 @@ describe("useLlmReport", () => {
       { link: "/b", sectionTitle: "Ноутбуки" }
     ]);
 
-    await vi.advanceTimersByTimeAsync(10_000);
+    await advanceTimersByTimeAsync(10_000);
 
     expect(useLlmStore.getState().report).toBe(
       "Failed to compare products. Please try again later."

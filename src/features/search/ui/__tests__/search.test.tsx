@@ -1,5 +1,5 @@
 import { cleanup, render, fireEvent, within } from "@testing-library/react";
-import { afterEach, describe, it, expect, beforeEach, vi } from "vitest";
+import { afterEach, describe, it, expect, beforeEach, vi } from "bun:test";
 
 import { useSearchStore } from "../../model/search-store";
 import { Search } from "../search";

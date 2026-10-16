@@ -50,7 +50,7 @@ API handlers live in `app/api/*/route.ts`. Clerk middleware is `proxy.ts`
 
 ## Workflow
 
-- After edits: `pnpm lint:fix && pnpm type-check`, then `pnpm build` for
+- After edits: `bun run lint:fix && bun run type-check`, then `bun run build` for
   routing/config changes (build catches invalid segment configs that
   type-check misses).
 - Respect import ordering (builtin → external → internal → parent → sibling →

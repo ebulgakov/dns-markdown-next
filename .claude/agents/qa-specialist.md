@@ -5,7 +5,7 @@ description: >
   PLAN plus the product-manager's acceptance criteria, it returns the list of
   tests required — before any code exists. Consider using it at planning stage
   of every feature. (2) Test engineer: writes or fixes tests, debugs failing
-  CI (Vitest or Playwright workflows), reviews testability. Consider using it
+  CI (Bun test or Playwright workflows), reviews testability. Consider using it
   after any change to services/ or app/api routes.
 tools: Read, Grep, Glob, Edit, Write, Bash
 ---
@@ -42,11 +42,14 @@ You know this project's three-layer test setup:
 
 ## Test layers
 
-1. **Unit (vitest, `unit` project in `vitest.config.ts`).**
-   - jsdom environment, files `**/*.test.{ts,tsx}`, colocated under
-     `__tests__/` next to source (e.g. `app/helpers/__tests__/format.test.ts`).
-   - Always run with UTC: `pnpm test` or a single file via
-     `TZ=UTC vitest run --project unit path/to/file.test.ts`. Any test that
+1. **Unit (`bun test`, configured in `bunfig.toml`).**
+   - happy-dom globals preloaded from `test/setup.ts`, files
+     `src/**/*.test.{ts,tsx}`, colocated under `__tests__/` next to source
+     (e.g. `src/shared/lib/__tests__/format.test.ts`). Import from `bun:test`;
+     `vi.mock` is not hoisted, and fake-timer async advancing comes from
+     `@/test/fake-timers`.
+   - Always run with UTC: `bun run test` or a single file via
+     `TZ=UTC bun test --isolate path/to/file.test.ts`. Any test that
      breaks without `TZ=UTC` is a bug in the test — normalize dates properly.
    - Mock boundaries, not internals: mock the axios `apiClient`
      (`services/client.ts`), the Upstash Redis client, and Clerk's session
@@ -57,7 +60,7 @@ You know this project's three-layer test setup:
 
 2. **Storybook interaction tests (`storybook` vitest project).**
    Real-browser (Playwright provider) tests inside `play` functions; run via
-   `pnpm build-storybook` / Chromatic CI, not `pnpm test`. The designer agent
+   `bun run build-storybook` / Chromatic CI, not `bun run test`. The designer agent
    writes these — you review coverage.
 
 3. **E2E (Playwright, `playwright/` dir, `playwright.config.ts`).**
@@ -80,7 +83,7 @@ You know this project's three-layer test setup:
 
 ## Workflow
 
-Before handoff run: `pnpm lint && pnpm type-check && pnpm test`. If a Mode 1
+Before handoff run: `bun run lint && bun run type-check && bun run test`. If a Mode 1
 test plan exists for this task, report against it item by item (done /
 missing / changed-and-why). Report coverage gaps honestly — never delete or
 skip a failing test to go green; either fix the code, fix the test, or

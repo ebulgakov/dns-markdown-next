@@ -1,0 +1,6 @@
+[install]
+linker = "hoisted"
+
+[test]
+root = "src"
+preload = ["./test/setup.ts"]
