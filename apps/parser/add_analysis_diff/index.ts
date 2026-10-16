@@ -1,12 +1,14 @@
-import getPerformance from "#helpers/get_performance.ts";
+import type { AnalysisData } from "@dns-markdown/db/types/analysis-data";
+
 import makeDiff from "#add_analysis_diff/helpers/make_diff.ts";
 import { getAllPriceLists, getAnalysisGoodsByDateAdded } from "#api/get.ts";
 import { deleteAnalysisDiffAll, deleteAnalysisDiffByDate, addManyAnalysisDiff } from "#api/post.ts";
-import type { AnalysisData } from "#types/analysis-data.ts";
+import { env } from "#env.ts";
+import getPerformance from "#helpers/get_performance.ts";
 
 async function addAnalysisDiff() {
-  const writeStrategy = process.env.WRITE_STRATEGY || "insert";
-  const city = process.env.CITY;
+  const writeStrategy = env.WRITE_STRATEGY;
+  const city = env.CITY;
 
   if (!city) throw new Error("No city found");
 

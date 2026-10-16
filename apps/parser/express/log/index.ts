@@ -1,7 +1,8 @@
-import express from "express";
 import { spawn } from "child_process";
 import { existsSync, unlinkSync, appendFileSync, readFileSync } from "node:fs";
 import { resolve } from "node:path";
+
+import express from "express";
 
 global.npmProcess = null;
 

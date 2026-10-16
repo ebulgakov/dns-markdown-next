@@ -1,17 +1,18 @@
 import { Index } from "@upstash/vector";
 import ora from "ora";
 
-import getPerformance from "#helpers/get_performance.ts";
 import { getLastPriceList } from "#api/get.ts";
+import { env } from "#env.ts";
+import getPerformance from "#helpers/get_performance.ts";
 
 async function addVectorDb() {
-  const city = process.env.CITY;
+  const city = env.CITY;
 
   if (!city) throw new Error("No city found");
 
   const index = new Index({
-    url: process.env.UPSTASH_VECTOR_REST_URL,
-    token: process.env.UPSTASH_VECTOR_REST_TOKEN
+    url: env.UPSTASH_VECTOR_REST_URL,
+    token: env.UPSTASH_VECTOR_REST_TOKEN
   });
 
   const spinner = ora("Connection to DB...").start();

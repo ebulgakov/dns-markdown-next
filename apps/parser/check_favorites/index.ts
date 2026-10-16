@@ -1,6 +1,4 @@
-import getPerformance from "#helpers/get_performance.ts";
 import updateFavorites from "./helpers/update_favorites.ts";
-import { sendUpdatesEmail } from "#email/updates-email.ts";
 
 import {
   getAnalysisGoodsByDateAdded,
@@ -8,9 +6,12 @@ import {
   getAllNotificationUsers
 } from "#api/get.ts";
 import { updateUsersFavorites } from "#api/post.ts";
+import { sendUpdatesEmail } from "#email/updates-email.ts";
+import { env } from "#env.ts";
+import getPerformance from "#helpers/get_performance.ts";
 
 async function checkFavorites() {
-  const city = process.env.CITY;
+  const city = env.CITY;
 
   if (!city) throw new Error("No city found");
 

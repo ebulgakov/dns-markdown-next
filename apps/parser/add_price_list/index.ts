@@ -1,19 +1,22 @@
-import "dotenv/config";
-import { ObjectId } from "mongodb";
-import createData from "./helpers/create_data.ts";
-import getPerformance from "#helpers/get_performance.ts";
 import { readFileSync } from "node:fs";
 import { join, resolve } from "node:path";
-import { getLastPriceList } from "#api/get.ts";
+
+import { ObjectId } from "mongodb";
+
+import createData from "./helpers/create_data.ts";
+
 import isSameDay from "#add_price_list/helpers/is_same_day.ts";
+import { getLastPriceList } from "#api/get.ts";
 import { deleteLastPriceList, savePriceList } from "#api/post.ts";
+import { env } from "#env.ts";
+import getPerformance from "#helpers/get_performance.ts";
 
 async function addPriceList() {
   const path = resolve("pages");
   const html = readFileSync(join(path, "body.html")).toString();
   const { data } = JSON.parse(readFileSync(join(path, "prices.html")).toString());
   const goods = createData(html, data);
-  const city = process.env.CITY;
+  const city = env.CITY;
 
   if (!city) throw new Error("No city found");
 

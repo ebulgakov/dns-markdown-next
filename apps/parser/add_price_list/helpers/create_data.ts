@@ -1,8 +1,12 @@
 import * as cheerio from "cheerio";
 import { ObjectId } from "mongodb";
-import type { Goods, Position } from "#types/pricelist.ts";
 
-export type SourcePrice = { id: string, data: { id: string; price: { previous: number; current: number } } };
+import type { Goods, Position } from "@dns-markdown/db/types/pricelist";
+
+export type SourcePrice = {
+  id: string;
+  data: { id: string; price: { previous: number; current: number } };
+};
 
 export type PricesSet = {
   states: SourcePrice[];

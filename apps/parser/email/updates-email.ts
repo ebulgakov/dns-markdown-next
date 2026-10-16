@@ -1,5 +1,6 @@
+import type { Favorite, User } from "@dns-markdown/db/types/user";
+
 import resend from "#email/index.ts";
-import type { Favorite, User } from "#types/user.ts";
 
 export type FavoriteUpdatesStatus = "availability" | "price";
 

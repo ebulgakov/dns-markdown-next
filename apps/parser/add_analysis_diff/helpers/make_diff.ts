@@ -1,5 +1,5 @@
-import type { AnalysisData } from "#types/analysis-data.ts";
-import type { AnalysisDiff } from "#types/analysis-diff.ts";
+import type { AnalysisData } from "@dns-markdown/db/types/analysis-data";
+import type { AnalysisDiff } from "@dns-markdown/db/types/analysis-diff";
 
 export default function makeDiff(
   flatLastCatalog: AnalysisData[],

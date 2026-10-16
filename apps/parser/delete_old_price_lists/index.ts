@@ -1,8 +1,9 @@
 import { deleteOldPriceLists as deleteOldPriceListsCall } from "#api/post.ts";
+import { env } from "#env.ts";
 import getPerformance from "#helpers/get_performance.ts";
 
 async function deleteOldPriceLists() {
-  const city = process.env.CITY;
+  const city = env.CITY;
 
   if (!city) throw new Error("No city found");
 

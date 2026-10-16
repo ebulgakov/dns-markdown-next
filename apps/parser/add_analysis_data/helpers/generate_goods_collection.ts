@@ -1,6 +1,7 @@
-import type { PriceList } from "#types/pricelist.ts";
-import type { AnalysisData } from "#types/analysis-data.ts";
 import { ObjectId } from "mongodb";
+
+import type { AnalysisData } from "@dns-markdown/db/types/analysis-data";
+import type { PriceList } from "@dns-markdown/db/types/pricelist";
 
 export default function generateGoodsCollection(
   priceLists: PriceList[],

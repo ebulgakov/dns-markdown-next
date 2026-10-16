@@ -1,11 +1,13 @@
-import express from "express";
-import ejs from "ejs";
-import { home } from "./home/index.ts";
-import updateRouter from "./update-request/index.ts";
-import setGlobalMiddleware from "./middleware.ts";
 import { resolve } from "node:path";
-import logRouter from "./log/index.ts";
+
+import ejs from "ejs";
+import express from "express";
+
 import configRouter from "./config/index.ts";
+import { home } from "./home/index.ts";
+import logRouter from "./log/index.ts";
+import setGlobalMiddleware from "./middleware.ts";
+import updateRouter from "./update-request/index.ts";
 
 const app = express();
 

@@ -1,6 +1,7 @@
-import express from "express";
 import { writeFileSync } from "node:fs";
 import { resolve } from "node:path";
+
+import express from "express";
 
 export const updateRouter = express.Router();
 

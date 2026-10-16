@@ -1,6 +1,7 @@
-import express from "express";
 import { writeFileSync, readFileSync } from "node:fs";
 import { join, resolve } from "node:path";
+
+import express from "express";
 
 export const configRouter = express.Router();
 
@@ -26,7 +27,7 @@ configRouter.route("/").get((_req, res) => {
   try {
     dns_shop_downloader = readFileSync(join(path, "dns_shop_downloader.sh"));
     dns_shop_downloader_prices = readFileSync(join(path, "dns_shop_downloader_prices.sh"));
-  } catch (e) {
+  } catch {
     dns_shop_downloader = "";
     dns_shop_downloader_prices = "";
   }

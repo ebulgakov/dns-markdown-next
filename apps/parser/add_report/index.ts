@@ -1,8 +1,9 @@
-import getPerformance from "#helpers/get_performance.ts";
 import { addNewReportByCity } from "#api/post.ts";
+import { env } from "#env.ts";
+import getPerformance from "#helpers/get_performance.ts";
 
 async function addReport() {
-  const city = process.env.CITY;
+  const city = env.CITY;
   if (!city) throw new Error("No city found");
   await addNewReportByCity({ city });
 }

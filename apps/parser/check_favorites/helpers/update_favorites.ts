@@ -1,8 +1,8 @@
-import type { User } from "#types/user.ts";
 import { ObjectId } from "mongodb";
-import type { AnalysisData } from "#types/analysis-data.ts";
 
 import type { FavoriteStatus } from "#email/updates-email.ts";
+import type { AnalysisData } from "@dns-markdown/db/types/analysis-data";
+import type { User } from "@dns-markdown/db/types/user";
 
 export default function updateFavorites(users: User[], history: AnalysisData[]) {
   const statuses: FavoriteStatus[] = [];

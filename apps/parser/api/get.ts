@@ -1,7 +1,7 @@
-import "dotenv/config";
-import type { PriceList } from "#types/pricelist.ts";
-import type { AnalysisData } from "#types/analysis-data.ts";
-import type { User } from "#types/user.ts";
+import type { AnalysisData } from "@dns-markdown/db/types/analysis-data";
+import type { PriceList } from "@dns-markdown/db/types/pricelist";
+import type { User } from "@dns-markdown/db/types/user";
+
 import { apiClient } from "#api/client.ts";
 
 const wrapApiCall = async (endpoint: string, options = {}) => {
