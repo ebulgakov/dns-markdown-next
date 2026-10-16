@@ -29,7 +29,7 @@
     "build": "NX_LOAD_DOT_ENV_FILES=false nx run-many -t build",
     "test": "NX_LOAD_DOT_ENV_FILES=false nx run-many -t test",
     "lint": "NX_LOAD_DOT_ENV_FILES=false nx run-many -t lint",
-    "lint:fix": "eslint --fix . && NX_LOAD_DOT_ENV_FILES=false nx run @dns-markdown/web:lint:fix",
+    "lint:fix": "NX_LOAD_DOT_ENV_FILES=false nx run-many -t lint:fix",
     "type-check": "NX_LOAD_DOT_ENV_FILES=false nx run-many -t type-check",
     "affected": "NX_LOAD_DOT_ENV_FILES=false nx affected -t lint type-check test build",
     "prepare": "husky"

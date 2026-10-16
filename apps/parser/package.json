@@ -20,7 +20,8 @@
     "parse:samara": "CITY=samara NODE_ENV=production bun run parse && bun run check:favorites && bun run add:vector-db",
     "parse:moscow": "CITY=moscow  NODE_ENV=production bun run parse",
     "delete:old-price-lists": "CITY=samara bun src/delete-old-price-lists",
-    "lint": "eslint src"
+    "lint": "eslint",
+    "lint:fix": "eslint --fix"
   },
   "dependencies": {
     "@dns-markdown/db": "workspace:*",

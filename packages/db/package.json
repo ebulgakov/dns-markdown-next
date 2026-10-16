@@ -12,7 +12,8 @@
     "mongoose": "^9.1.5"
   },
   "scripts": {
-    "lint": "eslint .",
+    "lint": "eslint",
+    "lint:fix": "eslint --fix",
     "type-check": "tsc --noEmit"
   }
 }
