@@ -24,8 +24,7 @@
     "typescript-eslint": "^8.54.0"
   },
   "scripts": {
-    "dev": "NX_LOAD_DOT_ENV_FILES=false nx run @dns-markdown/api:dev",
-    "dev:web": "NX_LOAD_DOT_ENV_FILES=false nx run @dns-markdown/web:dev",
+    "dev": "NX_LOAD_DOT_ENV_FILES=false nx run-many -t dev",
     "build": "NX_LOAD_DOT_ENV_FILES=false nx run-many -t build",
     "test": "NX_LOAD_DOT_ENV_FILES=false nx run-many -t test",
     "lint": "NX_LOAD_DOT_ENV_FILES=false nx run-many -t lint",

@@ -1,37 +1,57 @@
 # dns-markdown
 
-Monorepo (Bun workspaces + Nx): `apps/web` — Next.js site ([README](apps/web/README.md)), `apps/api` — Express API, `apps/parser` — DNS markdown scraper ([README](apps/parser/README.md)), `packages/db` — shared Mongoose models, `packages/env` — shared env loading.
+Service for browsing discounted (markdown) products of the DNS store: website, API and data parser in one monorepo.
 
 <img width="2574" height="2342" alt="image" src="https://github.com/user-attachments/assets/a6922841-1aa0-4801-9577-50f47bc80b34" />
 
-## API docs
+## Workspaces
 
-- [API-Enpoints Documentation](apps/api/API.md)
-- [Swagger URL](https://dns-markdown-api.vercel.app/docs/)
+| Path           | Package                | Description                                                   | Docs                            |
+| -------------- | ---------------------- | ------------------------------------------------------------- | ------------------------------- |
+| `apps/web`     | `@dns-markdown/web`    | Next.js (App Router) site, deployed to Vercel                 | [README](apps/web/README.md)    |
+| `apps/api`     | `@dns-markdown/api`    | Express API, deployed to Vercel                               | [README](apps/api/README.md)    |
+| `apps/parser`  | `@dns-markdown/parser` | DNS markdown scraper/ETL, pushes data to the API (local only) | [README](apps/parser/README.md) |
+| `packages/db`  | `@dns-markdown/db`     | Shared Mongoose models, schemas and payload types             |                                 |
+| `packages/env` | `@dns-markdown/env`    | Shared env-file loading and `NODE_ENV` checks                 |                                 |
+
+## Tooling
+
+[Bun](https://bun.sh) workspaces (`apps/*`, `packages/*`) with a single `bun.lock`, orchestrated by [Nx](https://nx.dev) in package-based mode: Nx targets are the `package.json` scripts of each workspace, caching rules live in `nx.json`.
 
 ## Commands
 
-Install:
+Run from the repo root:
 
 ```bash
-bun install
+bun install            # install all workspaces
+bun run dev            # dev servers of all apps (api + web on :3000)
+bun run test           # tests of all projects
+bun run lint           # lint all projects
+bun run lint:fix       # lint with --fix
+bun run type-check     # tsc --noEmit for all projects
+bun run build          # build all projects
+bun run affected       # lint/type-check/test/build only for projects changed vs main
 ```
 
-Run dev build:
+Single project / script:
 
 ```bash
-bun run dev       # api
-bun run dev:web   # web (Next.js, :3000)
+NX_LOAD_DOT_ENV_FILES=false bunx nx run <project>:<script>   # e.g. @dns-markdown/api:dev
+bunx nx graph                                                # project graph
 ```
+
+`NX_LOAD_DOT_ENV_FILES=false` stops Nx from injecting the root `.env*` files into every task (root scripts already set it).
+
+## Env
+
+API, parser and packages share env files in the repo root: `.env.<NODE_ENV>` is loaded first, then `.env` (see `.env.example`). `apps/web` uses its own `apps/web/.env` (see `apps/web/.env-example`).
 
 ## Technologies
 
-- Express
-- Bun
-- MongoDB
-- Typescript
-- Redis
+- Bun, Nx, TypeScript
+- Next.js, React, Tailwind CSS
+- Express, Swagger
+- MongoDB, Redis
 - Clerk Auth
 - Upstash Vector DB
 - OpenAI API
-- Swagger
