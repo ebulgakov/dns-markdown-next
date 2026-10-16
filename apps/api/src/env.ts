@@ -59,7 +59,6 @@ let env: Env;
 try {
   env = envSchema.parse(process.env);
 } catch (error) {
-  console.error("⚠️  Environment variable validation error:", process.env);
   if (error instanceof z.ZodError) {
     console.error("❌ Invalid environment variables:");
     const { fieldErrors } = z.flattenError(error);

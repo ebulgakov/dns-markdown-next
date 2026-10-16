@@ -3,7 +3,14 @@ import importPlugin from "eslint-plugin-import";
 import tseslint from "typescript-eslint";
 
 const eslintConfig = defineConfig([
-  globalIgnores(["**/coverage/**", "**/node_modules/**", "**/dist/**", ".nx/**"]),
+  // apps/parser/src/dns-markdown-parser is a git submodule (scraper scripts), linted in its own repo
+  globalIgnores([
+    "**/coverage/**",
+    "**/node_modules/**",
+    "**/dist/**",
+    ".nx/**",
+    "apps/parser/src/dns-markdown-parser/**"
+  ]),
   ...tseslint.configs.recommended,
   {
     files: ["**/*.ts"],
