@@ -1,4 +1,5 @@
 import { clerkMiddleware } from "@clerk/express";
+import { isDev, isTestEnv } from "@dns-markdown/env";
 import * as Sentry from "@sentry/node";
 import cors from "cors";
 import express from "express";
@@ -8,7 +9,7 @@ import swaggerUi from "swagger-ui-express";
 
 import analysisRoutes from "./analysis-routes";
 import clerkRoutes from "./clerk-routes";
-import { env, isDev, isTestEnv } from "./env";
+import { env } from "./env";
 import llmRoutes from "./llm-routes";
 import { authServiceMiddleware, authPublicMiddleware } from "./middleware/auth-middleware";
 import { ensureDbConnectionMiddleware } from "./middleware/db-connection-middleware";
@@ -124,9 +125,10 @@ Sentry.setupExpressErrorHandler(app);
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 app.use((err: Error, _req: Request, res: Response, _next: NextFunction) => {
   console.error(err.stack);
-  res
-    .status(500)
-    .json({ error: "Internal Server Error", ...(isDev() && { details: err.message }) });
+  res.status(500).json({
+    error: "Internal Server Error",
+    ...(isDev() && { details: err.message })
+  });
 });
 
 export default app;

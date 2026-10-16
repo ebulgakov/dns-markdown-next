@@ -8,6 +8,7 @@ Bun workspaces (`apps/*`, `packages/*`) orchestrated by **Nx** (package-based: t
 
 - `apps/api` (`@dns-markdown/api`) — the Express API, deployed to Vercel (Vercel project Root Directory = `apps/api`).
 - `packages/db` (`@dns-markdown/db`) — Mongoose models, schemas, payload types and `dbConnect(uri)`. Internal package: `exports` point straight at `.ts` sources (no build step), imported via subpaths like `@dns-markdown/db/models/pricelist`, `@dns-markdown/db/types/pricelist`, `@dns-markdown/db/database`. It must not read `process.env` — callers pass config in.
+- `packages/env` (`@dns-markdown/env`) — `loadEnv()` (loads the shared env files from the monorepo root) and `isProd`/`isDev`/`isTestEnv`. Only loading and mode checks — each app keeps its own zod schema for validation. Mode helpers read `NODE_ENV` via destructuring: `bun build` inlines a literal `process.env.NODE_ENV` at build time.
 
 `dns-markdown-parser-next` will later move into `apps/` as another workspace.
 
@@ -29,11 +30,11 @@ bun run affected            # lint/type-check/test/build only for projects chang
 bunx nx run @dns-markdown/api:<script>   # any single script of one project
 ```
 
-Inside `apps/api` the per-project commands still work (`bun test path/to/file.test.ts`, `bun test --watch`, `bun run start`, `bun run generate:openapi`). Nx runs every target with cwd = the project root, so `.env*` files belong in `apps/api/`.
+Inside `apps/api` the per-project commands still work (`bun test path/to/file.test.ts`, `bun test --watch`, `bun run start`, `bun run generate:openapi`). Nx runs every target with cwd = the project root.
 
 Tests are colocated in `__tests__` (or `__test__`) directories next to the code they cover, using `bun:test` (not Jest/Vitest) with `mock`/`mock.module` for mocking. Env vars required by `src/env.ts` must be present for tests to run — see `.github/workflows/test.yml` for the full list of vars and their dummy CI values.
 
-Environment files are loaded based on `NODE_ENV` (`development` → `.env.development`, `test` → `.env.test`, `production` → `.env.production`), all parsed/validated through the zod schema in `src/env.ts`. Nothing should read `process.env` directly outside of that file.
+Env files are shared by all workspaces and live in the **monorepo root**; `src/env.ts` loads them via `loadEnv()` from `@dns-markdown/env` (root found by walking up to `bun.lock`, so it works from `src/` and the bundled `dist/` regardless of cwd): first `.env.<NODE_ENV>` (`development` → `.env.development`, `test` → `.env.test`, `production` → `.env.production`), then the common `.env` (dotenv never overrides already set vars). Each app validates only its own variables with its own zod schema — for the api that is `src/env.ts`. In production there are no env files: Vercel injects vars from the project settings. Nothing should read `process.env` directly outside of that file.
 
 ## Architecture
 
@@ -50,7 +51,7 @@ Mounting order and auth layering happens in `src/server.ts`:
 - `/clerk/*` — Clerk webhooks (signature-verified via `svix`, not the two middlewares above). Note `/clerk/create-user` needs `express.raw()` body parsing (mounted _before_ the global `express.json()` — order matters) so the webhook signature can be verified against the raw body.
 - `/service/*` — internal/background-job routes, gated by `authServiceMiddleware` (`Authorization: Bearer <API_SERVICE_KEY>`), used for cross-service writes (inserting price lists, analysis data/diffs, notification fan-out, cache invalidation) rather than public reads.
 - `ensureDbConnectionMiddleware` runs globally before routes and lazily opens the Mongoose connection (`packages/db/src/database.ts`, called with `env.DATABASE_URL` from `src/middleware/db-connection-middleware.ts`), caching the connection on `global.mongoose` so repeated invocations (e.g. serverless cold starts) reuse it.
-- A final Express error-handling middleware returns `{ error: "Internal Server Error" }`, and additionally `details` when `isDev()`. Route handlers should catch and call `next(error)` rather than handling errors themselves.
+- A final Express error-handling middleware returns `{ error: "Internal Server Error" }`, and additionally `details` when `isDev()` (from `@dns-markdown/env`). Route handlers should catch and call `next(error)` rather than handling errors themselves.
 
 Full endpoint-by-endpoint request/response contracts are documented in `API.md` (in Russian) — check it before changing route behavior, and update it when adding/changing endpoints.
 

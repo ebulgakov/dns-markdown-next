@@ -1,17 +1,7 @@
-import * as dotenv from "dotenv";
+import { loadEnv } from "@dns-markdown/env";
 import { z } from "zod";
 
-export const isProd = () => process.env.NODE_ENV === "production";
-export const isDev = () => process.env.NODE_ENV === "development";
-export const isTestEnv = () => process.env.NODE_ENV === "test";
-
-if (isDev()) {
-  dotenv.config({ path: ".env.development" });
-} else if (isTestEnv()) {
-  dotenv.config({ path: ".env.test" });
-} else if (isProd()) {
-  dotenv.config({ path: ".env.production" });
-}
+loadEnv();
 
 const envSchema = z.object({
   OTEL_SERVICE_NAME: z.string().default("Dns-Markdown-API"),

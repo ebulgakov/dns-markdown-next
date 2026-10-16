@@ -5,6 +5,7 @@
   "type": "module",
   "dependencies": {
     "@dns-markdown/db": "workspace:*",
+    "@dns-markdown/env": "workspace:*",
     "@clerk/backend": "^2.29.7",
     "@clerk/express": "^1.7.67",
     "@opentelemetry/api": "^1.9.0",
@@ -18,7 +19,6 @@
     "@upstash/redis": "^1.36.1",
     "@upstash/vector": "^1.2.2",
     "cors": "^2.8.6",
-    "dotenv": "^17.2.3",
     "express": "^5.2.1",
     "helmet": "^8.1.0",
     "mongodb": "^7.1.0",
