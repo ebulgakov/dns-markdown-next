@@ -1,0 +1,22 @@
+# Binary files with parser code
+/parser
+parselog.txt
+request.sh
+
+# env files (can opt-in for committing if needed)
+.env
+
+# dependencies
+/node_modules
+.vercel
+fly.toml
+
+# TypeScript build output
+/dist
+/pages
+
+# OS generated files
+.DS_Store
+
+# Test coverage
+/coverage

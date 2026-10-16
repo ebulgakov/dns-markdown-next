@@ -1,0 +1,36 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>update-request</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+  </head>
+  <body>
+    <div class="md:container mx-auto p-4">
+      <form action="/config" method="POST">
+        <label for="parser_goods">parser goods</label>
+        <textarea
+          class="w-full border border-gray-300 rounded p-2 mb-4"
+          name="parser_goods"
+          id="parser_goods"
+          cols="30"
+          rows="10"
+        ><%- dns_shop_downloader %></textarea>
+
+        <label for="parser_prices">parser prices</label>
+        <textarea
+          class="w-full border border-gray-300 rounded p-2 mb-4"
+          name="parser_prices"
+          id="parser_prices"
+          cols="30"
+          rows="10"
+        ><%- dns_shop_downloader_prices %></textarea>
+
+        <button type="submit" class="bg-blue-500 text-white px-4 py-2 rounded mt-4">
+          Update config files
+        </button>
+      </form>
+    </div>
+  </body>
+</html>

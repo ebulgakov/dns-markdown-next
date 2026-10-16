@@ -1,0 +1,58 @@
+{
+  "name": "dns-markdown-parser-next",
+  "version": "1.0.0",
+  "description": "",
+  "homepage": "https://github.com/ebulgakov/dns-markdown-parser-next#readme",
+  "bugs": {
+    "url": "https://github.com/ebulgakov/dns-markdown-parser-next/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ebulgakov/dns-markdown-parser-next.git"
+  },
+  "license": "ISC",
+  "author": "ebulgakov",
+  "type": "module",
+  "scripts": {
+    "start": "bun --watch express/index.ts",
+    "build": "bunx tsc -p tsconfig.build.json",
+    "type-check": "bunx tsc --noEmit",
+    "downloader": "bash parser/dns_shop_downloader.sh && bun run ./parser/crawler.ts && bash parser/dns_shop_downloader_prices.sh",
+    "add:list": "bun ./add_price_list",
+    "add:analysis-report": "CITY=samara bun ./add_report",
+    "add:analysis-data:full": "WRITE_STRATEGY=replace bun ./add_analysis_data",
+    "add:analysis-data": "WRITE_STRATEGY=insert bun ./add_analysis_data",
+    "add:analysis-diff:full": "WRITE_STRATEGY=replace bun ./add_analysis_diff",
+    "add:analysis-diff": "WRITE_STRATEGY=insert bun ./add_analysis_diff",
+    "add:vector-db": "CITY=samara  bun ./add_vector_db",
+    "check:favorites": "CITY=samara bun ./check_favorites",
+    "cache:clear:local": "KEYS=local:* bun ./cache_clear",
+    "cache:clear": "KEYS=daily:* bun ./cache_clear",
+    "parse": "bun run downloader && bun run add:list && bun run add:analysis-data && bun run add:analysis-diff && bun run cache:clear",
+    "parse:samara": "CITY=samara bun run parse && bun run check:favorites && bun run add:vector-db",
+    "parse:moscow": "CITY=moscow bun run parse",
+    "delete:old-price-lists": "CITY=samara bun ./delete_old_price_lists",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "dependencies": {
+    "@upstash/vector": "^1.2.2",
+    "axios": "^1.13.4",
+    "body-parser": "^2.2.1",
+    "cheerio": "^1.1.2",
+    "dotenv": "^17.2.3",
+    "ejs": "^3.1.10",
+    "express": "^5.2.1",
+    "mongodb": "^7.0.0",
+    "ora": "^9.3.0",
+    "resend": "^6.9.1"
+  },
+  "devDependencies": {
+    "@tsconfig/node24": "^24.0.3",
+    "@types/ejs": "^3.1.5",
+    "@types/express": "^5.0.6",
+    "prettier": "^3.7.4"
+  },
+  "imports": {
+    "#*": "./*"
+  }
+}
