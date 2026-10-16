@@ -33,7 +33,9 @@
     "node": "24.x"
   },
   "scripts": {
-    "dev": "bun --watch src/index.ts",
+    "dev": "NODE_ENV=development bun --watch src/index.ts",
+    "dev:test": "NODE_ENV=test bun --watch src/index.ts",
+    "dev:prod": "NODE_ENV=production bun --watch src/index.ts",
     "test": "bun test",
     "test:watch": "bun test --watch",
     "type-check": "tsc --noEmit",

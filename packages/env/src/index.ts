@@ -16,6 +16,12 @@ export const isProd = () => nodeEnv() === "production";
 export const isDev = () => nodeEnv() === "development";
 export const isTestEnv = () => nodeEnv() === "test";
 
+// Vercel sets VERCEL=1 at build and runtime
+export const isVercel = () => {
+  const { VERCEL } = process.env;
+  return Boolean(VERCEL);
+};
+
 // Monorepo root = the closest parent dir with bun.lock. Resolved from this file rather than cwd,
 // so it works the same from sources and from a bundled dist/.
 const findWorkspaceRoot = (from: string) => {

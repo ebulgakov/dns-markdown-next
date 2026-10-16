@@ -8,7 +8,7 @@ Bun workspaces (`apps/*`, `packages/*`) orchestrated by **Nx** (package-based: t
 
 - `apps/api` (`@dns-markdown/api`) — the Express API, deployed to Vercel (Vercel project Root Directory = `apps/api`).
 - `packages/db` (`@dns-markdown/db`) — Mongoose models, schemas, payload types and `dbConnect(uri)`. Internal package: `exports` point straight at `.ts` sources (no build step), imported via subpaths like `@dns-markdown/db/models/pricelist`, `@dns-markdown/db/types/pricelist`, `@dns-markdown/db/database`. It must not read `process.env` — callers pass config in.
-- `packages/env` (`@dns-markdown/env`) — `loadEnv()` (loads the shared env files from the monorepo root) and `isProd`/`isDev`/`isTestEnv`. Only loading and mode checks — each app keeps its own zod schema for validation. Mode helpers read `NODE_ENV` via destructuring: `bun build` inlines a literal `process.env.NODE_ENV` at build time.
+- `packages/env` (`@dns-markdown/env`) — `loadEnv()` (loads the shared env files from the monorepo root) and `isProd`/`isDev`/`isTestEnv`/`isVercel`. Only loading and mode checks — each app keeps its own zod schema for validation. Mode helpers read `NODE_ENV` via destructuring: `bun build` inlines a literal `process.env.NODE_ENV` at build time.
 
 `dns-markdown-parser-next` will later move into `apps/` as another workspace.
 
@@ -30,6 +30,8 @@ bun run affected            # lint/type-check/test/build only for projects chang
 bunx nx run @dns-markdown/api:<script>   # any single script of one project
 ```
 
+Local modes (in `apps/api`, or from the root via `bunx nx run @dns-markdown/api:<script>`): `dev` (`NODE_ENV=development`, watch), `dev:test` (`NODE_ENV=test`, watch), `dev:prod` (`NODE_ENV=production`, watch — sources with production keys, hits real prod services), `start` (built bundle, no `NODE_ENV`), `start:prod` (built bundle, `NODE_ENV=production`; run `bun run build` first). Each mode loads `.env.<mode>` + `.env` from the repo root.
+
 Inside `apps/api` the per-project commands still work (`bun test path/to/file.test.ts`, `bun test --watch`, `bun run start`, `bun run generate:openapi`). Nx runs every target with cwd = the project root.
 
 Tests are colocated in `__tests__` (or `__test__`) directories next to the code they cover, using `bun:test` (not Jest/Vitest) with `mock`/`mock.module` for mocking. Env vars required by `src/env.ts` must be present for tests to run — see `.github/workflows/test.yml` for the full list of vars and their dummy CI values.
@@ -38,7 +40,7 @@ Env files are shared by all workspaces and live in the **monorepo root**; `src/e
 
 ## Architecture
 
-Express 5 app (`src/server.ts`) exported as default and started conditionally in `src/index.ts` (only calls `app.listen` outside of `production`, since in production Vercel runs the bundled `dist/index.js` as a single serverless function. `vercel.json` pins `outputDirectory: "dist"` so the bundle is the entrypoint — without it Vercel runs unbundled `src/` and crashes with `ERR_UNSUPPORTED_DIR_IMPORT`. Do not add `rewrites` there: they change the path Express sees).
+Express 5 app (`src/server.ts`) exported as default and started conditionally in `src/index.ts` (calls `app.listen` everywhere except on Vercel — `isVercel()` from `@dns-markdown/env`, based on the `VERCEL` var Vercel sets — since there Vercel runs the bundled `dist/index.js` as a single serverless function; so `start:prod` can run the production bundle locally. `vercel.json` pins `outputDirectory: "dist"` so the bundle is the entrypoint — without it Vercel runs unbundled `src/` and crashes with `ERR_UNSUPPORTED_DIR_IMPORT`. Do not add `rewrites` there: they change the path Express sees).
 
 ### Route layout
 
