@@ -29,7 +29,7 @@ bun run affected            # lint/type-check/test/build only for projects chang
 bunx nx run <project>:<script>   # any single script of one project, e.g. @dns-markdown/api:dev:prod
 ```
 
-Nx runs every target with cwd = the project root. Use `bun run test` (Nx), not a bare `bun test` from the root.
+Nx runs every target with cwd = the project root. Prefer `bun run test` (Nx, one process per project). A bare `bun test` from the root also works (runs all workspaces in one process); the parser's test preload is therefore set in both `bunfig.toml` (root) and `apps/parser/bunfig.toml` — keep them in sync.
 
 ## Env files
 

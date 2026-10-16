@@ -1,2 +1,6 @@
 [install]
 linker = "hoisted"
+[test]
+# Parser test mocks for a bare `bun test` from the repo root (Nx / CI run tests with cwd =
+# apps/parser and use apps/parser/bunfig.toml). Keep both preload entries in sync.
+preload = ["./apps/parser/src/__tests__/mocks.ts"]
