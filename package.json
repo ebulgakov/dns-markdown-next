@@ -1,0 +1,35 @@
+{
+  "name": "dns-markdown",
+  "private": true,
+  "type": "module",
+  "workspaces": [
+    "apps/*",
+    "packages/*"
+  ],
+  "devDependencies": {
+    "@types/bun": "latest",
+    "@types/cors": "^2.8.19",
+    "@types/express": "^5.0.6",
+    "@types/morgan": "^1.9.10",
+    "@types/swagger-ui-express": "^4.1.8",
+    "eslint": "^9.39.2",
+    "eslint-plugin-import": "^2.32.0",
+    "husky": "^9.1.7",
+    "jiti": "^2.6.1",
+    "lint-staged": "^17.0.8",
+    "nx": "^23.3.0",
+    "prettier": "^3.8.1",
+    "typescript": "^5.9.3",
+    "typescript-eslint": "^8.54.0"
+  },
+  "scripts": {
+    "dev": "nx run @dns-markdown/api:dev",
+    "build": "nx run-many -t build",
+    "test": "nx run-many -t test",
+    "lint": "nx run-many -t lint",
+    "lint:fix": "eslint --fix .",
+    "type-check": "nx run-many -t type-check",
+    "affected": "nx affected -t lint type-check test build",
+    "prepare": "husky"
+  }
+}

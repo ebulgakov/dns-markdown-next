@@ -1,0 +1,47 @@
+{
+  "name": "@dns-markdown/api",
+  "private": true,
+  "module": "src/index.ts",
+  "type": "module",
+  "dependencies": {
+    "@dns-markdown/db": "workspace:*",
+    "@dns-markdown/env": "workspace:*",
+    "@clerk/backend": "^2.29.7",
+    "@clerk/express": "^1.7.67",
+    "@opentelemetry/api": "^1.9.0",
+    "@opentelemetry/auto-instrumentations-node": "^0.69.0",
+    "@opentelemetry/exporter-metrics-otlp-http": "^0.211.0",
+    "@opentelemetry/exporter-trace-otlp-http": "^0.211.0",
+    "@opentelemetry/resources": "^2.5.0",
+    "@opentelemetry/sdk-node": "^0.211.0",
+    "@opentelemetry/semantic-conventions": "^1.39.0",
+    "@sentry/node": "^10.38.0",
+    "@upstash/redis": "^1.36.1",
+    "@upstash/vector": "^1.2.2",
+    "cors": "^2.8.6",
+    "express": "^5.2.1",
+    "helmet": "^8.1.0",
+    "mongodb": "^7.1.0",
+    "mongoose": "^9.1.5",
+    "morgan": "^1.10.1",
+    "openai": "^6.21.0",
+    "svix": "^1.84.1",
+    "swagger-ui-express": "^5.0.1",
+    "zod": "^4.3.6"
+  },
+  "engines": {
+    "node": "24.x"
+  },
+  "scripts": {
+    "dev": "NODE_ENV=development bun --watch src/index.ts",
+    "dev:test": "NODE_ENV=test bun --watch src/index.ts",
+    "dev:prod": "NODE_ENV=production bun --watch src/index.ts",
+    "test": "bun test",
+    "test:watch": "bun test --watch",
+    "type-check": "tsc --noEmit",
+    "generate:openapi": "bun run src/openapi/generate.ts && bunx prettier --write openapi.json",
+    "build": "bun build src/index.ts --outfile dist/index.js --target node --bundle --external mongoose --external @sentry/node --external @opentelemetry/* --external zod",
+    "start": "node dist/index.js",
+    "lint": "eslint ."
+  }
+}

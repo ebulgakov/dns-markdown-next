@@ -1,0 +1,2 @@
+# Scraper runtime files (not in git): curl scripts, saved request, downloaded pages
+/src/pages

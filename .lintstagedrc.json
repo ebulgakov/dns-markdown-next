@@ -1,0 +1,4 @@
+{
+  "*.ts": ["bunx eslint --fix --max-warnings=0", "bunx prettier --write"],
+  "*.{json,md,yml,yaml}": ["bunx prettier --write"]
+}

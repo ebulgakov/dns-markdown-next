@@ -20,6 +20,18 @@
         ]
       }
     ],
+    "PostToolUse": [
+      {
+        "matcher": "Write|Edit",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "bun run lint",
+            "statusMessage": "Running Linter..."
+          }
+        ]
+      }
+    ],
     "UserPromptSubmit": [
       {
         "hooks": [
@@ -35,7 +47,7 @@
     "bgIsolation": "none"
   },
   "permissions": {
-    "allow": ["mcp__codegraph__*"],
+    "allow": ["mcp__codegraph__*", "Bash(bun test *)", "Bash(bun run *)"],
     "deny": [
       "Read(**/.env)",
       "Read(**/.env.*)",

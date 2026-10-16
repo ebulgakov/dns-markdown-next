@@ -1,0 +1,5 @@
+{
+  // Root-level config files only (eslint.config.ts etc.); each workspace has its own tsconfig.json
+  "extends": "./tsconfig.base.json",
+  "include": ["*.ts"]
+}
