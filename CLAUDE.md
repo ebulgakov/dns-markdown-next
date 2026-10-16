@@ -4,7 +4,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Monorepo layout
 
-Bun workspaces (`apps/*`, `packages/*`) orchestrated by **Nx** (package-based: targets are inferred from each workspace's `package.json` scripts, no Nx plugins; caching/`dependsOn` live in `nx.json`). Single `bun.lock` at the root; `bunfig.toml` pins `linker = "hoisted"` so Vercel can trace external modules from the root `node_modules`. Shared compiler options live in `tsconfig.base.json`; every workspace `tsconfig.json` extends it (the root `tsconfig.json` covers only root-level config files like `eslint.config.ts`).
+Bun workspaces (`apps/*`, `packages/*`) orchestrated by **Nx** (package-based: targets are inferred from each workspace's `package.json` scripts, no Nx plugins; caching rules live in `nx.json`). Single `bun.lock` at the root; `bunfig.toml` pins `linker = "hoisted"` so Vercel can trace external modules from the root `node_modules`. Shared compiler options live in `tsconfig.base.json`; every workspace `tsconfig.json` extends it (the root `tsconfig.json` covers only root-level config files like `eslint.config.ts`).
 
 Each workspace has its own `CLAUDE.md` with details — read it before working in that workspace:
 
@@ -21,7 +21,7 @@ This project uses **Bun** (not npm/node) as the package manager and runtime. Run
 ```bash
 bun install                 # install all workspaces
 bun run dev                 # api dev server with watch mode
-bun run test                # nx run-many -t test
+bun run test                # nx run-many -t test (not cached: env files are not part of the cache key)
 bun run lint                # nx run-many -t lint
 bun run lint:fix            # eslint --fix across the repo
 bun run type-check          # nx run-many -t type-check

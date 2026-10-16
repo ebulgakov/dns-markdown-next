@@ -3,24 +3,16 @@
   "defaultBase": "main",
   "namedInputs": {
     "default": ["{projectRoot}/**/*", "sharedGlobals"],
-    "production": ["default", "!{projectRoot}/**/__tests__/**", "!{projectRoot}/**/__test__/**"],
     "sharedGlobals": [
       "{workspaceRoot}/bun.lock",
       "{workspaceRoot}/bunfig.toml",
       "{workspaceRoot}/tsconfig.base.json",
-      "{workspaceRoot}/eslint.config.ts",
-      "{workspaceRoot}/.prettierrc"
+      "{workspaceRoot}/eslint.config.ts"
     ]
   },
   "targetDefaults": {
     "build": {
-      "dependsOn": ["^build"],
-      "inputs": ["production", "^production"],
       "outputs": ["{projectRoot}/dist"],
-      "cache": true
-    },
-    "test": {
-      "inputs": ["default", "^production"],
       "cache": true
     },
     "lint": {
@@ -28,7 +20,6 @@
       "cache": true
     },
     "type-check": {
-      "inputs": ["default", "^production"],
       "cache": true
     }
   },
