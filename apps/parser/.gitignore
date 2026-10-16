@@ -1,22 +1,5 @@
-# Binary files with parser code
+# Scraper runtime files (not in git): curl scripts, saved request, downloaded pages, run log
 /parser
-parselog.txt
-request.sh
-
-# env files (can opt-in for committing if needed)
-.env
-
-# dependencies
-/node_modules
-.vercel
-fly.toml
-
-# TypeScript build output
-/dist
 /pages
-
-# OS generated files
-.DS_Store
-
-# Test coverage
-/coverage
+request.sh
+parselog.txt
