@@ -17,6 +17,8 @@ jobs:
       - name: Install dependencies
         run: bun install --frozen-lockfile
       - name: Regenerate OpenAPI spec
-        run: bun run --filter @dns-markdown/api generate:openapi
+        working-directory: apps/api
+        run: bun run generate:openapi
       - name: Fail if openapi.json is stale
-        run: git diff --exit-code apps/api/openapi.json
+        working-directory: apps/api
+        run: git diff --exit-code openapi.json
