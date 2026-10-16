@@ -1,5 +1,4 @@
-# Scraper runtime files (not in git): curl scripts, saved request, downloaded pages, run log
+# Scraper runtime files (not in git): curl scripts, saved request, downloaded pages
 /parser
 /pages
 request.sh
-parselog.txt

@@ -4,9 +4,6 @@ import { z } from "zod";
 loadEnv();
 
 const envSchema = z.object({
-  // Set by the `start` script (overrides the API's PORT from the shared .env)
-  PORT: z.string().default("3100"),
-
   // API (apps/api)
   API_URL: z.string().startsWith("http"),
   API_SECRET_KEY: z.string().min(10, "API_SECRET_KEY must be at least 10 characters long"),

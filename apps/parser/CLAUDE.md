@@ -1,10 +1,10 @@
 # apps/parser — `@dns-markdown/parser`
 
-Paths below are relative to `apps/parser`. All code lives in `src/` (same layout rules as `apps/api`: kebab-case names, `@src/*` alias); scraper runtime files and `public/` stay in the package root. Monorepo-wide rules (commands, env files, code style) are in the root `CLAUDE.md`.
+Paths below are relative to `apps/parser`. All code lives in `src/` (same layout rules as `apps/api`: kebab-case names, `@src/*` alias); scraper runtime files stay in the package root. Monorepo-wide rules (commands, env files, code style) are in the root `CLAUDE.md`.
 
 ## What this is
 
-A scraper/ETL service for DNS-shop markdown ("уценка") listings. It downloads catalog pages, parses them with cheerio, and pushes the results over HTTP to the API (`apps/api`), which backs the Next.js app [dns-markdown-next](https://github.com/ebulgakov/dns-markdown-next). It also ships a small Express control panel for triggering runs and editing the scraper's curl scripts.
+A scraper/ETL service for DNS-shop markdown ("уценка") listings. It downloads catalog pages, parses them with cheerio, and pushes the results over HTTP to the API (`apps/api`), which backs the Next.js app [dns-markdown-next](https://github.com/ebulgakov/dns-markdown-next).
 
 Runtime is **Bun**. TypeScript, ESM, no build step. Not deployed anywhere — it runs locally (Docker/Fly setup was dropped when moving into the monorepo).
 
@@ -13,7 +13,6 @@ Runtime is **Bun**. TypeScript, ESM, no build step. Not deployed anywhere — it
 Run inside `apps/parser`, or from the root via `bunx nx run @dns-markdown/parser:<script>`:
 
 ```sh
-bun run start          # Express control panel on port 3100 (PORT is set in the script), --watch
 bun run type-check     # tsc --noEmit
 bun run lint           # eslint (root config)
 
@@ -79,24 +78,13 @@ All vars are validated by the zod schema in `src/env.ts` (`import { env } from "
 - **`CITY` is required**, not defaulted — almost every entrypoint does `if (!city) throw new Error("No city found")`. It's supplied by the `parse:samara` / `parse:moscow` / `add:*` wrapper scripts, so running a stage bare will fail. `CITY` must therefore **not** be put into the shared root `.env` (the API doesn't need it — its schema has a default).
 - **`WRITE_STRATEGY`** (`insert` default | `replace`) switches each analysis stage between incremental and full rebuild. `insert` fetches only the last 2 price lists and deletes-then-reinserts today's rows so reruns are idempotent; `replace` deletes everything for the city first and, for diffs, also emits a diff of the oldest price list against an empty previous state.
 - `KEYS` selects which API cache keys `src/cache-clear` wipes.
-- `PORT` is fixed to 3100 by the `start` script, so the API's `PORT` from the shared `.env` doesn't leak in.
 - Remaining vars are in the root `.env.example`.
-
-### Express control panel (`src/express/`)
-
-Not a public API — an ops UI rendered from `src/express/templates/*.html` via ejs (views dir resolved from cwd as `src/express/templates`); static files come from `public/` in the package root:
-
-- `GET /` + `POST /update-request` — edit and overwrite `request.sh` (the saved DNS curl request that carries the cookies/CSRF token the downloaders scrape out of it). POST redirects 307 to `/log`, which starts a run.
-- `GET|POST /config` — read and overwrite `parser/dns_shop_downloader*.sh` in place.
-- `POST /log` — spawns `npm run parse` detached, guarded by `global.npmProcess` so a second request is a no-op; stdout/stderr are appended to `parselog.txt` (truncated at start). `GET /log` renders it; `GET /log/stop` kills the process group.
-
-All three forms write files that are gitignored, so the panel is how a fresh checkout gets its scraper config.
 
 ## Gotchas
 
-- **Gitignored but required at runtime** (see `apps/parser/.gitignore`): `parser/` (both `.sh` files), `pages/`, `request.sh`, `parselog.txt`; plus the root `.env`. A fresh clone has no scraper scripts — the README says to pull them from a Gist and hand-write `request.sh`. Don't "fix" missing-file errors by recreating them from scratch.
+- **Gitignored but required at runtime** (see `apps/parser/.gitignore`): `parser/` (both `.sh` files and `crawler.ts`), `pages/`, `request.sh`; plus the root `.env`. A fresh clone has no scraper scripts — the README says to pull them from a Gist and hand-write `request.sh` (the saved DNS curl request whose cookies/CSRF token the downloaders scrape out of it; refresh it by hand when it expires). Don't "fix" missing-file errors by recreating them from scratch.
 - **Imports** follow the api convention: `@src/*` (tsconfig `paths`, resolved by Bun at runtime) for cross-directory imports, relative `./…` within a stage's own folder (e.g. `./helpers/create-data`), no file extensions. Cross-workspace imports use package names (`@dns-markdown/db/types/pricelist`, `@dns-markdown/env`).
-- **Paths to runtime files are cwd-relative** (`resolve("pages")`, `resolve("parser")`, `resolve("request.sh")`, `resolve("parselog.txt")`, `express.static("public")`): scripts must run with cwd = `apps/parser` (Nx and `bun run` do). `lint` / `type-check` cover only `src/`, so the gitignored `parser/crawler.ts` is not checked.
-- **tsconfig extends the root `tsconfig.base.json` — strict and erasable-only:** `erasableSyntaxOnly` + `verbatimModuleSyntax` mean no enums, no `namespace`, no constructor parameter properties, and type-only imports must be written `import type`. `noUnusedLocals`/`noUnusedParameters` are on (hence the `_req` naming), and `noUncheckedIndexedAccess` means array/record indexing yields `T | undefined` — the existing `if (priceLists[0])` guards are there for that reason.
+- **Paths to runtime files are cwd-relative** (`resolve("pages")` in `src/add-price-list`, `parser/*.sh` / `request.sh` in the `downloader` script): scripts must run with cwd = `apps/parser` (Nx and `bun run` do). `lint` / `type-check` cover only `src/`, so the gitignored `parser/crawler.ts` is not checked.
+- **tsconfig extends the root `tsconfig.base.json` — strict and erasable-only:** `erasableSyntaxOnly` + `verbatimModuleSyntax` mean no enums, no `namespace`, no constructor parameter properties, and type-only imports must be written `import type`. `noUnusedLocals`/`noUnusedParameters` are on (prefix unused params with `_`), and `noUncheckedIndexedAccess` means array/record indexing yields `T | undefined` — the existing `if (priceLists[0])` guards are there for that reason.
 - **Standalone scripts own their exit code.** Each `src/*/index.ts` stage wraps its work in `getPerformance(fn).then(...).catch(err => { console.error(...); process.exit(1) })` so a failing stage aborts the chained `parse` run. Keep that pattern when adding a stage. (`add-vector-db` and `cache-clear` deliberately don't exit 1.)
 - User-facing strings (emails, vector-index text) are Russian. Keep them Russian.
