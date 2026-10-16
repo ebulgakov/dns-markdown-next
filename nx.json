@@ -7,6 +7,7 @@
     "sharedGlobals": [
       "{workspaceRoot}/bun.lock",
       "{workspaceRoot}/bunfig.toml",
+      "{workspaceRoot}/tsconfig.base.json",
       "{workspaceRoot}/eslint.config.ts",
       "{workspaceRoot}/.prettierrc"
     ]
