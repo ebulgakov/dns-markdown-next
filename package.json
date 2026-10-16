@@ -2,6 +2,7 @@
   "name": "dns-markdown",
   "private": true,
   "type": "module",
+  "packageManager": "bun@1.4.3",
   "workspaces": [
     "apps/*",
     "packages/*"
@@ -23,13 +24,27 @@
     "typescript-eslint": "^8.54.0"
   },
   "scripts": {
-    "dev": "nx run @dns-markdown/api:dev",
-    "build": "nx run-many -t build",
-    "test": "nx run-many -t test",
-    "lint": "nx run-many -t lint",
-    "lint:fix": "eslint --fix .",
-    "type-check": "nx run-many -t type-check",
-    "affected": "nx affected -t lint type-check test build",
+    "dev": "NX_LOAD_DOT_ENV_FILES=false nx run @dns-markdown/api:dev",
+    "dev:web": "NX_LOAD_DOT_ENV_FILES=false nx run @dns-markdown/web:dev",
+    "build": "NX_LOAD_DOT_ENV_FILES=false nx run-many -t build",
+    "test": "NX_LOAD_DOT_ENV_FILES=false nx run-many -t test",
+    "lint": "NX_LOAD_DOT_ENV_FILES=false nx run-many -t lint",
+    "lint:fix": "eslint --fix . && NX_LOAD_DOT_ENV_FILES=false nx run @dns-markdown/web:lint:fix",
+    "type-check": "NX_LOAD_DOT_ENV_FILES=false nx run-many -t type-check",
+    "affected": "NX_LOAD_DOT_ENV_FILES=false nx affected -t lint type-check test build",
     "prepare": "husky"
+  },
+  "trustedDependencies": [
+    "@clerk/shared",
+    "@parcel/watcher",
+    "@sentry/cli",
+    "@swc/core",
+    "esbuild",
+    "sharp",
+    "unrs-resolver"
+  ],
+  "overrides": {
+    "react": "19.2.3",
+    "react-dom": "19.2.3"
   }
 }

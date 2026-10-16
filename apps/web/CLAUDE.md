@@ -1,6 +1,6 @@
 # CLAUDE.md
 
-This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
+This file provides guidance to Claude Code (claude.ai/code) when working with code in `apps/web` (`@dns-markdown/web`) of the dns-markdown monorepo. Monorepo-wide layout, Nx usage, subagents and worktree policy are in the root `CLAUDE.md`. All paths below are relative to `apps/web/`.
 
 ## Project overview
 
@@ -17,7 +17,7 @@ If `codegraph status` reports no index (or the command itself is unavailable), s
 
 ## Commands
 
-Package manager is **bun** (see `bunfig.toml`, `bun.lock`; hoisted linker and `trustedDependencies` in `package.json`, matching the `dns-markdown-api` Nx monorepo this app will move into). Bun is the package manager/script runner and the unit-test runner (`bun test`); `next`, `storybook`, `eslint` (and Vitest for Storybook interaction tests) still run on Node, whose version is pinned in `.nvmrc`. Always invoke scripts as `bun run <script>`: `bun build` is Bun's built-in bundler, not this project's `build` script.
+Package manager is **bun**; the single `bun.lock`, hoisted linker (root `bunfig.toml`), `packageManager`, `trustedDependencies` and the `react`/`react-dom` `overrides` (keeps one React copy for peers like `react-scroll-up` that declare an older range) live in the monorepo root `package.json`. `apps/web/bunfig.toml` holds only the `[test]` config. Bun is the package manager/script runner and the unit-test runner (`bun test`); `next`, `storybook`, `eslint` (and Vitest for Storybook interaction tests) still run on Node, whose version is pinned in `.nvmrc`. Always invoke scripts as `bun run <script>`: `bun build` is Bun's built-in bundler, not this project's `build` script. Run the scripts below from `apps/web/` (or from the root via `bun run dev:web` / `NX_LOAD_DOT_ENV_FILES=false bunx nx run @dns-markdown/web:<script>`; the root `bun run lint|type-check|test|build` cover web too).
 
 ```bash
 bun run dev              # start dev server (localhost:3000)
@@ -44,13 +44,14 @@ Run a single unit test file: `TZ=UTC bun test --isolate path/to/file.test.ts`.
 
 Playwright e2e tests live in `playwright/` (config in `playwright.config.ts`). They build+start the app and run against `http://localhost:3000`: `npx playwright test`. These require Clerk test credentials and Upstash Redis env vars (see CI workflow `.github/workflows/playwright.yml`) — they are not expected to run without that setup.
 
-Unit tests run on `bun test` (configured in `bunfig.toml`'s `[test]`): discovery is rooted at `src/` (`**/*.test.{ts,tsx}`, colocated under `__tests__/`, e.g. `src/shared/lib/__tests__/format.test.ts`), and `test/setup.ts` is preloaded to register happy-dom globals for React Testing Library. Import test APIs from `bun:test`. Unlike Vitest, plain `bun test` runs every file in one shared global and module registry, so module-level state (zustand stores) and `vi.mock` module mocks leak between files — the `test` scripts pass `--isolate` (Bun ≥ 1.4; the version is pinned in `package.json`'s `packageManager` and CI reads it via `bun-version-file`) to give each file a fresh global, matching Vitest's per-file isolation. Older Bun silently ignores the flag. Differences from Vitest to keep in mind: `vi.mock` is not hoisted (declare `vi.fn()` mocks first and close over them in the factory — no `as Mock` casts), and there is no `vi.advanceTimersByTimeAsync` (use `advanceTimersByTimeAsync` from `@/test/fake-timers`). `vitest.config.ts` now holds only the `storybook` project, which runs Storybook interaction tests in a real browser (Playwright provider) — this is exercised via `bun run build-storybook`/Chromatic CI, not `bun run test`.
+Unit tests run on `bun test` (configured in `bunfig.toml`'s `[test]`): discovery is rooted at `src/` (`**/*.test.{ts,tsx}`, colocated under `__tests__/`, e.g. `src/shared/lib/__tests__/format.test.ts`), and `test/setup.ts` is preloaded to register happy-dom globals for React Testing Library. Import test APIs from `bun:test`. Unlike Vitest, plain `bun test` runs every file in one shared global and module registry, so module-level state (zustand stores) and `vi.mock` module mocks leak between files — the `test` scripts pass `--isolate` (Bun ≥ 1.4; the version is pinned in the root `package.json`'s `packageManager` and CI reads it via `bun-version-file`) to give each file a fresh global, matching Vitest's per-file isolation. Older Bun silently ignores the flag. Differences from Vitest to keep in mind: `vi.mock` is not hoisted (declare `vi.fn()` mocks first and close over them in the factory — no `as Mock` casts), and there is no `vi.advanceTimersByTimeAsync` (use `advanceTimersByTimeAsync` from `@/test/fake-timers`). `vitest.config.ts` now holds only the `storybook` project, which runs Storybook interaction tests in a real browser (Playwright provider) — this is exercised via `bun run build-storybook`/Chromatic CI, not `bun run test`.
 
-CI runs ESLint, `tsc --noEmit` ("TSLint" workflow), Bun tests, Playwright, and `bun run dep-check` (`.github/workflows/dependency-check.yml`) as separate GitHub Actions workflows on push/PR to `main`. Chromatic runs only when a PR is labeled `chromatic`.
+CI (`.github/workflows/` at the monorepo root) runs ESLint, `tsc --noEmit` ("TSLint" workflow) and Bun tests for every workspace via Nx, plus web-only Playwright and `bun run dep-check` (`dependency-check.yml`) with `working-directory: apps/web`, on push/PR to `main`. Chromatic runs only when a PR is labeled `chromatic`.
 
 ## Environment
 
-Copy `.env-example` to `.env` and fill in values. Key variables:
+Copy `apps/web/.env-example` to `apps/web/.env` and fill in values (Next.js reads env files from `apps/web/`, not the monorepo root). Key variables:
+
 - `API_URL` / `API_SECRET_KEY` — external backend that owns pricelist/product/analysis data (called via `src/shared/api/client.ts`'s `apiClient`, an axios instance sending `X-Internal-API-Secret`).
 - `CLERK_SECRET_KEY` / `NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY` / `NEXT_PUBLIC_CLERK_*_URL` — Clerk auth.
 - `UPSTASH_REDIS_REST_URL` / `UPSTASH_REDIS_REST_TOKEN` — guest user state storage.
@@ -68,6 +69,7 @@ Files under `src/` and `app/` use kebab-case — lowercase words separated by hy
 ### Data layer: user vs. guest, always behind `src/entities/user`'s `post.ts`
 
 Almost all mutating/user-scoped reads go through `src/entities/user/api/post.ts` (re-exported via `src/entities/user/index.ts`), which branches on whether a Clerk session exists (`getSessionInfo()` from `src/entities/user/api/user.ts`, memoized per-request via React's `cache()`):
+
 - **Logged-in** → delegates to `api/user.ts`, which calls the external API with the Clerk bearer token and calls `revalidateTag(`user-${userId}`)` after every mutation.
 - **Guest** → delegates to `api/guest.ts`, which reads/writes a `User` object in Upstash Redis keyed by a `guestId` cookie (30-day TTL), with no external API involvement.
 
@@ -108,11 +110,3 @@ ESLint enforces `import/order` (builtin → external → internal → parent →
 - `max-lines-per-function` is enforced at 80, and `max-lines` (whole file) at 250, both `skipBlankLines`/`skipComments`, both across `.ts` and `.tsx` (`eslint.config.mjs`). `__tests__/` files are exempt from both (arrange-act-assert blocks legitimately run long); both also exempt `*.stories.tsx`. Eleven files are grandfathered by filename for `max-lines-per-function` (mostly React components — a JSX-heavy render body trips this rule at a much lower true "logic" size than a `.ts` file would); `src/shared/ui/chart/chart.tsx` (shadcn-generated) is additionally grandfathered for `max-lines`. That list should only shrink (refactor one below its threshold, drop the entry), never grow — see `eslint.config.mjs` for the exact file list.
 - **FSD layer boundaries** are enforced by `eslint-plugin-boundaries` — see Architecture above for the full policy graph. `**/*.stories.tsx`, `**/__mocks__/**`, and `**/__tests__/**` are exempt from the `boundaries/dependencies` check entirely (`eslint.config.mjs`'s boundaries block `ignores`): those files legitimately reach into internals (mocking a store, rendering a component directly) that production code must not.
 - `dependency-cruiser` (`.dependency-cruiser.cjs`, `bun run dep-check`, see Commands) covers what `eslint-plugin-boundaries` structurally can't: circular imports anywhere in `app/**`/`src/**`, and unresolvable import paths (a canary against a misconfigured resolver silently passing `no-circular` while checking nothing).
-
-## Subagents
-
-Subagent roster and routing are defined in AGENTS.md (single source of truth for Claude Code and other CLIs): @AGENTS.md
-
-## Worktree policy
-
-Never use `EnterWorktree` in this repo — always work directly in the current branch/checkout. This is enforced by a `PreToolUse` hook (`.claude/hooks/block-worktree.sh`, wired up in `.claude/settings.json`) that denies every `EnterWorktree` call: if it detects only the main checkout (`git worktree list --porcelain`), it explains the policy; if it detects an extra worktree, it warns that a previous agent session may still have work in progress there and to close/merge that first. `settings.json` also sets `worktree.bgIsolation: "none"` so background sessions can still edit files directly without ever needing `EnterWorktree` to unlock that.

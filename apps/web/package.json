@@ -1,8 +1,7 @@
 {
-  "name": "dns-markdown-next",
+  "name": "@dns-markdown/web",
   "version": "3.2.0",
   "private": true,
-  "packageManager": "bun@1.4.3",
   "scripts": {
     "dev": "bun --bun next dev",
     "build": "bun --bun next build",
@@ -82,6 +81,7 @@
     "@types/react-copy-to-clipboard": "^5.0.7",
     "@types/react-dom": "^19",
     "@vitest/browser-playwright": "^4.0.16",
+    "babel-plugin-react-compiler": "1.0.0",
     "dependency-cruiser": "^18.2.0",
     "eslint": "^9",
     "eslint-config-next": "16.1.1",
@@ -98,13 +98,13 @@
     "vite": "^7.3.0",
     "vitest": "^4.0.16"
   },
-  "trustedDependencies": [
-    "@clerk/shared",
-    "@parcel/watcher",
-    "@sentry/cli",
-    "@swc/core",
-    "esbuild",
-    "sharp",
-    "unrs-resolver"
-  ]
+  "nx": {
+    "targets": {
+      "build": {
+        "outputs": [
+          "{projectRoot}/.next"
+        ]
+      }
+    }
+  }
 }
