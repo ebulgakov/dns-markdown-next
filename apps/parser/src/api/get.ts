@@ -1,3 +1,5 @@
+import describeError from "@src/helpers/describe-error";
+
 import { apiClient } from "./client";
 
 import type { AnalysisData } from "@dns-markdown/db/types/analysis-data";
@@ -9,7 +11,7 @@ const wrapApiCall = async (endpoint: string, options = {}) => {
     const response = await apiClient.get(endpoint, options);
     return response.data;
   } catch (error) {
-    console.error(`Error fetching data from ${endpoint}:`, error);
+    console.error(`Error fetching data from ${endpoint}:`, describeError(error));
     throw error;
   }
 };

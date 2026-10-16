@@ -1,3 +1,5 @@
+import describeError from "@src/helpers/describe-error";
+
 import { apiClient, webClient } from "./client";
 
 import type { AnalysisData } from "@dns-markdown/db/types/analysis-data";
@@ -10,7 +12,7 @@ const wrapApiCall = async (endpoint: string, data = {}) => {
     const response = await apiClient.post(endpoint, data);
     return response.data;
   } catch (error) {
-    console.error(`Error fetching data from ${endpoint}:`, error);
+    console.error(`Error fetching data from ${endpoint}:`, describeError(error));
     throw error;
   }
 };
@@ -88,5 +90,6 @@ export const clearCacheByKeys = async (keys: string): Promise<null> => {
 };
 
 export const clearWebCache = async (tag: string): Promise<null> => {
-  return await webClient.post("/api/revalidate", { tag });
+  await webClient.post("/api/revalidate", { tag });
+  return null;
 };
