@@ -75,4 +75,32 @@ describe("sendUpdatesEmail", () => {
 
     expect(sentEmails().map(email => email.to[0])).toEqual(["yes@example.com"]);
   });
+
+  test("does not call Resend when nobody has updates", async () => {
+    await sendUpdatesEmail([user("none@example.com")], []);
+
+    expect(resendBatchSend).not.toHaveBeenCalled();
+  });
+
+  test("splits sends into batches of 100", async () => {
+    const emails = Array.from({ length: 150 }, (_, i) => `u${i}@example.com`);
+
+    await sendUpdatesEmail(
+      emails.map(email => user(email)),
+      emails.map(email => ({ id: `fav-${email}`, status: ["price"] }))
+    );
+
+    expect(resendBatchSend.mock.calls.map(([batch]) => batch.length)).toEqual([100, 50]);
+  });
+
+  test("throws when Resend returns an error", async () => {
+    resendBatchSend.mockImplementation(async () => ({
+      data: null,
+      error: { message: "Invalid key" }
+    }));
+
+    await expect(
+      sendUpdatesEmail([user("a@example.com")], [{ id: "fav-a@example.com", status: ["price"] }])
+    ).rejects.toThrow("Failed to send update emails: Invalid key");
+  });
 });

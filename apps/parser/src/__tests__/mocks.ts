@@ -47,7 +47,9 @@ type ClientCall = (endpoint: string, payload?: unknown) => Promise<{ data: unkno
 export const apiGet = mock<ClientCall>(async () => ({ data: undefined }));
 export const apiPost = mock<ClientCall>(async () => ({ data: undefined }));
 export const webPost = mock<ClientCall>(async () => ({ data: undefined }));
-export const resendBatchSend = mock<(emails: unknown[]) => Promise<unknown>>(async () => ({}));
+export const resendBatchSend = mock<
+  (emails: unknown[]) => Promise<{ data?: unknown; error?: { message: string } | null }>
+>(async () => ({ data: null, error: null }));
 
 mock.module("@src/env", () => ({ env }));
 mock.module("@src/api/client", () => ({
@@ -65,7 +67,7 @@ export const resetMocks = () => {
   apiGet.mockImplementation(async () => ({ data: undefined }));
   apiPost.mockImplementation(async () => ({ data: undefined }));
   webPost.mockImplementation(async () => ({ data: undefined }));
-  resendBatchSend.mockImplementation(async () => ({}));
+  resendBatchSend.mockImplementation(async () => ({ data: null, error: null }));
 };
 
 // Route apiClient.get responses by endpoint.

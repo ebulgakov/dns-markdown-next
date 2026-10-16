@@ -9,6 +9,9 @@ export type FavoriteStatus = {
   status: FavoriteUpdatesStatus[];
 };
 
+// Resend accepts at most 100 emails per batch request
+const BATCH_LIMIT = 100;
+
 function addStatusInfo(statuses: FavoriteUpdatesStatus[], favorite: Favorite) {
   if (!statuses) return "";
 
@@ -74,7 +77,10 @@ async function sendUpdatesEmail(users: User[], statuses: FavoriteStatus[]) {
     });
   }
 
-  await resend.batch.send(emails);
+  for (let i = 0; i < emails.length; i += BATCH_LIMIT) {
+    const { error } = await resend.batch.send(emails.slice(i, i + BATCH_LIMIT));
+    if (error) throw new Error(`Failed to send update emails: ${error.message}`);
+  }
 
   return users;
 }
