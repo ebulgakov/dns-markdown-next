@@ -28,9 +28,9 @@ bun run lint             # eslint
 bun run lint:fix         # eslint --fix
 bun run type-check       # tsc --noEmit
 
-bun run test             # bun test (TZ=UTC)
-bun run test:watch       # bun test --watch
-bun run test:coverage    # bun test --coverage
+bun run test             # bun test --isolate (TZ=UTC)
+bun run test:watch       # bun test --isolate --watch
+bun run test:coverage    # bun test --isolate --coverage
 
 bun run storybook        # storybook dev on :6006
 bun run build-storybook  # static storybook build
@@ -40,11 +40,11 @@ bun run dep-graph        # dependency-cruiser: mermaid dependency graph
 bun run dep-graph:archi  # dependency-cruiser: svg architecture diagram (needs graphviz `dot`)
 ```
 
-Run a single unit test file: `TZ=UTC bun test path/to/file.test.ts`.
+Run a single unit test file: `TZ=UTC bun test --isolate path/to/file.test.ts`.
 
 Playwright e2e tests live in `playwright/` (config in `playwright.config.ts`). They build+start the app and run against `http://localhost:3000`: `npx playwright test`. These require Clerk test credentials and Upstash Redis env vars (see CI workflow `.github/workflows/playwright.yml`) — they are not expected to run without that setup.
 
-Unit tests run on `bun test` (configured in `bunfig.toml`'s `[test]`): discovery is rooted at `src/` (`**/*.test.{ts,tsx}`, colocated under `__tests__/`, e.g. `src/shared/lib/__tests__/format.test.ts`), and `test/setup.ts` is preloaded to register happy-dom globals for React Testing Library. Import test APIs from `bun:test`. Differences from Vitest to keep in mind: `vi.mock` is not hoisted (declare `vi.fn()` mocks first and close over them in the factory — no `as Mock` casts), and there is no `vi.advanceTimersByTimeAsync` (use `advanceTimersByTimeAsync` from `@/test/fake-timers`). `vitest.config.ts` now holds only the `storybook` project, which runs Storybook interaction tests in a real browser (Playwright provider) — this is exercised via `bun run build-storybook`/Chromatic CI, not `bun run test`.
+Unit tests run on `bun test` (configured in `bunfig.toml`'s `[test]`): discovery is rooted at `src/` (`**/*.test.{ts,tsx}`, colocated under `__tests__/`, e.g. `src/shared/lib/__tests__/format.test.ts`), and `test/setup.ts` is preloaded to register happy-dom globals for React Testing Library. Import test APIs from `bun:test`. Unlike Vitest, plain `bun test` runs every file in one shared global and module registry, so module-level state (zustand stores) and `vi.mock` module mocks leak between files — the `test` scripts pass `--isolate` (Bun ≥ 1.4; the version is pinned in `package.json`'s `packageManager` and CI reads it via `bun-version-file`) to give each file a fresh global, matching Vitest's per-file isolation. Older Bun silently ignores the flag. Differences from Vitest to keep in mind: `vi.mock` is not hoisted (declare `vi.fn()` mocks first and close over them in the factory — no `as Mock` casts), and there is no `vi.advanceTimersByTimeAsync` (use `advanceTimersByTimeAsync` from `@/test/fake-timers`). `vitest.config.ts` now holds only the `storybook` project, which runs Storybook interaction tests in a real browser (Playwright provider) — this is exercised via `bun run build-storybook`/Chromatic CI, not `bun run test`.
 
 CI runs ESLint, `tsc --noEmit` ("TSLint" workflow), Bun tests, Playwright, and `bun run dep-check` (`.github/workflows/dependency-check.yml`) as separate GitHub Actions workflows on push/PR to `main`. Chromatic runs only when a PR is labeled `chromatic`.
 
