@@ -36,7 +36,22 @@ bun run cache:clear                 # clear API cache (daily:*) + Next.js revali
 bun run cache:clear:local           # same for local:* keys
 ```
 
-**There are no tests** and no `test` script (so `nx run-many -t test` skips the parser). Lint and formatting use the root `eslint.config.ts` / `.prettierrc`.
+```sh
+bun test                            # all parser tests (bun:test)
+bun test src/add-price-list         # one folder
+```
+
+Lint and formatting use the root `eslint.config.ts` / `.prettierrc`.
+
+### Tests
+
+Tests live in `__tests__/` next to the code (`bun:test`); a stage's test is `src/<stage>/__tests__/<stage>.test.ts` and imports `../<stage>`, never `index.ts`. Rules:
+
+- **Only outer boundaries are mocked**, always in `src/__tests__/mocks.ts`, which `bunfig.toml` preloads for every test file (`[test] preload`) — it must run before any import, otherwise the real `src/env.ts` validates `process.env` and exits. Mocked: `@src/env` (a mutable `env` — tests set `env.CITY`, `env.WRITE_STRATEGY`, `env.KEYS`), `@src/api/client` (`apiGet` / `apiPost` / `webPost`), `@src/email/index` (`resendBatchSend`). `mock.module` is process-wide, so never mock `@src/api/get`, `@src/api/post` or helpers — stage tests run through the real API layer and assert endpoints and payloads on the client mocks (`mockGetResponses`, `postBody`, `postedEndpoints`). Call `resetMocks()` in `beforeEach`.
+- Mocks for third-party SDKs used by a single stage (`@upstash/vector`, `ora`) stay in that test file, and the stage module is imported with `await import()` after `mock.module`.
+- Fixtures: `makeGoods`, `makePriceList`, `makeAnalysisData`, `makeUser` in `src/__tests__/mocks.ts`.
+- `src/add-price-list` reads `pages/` from cwd — its test writes fixtures to a temp dir and `process.chdir`s into it.
+- No env vars are needed to run the tests (CI included).
 
 ## Architecture
 
@@ -86,5 +101,5 @@ All vars are validated by the zod schema in `src/env.ts` (`import { env } from "
 - **Imports** follow the api convention: `@src/*` (tsconfig `paths`, resolved by Bun at runtime) for cross-directory imports, relative `./…` within a stage's own folder (e.g. `./helpers/create-data`), no file extensions. Cross-workspace imports use package names (`@dns-markdown/db/types/pricelist`, `@dns-markdown/env`).
 - **Paths to runtime files are cwd-relative** (`resolve("pages")` in `src/add-price-list`, `parser/*.sh` / `request.sh` in the `downloader` script): scripts must run with cwd = `apps/parser` (Nx and `bun run` do). `lint` / `type-check` cover only `src/`, so the gitignored `parser/crawler.ts` is not checked.
 - **tsconfig extends the root `tsconfig.base.json` — strict and erasable-only:** `erasableSyntaxOnly` + `verbatimModuleSyntax` mean no enums, no `namespace`, no constructor parameter properties, and type-only imports must be written `import type`. `noUnusedLocals`/`noUnusedParameters` are on (prefix unused params with `_`), and `noUncheckedIndexedAccess` means array/record indexing yields `T | undefined` — the existing `if (priceLists[0])` guards are there for that reason.
-- **Standalone scripts own their exit code.** Each `src/*/index.ts` stage wraps its work in `getPerformance(fn).then(...).catch(err => { console.error(...); process.exit(1) })` so a failing stage aborts the chained `parse` run. Keep that pattern when adding a stage. (`add-vector-db` and `cache-clear` deliberately don't exit 1.)
+- **Each stage is split into logic and entrypoint.** `src/<stage>/<stage>.ts` exports the stage function (`export async function addPriceList()`) and has no side effects — tests import it. `src/<stage>/index.ts` is only the runner: `getPerformance(fn).then(...).catch(err => { console.error(...); process.exit(1) })`; it is what `bun src/<stage>` executes and is never imported or tested. A failing stage exits 1 so it aborts the chained `parse` run. Keep that pattern when adding a stage. (`add-vector-db` and `cache-clear` deliberately don't exit 1.)
 - User-facing strings (emails, vector-index text) are Russian. Keep them Russian.

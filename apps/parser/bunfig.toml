@@ -1,0 +1,4 @@
+[test]
+# Boundary mocks (@src/env, @src/api/client, @src/email/index) must be registered before any
+# test file imports code that loads them
+preload = ["./src/__tests__/mocks.ts"]
