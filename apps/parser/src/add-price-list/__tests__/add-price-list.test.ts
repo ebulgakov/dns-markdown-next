@@ -33,19 +33,19 @@ const PRICES_HTML = JSON.stringify({
   }
 });
 
-// addPriceList reads `pages/` relative to cwd, so run it inside a temp dir with fixtures
+// addPriceList reads `src/pages/` relative to cwd, so run it inside a temp dir with fixtures
 const originalCwd = process.cwd();
 let workDir: string;
 
 const writePages = (body: string, prices = PRICES_HTML) => {
-  writeFileSync(join(workDir, "pages", "body.html"), body);
-  writeFileSync(join(workDir, "pages", "prices.html"), prices);
+  writeFileSync(join(workDir, "src", "pages", "body.html"), body);
+  writeFileSync(join(workDir, "src", "pages", "prices.html"), prices);
 };
 
 describe("addPriceList", () => {
   beforeAll(() => {
     workDir = mkdtempSync(join(tmpdir(), "parser-add-price-list-"));
-    mkdirSync(join(workDir, "pages"));
+    mkdirSync(join(workDir, "src", "pages"), { recursive: true });
     process.chdir(workDir);
   });
 
@@ -67,7 +67,10 @@ describe("addPriceList", () => {
   });
 
   test("saves the parsed price list when the last one is from another day", async () => {
-    const yesterday = new Date(Date.now() - 24 * 60 * 60 * 1000).toISOString();
+    // A calendar day back, not 24h: on a 25-hour DST day `now - 24h` can still be the same date
+    const date = new Date();
+    date.setDate(date.getDate() - 1);
+    const yesterday = date.toISOString();
     mockGetResponses({ "/api/pricelist": makePriceList({ createdAt: yesterday }) });
 
     await addPriceList();

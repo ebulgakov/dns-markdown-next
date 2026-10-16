@@ -10,7 +10,7 @@ import createData from "./helpers/create-data";
 import isSameDay from "./helpers/is-same-day";
 
 export async function addPriceList() {
-  const path = resolve("pages");
+  const path = resolve("src/pages");
   const html = readFileSync(join(path, "body.html")).toString();
   const { data } = JSON.parse(readFileSync(join(path, "prices.html")).toString());
   const goods = createData(html, data);
