@@ -1,6 +1,6 @@
 # dns-markdown-api
 
-Monorepo (Bun workspaces + Nx): `apps/api` — Express API, `packages/db` — shared Mongoose models.
+Monorepo (Bun workspaces + Nx): `apps/api` — Express API, `apps/parser` — DNS markdown scraper ([README](apps/parser/README.md)), `packages/db` — shared Mongoose models, `packages/env` — shared env loading.
 
 <img width="2574" height="2342" alt="image" src="https://github.com/user-attachments/assets/a6922841-1aa0-4801-9577-50f47bc80b34" />
 
