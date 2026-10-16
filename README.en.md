@@ -17,7 +17,7 @@ The service provides a convenient way to view products from Samara for now. You 
 First, run the development server:
 
 ```bash
-pnpm dev
+bun run dev
 ```
 
 Open [http://localhost:3000](http://localhost:3000) with your browser to see the local site.
@@ -33,9 +33,9 @@ Chromatic Storybook is set up for this project: https://www.chromatic.com/librar
 ## Dependency graph
 
 ```bash
-pnpm dep-check         # CI gate: no circular imports
-pnpm dep-graph          # prints a Mermaid diagram to stdout — paste into a PR/Markdown
-pnpm dep-graph:archi    # renders dependency-graph.svg (needs Graphviz's `dot` locally)
+bun run dep-check       # CI gate: no circular imports
+bun run dep-graph       # prints a Mermaid diagram to stdout — paste into a PR/Markdown
+bun run dep-graph:archi # renders dependency-graph.svg (needs Graphviz's `dot` locally)
 ```
 
 Requires Node `^22||^24||>=26` (dependency-cruiser's own supported range) — the project's pinned version ([`.nvmrc`](./.nvmrc), `v26.7.0`) already satisfies this. See `.dependency-cruiser.cjs` and `CLAUDE.md` for what these rules cover and why.

@@ -96,5 +96,14 @@
     "typescript": "^5",
     "vite": "^7.3.0",
     "vitest": "^4.0.16"
-  }
+  },
+  "trustedDependencies": [
+    "@clerk/shared",
+    "@parcel/watcher",
+    "@sentry/cli",
+    "@swc/core",
+    "esbuild",
+    "sharp",
+    "unrs-resolver"
+  ]
 }

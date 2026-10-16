@@ -254,7 +254,7 @@ font renders — it only proves both sides fall back the same way.
 woff2 files from `next/font/google`'s own build cache
 (`.next/dev/static/chunks/[next]_internal_font_google_roboto_*.css` for the
 CSS, `.next/dev/static/media/*.woff2` for the files — these appear after
-`pnpm dev` has run at least once; they are NOT committed/durable on their
+`bun run dev` has run at least once; they are NOT committed/durable on their
 own). Copied into `.design-sync/shims/fonts/{roboto,roboto-mono}.css` +
 sibling `.woff2` files (15 files, ~340 KB total, all unicode-range subsets
 incl. Cyrillic — this app is Russian-primary) — this directory IS committed
@@ -277,7 +277,7 @@ run together** on every re-sync, not just the CSS copy.
 
 **To revisit**: if `.design-sync/shims/fonts/*.woff2` ever needs
 regenerating (e.g. Google updates the Roboto files, or more unicode subsets
-are needed), run `pnpm dev`, open any page once, then re-harvest from
+are needed), run `bun run dev`, open any page once, then re-harvest from
 `.next/dev/static/chunks/[next]_internal_font_google_roboto*.css` +
 `.next/dev/static/media/` following the same pattern.
 

@@ -17,36 +17,36 @@ If `codegraph status` reports no index (or the command itself is unavailable), s
 
 ## Commands
 
-Package manager is **pnpm** (see `pnpm-workspace.yaml`, `pnpm-lock.yaml`). Node version is pinned in `.nvmrc`.
+Package manager is **bun** (see `bunfig.toml`, `bun.lock`; hoisted linker and `trustedDependencies` in `package.json`, matching the `dns-markdown-api` Nx monorepo this app will move into). Bun is only the package manager/script runner — `next`, `vitest`, `storybook`, `eslint` still run on Node, whose version is pinned in `.nvmrc`. Always invoke scripts as `bun run <script>`: `bun test` and `bun build` are Bun's built-in test runner and bundler, not this project's `test`/`build` scripts.
 
 ```bash
-pnpm dev                 # start dev server (localhost:3000)
-pnpm build               # production build
-pnpm start               # start production server
+bun run dev              # start dev server (localhost:3000)
+bun run build            # production build
+bun run start            # start production server
 
-pnpm lint                # eslint
-pnpm lint:fix            # eslint --fix
-pnpm type-check          # tsc --noEmit
+bun run lint             # eslint
+bun run lint:fix         # eslint --fix
+bun run type-check       # tsc --noEmit
 
-pnpm test                # vitest run --project unit (TZ=UTC)
-pnpm test:watch          # vitest --project unit, watch mode
-pnpm test:coverage       # vitest --project unit --coverage
+bun run test             # vitest run --project unit (TZ=UTC)
+bun run test:watch       # vitest --project unit, watch mode
+bun run test:coverage    # vitest --project unit --coverage
 
-pnpm storybook           # storybook dev on :6006
-pnpm build-storybook     # static storybook build
+bun run storybook        # storybook dev on :6006
+bun run build-storybook  # static storybook build
 
-pnpm dep-check           # dependency-cruiser: circular imports, unresolvable paths
-pnpm dep-graph           # dependency-cruiser: mermaid dependency graph
-pnpm dep-graph:archi     # dependency-cruiser: svg architecture diagram (needs graphviz `dot`)
+bun run dep-check        # dependency-cruiser: circular imports, unresolvable paths
+bun run dep-graph        # dependency-cruiser: mermaid dependency graph
+bun run dep-graph:archi  # dependency-cruiser: svg architecture diagram (needs graphviz `dot`)
 ```
 
 Run a single unit test file: `TZ=UTC vitest run --project unit path/to/file.test.ts`.
 
 Playwright e2e tests live in `playwright/` (config in `playwright.config.ts`). They build+start the app and run against `http://localhost:3000`: `npx playwright test`. These require Clerk test credentials and Upstash Redis env vars (see CI workflow `.github/workflows/playwright.yml`) — they are not expected to run without that setup.
 
-Unit tests (`vitest`) use the `unit` project defined in `vitest.config.ts`: jsdom environment, files matched by `**/*.test.{ts,tsx}`, colocated with source under `__tests__/` directories (e.g. `src/shared/lib/__tests__/format.test.ts`). A second `storybook` project runs Storybook interaction tests in a real browser (Playwright provider) — this is exercised via `pnpm build-storybook`/Chromatic CI, not `pnpm test`.
+Unit tests (`vitest`) use the `unit` project defined in `vitest.config.ts`: jsdom environment, files matched by `**/*.test.{ts,tsx}`, colocated with source under `__tests__/` directories (e.g. `src/shared/lib/__tests__/format.test.ts`). A second `storybook` project runs Storybook interaction tests in a real browser (Playwright provider) — this is exercised via `bun run build-storybook`/Chromatic CI, not `bun run test`.
 
-CI runs ESLint, `tsc --noEmit` ("TSLint" workflow), Vitest, Playwright, and `pnpm dep-check` (`.github/workflows/dependency-check.yml`) as separate GitHub Actions workflows on push/PR to `main`. Chromatic runs only when a PR is labeled `chromatic`.
+CI runs ESLint, `tsc --noEmit` ("TSLint" workflow), Vitest, Playwright, and `bun run dep-check` (`.github/workflows/dependency-check.yml`) as separate GitHub Actions workflows on push/PR to `main`. Chromatic runs only when a PR is labeled `chromatic`.
 
 ## Environment
 
@@ -99,7 +99,7 @@ Read-only catalog/analysis data (pricelists, products, diffs, LLM reports) goes 
 
 ### Import ordering & formatting
 
-ESLint enforces `import/order` (builtin → external → internal → parent → sibling → index → object → type, alphabetized, blank line between groups) — see `eslint.config.mjs`. Prettier config (`.prettierrc`): no trailing commas, double quotes, no semicolon-omission changes needed (semi: true), `arrowParens: avoid`, tailwind class sorting via `prettier-plugin-tailwindcss`. Run `pnpm lint:fix` after edits touching imports.
+ESLint enforces `import/order` (builtin → external → internal → parent → sibling → index → object → type, alphabetized, blank line between groups) — see `eslint.config.mjs`. Prettier config (`.prettierrc`): no trailing commas, double quotes, no semicolon-omission changes needed (semi: true), `arrowParens: avoid`, tailwind class sorting via `prettier-plugin-tailwindcss`. Run `bun run lint:fix` after edits touching imports.
 
 ## Code style
 
@@ -107,7 +107,7 @@ ESLint enforces `import/order` (builtin → external → internal → parent →
 - No unjustified `eslint-disable`. Zero exist in the repo today — a new one needs a genuine conflict between two tools/rules, stated inline, not "the linter was annoying here."
 - `max-lines-per-function` is enforced at 80, and `max-lines` (whole file) at 250, both `skipBlankLines`/`skipComments`, both across `.ts` and `.tsx` (`eslint.config.mjs`). `__tests__/` files are exempt from both (arrange-act-assert blocks legitimately run long); both also exempt `*.stories.tsx`. Eleven files are grandfathered by filename for `max-lines-per-function` (mostly React components — a JSX-heavy render body trips this rule at a much lower true "logic" size than a `.ts` file would); `src/shared/ui/chart/chart.tsx` (shadcn-generated) is additionally grandfathered for `max-lines`. That list should only shrink (refactor one below its threshold, drop the entry), never grow — see `eslint.config.mjs` for the exact file list.
 - **FSD layer boundaries** are enforced by `eslint-plugin-boundaries` — see Architecture above for the full policy graph. `**/*.stories.tsx`, `**/__mocks__/**`, and `**/__tests__/**` are exempt from the `boundaries/dependencies` check entirely (`eslint.config.mjs`'s boundaries block `ignores`): those files legitimately reach into internals (mocking a store, rendering a component directly) that production code must not.
-- `dependency-cruiser` (`.dependency-cruiser.cjs`, `pnpm dep-check`, see Commands) covers what `eslint-plugin-boundaries` structurally can't: circular imports anywhere in `app/**`/`src/**`, and unresolvable import paths (a canary against a misconfigured resolver silently passing `no-circular` while checking nothing).
+- `dependency-cruiser` (`.dependency-cruiser.cjs`, `bun run dep-check`, see Commands) covers what `eslint-plugin-boundaries` structurally can't: circular imports anywhere in `app/**`/`src/**`, and unresolvable import paths (a canary against a misconfigured resolver silently passing `no-circular` while checking nothing).
 
 ## Subagents
 
