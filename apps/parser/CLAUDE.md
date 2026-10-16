@@ -50,7 +50,7 @@ Tests live in `__tests__/` next to the code (`bun:test`); a stage's test is `src
 - **Only outer boundaries are mocked**, always in `src/__tests__/mocks.ts`, which `bunfig.toml` preloads for every test file (`[test] preload`) — it must run before any import, otherwise the real `src/env.ts` validates `process.env` and exits. Mocked: `@src/env` (a mutable `env` — tests set `env.CITY`, `env.WRITE_STRATEGY`, `env.KEYS`), `@src/api/client` (`apiGet` / `apiPost` / `webPost`), `@src/email/index` (`resendBatchSend`). `mock.module` is process-wide, so never mock `@src/api/get`, `@src/api/post` or helpers — stage tests run through the real API layer and assert endpoints and payloads on the client mocks (`mockGetResponses`, `postBody`, `postedEndpoints`). Call `resetMocks()` in `beforeEach`.
 - Mocks for third-party SDKs used by a single stage (`@upstash/vector`, `ora`) stay in that test file, and the stage module is imported with `await import()` after `mock.module`.
 - Fixtures: `makeGoods`, `makePriceList`, `makeAnalysisData`, `makeUser` in `src/__tests__/mocks.ts`.
-- `src/add-price-list` reads `pages/` from cwd — its test writes fixtures to a temp dir and `process.chdir`s into it.
+- `src/add-price-list` reads `src/pages/` from cwd — its test writes fixtures to a temp dir and `process.chdir`s into it.
 - No env vars are needed to run the tests (CI included).
 
 ## Architecture
@@ -68,13 +68,13 @@ So: to add a new data operation, add a wrapper to `src/api/get.ts` / `src/api/po
 
 Payload types (`PriceList`, `Goods`, `AnalysisData`, `AnalysisDiff`, `User`, …) come from `@dns-markdown/db/types/*` — the same types the API stores, imported with `import type` only (the parser has no mongoose runtime).
 
-### The `pages/` directory is the contract between stages
+### The `src/pages/` directory is the contract between stages
 
-`bun run downloader` is three steps whose only coupling is files in `pages/`, and the order is load-bearing:
+`bun run downloader` is three steps whose only coupling is files in `src/pages/`, and the order is load-bearing:
 
-1. `parser/dns_shop_downloader.sh` — wipes and recreates `pages/`, reads the page count, CSRF token and cookies **out of `request.sh`** (a saved curl command), then downloads `pages/page_N.html` (each is a JSON envelope: `{ html, assets }`) with rotating user-agents and random delays.
-2. `parser/crawler.ts` — concatenates every `html` field into `pages/body.html`, and `eval`s each page's `assets.inlineJs` against a fake `window.AjaxState` shim to harvest product-buy container ids into `pages/ids.json`. The `eval` and the stub `window` are deliberate, not leftovers.
-3. `parser/dns_shop_downloader_prices.sh` — POSTs `ids.json` back to DNS to get `pages/prices.html` (JSON, `{ data: { states: [...] } }`).
+1. `dns_shop_downloader.sh` — wipes and recreates `src/pages/`, reads the page count, CSRF token and cookies **out of `request.sh`** (a saved curl command), then downloads `src/pages/page_N.html` (each is a JSON envelope: `{ html, assets }`) with rotating user-agents and random delays.
+2. `crawler.ts` — concatenates every `html` field into `src/pages/body.html`, and `eval`s each page's `assets.inlineJs` against a fake `window.AjaxState` shim to harvest product-buy container ids into `src/pages/ids.json`. The `eval` and the stub `window` are deliberate, not leftovers.
+3. `dns_shop_downloader_prices.sh` — POSTs `ids.json` back to DNS to get `src/pages/prices.html` (JSON, `{ data: { states: [...] } }`).
 
 Then `src/add-price-list/helpers/create-data.ts` cheerio-parses `body.html`, joins each product to its price by the `.catalog-product__buy` element id against `prices.html`'s `states`, groups by `.markdown-page__group-title`, and drops any item missing title/link/price/availability.
 
@@ -97,9 +97,9 @@ All vars are validated by the zod schema in `src/env.ts` (`import { env } from "
 
 ## Gotchas
 
-- **Gitignored but required at runtime** (see `apps/parser/.gitignore`): `parser/` (both `.sh` files and `crawler.ts`), `pages/`, `request.sh`; plus the root `.env`. A fresh clone has no scraper scripts — the README says to pull them from a Gist and hand-write `request.sh` (the saved DNS curl request whose cookies/CSRF token the downloaders scrape out of it; refresh it by hand when it expires). Don't "fix" missing-file errors by recreating them from scratch.
+- **Scraper scripts are a git submodule**: `src/dns-markdown-parser` (private `ebulgakov/dns-markdown-parser` repo: both `.sh` files, `crawler.ts`, `request.sh`). A fresh clone needs `git submodule update --init`; CI does not check it out (no workflow runs `downloader`). `request.sh` is the saved DNS curl request whose cookies/CSRF token the downloaders scrape out of it — gitignored inside the submodule, hand-written and refreshed by hand when it expires. `src/pages/` and the root `.env` are gitignored too. Don't "fix" missing-file errors by recreating them from scratch. ESLint ignores the submodule; never `lint:fix` it from here (e.g. `prefer-const` would break the `let ids` that `crawler.ts` `eval`s into).
 - **Imports** follow the api convention: `@src/*` (tsconfig `paths`, resolved by Bun at runtime) for cross-directory imports, relative `./…` within a stage's own folder (e.g. `./helpers/create-data`), no file extensions. Cross-workspace imports use package names (`@dns-markdown/db/types/pricelist`, `@dns-markdown/env`).
-- **Paths to runtime files are cwd-relative** (`resolve("pages")` in `src/add-price-list`, `parser/*.sh` / `request.sh` in the `downloader` script): scripts must run with cwd = `apps/parser` (Nx and `bun run` do). `lint` / `type-check` cover only `src/`, so the gitignored `parser/crawler.ts` is not checked.
+- **Paths to runtime files are cwd-relative** (`resolve("src/pages")` in `src/add-price-list`, `src/dns-markdown-parser/*` in the `downloader` script and inside the `.sh` files): scripts must run with cwd = `apps/parser` (Nx and `bun run` do). `lint` skips the submodule.
 - **tsconfig extends the root `tsconfig.base.json` — strict and erasable-only:** `erasableSyntaxOnly` + `verbatimModuleSyntax` mean no enums, no `namespace`, no constructor parameter properties, and type-only imports must be written `import type`. `noUnusedLocals`/`noUnusedParameters` are on (prefix unused params with `_`), and `noUncheckedIndexedAccess` means array/record indexing yields `T | undefined` — the existing `if (priceLists[0])` guards are there for that reason.
-- **Each stage is split into logic and entrypoint.** `src/<stage>/<stage>.ts` exports the stage function (`export async function addPriceList()`) and has no side effects — tests import it. `src/<stage>/index.ts` is only the runner: `getPerformance(fn).then(...).catch(err => { console.error(...); process.exit(1) })`; it is what `bun src/<stage>` executes and is never imported or tested. A failing stage exits 1 so it aborts the chained `parse` run. Keep that pattern when adding a stage. (`add-vector-db` and `cache-clear` deliberately don't exit 1.)
+- **Each stage is split into logic and entrypoint.** `src/<stage>/<stage>.ts` exports the stage function (`export async function addPriceList()`) and has no side effects — tests import it. `src/<stage>/index.ts` is only the runner: `getPerformance(fn).then(...).catch(err => { console.error(...); process.exit(1) })`; it is what `bun src/<stage>` executes and is never imported or tested. A failing stage exits 1 so it aborts the chained `parse` run. Keep that pattern when adding a stage. (`add-vector-db` sets `process.exitCode = 1` instead, so a failed index rebuild is visible; `cache-clear` deliberately doesn't exit 1.)
 - User-facing strings (emails, vector-index text) are Russian. Keep them Russian.
