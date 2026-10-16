@@ -49,7 +49,7 @@ Upstash Redis (guests, keyed by a `guestId` cookie with 30-day TTL).
   contract intact.
 - After edits: `bun run lint:fix && bun run type-check`.
 - Write/extend colocated unit tests under `__tests__/` for pure logic
-  (run with `TZ=UTC vitest run --project unit <file>`); mock the axios
+  (run with `TZ=UTC bun test <file>`); mock the axios
   `apiClient` and the Redis client — never hit real backends in unit tests.
 - When you add a new env var, document it in `.env-example` and mention it in
   your handoff summary.

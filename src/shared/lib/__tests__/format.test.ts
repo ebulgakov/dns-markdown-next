@@ -1,4 +1,4 @@
-import { describe, it, test, expect } from "vitest";
+import { describe, it, test, expect } from "bun:test";
 
 import { formatDate, formatDateShort, formatTime } from "../format";
 

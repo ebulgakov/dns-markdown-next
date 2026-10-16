@@ -5,7 +5,7 @@ description: >
   PLAN plus the product-manager's acceptance criteria, it returns the list of
   tests required — before any code exists. Consider using it at planning stage
   of every feature. (2) Test engineer: writes or fixes tests, debugs failing
-  CI (Vitest or Playwright workflows), reviews testability. Consider using it
+  CI (Bun test or Playwright workflows), reviews testability. Consider using it
   after any change to services/ or app/api routes.
 tools: Read, Grep, Glob, Edit, Write, Bash
 ---
@@ -42,11 +42,14 @@ You know this project's three-layer test setup:
 
 ## Test layers
 
-1. **Unit (vitest, `unit` project in `vitest.config.ts`).**
-   - jsdom environment, files `**/*.test.{ts,tsx}`, colocated under
-     `__tests__/` next to source (e.g. `app/helpers/__tests__/format.test.ts`).
+1. **Unit (`bun test`, configured in `bunfig.toml`).**
+   - happy-dom globals preloaded from `test/setup.ts`, files
+     `src/**/*.test.{ts,tsx}`, colocated under `__tests__/` next to source
+     (e.g. `src/shared/lib/__tests__/format.test.ts`). Import from `bun:test`;
+     `vi.mock` is not hoisted, and fake-timer async advancing comes from
+     `@/test/fake-timers`.
    - Always run with UTC: `bun run test` or a single file via
-     `TZ=UTC vitest run --project unit path/to/file.test.ts`. Any test that
+     `TZ=UTC bun test path/to/file.test.ts`. Any test that
      breaks without `TZ=UTC` is a bug in the test — normalize dates properly.
    - Mock boundaries, not internals: mock the axios `apiClient`
      (`services/client.ts`), the Upstash Redis client, and Clerk's session

@@ -46,8 +46,8 @@ You are the React specialist on this project.
 
 ## Workflow
 
-- Colocate unit tests in `__tests__/` next to the code; jsdom environment;
-  run with `TZ=UTC vitest run --project unit <file>`. Test hooks and store
+- Colocate unit tests in `__tests__/` next to the code; `bun test` with
+  happy-dom; run with `TZ=UTC bun test <file>`. Test hooks and store
   logic; leave visual/interaction coverage in stories to designer/qa.
 - After edits: `bun run lint:fix && bun run type-check && bun run test`.
 - If a component you touched has a `*.stories.tsx`, flag the designer agent to

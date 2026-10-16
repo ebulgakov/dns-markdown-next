@@ -17,7 +17,7 @@ If `codegraph status` reports no index (or the command itself is unavailable), s
 
 ## Commands
 
-Package manager is **bun** (see `bunfig.toml`, `bun.lock`; hoisted linker and `trustedDependencies` in `package.json`, matching the `dns-markdown-api` Nx monorepo this app will move into). Bun is only the package manager/script runner — `next`, `vitest`, `storybook`, `eslint` still run on Node, whose version is pinned in `.nvmrc`. Always invoke scripts as `bun run <script>`: `bun test` and `bun build` are Bun's built-in test runner and bundler, not this project's `test`/`build` scripts.
+Package manager is **bun** (see `bunfig.toml`, `bun.lock`; hoisted linker and `trustedDependencies` in `package.json`, matching the `dns-markdown-api` Nx monorepo this app will move into). Bun is the package manager/script runner and the unit-test runner (`bun test`); `next`, `storybook`, `eslint` (and Vitest for Storybook interaction tests) still run on Node, whose version is pinned in `.nvmrc`. Always invoke scripts as `bun run <script>`: `bun build` is Bun's built-in bundler, not this project's `build` script.
 
 ```bash
 bun run dev              # start dev server (localhost:3000)
@@ -28,9 +28,9 @@ bun run lint             # eslint
 bun run lint:fix         # eslint --fix
 bun run type-check       # tsc --noEmit
 
-bun run test             # vitest run --project unit (TZ=UTC)
-bun run test:watch       # vitest --project unit, watch mode
-bun run test:coverage    # vitest --project unit --coverage
+bun run test             # bun test (TZ=UTC)
+bun run test:watch       # bun test --watch
+bun run test:coverage    # bun test --coverage
 
 bun run storybook        # storybook dev on :6006
 bun run build-storybook  # static storybook build
@@ -40,13 +40,13 @@ bun run dep-graph        # dependency-cruiser: mermaid dependency graph
 bun run dep-graph:archi  # dependency-cruiser: svg architecture diagram (needs graphviz `dot`)
 ```
 
-Run a single unit test file: `TZ=UTC vitest run --project unit path/to/file.test.ts`.
+Run a single unit test file: `TZ=UTC bun test path/to/file.test.ts`.
 
 Playwright e2e tests live in `playwright/` (config in `playwright.config.ts`). They build+start the app and run against `http://localhost:3000`: `npx playwright test`. These require Clerk test credentials and Upstash Redis env vars (see CI workflow `.github/workflows/playwright.yml`) — they are not expected to run without that setup.
 
-Unit tests (`vitest`) use the `unit` project defined in `vitest.config.ts`: jsdom environment, files matched by `**/*.test.{ts,tsx}`, colocated with source under `__tests__/` directories (e.g. `src/shared/lib/__tests__/format.test.ts`). A second `storybook` project runs Storybook interaction tests in a real browser (Playwright provider) — this is exercised via `bun run build-storybook`/Chromatic CI, not `bun run test`.
+Unit tests run on `bun test` (configured in `bunfig.toml`'s `[test]`): discovery is rooted at `src/` (`**/*.test.{ts,tsx}`, colocated under `__tests__/`, e.g. `src/shared/lib/__tests__/format.test.ts`), and `test/setup.ts` is preloaded to register happy-dom globals for React Testing Library. Import test APIs from `bun:test`. Differences from Vitest to keep in mind: `vi.mock` is not hoisted (declare `vi.fn()` mocks first and close over them in the factory — no `as Mock` casts), and there is no `vi.advanceTimersByTimeAsync` (use `advanceTimersByTimeAsync` from `@/test/fake-timers`). `vitest.config.ts` now holds only the `storybook` project, which runs Storybook interaction tests in a real browser (Playwright provider) — this is exercised via `bun run build-storybook`/Chromatic CI, not `bun run test`.
 
-CI runs ESLint, `tsc --noEmit` ("TSLint" workflow), Vitest, Playwright, and `bun run dep-check` (`.github/workflows/dependency-check.yml`) as separate GitHub Actions workflows on push/PR to `main`. Chromatic runs only when a PR is labeled `chromatic`.
+CI runs ESLint, `tsc --noEmit` ("TSLint" workflow), Bun tests, Playwright, and `bun run dep-check` (`.github/workflows/dependency-check.yml`) as separate GitHub Actions workflows on push/PR to `main`. Chromatic runs only when a PR is labeled `chromatic`.
 
 ## Environment
 

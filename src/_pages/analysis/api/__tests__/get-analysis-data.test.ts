@@ -1,13 +1,4 @@
-import { describe, it, expect, vi, afterEach, type Mock } from "vitest";
-
-import {
-  getLast30ArchiveProductsCount,
-  getLast30DiffsReportByCity,
-  getLast30ReportsByCity,
-  getTotalUniqProductsCount,
-  getArchiveListDates
-} from "@/entities/product";
-import { getPriceListCity } from "@/entities/user";
+import { describe, it, expect, vi, afterEach } from "bun:test";
 
 import { getAnalysisData } from "../get-analysis-data";
 
@@ -15,24 +6,25 @@ import type { PriceListsArchiveCount } from "@/entities/product";
 import type { AnalysisDiffReport } from "@/types/analysis-diff";
 import type { ReportsResponse } from "@/types/reports";
 
+// bun:test does not hoist vi.mock, so the factories can close over these mocks.
+const mockedGetPriceListCity = vi.fn();
+const mockedGetArchiveGoodsCount = vi.fn();
+const mockedGetAllDiffsReportByCity = vi.fn();
+const mockedGetAllReportsByCity = vi.fn();
+const mockedGetUniqueAnalysisGoodsCount = vi.fn();
+const mockedGetArchiveListDates = vi.fn();
+
 vi.mock("@/entities/product", () => ({
-  getLast30DiffsReportByCity: vi.fn(),
-  getLast30ArchiveProductsCount: vi.fn(),
-  getLast30ReportsByCity: vi.fn(),
-  getTotalUniqProductsCount: vi.fn(),
-  getArchiveListDates: vi.fn()
+  getLast30DiffsReportByCity: mockedGetAllDiffsReportByCity,
+  getLast30ArchiveProductsCount: mockedGetArchiveGoodsCount,
+  getLast30ReportsByCity: mockedGetAllReportsByCity,
+  getTotalUniqProductsCount: mockedGetUniqueAnalysisGoodsCount,
+  getArchiveListDates: mockedGetArchiveListDates
 }));
 
 vi.mock("@/entities/user", () => ({
-  getPriceListCity: vi.fn()
+  getPriceListCity: mockedGetPriceListCity
 }));
-
-const mockedGetPriceListCity = getPriceListCity as Mock;
-const mockedGetArchiveGoodsCount = getLast30ArchiveProductsCount as Mock;
-const mockedGetAllDiffsReportByCity = getLast30DiffsReportByCity as Mock;
-const mockedGetAllReportsByCity = getLast30ReportsByCity as Mock;
-const mockedGetUniqueAnalysisGoodsCount = getTotalUniqProductsCount as Mock;
-const mockedGetArchiveListDates = getArchiveListDates as Mock;
 
 console.error = vi.fn();
 
