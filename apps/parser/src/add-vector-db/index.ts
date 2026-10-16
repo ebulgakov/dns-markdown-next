@@ -8,4 +8,5 @@ getPerformance(addVectorDb)
   })
   .catch(err => {
     console.error("Error adding vector DB:", err);
+    process.exitCode = 1;
   });
