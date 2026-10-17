@@ -4,10 +4,11 @@
   "module": "src/index.ts",
   "type": "module",
   "dependencies": {
-    "@dns-markdown/db": "workspace:*",
-    "@dns-markdown/env": "workspace:*",
     "@clerk/backend": "^2.29.7",
     "@clerk/express": "^1.7.67",
+    "@dns-markdown/db": "workspace:*",
+    "@dns-markdown/env": "workspace:*",
+    "@dns-markdown/types": "workspace:*",
     "@opentelemetry/api": "^1.9.0",
     "@opentelemetry/auto-instrumentations-node": "^0.69.0",
     "@opentelemetry/exporter-metrics-otlp-http": "^0.211.0",

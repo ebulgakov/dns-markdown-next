@@ -1,9 +1,4 @@
-import { getAllPriceLists } from "@src/api/get";
-import {
-  deleteAllAnalysisData,
-  deleteAnalysisByDateData,
-  addManyAnalysisData
-} from "@src/api/post";
+import { api } from "@src/api/client";
 import { env } from "@src/env";
 
 import generateGoodsCollection from "./helpers/generate-goods-collection";
@@ -22,19 +17,19 @@ export async function addAnalysisData() {
     ...(writeStrategy === "insert" ? { limit: 2 } : {})
   };
 
-  const priceListsCollections = await getAllPriceLists(options);
+  const priceListsCollections = await api.service.getAllPriceLists(options);
 
   let usedPriceLists = [];
 
   if (writeStrategy === "replace") {
     usedPriceLists = priceListsCollections;
-    await deleteAllAnalysisData(city);
+    await api.service.deleteAllAnalysisData(city);
   } else {
     usedPriceLists = priceListsCollections.slice(0, 1);
     if (usedPriceLists[0])
-      await deleteAnalysisByDateData({ date: usedPriceLists[0].createdAt, city });
+      await api.service.deleteAnalysisByDateData({ date: usedPriceLists[0].createdAt, city });
   }
 
   const data = generateGoodsCollection(usedPriceLists, city);
-  await addManyAnalysisData({ analysisData: data });
+  await api.service.addManyAnalysisData({ analysisData: data });
 }

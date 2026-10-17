@@ -10,6 +10,8 @@ const monorepoRoot = path.join(__dirname, "../..");
 
 const nextConfig: NextConfig = {
   reactCompiler: true,
+  // Workspace packages ship raw .ts sources
+  transpilePackages: ["@dns-markdown/api-client", "@dns-markdown/types"],
   outputFileTracingRoot: monorepoRoot,
   turbopack: {
     root: monorepoRoot

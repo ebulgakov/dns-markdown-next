@@ -5,7 +5,7 @@ import productsCountHandler from "../products-count";
 import type {
   PriceList as PriceListType,
   PriceListsArchiveCount
-} from "@dns-markdown/db/types/pricelist";
+} from "@dns-markdown/types/pricelist";
 import type { Mock } from "bun:test";
 import type { NextFunction, Request, Response } from "express";
 

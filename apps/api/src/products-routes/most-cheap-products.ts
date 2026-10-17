@@ -3,7 +3,7 @@ import { getLastPriceListFlat } from "@src/pricelist-routes/helpers/get-last-pri
 import { cityQuerySchema } from "@src/products-routes/helpers/schemas";
 import { z } from "zod";
 
-import type { Goods } from "@dns-markdown/db/types/pricelist";
+import type { Goods } from "@dns-markdown/types/pricelist";
 import type { NextFunction, Request, Response } from "express";
 async function mostCheapProductsHandler(req: Request, res: Response, next: NextFunction) {
   try {

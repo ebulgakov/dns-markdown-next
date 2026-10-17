@@ -2,7 +2,7 @@ import type { Favorite } from "../../model/favorite";
 
 export const mockFavorites: Favorite[] = [
   {
-    id: "fav1",
+    _id: "fav1",
     item: {
       _id: "g1",
       code: "123",

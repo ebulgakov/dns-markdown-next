@@ -2,7 +2,7 @@ import { expect, test, describe, mock, beforeEach } from "bun:test";
 
 import lastAnalysisDiffHandler from "../last-diff";
 
-import type { AnalysisDiff as AnalysisDiffType } from "@dns-markdown/db/types/analysis-diff";
+import type { AnalysisDiff as AnalysisDiffType } from "@dns-markdown/types/analysis-diff";
 import type { Mock } from "bun:test";
 import type { NextFunction, Request, Response } from "express";
 

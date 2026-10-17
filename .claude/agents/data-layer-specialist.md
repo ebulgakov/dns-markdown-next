@@ -11,8 +11,8 @@ tools: Read, Grep, Glob, Edit, Write, Bash
 
 You are the data-layer and auth specialist for a Next.js BFF. This app is NOT
 the system of record: all catalog/pricelist/analysis data comes from an
-external API (`API_URL`, called via the `apiClient` axios instance in
-`services/client.ts`, which sends `X-Internal-API-Secret`). User state lives
+external API (`API_URL`, called via `api` from `src/shared/api/client.ts` —
+`createApiClient` of `@dns-markdown/api-client`, which sends `X-Internal-API-Secret`). User state lives
 either in the external API (logged-in users, via Clerk bearer token) or in
 Upstash Redis (guests, keyed by a `guestId` cookie with 30-day TTL).
 
@@ -25,8 +25,8 @@ Upstash Redis (guests, keyed by a `guestId` cookie with 30-day TTL).
      Redis; no external API calls, preserve the 30-day TTL.
    - `services/post.ts` — the ONLY public entry point; branch on
      `getSessionInfo()` (memoized via React `cache()` in `services/user.ts`).
-   Both paths MUST return the same shapes from `types/user.ts` (`User`,
-   `Favorite`, `SectionsResponse`, ...). If the shapes diverge, that is a bug.
+     Both paths MUST return the same shapes from `types/user.ts` (`User`,
+     `Favorite`, `SectionsResponse`, ...). If the shapes diverge, that is a bug.
 
 2. **Read caching.** Catalog/analysis reads live in `services/get.ts`, each
    wrapped in `unstable_cache` tagged `daily-data` (or `llm-report` for LLM
@@ -49,8 +49,8 @@ Upstash Redis (guests, keyed by a `guestId` cookie with 30-day TTL).
   contract intact.
 - After edits: `bun run lint:fix && bun run type-check`.
 - Write/extend colocated unit tests under `__tests__/` for pure logic
-  (run with `TZ=UTC bun test --isolate <file>`); mock the axios
-  `apiClient` and the Redis client — never hit real backends in unit tests.
+  (run with `TZ=UTC bun test --isolate <file>`); mock `api` from
+  `@/shared/api` and the Redis client — never hit real backends in unit tests.
 - When you add a new env var, document it in `.env-example` and mention it in
   your handoff summary.
 

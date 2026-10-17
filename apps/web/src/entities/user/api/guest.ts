@@ -122,7 +122,7 @@ export const addToFavorites = async (product: Goods, city: string): Promise<Favo
   const guest = await getGuest();
   if (!guest.favorites.some(fav => fav.item.link === product.link)) {
     const newFavorite: Favorite = {
-      id: crypto.randomUUID(),
+      _id: crypto.randomUUID(),
       item: product,
       status: {
         city,

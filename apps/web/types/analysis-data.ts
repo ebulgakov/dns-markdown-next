@@ -1,10 +1,4 @@
-import type { Goods } from "@/entities/product";
-
-export type AnalysisData = Goods & {
-  city: string;
-  category: string;
-  dateAdded: string;
-};
+export type { AnalysisData } from "@dns-markdown/types/analysis-data";
 
 export type AnalysisChangesByDates = {
   date: string;

@@ -3,14 +3,17 @@
 // Bun's mock.module is process-wide and every test file runs in the same process, so only the
 // outer boundaries are mocked — and always here, the same way for every test file:
 //   - @src/env         → a mutable `env` object (tests tweak CITY / WRITE_STRATEGY / KEYS)
-//   - @src/api/client  → axios clients replaced by mocks (the real api/get + api/post run on top)
+//   - @src/api/client  → axios transports replaced by mocks (the real @dns-markdown/api-client
+//                        endpoints run on top)
 //   - @src/email/index → the Resend client
 // Preloaded for every test file via bunfig.toml ([test] preload); tests import it for the mocks.
+import { createApiClient } from "@dns-markdown/api-client";
+import { logError } from "@src/api/log-error";
 import { mock } from "bun:test";
 
-import type { AnalysisData } from "@dns-markdown/db/types/analysis-data";
-import type { Goods, PriceList } from "@dns-markdown/db/types/pricelist";
-import type { User } from "@dns-markdown/db/types/user";
+import type { AnalysisData } from "@dns-markdown/types/analysis-data";
+import type { Goods, PriceList } from "@dns-markdown/types/pricelist";
+import type { User } from "@dns-markdown/types/user";
 
 type TestEnv = {
   API_URL: string;
@@ -53,7 +56,7 @@ export const resendBatchSend = mock<
 
 mock.module("@src/env", () => ({ env }));
 mock.module("@src/api/client", () => ({
-  apiClient: { get: apiGet, post: apiPost },
+  api: createApiClient({ http: { get: apiGet, post: apiPost }, onError: logError }),
   webClient: { post: webPost }
 }));
 mock.module("@src/email/index", () => ({

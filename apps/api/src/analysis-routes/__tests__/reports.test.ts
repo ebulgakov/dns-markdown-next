@@ -2,7 +2,7 @@ import { expect, test, describe, mock, beforeEach } from "bun:test";
 
 import reportsHandler from "../reports";
 
-import type { ReportsResponse } from "@dns-markdown/db/types/reports";
+import type { ReportsResponse } from "@dns-markdown/types/reports";
 import type { Mock } from "bun:test";
 import type { NextFunction, Request, Response } from "express";
 

@@ -1,7 +1,7 @@
 import { env } from "@src/env.ts";
 import { Index } from "@upstash/vector";
 
-import type { Goods } from "@dns-markdown/db/types/pricelist";
+import type { Goods } from "@dns-markdown/types/pricelist";
 
 const vector = new Index({
   url: env.UPSTASH_VECTOR_REST_URL,

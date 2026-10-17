@@ -52,7 +52,7 @@ CI (`.github/workflows/` at the monorepo root) runs ESLint, `tsc --noEmit` ("TSL
 
 Copy `apps/web/.env-example` to `apps/web/.env` and fill in values (Next.js reads env files from `apps/web/`, not the monorepo root). Key variables:
 
-- `API_URL` / `API_SECRET_KEY` — external backend that owns pricelist/product/analysis data (called via `src/shared/api/client.ts`'s `apiClient`, an axios instance sending `X-Internal-API-Secret`).
+- `API_URL` / `API_SECRET_KEY` — external backend that owns pricelist/product/analysis data (called via `src/shared/api/client.ts`'s `api` — `createApiClient` from `@dns-markdown/api-client`, sending `X-Internal-API-Secret`; server-side only).
 - `CLERK_SECRET_KEY` / `NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY` / `NEXT_PUBLIC_CLERK_*_URL` — Clerk auth.
 - `UPSTASH_REDIS_REST_URL` / `UPSTASH_REDIS_REST_TOKEN` — guest user state storage.
 - `DEFAULT_CITY` — fallback city (e.g. `samara`) used when a user/guest has none set.
@@ -73,7 +73,7 @@ Almost all mutating/user-scoped reads go through `src/entities/user/api/post.ts`
 - **Logged-in** → delegates to `api/user.ts`, which calls the external API with the Clerk bearer token and calls `revalidateTag(`user-${userId}`)` after every mutation.
 - **Guest** → delegates to `api/guest.ts`, which reads/writes a `User` object in Upstash Redis keyed by a `guestId` cookie (30-day TTL), with no external API involvement.
 
-Both paths converge on the same shape (`User`, `Favorite`, `SectionsResponse`, etc. from `src/entities/user/model/user.ts`), so components/pages consuming `getUser()` etc. don't need to know which backend served the request. When adding a new user-scoped action, add matching functions to both `api/user.ts` and `api/guest.ts`, then branch on `userId` in `api/post.ts` — don't special-case guest/user logic in components. `api/user.ts`/`api/guest.ts` are private internals of the slice; only `post.ts`'s exports (and `getSessionInfo`/`getUser` from `api/user.ts`, used directly by `app/layout.tsx`, `app/favorites/page.tsx`, `app/profile/page.tsx`) are re-exported through the slice's public `index.ts`.
+Both paths converge on the same shape (`User`, `Favorite`, `SectionsResponse`, etc. from `src/entities/user/model/user.ts`, re-exported from `@dns-markdown/types`), so components/pages consuming `getUser()` etc. don't need to know which backend served the request. When adding a new user-scoped action, add matching functions to both `api/user.ts` and `api/guest.ts`, then branch on `userId` in `api/post.ts` — don't special-case guest/user logic in components. `api/user.ts`/`api/guest.ts` are private internals of the slice; only `post.ts`'s exports (and `getSessionInfo`/`getUser` from `api/user.ts`, used directly by `app/layout.tsx`, `app/favorites/page.tsx`, `app/profile/page.tsx`) are re-exported through the slice's public `index.ts`.
 
 ### Data layer: catalog/analysis reads via `src/entities/product`'s `get.ts`
 

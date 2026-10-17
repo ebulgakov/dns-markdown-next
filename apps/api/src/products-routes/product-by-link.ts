@@ -4,10 +4,10 @@ import { getLastPriceListFlat } from "@src/pricelist-routes/helpers/get-last-pri
 import { linkQuerySchema } from "@src/products-routes/helpers/schemas";
 import { z } from "zod";
 
-import type { AnalysisData as AnalysisDataType } from "@dns-markdown/db/types/analysis-data";
-import type { DiffHistory } from "@dns-markdown/db/types/analysis-diff";
-import type { ProductPayload } from "@dns-markdown/db/types/product";
-import type { FavoriteStatus } from "@dns-markdown/db/types/user";
+import type { AnalysisData as AnalysisDataType } from "@dns-markdown/types/analysis-data";
+import type { DiffHistory } from "@dns-markdown/types/analysis-diff";
+import type { ProductPayload } from "@dns-markdown/types/product";
+import type { FavoriteStatus } from "@dns-markdown/types/user";
 import type { NextFunction, Request, Response } from "express";
 
 async function productByLinkHandler(req: Request, res: Response, next: NextFunction) {

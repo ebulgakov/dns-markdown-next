@@ -15,7 +15,7 @@ import { afterAll, beforeAll, beforeEach, describe, expect, test } from "bun:tes
 
 import { addPriceList } from "../add-price-list";
 
-import type { Position } from "@dns-markdown/db/types/pricelist";
+import type { Position } from "@dns-markdown/types/pricelist";
 
 const BODY_HTML = `
   <div class="markdown-page__group-title">Смартфоны</div>

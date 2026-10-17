@@ -1,7 +1,7 @@
 import { AnalysisData } from "@dns-markdown/db/models/analysis-data";
 import { Pricelist } from "@dns-markdown/db/models/pricelist";
 
-import type { Goods, PriceList as PriceListType } from "@dns-markdown/db/types/pricelist";
+import type { Goods, PriceList as PriceListType } from "@dns-markdown/types/pricelist";
 
 export const getLastPriceList = async (city: string): Promise<PriceListType | null> =>
   Pricelist.findOne({ city }, {}, { sort: { updatedAt: -1 } })

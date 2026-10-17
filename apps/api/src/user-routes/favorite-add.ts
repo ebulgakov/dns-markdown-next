@@ -4,7 +4,7 @@ import { addFavoriteSchema } from "@src/user-routes/helpers/schemas";
 import { ObjectId } from "mongodb";
 import { z } from "zod";
 
-import type { Favorite } from "@dns-markdown/db/types/user";
+import type { Favorite } from "@dns-markdown/types/user";
 import type { NextFunction, Request, Response } from "express";
 
 async function addFavoriteHandler(req: Request, res: Response, next: NextFunction) {

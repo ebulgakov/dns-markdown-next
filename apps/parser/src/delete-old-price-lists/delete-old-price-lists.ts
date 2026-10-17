@@ -1,4 +1,4 @@
-import { deleteOldPriceLists as deleteOldPriceListsCall } from "@src/api/post";
+import { api } from "@src/api/client";
 import { env } from "@src/env";
 
 export async function deleteOldPriceLists() {
@@ -6,5 +6,5 @@ export async function deleteOldPriceLists() {
 
   if (!city) throw new Error("No city found");
 
-  await deleteOldPriceListsCall(city);
+  await api.service.deleteOldPriceLists(city);
 }

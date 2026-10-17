@@ -1,14 +1,9 @@
-import { getAllPriceLists, getAnalysisGoodsByDateAdded } from "@src/api/get";
-import {
-  deleteAnalysisDiffAll,
-  deleteAnalysisDiffByDate,
-  addManyAnalysisDiff
-} from "@src/api/post";
+import { api } from "@src/api/client";
 import { env } from "@src/env";
 
 import makeDiff from "./helpers/make-diff";
 
-import type { AnalysisData } from "@dns-markdown/db/types/analysis-data";
+import type { AnalysisData } from "@dns-markdown/types/analysis-data";
 
 export async function addAnalysisDiff() {
   const writeStrategy = env.WRITE_STRATEGY;
@@ -24,14 +19,17 @@ export async function addAnalysisDiff() {
     ...(writeStrategy === "insert" ? { limit: 2 } : {})
   };
 
-  const priceListsCollections = await getAllPriceLists(options);
+  const priceListsCollections = await api.service.getAllPriceLists(options);
 
   if (writeStrategy === "replace") {
-    await deleteAnalysisDiffAll(city);
+    await api.service.deleteAnalysisDiffAll(city);
   } else {
     // Avoid duplication if I run this task many times
     if (priceListsCollections[0]) {
-      await deleteAnalysisDiffByDate({ date: priceListsCollections[0].createdAt, city });
+      await api.service.deleteAnalysisDiffByDate({
+        date: priceListsCollections[0].createdAt,
+        city
+      });
     }
   }
 
@@ -41,8 +39,14 @@ export async function addAnalysisDiff() {
     const currentDateGoods = priceListsCollections[i - 1];
 
     if (previousDateGoods && currentDateGoods) {
-      const prev = await getAnalysisGoodsByDateAdded({ date: previousDateGoods.createdAt, city });
-      const current = await getAnalysisGoodsByDateAdded({ date: currentDateGoods.createdAt, city });
+      const prev = await api.analysis.getGoodsByDateAdded({
+        date: previousDateGoods.createdAt,
+        city
+      });
+      const current = await api.analysis.getGoodsByDateAdded({
+        date: currentDateGoods.createdAt,
+        city
+      });
 
       diffs.push(makeDiff(current, prev, { city, dateAdded: currentDateGoods.createdAt }));
     }
@@ -52,11 +56,14 @@ export async function addAnalysisDiff() {
   if (writeStrategy === "replace") {
     const currentDateGoods = priceListsCollections[priceListsCollections.length - 1];
     if (currentDateGoods) {
-      const current = await getAnalysisGoodsByDateAdded({ date: currentDateGoods.createdAt, city });
+      const current = await api.analysis.getGoodsByDateAdded({
+        date: currentDateGoods.createdAt,
+        city
+      });
       const prev: AnalysisData[] = [];
       diffs.push(makeDiff(current, prev, { city, dateAdded: currentDateGoods.createdAt }));
     }
   }
 
-  await addManyAnalysisDiff(diffs);
+  await api.service.addManyAnalysisDiff(diffs);
 }

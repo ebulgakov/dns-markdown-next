@@ -5,10 +5,10 @@
   "exports": {
     "./database": "./src/database.ts",
     "./models/*": "./src/models/*.ts",
-    "./schemas/*": "./src/schemas/*.ts",
-    "./types/*": "./src/types/*.ts"
+    "./schemas/*": "./src/schemas/*.ts"
   },
   "dependencies": {
+    "@dns-markdown/types": "workspace:*",
     "mongoose": "^9.1.5"
   },
   "scripts": {

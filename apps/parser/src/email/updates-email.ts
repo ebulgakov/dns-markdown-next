@@ -1,6 +1,6 @@
 import resend from "./index";
 
-import type { Favorite, User } from "@dns-markdown/db/types/user";
+import type { Favorite, User } from "@dns-markdown/types/user";
 
 export type FavoriteUpdatesStatus = "availability" | "price";
 

@@ -1,8 +1,1 @@
-export type Report = {
-  _id: string;
-  city: string;
-  dateAdded: string;
-  report: string;
-};
-
-export type ReportsResponse = Report[];
+export type { Report, ReportsResponse } from "@dns-markdown/types/reports";

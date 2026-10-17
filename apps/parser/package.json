@@ -24,8 +24,10 @@
     "lint:fix": "eslint --fix"
   },
   "dependencies": {
+    "@dns-markdown/api-client": "workspace:*",
     "@dns-markdown/db": "workspace:*",
     "@dns-markdown/env": "workspace:*",
+    "@dns-markdown/types": "workspace:*",
     "@upstash/vector": "^1.2.2",
     "axios": "^1.13.4",
     "cheerio": "^1.1.2",

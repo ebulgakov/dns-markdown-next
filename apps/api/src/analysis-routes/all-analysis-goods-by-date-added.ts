@@ -3,7 +3,7 @@ import { cityDateQuerySchema } from "@src/analysis-routes/helpers/schemas";
 import { cacheAdd, cacheGet } from "@src/cache";
 import { z } from "zod";
 
-import type { AnalysisData as AnalysisDataType } from "@dns-markdown/db/types/analysis-data";
+import type { AnalysisData as AnalysisDataType } from "@dns-markdown/types/analysis-data";
 import type { NextFunction, Request, Response } from "express";
 
 async function allAnalysisGoodsByDateAddedHandler(req: Request, res: Response, next: NextFunction) {

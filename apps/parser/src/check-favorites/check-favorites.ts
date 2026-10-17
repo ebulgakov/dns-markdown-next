@@ -1,9 +1,4 @@
-import {
-  getAnalysisGoodsByDateAdded,
-  getLastPriceList,
-  getAllNotificationUsers
-} from "@src/api/get";
-import { updateUsersFavorites } from "@src/api/post";
+import { api } from "@src/api/client";
 import { sendUpdatesEmail } from "@src/email/updates-email";
 import { env } from "@src/env";
 
@@ -14,13 +9,13 @@ export async function checkFavorites() {
 
   if (!city) throw new Error("No city found");
 
-  const lastPriceList = await getLastPriceList(city);
+  const lastPriceList = await api.pricelist.getLast(city);
   if (!lastPriceList) throw new Error("No last price list found");
 
-  const goods = await getAnalysisGoodsByDateAdded({ date: lastPriceList.createdAt, city });
-  const users = await getAllNotificationUsers(city);
+  const goods = await api.analysis.getGoodsByDateAdded({ date: lastPriceList.createdAt, city });
+  const users = await api.service.getAllNotificationUsers(city);
 
   const { users: updatedUsers, statuses } = updateFavorites(users, goods);
   await sendUpdatesEmail(updatedUsers, statuses);
-  await updateUsersFavorites(updatedUsers);
+  await api.service.updateUsersFavorites(updatedUsers);
 }
