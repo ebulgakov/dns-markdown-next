@@ -13,9 +13,10 @@ import { ErrorAlert } from "@/shared/ui/error-alert";
 import { PageLoader } from "@/shared/ui/page-loader";
 import { PageTitle } from "@/shared/ui/page-title";
 import { ScrollToTop } from "@/shared/ui/scroll-to-top";
-import { AnalysisDiff } from "@/types/analysis-diff";
 
 import { transformDiffData } from "../lib/transform-diff-data";
+
+import type { AnalysisDiff } from "@dns-markdown/types/analysis-diff";
 
 function TodayClientPage() {
   const { city } = useContext(UserContext);

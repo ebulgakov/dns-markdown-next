@@ -33,7 +33,7 @@ const elements = [
 // a circular-import one. Each ui component's own index.ts stays the entry
 // point instead. `lib`/`api`/`providers` have no such fan-out (no heavy
 // third-party client components), so they keep one barrel each.
-const SHARED_ENTRY_POINTS = "{ui/*/index.ts,lib/index.ts,api/index.ts,providers/index.ts}";
+const SHARED_ENTRY_POINTS = "{ui/*/index.ts,lib/index.ts,api/index.ts,config/index.ts,providers/index.ts}";
 
 // Pragmatic entities -> features exceptions (only product-card.tsx does this
 // today): the compare-to-LLM-report button and the favorite-toggle button

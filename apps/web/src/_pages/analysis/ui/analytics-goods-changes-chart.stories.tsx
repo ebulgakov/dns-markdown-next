@@ -1,6 +1,6 @@
 import { AnalyticsGoodsChangesChart } from "./analytics-goods-changes-chart";
 
-import type { AnalysisDiffReport } from "@/types/analysis-diff";
+import type { AnalysisDiffReport } from "@dns-markdown/types/analysis-diff";
 import type { Meta, StoryObj } from "@storybook/react";
 
 const meta: Meta<typeof AnalyticsGoodsChangesChart> = {

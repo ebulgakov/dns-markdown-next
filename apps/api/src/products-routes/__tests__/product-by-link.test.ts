@@ -2,9 +2,9 @@ import { expect, test, describe, mock, beforeEach } from "bun:test";
 
 import productByLinkHandler from "../product-by-link";
 
-import type { AnalysisData as AnalysisDataType } from "@dns-markdown/db/types/analysis-data";
-import type { Goods } from "@dns-markdown/db/types/pricelist";
-import type { ProductPayload } from "@dns-markdown/db/types/product";
+import type { AnalysisData as AnalysisDataType } from "@dns-markdown/types/analysis-data";
+import type { Goods } from "@dns-markdown/types/pricelist";
+import type { ProductPayload } from "@dns-markdown/types/product";
 import type { Mock } from "bun:test";
 import type { NextFunction, Request, Response } from "express";
 

@@ -4,10 +4,16 @@ import { Area, AreaChart, CartesianGrid, XAxis, YAxis } from "recharts";
 
 import { formatDateMonthDay } from "@/shared/lib";
 import { Card, CardContent } from "@/shared/ui/card";
-import { ChartContainer, ChartLegend, ChartLegendContent, ChartTooltip, ChartTooltipContent } from "@/shared/ui/chart";
+import {
+  ChartContainer,
+  ChartLegend,
+  ChartLegendContent,
+  ChartTooltip,
+  ChartTooltipContent
+} from "@/shared/ui/chart";
 
 import type { ChartConfig } from "@/shared/ui/chart";
-import type { DiffHistory } from "@/types/analysis-diff";
+import type { DiffHistory } from "@dns-markdown/types/analysis-diff";
 
 const chartConfig = {
   price: {

@@ -11,8 +11,10 @@ Each workspace has its own `CLAUDE.md` with details — read it before working i
 - `apps/api` (`@dns-markdown/api`) — the Express API, deployed to Vercel. See `apps/api/CLAUDE.md`.
 - `apps/web` (`@dns-markdown/web`) — the Next.js (App Router) frontend/BFF, deployed to Vercel; talks to the API over HTTP (`API_URL`). See `apps/web/CLAUDE.md`.
 - `apps/parser` (`@dns-markdown/parser`) — DNS markdown scraper/ETL (CLI pipeline); pushes data to the API over HTTP, runs locally only (not deployed). See `apps/parser/CLAUDE.md`.
-- `packages/db` (`@dns-markdown/db`) — Mongoose models, schemas, payload types and `dbConnect(uri)`. See `packages/db/CLAUDE.md`.
+- `packages/db` (`@dns-markdown/db`) — Mongoose models, schemas and `dbConnect(uri)`. See `packages/db/CLAUDE.md`.
 - `packages/env` (`@dns-markdown/env`) — shared env-file loading and `NODE_ENV`/platform checks. See `packages/env/CLAUDE.md`.
+- `packages/types` (`@dns-markdown/types`) — shared API payload/response types (JSON wire shapes, no runtime code). See `packages/types/CLAUDE.md`.
+- `packages/api-client` (`@dns-markdown/api-client`) — typed axios client for every `apps/api` endpoint, used by web, parser and the planned Expo app (React Native compatible: no env, no Next). See `packages/api-client/CLAUDE.md`.
 
 ## Commands
 
@@ -34,7 +36,7 @@ Nx runs every target with cwd = the project root. Root scripts set `NX_LOAD_DOT_
 
 ## Env files
 
-`apps/web` is the exception: Next.js loads its own env files from `apps/web/` (`.env`, see `apps/web/.env-example`) and does not use `@dns-markdown/env`. Everything below applies to the API, parser and packages.
+`apps/web` included: Next.js itself only reads `apps/web/.env*`, so `apps/web/next.config.ts` calls `loadEnv()` from `@dns-markdown/env` before Next compiles anything — server code then reads the vars from `process.env` and `NEXT_PUBLIC_*` get inlined into the client bundle. Do not put env files into `apps/web/`.
 
 Env files are shared by all workspaces and live in the **monorepo root**: `.env.<NODE_ENV>` (`.env.development`, `.env.test`, `.env.production`) is loaded first, then the common `.env` (already set vars are never overridden). Loading is done by `loadEnv()` from `@dns-markdown/env`; each app validates only its own variables with its own zod schema. In production there are no env files — Vercel injects the API's vars (the parser is not deployed). A key both apps share (`API_SECRET_KEY`, `API_SERVICE_KEY`, `UPSTASH_VECTOR_*`) lives once in the shared file; per-app differences go into the app's `package.json` scripts (e.g. the parser's `CITY` / `WRITE_STRATEGY`). Keep `CITY` out of the shared `.env` — parser stages rely on it being set only by their scripts. All keys are listed in the root `.env.example`. Never read `process.env` directly outside an app's env module or `packages/env`.
 
@@ -42,7 +44,7 @@ Env files are shared by all workspaces and live in the **monorepo root**: `.env.
 
 Enforced by the root `eslint.config.ts` and `.prettierrc` for all workspaces except `apps/web`, which has its own `eslint.config.mjs` (Next, FSD boundaries, Storybook rules), `.prettierrc` (Tailwind plugin) and `.lintstagedrc.json`: no semicolon-trailing commas, double quotes, 100-char print width, arrow function params unparenthesized when single-arg. Import order is enforced (builtin → external → internal → parent → sibling → index → type) with alphabetization and mandatory blank lines between groups — let `bun run lint:fix` handle this rather than ordering imports by hand.
 
-Apps except `apps/web` (Next.js / Feature-Sliced Design layout, see its `CLAUDE.md`) share one layout: code in `src/`, kebab-case file and folder names, `@src/*` → `src/*` alias (tsconfig `paths`) for cross-directory imports, relative imports within a folder, no file extensions in imports. Cross-workspace imports go through the workspace package name (`@dns-markdown/db/...`, `@dns-markdown/env`), never through relative paths into another workspace.
+Apps except `apps/web` (Next.js / Feature-Sliced Design layout, see its `CLAUDE.md`) share one layout: code in `src/`, kebab-case file and folder names, `@src/*` → `src/*` alias (tsconfig `paths`) for cross-directory imports, relative imports within a folder, no file extensions in imports. Cross-workspace imports go through the workspace package name (`@dns-markdown/db/...`, `@dns-markdown/types/...`, `@dns-markdown/api-client`, `@dns-markdown/env`), never through relative paths into another workspace.
 
 ## Subagents
 

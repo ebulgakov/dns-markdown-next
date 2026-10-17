@@ -3,7 +3,7 @@ import { cityQuerySchema } from "@src/analysis-routes/helpers/schemas";
 import { cacheAdd, cacheGet } from "@src/cache";
 import { z } from "zod";
 
-import type { AnalysisDiff as AnalysisDiffType } from "@dns-markdown/db/types/analysis-diff";
+import type { AnalysisDiff as AnalysisDiffType } from "@dns-markdown/types/analysis-diff";
 import type { NextFunction, Response, Request } from "express";
 
 async function lastAnalysisDiffHandler(req: Request, res: Response, next: NextFunction) {

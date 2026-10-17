@@ -1,11 +1,9 @@
-import axios from "axios";
+import { createApiClient } from "@dns-markdown/api-client";
 
-const API_URL = process.env.API_URL || "";
-const API_SECRET_KEY = process.env.API_SECRET_KEY || "";
+import { env } from "@/shared/config";
 
-export const apiClient = axios.create({
-  baseURL: API_URL,
-  headers: {
-    "X-Internal-API-Secret": API_SECRET_KEY
-  }
+export const api = createApiClient({
+  baseURL: env.API_URL,
+  apiSecret: env.API_SECRET_KEY,
+  onError: (endpoint, error) => console.error(`Error fetching data from ${endpoint}:`, error)
 });

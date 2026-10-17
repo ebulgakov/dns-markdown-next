@@ -51,8 +51,8 @@ You know this project's three-layer test setup:
    - Always run with UTC: `bun run test` or a single file via
      `TZ=UTC bun test --isolate path/to/file.test.ts`. Any test that
      breaks without `TZ=UTC` is a bug in the test — normalize dates properly.
-   - Mock boundaries, not internals: mock the axios `apiClient`
-     (`services/client.ts`), the Upstash Redis client, and Clerk's session
+   - Mock boundaries, not internals: mock `api`
+     (`@/shared/api`, the `@dns-markdown/api-client` instance), the Upstash Redis client, and Clerk's session
      (`getSessionInfo`). Never hit real backends.
    - Priority targets: `services/post.ts` branching (user vs guest must return
      identical shapes for the same action), `services/guest.ts` Redis

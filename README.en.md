@@ -18,13 +18,15 @@ For now the service shows products from Samara. You can add items to your favori
 
 ## Workspaces
 
-| Path           | Package                | Description                                       | Docs                            |
-| -------------- | ---------------------- | ------------------------------------------------- | ------------------------------- |
-| `apps/web`     | `@dns-markdown/web`    | Next.js (App Router) site, deployed to Vercel     | [README](apps/web/README.md)    |
-| `apps/api`     | `@dns-markdown/api`    | Express API, deployed to Vercel                   | [README](apps/api/README.md)    |
-| `apps/parser`  | `@dns-markdown/parser` | DNS markdown scraper/ETL, pushes data to the API  | [README](apps/parser/README.md) |
-| `packages/db`  | `@dns-markdown/db`     | Shared Mongoose models, schemas and payload types |                                 |
-| `packages/env` | `@dns-markdown/env`    | Shared env-file loading and `NODE_ENV` checks     |                                 |
+| Path                  | Package                    | Description                                      | Docs                            |
+| --------------------- | -------------------------- | ------------------------------------------------ | ------------------------------- |
+| `apps/web`            | `@dns-markdown/web`        | Next.js (App Router) site, deployed to Vercel    | [README](apps/web/README.md)    |
+| `apps/api`            | `@dns-markdown/api`        | Express API, deployed to Vercel                  | [README](apps/api/README.md)    |
+| `apps/parser`         | `@dns-markdown/parser`     | DNS markdown scraper/ETL, pushes data to the API | [README](apps/parser/README.md) |
+| `packages/db`         | `@dns-markdown/db`         | Shared Mongoose models and schemas               |                                 |
+| `packages/env`        | `@dns-markdown/env`        | Shared env-file loading and `NODE_ENV` checks    |                                 |
+| `packages/types`      | `@dns-markdown/types`      | Shared API payload and response types            |                                 |
+| `packages/api-client` | `@dns-markdown/api-client` | Typed client for every API endpoint              |                                 |
 
 ## Tooling
 

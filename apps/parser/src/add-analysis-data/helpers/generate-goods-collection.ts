@@ -1,7 +1,7 @@
 import { ObjectId } from "mongodb";
 
-import type { AnalysisData } from "@dns-markdown/db/types/analysis-data";
-import type { PriceList } from "@dns-markdown/db/types/pricelist";
+import type { AnalysisData } from "@dns-markdown/types/analysis-data";
+import type { PriceList } from "@dns-markdown/types/pricelist";
 
 export default function generateGoodsCollection(
   priceLists: PriceList[],

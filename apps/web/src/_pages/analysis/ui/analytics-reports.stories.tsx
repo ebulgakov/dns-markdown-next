@@ -1,6 +1,6 @@
 import { AnalyticsReports } from "./analytics-reports";
 
-import type { ReportsResponse } from "@/types/reports";
+import type { ReportsResponse } from "@dns-markdown/types/reports";
 import type { Meta, StoryObj } from "@storybook/react";
 
 const meta: Meta<typeof AnalyticsReports> = {

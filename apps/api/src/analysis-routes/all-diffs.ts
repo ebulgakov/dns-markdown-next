@@ -6,7 +6,7 @@ import { z } from "zod";
 import type {
   AnalysisDiff as AnalysisDiffType,
   AnalysisDiffReport
-} from "@dns-markdown/db/types/analysis-diff";
+} from "@dns-markdown/types/analysis-diff";
 import type { NextFunction, Request, Response } from "express";
 
 async function allAnalysisDiffsHandler(req: Request, res: Response, next: NextFunction) {

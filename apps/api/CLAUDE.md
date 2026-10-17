@@ -46,7 +46,7 @@ Full endpoint-by-endpoint request/response contracts are documented in `API.md` 
 
 ### Data layer
 
-Models, schemas and payload types come from `@dns-markdown/db` (see `packages/db/CLAUDE.md`), imported by subpath: `@dns-markdown/db/models/pricelist`, `import type ... from "@dns-markdown/db/types/pricelist"`. `src/types/*` keeps only API-local ambient declarations. Tests mock models by the package subpath, e.g. `mock.module("@dns-markdown/db/models/pricelist", ...)` — mocking any other specifier will not intercept the import.
+Models, schemas and payload types come from `@dns-markdown/db` (see `packages/db/CLAUDE.md`), imported by subpath: `@dns-markdown/db/models/pricelist`, `import type ... from "@dns-markdown/types/pricelist"`. `src/types/*` keeps only API-local ambient declarations. Tests mock models by the package subpath, e.g. `mock.module("@dns-markdown/db/models/pricelist", ...)` — mocking any other specifier will not intercept the import.
 
 ### Cache
 

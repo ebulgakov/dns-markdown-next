@@ -1,4 +1,4 @@
-import { getLastPriceList } from "@src/api/get";
+import { api } from "@src/api/client";
 import { env } from "@src/env";
 import { Index } from "@upstash/vector";
 import ora from "ora";
@@ -24,7 +24,7 @@ export async function addVectorDb() {
     throw error;
   }
 
-  const lastPriceList = await getLastPriceList(city);
+  const lastPriceList = await api.pricelist.getLast(city);
 
   if (lastPriceList) {
     spinner.text = "Resetting index...";

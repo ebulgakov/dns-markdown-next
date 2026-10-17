@@ -12,7 +12,7 @@ import { beforeEach, describe, expect, test } from "bun:test";
 
 import { addAnalysisData } from "../add-analysis-data";
 
-import type { AnalysisData } from "@dns-markdown/db/types/analysis-data";
+import type { AnalysisData } from "@dns-markdown/types/analysis-data";
 
 const latest = makePriceList({
   createdAt: "2026-10-16T10:00:00.000Z",

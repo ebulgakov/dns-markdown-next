@@ -14,7 +14,7 @@ import { beforeEach, describe, expect, test } from "bun:test";
 
 import { checkFavorites } from "../check-favorites";
 
-import type { User } from "@dns-markdown/db/types/user";
+import type { User } from "@dns-markdown/types/user";
 
 const lastPriceList = makePriceList({ createdAt: "2026-10-16T10:00:00.000Z" });
 

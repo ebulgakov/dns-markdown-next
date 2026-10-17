@@ -1,4 +1,4 @@
-import type { Goods } from "@dns-markdown/db/types/pricelist";
+import type { Goods } from "@dns-markdown/types/pricelist";
 
 export const convertGoodsToString = (goods: Goods) => {
   let str = "";

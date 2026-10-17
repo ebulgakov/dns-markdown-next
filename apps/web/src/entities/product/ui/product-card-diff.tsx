@@ -1,7 +1,7 @@
 "use client";
 import { NumericFormat } from "react-number-format";
 
-import type { Diff as DiffType } from "@/types/analysis-diff";
+import type { Diff as DiffType } from "@dns-markdown/types/analysis-diff";
 
 type ProductCardDiffProps = {
   diff: DiffType;

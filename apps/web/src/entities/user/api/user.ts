@@ -4,38 +4,17 @@ import { auth } from "@clerk/nextjs/server";
 import { unstable_cache as cacheToken, revalidateTag } from "next/cache";
 import { cache } from "react";
 
-import { apiClient } from "@/shared/api";
+import { api } from "@/shared/api";
 
-import type { Goods } from "@/entities/product";
-import type { Favorite, User, UserNotifications, UserSections } from "@/entities/user";
-
-export type FavoritesResponse = { message: string; favorites: Favorite[] };
-export type FavoritesStatusResponse = { message: string; shownBoughtFavorites: boolean };
-export type CityStatusResponse = { message: string; city: string };
-
-export type SectionsResponse = {
-  message: string;
-  sections: UserSections;
-};
-
-export type UserNotificationsResponse = {
-  message: string;
-  notifications: UserNotifications;
-};
-
-const wrapApiCall = async (endpoint: string, token: string | null, data = {}) => {
-  try {
-    if (!token) return null;
-
-    const response = await apiClient.post(endpoint, data, {
-      headers: { Authorization: `Bearer ${token}` }
-    });
-    return response.data;
-  } catch (error) {
-    console.error(`Error fetching data from ${endpoint}:`, error);
-    throw error;
-  }
-};
+import type { Goods } from "@dns-markdown/types/pricelist";
+import type {
+  CityStatusResponse,
+  FavoritesResponse,
+  FavoritesStatusResponse,
+  SectionsResponse,
+  UserNotificationsResponse
+} from "@dns-markdown/types/responses";
+import type { User, UserNotifications } from "@dns-markdown/types/user";
 
 // Just for performance optimization. Avoid calling auth() multiple times in the same request.
 export const getSessionInfo = cache(async () => {
@@ -49,7 +28,8 @@ export const postUpdateUserNotifications = async (
 ): Promise<UserNotificationsResponse | null> => {
   const { token, userId } = await getSessionInfo();
   revalidateTag(`user-${userId}`, { expire: 0 });
-  return await wrapApiCall("/api/user/notifications-update", token, { notifications });
+  if (!token) return null;
+  return api.user.updateNotifications(token, notifications);
 };
 
 export const postToggleFavoriteShownBought = async (
@@ -57,15 +37,15 @@ export const postToggleFavoriteShownBought = async (
 ): Promise<FavoritesStatusResponse | null> => {
   const { token, userId } = await getSessionInfo();
   revalidateTag(`user-${userId}`, { expire: 0 });
-  return await wrapApiCall("/api/user/toggle-shown-bought-favorites", token, {
-    status: shownBoughtFavorites
-  });
+  if (!token) return null;
+  return api.user.toggleShownBoughtFavorites(token, shownBoughtFavorites);
 };
 
 export const postChangeUserCity = async (city: string): Promise<CityStatusResponse | null> => {
   const { token, userId } = await getSessionInfo();
   revalidateTag(`user-${userId}`, { expire: 0 });
-  return await wrapApiCall("/api/user/change-city", token, { city });
+  if (!token) return null;
+  return api.user.changeCity(token, city);
 };
 
 // User Favorites API
@@ -75,25 +55,23 @@ export const postAddToFavorites = async (
 ): Promise<FavoritesResponse | null> => {
   const { token, userId } = await getSessionInfo();
   revalidateTag(`user-${userId}`, { expire: 0 });
-  return await wrapApiCall("/api/user/favorite-add", token, {
-    product: {
-      ...product,
-      city
-    }
-  });
+  if (!token) return null;
+  return api.user.addFavorite(token, product, city);
 };
 
 export const postRemoveFromFavorites = async (link: string): Promise<FavoritesResponse | null> => {
   const { token, userId } = await getSessionInfo();
   revalidateTag(`user-${userId}`, { expire: 0 });
-  return await wrapApiCall("/api/user/favorite-remove", token, { link });
+  if (!token) return null;
+  return api.user.removeFavorite(token, link);
 };
 
 // User Sections API
 export const postAddToHiddenSections = async (title: string): Promise<SectionsResponse | null> => {
   const { token, userId } = await getSessionInfo();
   revalidateTag(`user-${userId}`, { expire: 0 });
-  return await wrapApiCall("/api/user/hidden-section-add", token, { title });
+  if (!token) return null;
+  return api.user.addHiddenSection(token, title);
 };
 
 export const postRemoveFromHiddenSections = async (
@@ -101,7 +79,8 @@ export const postRemoveFromHiddenSections = async (
 ): Promise<SectionsResponse | null> => {
   const { token, userId } = await getSessionInfo();
   revalidateTag(`user-${userId}`, { expire: 0 });
-  return await wrapApiCall("/api/user/hidden-section-remove", token, { title });
+  if (!token) return null;
+  return api.user.removeHiddenSection(token, title);
 };
 
 export const postAddToFavoriteSections = async (
@@ -109,7 +88,8 @@ export const postAddToFavoriteSections = async (
 ): Promise<SectionsResponse | null> => {
   const { token, userId } = await getSessionInfo();
   revalidateTag(`user-${userId}`, { expire: 0 });
-  return await wrapApiCall("/api/user/favorite-section-add", token, { title });
+  if (!token) return null;
+  return api.user.addFavoriteSection(token, title);
 };
 
 export const postRemoveFromFavoriteSection = async (
@@ -117,11 +97,12 @@ export const postRemoveFromFavoriteSection = async (
 ): Promise<SectionsResponse | null> => {
   const { token, userId } = await getSessionInfo();
   revalidateTag(`user-${userId}`, { expire: 0 });
-  return await wrapApiCall("/api/user/favorite-section-remove", token, { title });
+  if (!token) return null;
+  return api.user.removeFavoriteSection(token, title);
 };
 
 // User Data API. Used pattern "Memoized Factor". Fabricated with caching.
-const fetchUser = async (token: string) => wrapApiCall("/api/user", token);
+const fetchUser = async (token: string) => api.user.get(token);
 const getCachedUserForId = (userId: string, token: string) =>
   cacheToken(async () => fetchUser(token), ["user-profile", userId], { tags: [`user-${userId}`] });
 // react cache() dedupes calls within one request (layout.tsx + a page both call this);

@@ -50,9 +50,13 @@ CI (`.github/workflows/` at the monorepo root) runs ESLint, `tsc --noEmit` ("TSL
 
 ## Environment
 
-Copy `apps/web/.env-example` to `apps/web/.env` and fill in values (Next.js reads env files from `apps/web/`, not the monorepo root). Key variables:
+Env files live in the monorepo root, shared with the other workspaces (see root `CLAUDE.md`; all keys are in the root `.env.example`). Next.js only reads `apps/web/.env*`, so `next.config.ts` loads the root files with `loadEnv()` from `@dns-markdown/env` (`.env.<NODE_ENV>`, then `.env`). The `dev`/`start` scripts set `NODE_ENV` explicitly so the right mode file is picked; `next build` sets `production` itself. The root files also carry the API's vars — keep web-only names from colliding with them (e.g. don't add `PORT` to a shared file).
 
-- `API_URL` / `API_SECRET_KEY` — external backend that owns pricelist/product/analysis data (called via `src/shared/api/client.ts`'s `apiClient`, an axios instance sending `X-Internal-API-Secret`).
+Server env vars are validated with zod in `src/shared/config/env.ts` (`import { env } from "@/shared/config"`, `server-only`): read them through `env`, never `process.env`, and add every new server var to its schema. A missing/invalid var throws on the first request in dev/start; during `next build` (`NEXT_PHASE=phase-production-build`) it only warns, because CI builds run without the full runtime env. `NEXT_PUBLIC_*` vars (inlined by Next at build time) and framework vars (`NODE_ENV`, `NEXT_RUNTIME`, `CI`) stay on `process.env`. Unit tests get placeholder values and a `server-only` stub from `test/setup.ts`. Storybook bundles server actions reachable from client components into the browser, so `.storybook/main.ts` aliases `@/shared/config` to `.storybook/mock-env-module.ts` (placeholders) — keep that mock in sync with the schema.
+
+Key variables:
+
+- `API_URL` / `API_SECRET_KEY` — external backend that owns pricelist/product/analysis data (called via `src/shared/api/client.ts`'s `api` — `createApiClient` from `@dns-markdown/api-client`, sending `X-Internal-API-Secret`; server-side only).
 - `CLERK_SECRET_KEY` / `NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY` / `NEXT_PUBLIC_CLERK_*_URL` — Clerk auth.
 - `UPSTASH_REDIS_REST_URL` / `UPSTASH_REDIS_REST_TOKEN` — guest user state storage.
 - `DEFAULT_CITY` — fallback city (e.g. `samara`) used when a user/guest has none set.
@@ -73,7 +77,7 @@ Almost all mutating/user-scoped reads go through `src/entities/user/api/post.ts`
 - **Logged-in** → delegates to `api/user.ts`, which calls the external API with the Clerk bearer token and calls `revalidateTag(`user-${userId}`)` after every mutation.
 - **Guest** → delegates to `api/guest.ts`, which reads/writes a `User` object in Upstash Redis keyed by a `guestId` cookie (30-day TTL), with no external API involvement.
 
-Both paths converge on the same shape (`User`, `Favorite`, `SectionsResponse`, etc. from `src/entities/user/model/user.ts`), so components/pages consuming `getUser()` etc. don't need to know which backend served the request. When adding a new user-scoped action, add matching functions to both `api/user.ts` and `api/guest.ts`, then branch on `userId` in `api/post.ts` — don't special-case guest/user logic in components. `api/user.ts`/`api/guest.ts` are private internals of the slice; only `post.ts`'s exports (and `getSessionInfo`/`getUser` from `api/user.ts`, used directly by `app/layout.tsx`, `app/favorites/page.tsx`, `app/profile/page.tsx`) are re-exported through the slice's public `index.ts`.
+Both paths converge on the same shape (`User`, `Favorite`, `SectionsResponse`, etc. from `@dns-markdown/types/{user,responses}`), so components/pages consuming `getUser()` etc. don't need to know which backend served the request. When adding a new user-scoped action, add matching functions to both `api/user.ts` and `api/guest.ts`, then branch on `userId` in `api/post.ts` — don't special-case guest/user logic in components. `api/user.ts`/`api/guest.ts` are private internals of the slice; only `post.ts`'s exports (and `getSessionInfo`/`getUser` from `api/user.ts`, used directly by `app/layout.tsx`, `app/favorites/page.tsx`, `app/profile/page.tsx`) are re-exported through the slice's public `index.ts`.
 
 ### Data layer: catalog/analysis reads via `src/entities/product`'s `get.ts`
 
@@ -87,6 +91,7 @@ Read-only catalog/analysis data (pricelists, products, diffs, LLM reports) goes 
 
 ### State
 
+- API data types (`Goods`, `PriceList`, `User`, `AnalysisDiff`, response envelopes, …) are imported directly from `@dns-markdown/types/<file>` in any layer (it is an external package, like `axios`); slices must not re-export them from their public `index.ts`. Only web-only view types live in web (`types/*`, e.g. `DiffsCollection`).
 - `src/entities/user/model/user-context.tsx` — server-populated user data (favorites, hidden/favorite sections, city) is fetched once in `app/layout.tsx` and provided via React context, avoiding a client-side refetch on every page.
 - Zustand stores live with the layer/slice that owns them, not in one shared folder: `src/entities/product/model/pricelist-store.ts` (genuine domain data, read by multiple routes/features — hence `entities`, not a feature); `src/features/search/model/search-store.ts`, `src/features/sort-goods/model/sort-goods-store.ts`, `src/features/llm-report/model/llm-store.ts` (feature-owned UI/interaction state — no feature reads another feature's store; `search`/`sort-goods` state that `product-catalog`/`jump-to-section` need is composed one layer up, in `src/_pages/*`, and passed down as props/callbacks).
 - `src/shared/providers/` — `QueryProvider` (TanStack Query) and `ThemeProvider` (next-themes) wrap the tree in `app/layout.tsx`. Pure infra wrappers, no business logic, hence `shared` rather than app-shell code.

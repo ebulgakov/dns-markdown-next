@@ -8,7 +8,7 @@ Internal package without a build step: `exports` in `package.json` point straigh
 
 - `@dns-markdown/db/models/<name>` — Mongoose models (`src/models/*`)
 - `@dns-markdown/db/schemas/<name>` — schemas (`src/schemas/*`)
-- `@dns-markdown/db/types/<name>` — hand-written TS payload types (`src/types/*`), imported with `import type`
+- `@dns-markdown/types/<name>` — hand-written TS payload types (`src/types/*`), imported with `import type`
 - `@dns-markdown/db/database` — `dbConnect(uri)` / `dbDisconnect()`
 
 There is no root `index.ts` on purpose: subpath imports keep `mock.module("@dns-markdown/db/models/<name>", ...)` in consumers' tests granular. When adding a new file under `models/`, `schemas/` or `types/`, it is exported automatically by the wildcard; a new top-level module needs a new `exports` entry.

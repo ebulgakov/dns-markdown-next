@@ -1,7 +1,7 @@
 import { ObjectId } from "mongodb";
 
-import type { AnalysisData } from "@dns-markdown/db/types/analysis-data";
-import type { User } from "@dns-markdown/db/types/user";
+import type { AnalysisData } from "@dns-markdown/types/analysis-data";
+import type { User } from "@dns-markdown/types/user";
 import type { FavoriteStatus } from "@src/email/updates-email";
 
 export default function updateFavorites(users: User[], history: AnalysisData[]) {

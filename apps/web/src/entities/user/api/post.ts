@@ -1,5 +1,7 @@
 "use server";
 
+import { env } from "@/shared/config";
+
 import {
   getGuest,
   addToHiddenSections as addToHiddenSectionsGuest,
@@ -25,8 +27,8 @@ import {
   getSessionInfo
 } from "./user";
 
-import type { UserNotifications } from "../model/user";
-import type { Goods } from "@/entities/product";
+import type { Goods } from "@dns-markdown/types/pricelist";
+import type { UserNotifications } from "@dns-markdown/types/user";
 
 export const postUpdateUserNotifications = async (notifications: UserNotifications) => {
   const { userId } = await getSessionInfo();
@@ -139,7 +141,5 @@ export const getUser = async () => {
 
 export const getPriceListCity = async (): Promise<string> => {
   const user = await getUser();
-  return user?.city || process.env.DEFAULT_CITY!;
+  return user?.city || env.DEFAULT_CITY;
 };
-
-export type { SectionsResponse } from "./user";

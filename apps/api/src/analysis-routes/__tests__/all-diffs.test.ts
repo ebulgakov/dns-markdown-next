@@ -5,7 +5,7 @@ import allAnalysisDiffsHandler from "../all-diffs";
 import type {
   AnalysisDiff as AnalysisDiffType,
   AnalysisDiffReport
-} from "@dns-markdown/db/types/analysis-diff";
+} from "@dns-markdown/types/analysis-diff";
 import type { Mock } from "bun:test";
 import type { NextFunction, Request, Response } from "express";
 

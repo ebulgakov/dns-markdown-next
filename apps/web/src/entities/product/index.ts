@@ -4,17 +4,6 @@ export { ProductCardDiff } from "./ui/product-card-diff";
 export { usePriceListStore } from "./model/pricelist-store";
 export type { PriceListStore } from "./model/pricelist-store";
 
-export type {
-  Goods,
-  RemovedGoods,
-  PriceList,
-  PriceListDate,
-  PriceListsArchiveCount,
-  Position
-} from "./model/pricelist";
-export type { ProductPayload } from "./model/product";
-export type { Favorite, FavoriteStatus } from "./model/favorite";
-
 export {
   getFlatPriceList,
   getPriceListWithSortedPositions,

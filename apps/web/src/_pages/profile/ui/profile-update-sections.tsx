@@ -10,8 +10,8 @@ import { Label } from "@/shared/ui/label";
 import { ScrollArea } from "@/shared/ui/scroll-area";
 import { Separator } from "@/shared/ui/separator";
 
-import type { SectionsResponse } from "@/entities/user";
-import type { UserSections as UserSectionsType } from "@/entities/user";
+import type { SectionsResponse } from "@dns-markdown/types/responses";
+import type { UserSections as UserSectionsType } from "@dns-markdown/types/user";
 
 type ProfileUpdateSectionsProps = {
   userSections: UserSectionsType;

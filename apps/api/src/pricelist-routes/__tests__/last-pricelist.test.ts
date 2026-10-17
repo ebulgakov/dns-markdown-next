@@ -2,7 +2,7 @@ import { expect, test, describe, mock, beforeEach } from "bun:test";
 
 import lastPriceListHandler from "../last-pricelist";
 
-import type { PriceList as PriceListType } from "@dns-markdown/db/types/pricelist";
+import type { PriceList as PriceListType } from "@dns-markdown/types/pricelist";
 import type { Mock } from "bun:test";
 import type { NextFunction, Request, Response } from "express";
 

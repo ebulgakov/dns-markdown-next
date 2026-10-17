@@ -3,7 +3,7 @@ import { getLastPriceListWithDates } from "@src/pricelist-routes/helpers/get-las
 import { lastPriceListQuerySchema } from "@src/pricelist-routes/helpers/schemas";
 import { z } from "zod";
 
-import type { PriceList as PriceListType } from "@dns-markdown/db/types/pricelist";
+import type { PriceList as PriceListType } from "@dns-markdown/types/pricelist";
 import type { NextFunction, Request, Response } from "express";
 
 async function lastPriceListHandler(req: Request, res: Response, next: NextFunction) {

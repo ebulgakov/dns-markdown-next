@@ -1,7 +1,7 @@
 import { getFlatPriceList, getLastPriceList } from "@/entities/product";
 import { getPriceListCity, getSessionInfo, getUser } from "@/entities/user";
 
-import type { Favorite } from "@/entities/user";
+import type { Favorite } from "@dns-markdown/types/user";
 
 export async function getFavoritesData() {
   const { userId } = await getSessionInfo();

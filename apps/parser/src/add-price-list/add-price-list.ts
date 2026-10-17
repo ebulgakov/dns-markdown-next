@@ -1,8 +1,7 @@
 import { readFileSync } from "node:fs";
 import { join, resolve } from "node:path";
 
-import { getLastPriceList } from "@src/api/get";
-import { deleteLastPriceList, savePriceList } from "@src/api/post";
+import { api } from "@src/api/client";
 import { env } from "@src/env";
 import { ObjectId } from "mongodb";
 
@@ -21,15 +20,15 @@ export async function addPriceList() {
   if (goods.length > 0) {
     // Check if there's already a price list for today and delete it.
     // I want only one price list per day.
-    const lastPriceList = await getLastPriceList(city);
+    const lastPriceList = await api.pricelist.getLast(city);
 
     if (
       lastPriceList &&
       isSameDay(new Date(lastPriceList.createdAt), new ObjectId().getTimestamp())
     ) {
-      await deleteLastPriceList(city);
+      await api.service.deleteLastPriceList(city);
     }
-    await savePriceList(city, goods);
+    await api.service.savePriceList(city, goods);
   } else {
     throw new Error("No price list data to add.");
   }

@@ -11,7 +11,7 @@ import { beforeEach, describe, expect, test } from "bun:test";
 
 import { addAnalysisDiff } from "../add-analysis-diff";
 
-import type { AnalysisDiff } from "@dns-markdown/db/types/analysis-diff";
+import type { AnalysisDiff } from "@dns-markdown/types/analysis-diff";
 
 const day1 = makePriceList({ createdAt: "2026-10-14T10:00:00.000Z" });
 const day2 = makePriceList({ createdAt: "2026-10-15T10:00:00.000Z" });

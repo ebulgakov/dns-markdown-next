@@ -2,8 +2,8 @@ import { create } from "zustand";
 
 import { formatDate, formatTime } from "@/shared/lib";
 
-import type { PriceList } from "./pricelist";
 import type { DiffsCollection } from "@/types/analysis-diff";
+import type { PriceList } from "@dns-markdown/types/pricelist";
 
 export type PriceListStore = {
   priceList?: PriceList;

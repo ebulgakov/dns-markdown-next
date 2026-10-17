@@ -6,7 +6,7 @@ import { z } from "zod";
 import type {
   PriceList as PriceListType,
   PriceListsArchiveCount
-} from "@dns-markdown/db/types/pricelist";
+} from "@dns-markdown/types/pricelist";
 import type { NextFunction, Request, Response } from "express";
 
 async function productsCountHandler(req: Request, res: Response, next: NextFunction) {

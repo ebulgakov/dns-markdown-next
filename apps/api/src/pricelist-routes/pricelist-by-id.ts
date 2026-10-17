@@ -3,7 +3,7 @@ import { cacheAdd, cacheGet } from "@src/cache";
 import { priceListByIdParamsSchema } from "@src/pricelist-routes/helpers/schemas";
 import { z } from "zod";
 
-import type { PriceList as PriceListType } from "@dns-markdown/db/types/pricelist";
+import type { PriceList as PriceListType } from "@dns-markdown/types/pricelist";
 import type { NextFunction, Request, Response } from "express";
 
 async function priceListByIdHandler(req: Request, res: Response, next: NextFunction) {

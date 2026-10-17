@@ -1,4 +1,4 @@
-import type { Goods, Position, PriceList } from "../../model/pricelist";
+import type { Goods, Position, PriceList } from "@dns-markdown/types/pricelist";
 
 export const mockGoodsList: Goods[] = [
   {

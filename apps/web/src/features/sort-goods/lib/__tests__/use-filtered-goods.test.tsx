@@ -7,7 +7,7 @@ import { UserContext } from "@/entities/user";
 import { useSortGoodsStore } from "../../model/sort-goods-store";
 import { useFilteredGoods } from "../use-filtered-goods";
 
-import type { Goods, PriceList } from "@/entities/product";
+import type { Goods, PriceList } from "@dns-markdown/types/pricelist";
 import type { ComponentProps, ReactNode } from "react";
 
 const goods = (overrides: Partial<Goods> & Pick<Goods, "_id" | "title" | "link">): Goods => ({

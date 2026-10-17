@@ -6,7 +6,6 @@ import { useContext, useEffect } from "react";
 import { useShallow } from "zustand/react/shallow";
 
 import { usePriceListStore } from "@/entities/product";
-import { PriceList } from "@/entities/product";
 import { UserContext } from "@/entities/user";
 import { JumpToSection } from "@/features/jump-to-section";
 import { LLMReport } from "@/features/llm-report";
@@ -17,6 +16,8 @@ import { ErrorAlert } from "@/shared/ui/error-alert";
 import { PageLoader } from "@/shared/ui/page-loader";
 import { PageTitle } from "@/shared/ui/page-title";
 import { ScrollToTop } from "@/shared/ui/scroll-to-top";
+
+import type { PriceList } from "@dns-markdown/types/pricelist";
 
 type CatalogClientPageProps = {
   city?: string;

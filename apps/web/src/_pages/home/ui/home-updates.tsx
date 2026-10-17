@@ -12,8 +12,8 @@ import { Title } from "@/shared/ui/title";
 import { HotOffer } from "./hot-offer";
 import { MoreLink } from "./more-link";
 
-import type { Goods } from "@/entities/product";
 import type { CustomDate } from "@/types/common";
+import type { Goods } from "@dns-markdown/types/pricelist";
 
 type HomeUpdatesProps = {
   city?: string;

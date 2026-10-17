@@ -1,7 +1,7 @@
 import * as cheerio from "cheerio";
 import { ObjectId } from "mongodb";
 
-import type { Goods, Position } from "@dns-markdown/db/types/pricelist";
+import type { Goods, Position } from "@dns-markdown/types/pricelist";
 
 export type SourcePrice = {
   id: string;

@@ -18,13 +18,15 @@ https://dns.ebulgakov.com/
 
 ## Воркспейсы
 
-| Путь           | Пакет                  | Описание                                          | Документация                    |
-| -------------- | ---------------------- | ------------------------------------------------- | ------------------------------- |
-| `apps/web`     | `@dns-markdown/web`    | Сайт на Next.js (App Router), деплоится на Vercel | [README](apps/web/README.md)    |
-| `apps/api`     | `@dns-markdown/api`    | Express API, деплоится на Vercel                  | [README](apps/api/README.md)    |
-| `apps/parser`  | `@dns-markdown/parser` | Скрапер/ETL уценки DNS, отправляет данные в API   | [README](apps/parser/README.md) |
-| `packages/db`  | `@dns-markdown/db`     | Общие Mongoose-модели, схемы и типы payload       |                                 |
-| `packages/env` | `@dns-markdown/env`    | Общая загрузка env-файлов и проверки `NODE_ENV`   |                                 |
+| Путь                  | Пакет                      | Описание                                          | Документация                    |
+| --------------------- | -------------------------- | ------------------------------------------------- | ------------------------------- |
+| `apps/web`            | `@dns-markdown/web`        | Сайт на Next.js (App Router), деплоится на Vercel | [README](apps/web/README.md)    |
+| `apps/api`            | `@dns-markdown/api`        | Express API, деплоится на Vercel                  | [README](apps/api/README.md)    |
+| `apps/parser`         | `@dns-markdown/parser`     | Скрапер/ETL уценки DNS, отправляет данные в API   | [README](apps/parser/README.md) |
+| `packages/db`         | `@dns-markdown/db`         | Общие Mongoose-модели и схемы                     |                                 |
+| `packages/env`        | `@dns-markdown/env`        | Общая загрузка env-файлов и проверки `NODE_ENV`   |                                 |
+| `packages/types`      | `@dns-markdown/types`      | Общие типы payload и ответов API                  |                                 |
+| `packages/api-client` | `@dns-markdown/api-client` | Типизированный клиент ко всем эндпоинтам API      |                                 |
 
 ## Инструменты
 

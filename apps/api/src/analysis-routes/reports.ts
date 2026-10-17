@@ -3,7 +3,7 @@ import { cityQuerySchema } from "@src/analysis-routes/helpers/schemas";
 import { cacheAdd, cacheGet } from "@src/cache";
 import { z } from "zod";
 
-import type { ReportsResponse } from "@dns-markdown/db/types/reports";
+import type { ReportsResponse } from "@dns-markdown/types/reports";
 import type { NextFunction, Response, Request } from "express";
 
 async function reportsHandler(req: Request, res: Response, next: NextFunction) {

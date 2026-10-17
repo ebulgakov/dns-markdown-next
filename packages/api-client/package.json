@@ -1,0 +1,19 @@
+{
+  "name": "@dns-markdown/api-client",
+  "private": true,
+  "type": "module",
+  "main": "./src/index.ts",
+  "exports": {
+    ".": "./src/index.ts"
+  },
+  "dependencies": {
+    "@dns-markdown/types": "workspace:*",
+    "axios": "^1.13.4"
+  },
+  "scripts": {
+    "lint": "eslint",
+    "lint:fix": "eslint --fix",
+    "type-check": "tsc --noEmit",
+    "test": "bun test"
+  }
+}

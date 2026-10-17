@@ -17,7 +17,7 @@ import { PageLoader } from "@/shared/ui/page-loader";
 import { PageTitle } from "@/shared/ui/page-title";
 import { ScrollToTop } from "@/shared/ui/scroll-to-top";
 
-import type { PriceList } from "@/entities/product";
+import type { PriceList } from "@dns-markdown/types/pricelist";
 
 type ArchiveItemClientPageProps = {
   id: string;
