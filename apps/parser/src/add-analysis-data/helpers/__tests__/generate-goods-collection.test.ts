@@ -1,4 +1,4 @@
-import { makeGoods, makePriceList } from "@src/__tests__/mocks";
+import { makeGoods, makePriceList } from "@dns-markdown/tests/fixtures";
 import { describe, expect, test } from "bun:test";
 
 import generateGoodsCollection from "../generate-goods-collection";

@@ -1,47 +1,29 @@
+import { createExpressMocks } from "@dns-markdown/tests/express";
+import { cacheAdd, cacheGet, resetCache } from "@src/__tests__/setup";
 import { expect, test, describe, mock, beforeEach } from "bun:test";
 
 import lastPriceListHandler from "../last-pricelist";
 
 import type { PriceList as PriceListType } from "@dns-markdown/types/pricelist";
-import type { Mock } from "bun:test";
-import type { NextFunction, Request, Response } from "express";
 
 // Mock dependencies
-const cacheGet = mock(async (): Promise<PriceListType | null> => null);
-const cacheAdd = mock(async () => {});
 const getLastPriceListWithDates = mock(async (): Promise<PriceListType | null> => null);
-
-mock.module("@src/cache", () => ({
-  cacheGet,
-  cacheAdd
-}));
 
 mock.module("@src/pricelist-routes/helpers/get-last-price-list.ts", () => ({
   getLastPriceListWithDates
 }));
 
-describe("lastPriceListHandler", () => {
-  let req: Partial<Request>;
-  let res: Partial<Response>;
-  const next: NextFunction = mock(() => {});
-  const json = mock(() => res as Response);
-  const send = mock(() => res as Response);
-  const status = mock(() => res as Response);
+const { req, res, next, json, send, status, reset } = createExpressMocks();
 
+describe("lastPriceListHandler", () => {
   beforeEach(() => {
-    req = { query: {} };
-    res = { json, send, status };
-    cacheGet.mockReset();
-    cacheAdd.mockReset();
+    reset();
+    resetCache();
     getLastPriceListWithDates.mockReset();
-    (next as unknown as Mock<NextFunction>).mockClear();
-    json.mockClear();
-    send.mockClear();
-    status.mockClear();
   });
 
   test("should return 400 if city is not provided", async () => {
-    await lastPriceListHandler(req as Request, res as Response, next);
+    await lastPriceListHandler(req, res, next);
     expect(status).toHaveBeenCalledWith(400);
     expect(json).toHaveBeenCalledWith({ errors: expect.any(String) });
   });
@@ -51,7 +33,7 @@ describe("lastPriceListHandler", () => {
     const mockData = { _id: "1", city: "TestCity", createdAt: "", positions: [] } as PriceListType;
     cacheGet.mockResolvedValueOnce(mockData);
 
-    await lastPriceListHandler(req as Request, res as Response, next);
+    await lastPriceListHandler(req, res, next);
 
     expect(cacheGet).toHaveBeenCalledWith("daily:pricelist:last:TestCity");
     expect(json).toHaveBeenCalledWith(mockData);
@@ -62,7 +44,7 @@ describe("lastPriceListHandler", () => {
     req.query = { city: "TestCity" };
     getLastPriceListWithDates.mockResolvedValueOnce(null);
 
-    await lastPriceListHandler(req as Request, res as Response, next);
+    await lastPriceListHandler(req, res, next);
 
     expect(status).toHaveBeenCalledWith(404);
     expect(send).toHaveBeenCalledWith("Price list not found");
@@ -113,7 +95,7 @@ describe("lastPriceListHandler", () => {
     };
     getLastPriceListWithDates.mockResolvedValueOnce(priceListWithDates);
 
-    await lastPriceListHandler(req as Request, res as Response, next);
+    await lastPriceListHandler(req, res, next);
 
     expect(getLastPriceListWithDates).toHaveBeenCalledWith("TestCity");
     expect(cacheAdd).toHaveBeenCalledWith("daily:pricelist:last:TestCity", priceListWithDates, {
@@ -127,7 +109,7 @@ describe("lastPriceListHandler", () => {
     const error = new Error("DB error");
     getLastPriceListWithDates.mockRejectedValueOnce(error);
 
-    await lastPriceListHandler(req as Request, res as Response, next);
+    await lastPriceListHandler(req, res, next);
 
     expect(next).toHaveBeenCalledWith(error);
   });

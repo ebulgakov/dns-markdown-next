@@ -1,4 +1,4 @@
-import { makeAnalysisData, makeGoods, makeUser } from "@src/__tests__/mocks";
+import { makeAnalysisData, makeGoods, makeUser } from "@dns-markdown/tests/fixtures";
 import { describe, expect, test } from "bun:test";
 
 import updateFavorites from "../update-favorites";

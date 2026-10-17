@@ -1,11 +1,5 @@
-import {
-  apiGet,
-  env,
-  makeGoods,
-  makePriceList,
-  mockGetResponses,
-  resetMocks
-} from "@src/__tests__/mocks";
+import { makeGoods, makePriceList } from "@dns-markdown/tests/fixtures";
+import { apiGet, env, mockGetResponses, resetMocks } from "@src/__tests__/setup";
 import { beforeEach, describe, expect, mock, spyOn, test } from "bun:test";
 
 type UpsertPayload = {

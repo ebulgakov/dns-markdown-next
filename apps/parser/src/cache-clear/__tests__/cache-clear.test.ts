@@ -1,4 +1,4 @@
-import { apiPost, env, resetMocks, webPost } from "@src/__tests__/mocks";
+import { apiPost, env, resetMocks, webPost } from "@src/__tests__/setup";
 import { beforeEach, describe, expect, test } from "bun:test";
 
 import { clearCache } from "../cache-clear";

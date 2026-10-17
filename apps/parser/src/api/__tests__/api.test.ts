@@ -1,4 +1,4 @@
-import { apiPost, resetMocks, webPost } from "@src/__tests__/mocks";
+import { apiPost, resetMocks, webPost } from "@src/__tests__/setup";
 import { beforeEach, describe, expect, spyOn, test } from "bun:test";
 
 import { api } from "../client";

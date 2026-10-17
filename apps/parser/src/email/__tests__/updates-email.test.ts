@@ -1,4 +1,5 @@
-import { makeGoods, makeUser, resendBatchSend, resetMocks } from "@src/__tests__/mocks";
+import { makeGoods, makeUser } from "@dns-markdown/tests/fixtures";
+import { resendBatchSend, resetMocks } from "@src/__tests__/setup";
 import { beforeEach, describe, expect, test } from "bun:test";
 
 import { sendUpdatesEmail } from "../updates-email";

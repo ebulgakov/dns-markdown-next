@@ -1,4 +1,4 @@
-import { apiPost, env, resetMocks } from "@src/__tests__/mocks";
+import { apiPost, env, resetMocks } from "@src/__tests__/setup";
 import { beforeEach, describe, expect, test } from "bun:test";
 
 import { deleteOldPriceLists } from "../delete-old-price-lists";

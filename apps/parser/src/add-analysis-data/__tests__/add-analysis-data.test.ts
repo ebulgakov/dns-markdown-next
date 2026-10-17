@@ -1,13 +1,12 @@
+import { makeGoods, makePriceList } from "@dns-markdown/tests/fixtures";
 import {
   apiGet,
   env,
-  makeGoods,
-  makePriceList,
   mockGetResponses,
   postBody,
   postedEndpoints,
   resetMocks
-} from "@src/__tests__/mocks";
+} from "@src/__tests__/setup";
 import { beforeEach, describe, expect, test } from "bun:test";
 
 import { addAnalysisData } from "../add-analysis-data";

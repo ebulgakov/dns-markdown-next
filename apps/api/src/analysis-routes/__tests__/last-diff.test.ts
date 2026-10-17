@@ -1,70 +1,38 @@
+import { createExpressMocks, mockQuery } from "@dns-markdown/tests/express";
+import { makeAnalysisDiff } from "@dns-markdown/tests/fixtures";
+import { cacheAdd, cacheGet, resetCache } from "@src/__tests__/setup";
 import { expect, test, describe, mock, beforeEach } from "bun:test";
 
 import lastAnalysisDiffHandler from "../last-diff";
 
 import type { AnalysisDiff as AnalysisDiffType } from "@dns-markdown/types/analysis-diff";
-import type { Mock } from "bun:test";
-import type { NextFunction, Request, Response } from "express";
 
-// Mock dependencies
-const cacheGet = mock(async (): Promise<AnalysisDiffType | null> => null);
-const cacheAdd = mock(async () => {});
-const exec = mock(async (): Promise<AnalysisDiffType | null> => null);
-const lean = mock(() => ({ exec }));
-const findOne = mock(() => ({ lean }));
+const findOneQuery = mockQuery<AnalysisDiffType | null>(null);
+const { query: findOne, lean, exec } = findOneQuery;
 
-const AnalysisDiff = { findOne };
+mock.module("@src/db/models/analysis-diff", () => ({ AnalysisDiff: { findOne } }));
 
-mock.module("@src/cache", () => ({
-  cacheGet,
-  cacheAdd
-}));
-
-mock.module("@src/db/models/analysis-diff", () => ({
-  AnalysisDiff
-}));
+const { req, res, next, json, send, status, reset } = createExpressMocks();
 
 describe("lastAnalysisDiffHandler", () => {
-  let req: Partial<Request>;
-  let res: Partial<Response>;
-  const next: NextFunction = mock(() => {});
-  const json = mock(() => res as Response);
-  const send = mock(() => res as Response);
-  const status = mock(() => res as Response);
-
   beforeEach(() => {
-    req = { query: {} };
-    res = { json, send, status };
-    cacheGet.mockReset();
-    cacheAdd.mockReset();
-    findOne.mockClear();
-    lean.mockClear();
-    exec.mockClear();
-    (next as unknown as Mock<NextFunction>).mockClear();
-    json.mockClear();
-    send.mockClear();
-    status.mockClear();
+    reset();
+    resetCache();
+    findOneQuery.reset();
   });
 
   test("should return 400 if city is not provided", async () => {
-    await lastAnalysisDiffHandler(req as Request, res as Response, next);
+    await lastAnalysisDiffHandler(req, res, next);
     expect(status).toHaveBeenCalledWith(400);
     expect(json).toHaveBeenCalledWith({ errors: expect.any(String) });
   });
 
   test("should return cached data if it exists", async () => {
     req.query = { city: "TestCity" };
-    const mockDiff: AnalysisDiffType = {
-      city: "TestCity",
-      dateAdded: `${new Date()}`,
-      newItems: [],
-      removedItems: [],
-      changesPrice: [],
-      changesProfit: []
-    };
+    const mockDiff = makeAnalysisDiff({ city: "TestCity" });
     cacheGet.mockResolvedValueOnce(mockDiff);
 
-    await lastAnalysisDiffHandler(req as Request, res as Response, next);
+    await lastAnalysisDiffHandler(req, res, next);
 
     expect(cacheGet).toHaveBeenCalledWith("daily:analysis:last:TestCity");
     expect(json).toHaveBeenCalledWith(mockDiff);
@@ -75,7 +43,7 @@ describe("lastAnalysisDiffHandler", () => {
     req.query = { city: "TestCity" };
     exec.mockResolvedValueOnce(null);
 
-    await lastAnalysisDiffHandler(req as Request, res as Response, next);
+    await lastAnalysisDiffHandler(req, res, next);
 
     expect(status).toHaveBeenCalledWith(404);
     expect(send).toHaveBeenCalledWith("Analysis diff not found");
@@ -83,17 +51,10 @@ describe("lastAnalysisDiffHandler", () => {
 
   test("should fetch from db, cache it, and return it", async () => {
     req.query = { city: "TestCity" };
-    const mockDiff: AnalysisDiffType = {
-      city: "TestCity",
-      dateAdded: "",
-      newItems: [],
-      removedItems: [],
-      changesPrice: [],
-      changesProfit: []
-    };
+    const mockDiff = makeAnalysisDiff({ city: "TestCity" });
     exec.mockResolvedValueOnce(mockDiff);
 
-    await lastAnalysisDiffHandler(req as Request, res as Response, next);
+    await lastAnalysisDiffHandler(req, res, next);
 
     expect(findOne).toHaveBeenCalledWith({ city: "TestCity" }, {}, { sort: { dateAdded: -1 } });
     expect(lean).toHaveBeenCalled();
@@ -109,7 +70,7 @@ describe("lastAnalysisDiffHandler", () => {
     const error = new Error("DB error");
     exec.mockRejectedValueOnce(error);
 
-    await lastAnalysisDiffHandler(req as Request, res as Response, next);
+    await lastAnalysisDiffHandler(req, res, next);
 
     expect(next).toHaveBeenCalledWith(error);
   });

@@ -1,4 +1,4 @@
-import { makeAnalysisData } from "@src/__tests__/mocks";
+import { makeAnalysisData } from "@dns-markdown/tests/fixtures";
 import { describe, expect, test } from "bun:test";
 
 import makeDiff from "../make-diff";

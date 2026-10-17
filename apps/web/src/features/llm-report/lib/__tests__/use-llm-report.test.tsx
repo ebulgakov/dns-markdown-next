@@ -1,8 +1,7 @@
+import { advanceTimersByTimeAsync } from "@dns-markdown/tests/timers";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { renderHook, waitFor } from "@testing-library/react";
 import { afterEach, beforeEach, describe, expect, it, vi } from "bun:test";
-
-import { advanceTimersByTimeAsync } from "@/test/fake-timers";
 
 import { useLlmStore } from "../../model/llm-store";
 import { useLlmReport } from "../use-llm-report";

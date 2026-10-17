@@ -19,7 +19,7 @@ bun test --watch
 bun run generate:openapi    # regenerate openapi.json (CI fails if it is stale)
 ```
 
-Tests are colocated in `__tests__` (or `__test__`) directories next to the code they cover, using `bun:test` (not Jest/Vitest) with `mock`/`mock.module` for mocking. Env vars required by `src/env.ts` must be present for tests to run — see `.github/workflows/test.yml` for the full list of vars and their dummy CI values.
+Tests are colocated in `__tests__` (or `__test__`) directories next to the code they cover, using `bun:test` (not Jest/Vitest) with `mock`/`mock.module` for mocking. `src/__tests__/setup.ts` is preloaded (`bunfig.toml`, and the root `bunfig.toml` for a bare root `bun test`) and mocks `@src/cache` once for all tests — import `cacheGet` / `cacheAdd` / `cacheDelete` and call `resetCache()` in `beforeEach`; never `mock.module("@src/cache")` in a test file (process-wide, it would replace the shared mocks). Handlers are called directly with `createExpressMocks()` and models mocked with `mockQuery()` from `@dns-markdown/tests/express`; fixtures from `@dns-markdown/tests/fixtures`. Env vars required by `src/env.ts` must be present for tests to run — see `.github/workflows/test.yml` for the full list of vars and their dummy CI values.
 
 ## Env
 

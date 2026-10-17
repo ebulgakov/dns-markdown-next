@@ -2,15 +2,15 @@ import { mkdirSync, mkdtempSync, rmSync, writeFileSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
 
+import { makePriceList } from "@dns-markdown/tests/fixtures";
 import {
   apiGet,
   env,
-  makePriceList,
   mockGetResponses,
   postBody,
   postedEndpoints,
   resetMocks
-} from "@src/__tests__/mocks";
+} from "@src/__tests__/setup";
 import { afterAll, beforeAll, beforeEach, describe, expect, test } from "bun:test";
 
 import { addPriceList } from "../add-price-list";

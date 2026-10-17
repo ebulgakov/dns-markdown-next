@@ -13,6 +13,7 @@ Each workspace has its own `CLAUDE.md` with details — read it before working i
 - `apps/parser` (`@dns-markdown/parser`) — DNS markdown scraper/ETL (CLI pipeline); pushes data to the API over HTTP, runs locally only (not deployed). See `apps/parser/CLAUDE.md`.
 - `packages/env` (`@dns-markdown/env`) — shared env-file loading and `NODE_ENV`/platform checks. See `packages/env/CLAUDE.md`.
 - `packages/types` (`@dns-markdown/types`) — shared API payload/response types (JSON wire shapes, no runtime code). See `packages/types/CLAUDE.md`.
+- `packages/tests` (`@dns-markdown/tests`) — shared test utilities (fixtures, HTTP/Express/Mongoose doubles, DOM preload, fake timers), devDependency of every app. See `packages/tests/CLAUDE.md`.
 - `packages/api-client` (`@dns-markdown/api-client`) — typed axios client for every `apps/api` endpoint, used by web, parser and the planned Expo app (React Native compatible: no env, no Next). See `packages/api-client/CLAUDE.md`.
 
 ## Commands
