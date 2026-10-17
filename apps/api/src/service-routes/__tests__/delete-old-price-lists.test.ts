@@ -18,7 +18,7 @@ mock.module("@src/cache", () => ({
   cacheDelete
 }));
 
-mock.module("@dns-markdown/db/models/pricelist", () => ({
+mock.module("@src/db/models/pricelist", () => ({
   Pricelist: { find, deleteMany }
 }));
 

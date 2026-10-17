@@ -1,6 +1,6 @@
-import { Reports } from "@dns-markdown/db/models/reports";
 import { cityQuerySchema } from "@src/analysis-routes/helpers/schemas";
 import { cacheAdd, cacheGet } from "@src/cache";
+import { Reports } from "@src/db/models/reports";
 import { z } from "zod";
 
 import type { ReportsResponse } from "@dns-markdown/types/reports";

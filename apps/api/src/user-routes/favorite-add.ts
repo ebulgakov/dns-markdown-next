@@ -1,5 +1,5 @@
 import { getAuth } from "@clerk/express";
-import { User } from "@dns-markdown/db/models/user";
+import { User } from "@src/db/models/user";
 import { addFavoriteSchema } from "@src/user-routes/helpers/schemas";
 import { ObjectId } from "mongodb";
 import { z } from "zod";

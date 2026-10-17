@@ -1,5 +1,5 @@
-import { AnalysisData } from "@dns-markdown/db/models/analysis-data";
-import { Pricelist } from "@dns-markdown/db/models/pricelist";
+import { AnalysisData } from "@src/db/models/analysis-data";
+import { Pricelist } from "@src/db/models/pricelist";
 
 import type { Goods, PriceList as PriceListType } from "@dns-markdown/types/pricelist";
 

@@ -1,4 +1,4 @@
-import { User } from "@dns-markdown/db/models/user";
+import { User } from "@src/db/models/user";
 import { updateUsersFavoritesBodySchema } from "@src/service-routes/helpers/schemas";
 import { z } from "zod";
 

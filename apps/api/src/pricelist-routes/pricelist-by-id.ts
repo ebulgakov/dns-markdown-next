@@ -1,5 +1,5 @@
-import { Pricelist } from "@dns-markdown/db/models/pricelist";
 import { cacheAdd, cacheGet } from "@src/cache";
+import { Pricelist } from "@src/db/models/pricelist";
 import { priceListByIdParamsSchema } from "@src/pricelist-routes/helpers/schemas";
 import { z } from "zod";
 

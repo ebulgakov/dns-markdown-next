@@ -8,7 +8,7 @@ import type { NextFunction, Request, Response } from "express";
 const save = mock(async () => {});
 const User = mock(() => ({ save }));
 
-mock.module("@dns-markdown/db/models/user", () => ({
+mock.module("@src/db/models/user", () => ({
   User
 }));
 

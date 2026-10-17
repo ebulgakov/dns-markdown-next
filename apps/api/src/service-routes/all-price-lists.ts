@@ -1,4 +1,4 @@
-import { Pricelist } from "@dns-markdown/db/models/pricelist";
+import { Pricelist } from "@src/db/models/pricelist";
 import { allPriceListsQuerySchema } from "@src/service-routes/helpers/schemas";
 import { z } from "zod";
 

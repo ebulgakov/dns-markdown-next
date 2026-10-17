@@ -1,5 +1,5 @@
-import { AnalysisData } from "@dns-markdown/db/models/analysis-data";
 import { cacheAdd, cacheGet } from "@src/cache";
+import { AnalysisData } from "@src/db/models/analysis-data";
 import { getLastPriceListFlat } from "@src/pricelist-routes/helpers/get-last-price-list";
 import { linkQuerySchema } from "@src/products-routes/helpers/schemas";
 import { z } from "zod";

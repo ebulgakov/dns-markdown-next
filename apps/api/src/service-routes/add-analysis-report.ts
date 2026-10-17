@@ -1,5 +1,5 @@
-import { Reports } from "@dns-markdown/db/models/reports";
 import { cacheDelete } from "@src/cache";
+import { Reports } from "@src/db/models/reports";
 import { generateLLMReport } from "@src/llm";
 import { convertGoodsToString } from "@src/llm-routes/helpers/convert-to-string";
 import { getLastPriceList } from "@src/pricelist-routes/helpers/get-last-price-list";

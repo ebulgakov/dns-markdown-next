@@ -1,5 +1,5 @@
-import { Pricelist } from "@dns-markdown/db/models/pricelist";
 import { cacheDelete } from "@src/cache";
+import { Pricelist } from "@src/db/models/pricelist";
 import { citySchema } from "@src/service-routes/helpers/schemas";
 import { z } from "zod";
 

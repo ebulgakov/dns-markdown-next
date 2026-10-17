@@ -1,5 +1,5 @@
-import { Reports } from "@dns-markdown/db/models/reports";
 import { cacheDelete } from "@src/cache";
+import { Reports } from "@src/db/models/reports";
 import { cityDateSchema } from "@src/service-routes/helpers/schemas";
 import { z } from "zod";
 
