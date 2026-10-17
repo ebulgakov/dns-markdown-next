@@ -2,7 +2,7 @@ import "server-only";
 
 import { z } from "zod";
 
-// Next.js loads apps/web/.env* itself (not @dns-markdown/env). Server-only:
+// Root env files are loaded by next.config.ts (loadEnv from @dns-markdown/env). Server-only:
 // these are secrets, never import this module from a client component.
 // NEXT_PUBLIC_* vars are inlined by Next at build time and stay on process.env.
 const envSchema = z.object({
@@ -44,8 +44,6 @@ const parseEnv = (): Env => {
     console.warn(`⚠️ Invalid environment variables (ignored during build):\n${details}`);
     return process.env as unknown as Env;
   }
-
-  console.log(process.env);
 
   // No process.exit here: Next.js reports the thrown error on the first request
   throw new Error(`❌ Invalid environment variables:\n${details}`);
