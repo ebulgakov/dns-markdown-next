@@ -12,7 +12,7 @@ bun run dev:test            # NODE_ENV=test, watch
 bun run dev:prod            # NODE_ENV=production, watch — production keys, hits real prod services
 bun run build               # bundle to dist/index.js (bun build, targets node)
 bun run start               # built bundle, no NODE_ENV
-bun run start:prod          # built bundle, NODE_ENV=production (run build first)
+NODE_ENV=production bun run start   # built bundle with production keys (run build first)
 bun test                    # all api tests
 bun test path/to/file.test.ts   # single test file
 bun test --watch
@@ -27,7 +27,7 @@ Tests are colocated in `__tests__` (or `__test__`) directories next to the code 
 
 ## Architecture
 
-Express 5 app (`src/server.ts`) exported as default and started conditionally in `src/index.ts`: it calls `app.listen` everywhere except on Vercel (`isVercel()`), since there Vercel runs the bundled `dist/index.js` as a single serverless function; so `start:prod` can run the production bundle locally. `vercel.json` pins `outputDirectory: "dist"` so the bundle is the entrypoint — without it Vercel runs unbundled `src/` and crashes with `ERR_UNSUPPORTED_DIR_IMPORT`. Do not add `rewrites` there: they change the path Express sees.
+Express 5 app (`src/server.ts`) exported as default and started conditionally in `src/index.ts`: it calls `app.listen` everywhere except on Vercel (`isVercel()`), since there Vercel runs the bundled `dist/index.js` as a single serverless function; so `NODE_ENV=production bun run start` can run the production bundle locally. `vercel.json` pins `outputDirectory: "dist"` so the bundle is the entrypoint — without it Vercel runs unbundled `src/` and crashes with `ERR_UNSUPPORTED_DIR_IMPORT`. Do not add `rewrites` there: they change the path Express sees.
 
 ### Route layout
 

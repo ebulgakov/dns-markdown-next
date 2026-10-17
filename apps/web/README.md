@@ -1,10 +1,10 @@
 # @dns-markdown/web
 
-Next.js (App Router) frontend/BFF of [dns-markdown](../../README.md), deployed to Vercel. Product, pricelist and analysis data come from the API over HTTP (`API_URL`); auth is handled by Clerk, guest state is stored in Upstash Redis.
+Next.js (App Router) frontend/BFF of [dns-markdown](../../README.md), deployed to Vercel. Product, pricelist and analysis data come from the API over HTTP (`API_URL`) through [`@dns-markdown/api-client`](../../packages/api-client/CLAUDE.md) (`src/shared/api/client.ts`), with payload types from `@dns-markdown/types`; auth is handled by Clerk, guest state is stored in Upstash Redis.
 
 ## Getting Started
 
-Copy `.env-example` to `.env` and fill in the required variables. Next.js reads env files from `apps/web/`, not the root `.env*` files.
+Env vars live in the shared `.env*` files in the monorepo root (copy the root `.env.example` to `.env` and fill it in). Next.js itself only reads `apps/web/.env*`, so `next.config.ts` loads the root files with `loadEnv()` from `@dns-markdown/env` — do not put env files into `apps/web/`. Server vars are validated by the zod schema in `src/shared/config/env.ts`.
 
 Run the development server from `apps/web/`:
 
@@ -43,6 +43,8 @@ bun run build-storybook  # static storybook build
 
 Always use `bun run <script>`: `bun build` is Bun's built-in bundler, not the `build` script.
 
+Unit tests are colocated under `__tests__/` in `src/`; `test/setup.ts` is preloaded and pulls in the DOM globals from `@dns-markdown/tests/dom`.
+
 ## E2E tests
 
 Playwright tests live in `playwright/` (config in `playwright.config.ts`). They build and start the app and run against `http://localhost:3000`:
@@ -75,7 +77,7 @@ Requires Node `^22||^24||>=26` (dependency-cruiser's own supported range) — th
 
 ## Technologies
 
-- Next.js 16, React, TypeScript
+- Next.js 16, React 19, TypeScript, Zod
 - Tailwind CSS, shadcn/ui
 - next-intl (i18n)
 - TanStack Query, Zustand
