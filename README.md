@@ -1,57 +1,71 @@
-# dns-markdown
+Русский | [English](./README.en.md)
 
-Service for browsing discounted (markdown) products of the DNS store: website, API and data parser in one monorepo.
+# Dns-Markdown
+
+Сервис по подбору уценённых товаров магазина DNS: сайт, API и парсер данных в одном монорепозитории.
+
+## Адрес сайта
+
+https://dns.ebulgakov.com/
+
+## О сервисе
+
+Это неофициальный сайт, связанный с компанией DNS. Он помогает просматривать уценённые товары, представленные на сайте DNS.
+
+Сейчас сервис показывает товары из Самары. Вы можете добавлять товары в избранное, чтобы отслеживать обновления, такие как изменения цен или наличие товара в магазинах.
 
 <img width="2574" height="2342" alt="image" src="https://github.com/user-attachments/assets/a6922841-1aa0-4801-9577-50f47bc80b34" />
 
-## Workspaces
+## Воркспейсы
 
-| Path           | Package                | Description                                                   | Docs                            |
-| -------------- | ---------------------- | ------------------------------------------------------------- | ------------------------------- |
-| `apps/web`     | `@dns-markdown/web`    | Next.js (App Router) site, deployed to Vercel                 | [README](apps/web/README.md)    |
-| `apps/api`     | `@dns-markdown/api`    | Express API, deployed to Vercel                               | [README](apps/api/README.md)    |
-| `apps/parser`  | `@dns-markdown/parser` | DNS markdown scraper/ETL, pushes data to the API (local only) | [README](apps/parser/README.md) |
-| `packages/db`  | `@dns-markdown/db`     | Shared Mongoose models, schemas and payload types             |                                 |
-| `packages/env` | `@dns-markdown/env`    | Shared env-file loading and `NODE_ENV` checks                 |                                 |
+| Путь           | Пакет                  | Описание                                          | Документация                    |
+| -------------- | ---------------------- | ------------------------------------------------- | ------------------------------- |
+| `apps/web`     | `@dns-markdown/web`    | Сайт на Next.js (App Router), деплоится на Vercel | [README](apps/web/README.md)    |
+| `apps/api`     | `@dns-markdown/api`    | Express API, деплоится на Vercel                  | [README](apps/api/README.md)    |
+| `apps/parser`  | `@dns-markdown/parser` | Скрапер/ETL уценки DNS, отправляет данные в API   | [README](apps/parser/README.md) |
+| `packages/db`  | `@dns-markdown/db`     | Общие Mongoose-модели, схемы и типы payload       |                                 |
+| `packages/env` | `@dns-markdown/env`    | Общая загрузка env-файлов и проверки `NODE_ENV`   |                                 |
 
-## Tooling
+## Инструменты
 
-[Bun](https://bun.sh) workspaces (`apps/*`, `packages/*`) with a single `bun.lock`, orchestrated by [Nx](https://nx.dev) in package-based mode: Nx targets are the `package.json` scripts of each workspace, caching rules live in `nx.json`.
+Воркспейсы [Bun](https://bun.sh) (`apps/*`, `packages/*`) с единым `bun.lock`, оркестрация через [Nx](https://nx.dev) в package-based режиме: таргеты Nx — это скрипты `package.json` каждого воркспейса, правила кеширования лежат в `nx.json`.
 
-## Commands
+## Команды
 
-Run from the repo root:
-
-```bash
-bun install            # install all workspaces
-bun run dev            # dev servers of all apps (api + web on :3000)
-bun run test           # tests of all projects
-bun run lint           # lint all projects
-bun run lint:fix       # lint with --fix
-bun run type-check     # tsc --noEmit for all projects
-bun run build          # build all projects
-bun run affected       # lint/type-check/test/build only for projects changed vs main
-```
-
-Single project / script:
+Запускаются из корня репозитория:
 
 ```bash
-NX_LOAD_DOT_ENV_FILES=false bunx nx run <project>:<script>   # e.g. @dns-markdown/api:dev
-bunx nx graph                                                # project graph
+bun install            # установить зависимости всех воркспейсов
+bun run dev            # dev-таргеты всех проектов (api, web на :3000)
+bun run test           # тесты всех проектов
+bun run lint           # линт всех проектов
+bun run lint:fix       # линт с --fix
+bun run type-check     # tsc --noEmit для всех проектов
+bun run build          # сборка всех проектов
+bun run affected       # lint/type-check/test/build только для проектов, изменённых относительно main
 ```
 
-`NX_LOAD_DOT_ENV_FILES=false` stops Nx from injecting the root `.env*` files into every task (root scripts already set it).
+Отдельный проект / скрипт:
 
-## Env
+```bash
+NX_LOAD_DOT_ENV_FILES=false bunx nx run <project>:<script>   # например @dns-markdown/api:dev
+bunx nx graph                                                # граф проектов
+```
 
-API, parser and packages share env files in the repo root: `.env.<NODE_ENV>` is loaded first, then `.env` (see `.env.example`). `apps/web` uses its own `apps/web/.env` (see `apps/web/.env-example`).
+`NX_LOAD_DOT_ENV_FILES=false` не даёт Nx подмешивать корневые `.env*` файлы в окружение каждой задачи (корневые скрипты уже его выставляют).
 
-## Technologies
+## Переменные окружения
+
+API, парсер и пакеты используют общие env-файлы в корне репозитория: сначала загружается `.env.<NODE_ENV>`, затем `.env` (см. `.env.example`). `apps/web` использует собственный `apps/web/.env` (см. `apps/web/.env-example`).
+
+## Используемые технологии
 
 - Bun, Nx, TypeScript
-- Next.js, React, Tailwind CSS
+- Next.js 16, React, Tailwind CSS, shadcn/ui, next-intl
 - Express, Swagger
-- MongoDB, Redis
+- MongoDB, Redis (Upstash)
 - Clerk Auth
 - Upstash Vector DB
 - OpenAI API
+- Storybook, Chromatic, Playwright, Bun test
+- Sentry

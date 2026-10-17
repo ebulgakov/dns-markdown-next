@@ -17,7 +17,7 @@ If `codegraph status` reports no index (or the command itself is unavailable), s
 
 ## Commands
 
-Package manager is **bun**; the single `bun.lock`, hoisted linker (root `bunfig.toml`), `packageManager`, `trustedDependencies` and the `react`/`react-dom` `overrides` (keeps one React copy for peers like `react-scroll-up` that declare an older range) live in the monorepo root `package.json`. `apps/web/bunfig.toml` holds only the `[test]` config. Bun is the package manager/script runner and the unit-test runner (`bun test`); `next`, `storybook`, `eslint` (and Vitest for Storybook interaction tests) still run on Node, whose version is pinned in `.nvmrc`. Always invoke scripts as `bun run <script>`: `bun build` is Bun's built-in bundler, not this project's `build` script. Run the scripts below from `apps/web/` (or from the root via `bun run dev:web` / `NX_LOAD_DOT_ENV_FILES=false bunx nx run @dns-markdown/web:<script>`; the root `bun run lint|type-check|test|build` cover web too).
+Package manager is **bun**; the single `bun.lock`, hoisted linker (root `bunfig.toml`), `packageManager`, `trustedDependencies` and the `react`/`react-dom` `overrides` (keeps one React copy for peers like `react-scroll-up` that declare an older range) live in the monorepo root `package.json`. `apps/web/bunfig.toml` holds only the `[test]` config. Bun is the package manager/script runner and the unit-test runner (`bun test`); `next`, `storybook`, `eslint` (and Vitest for Storybook interaction tests) still run on Node, whose version is pinned in the monorepo root `.nvmrc`. Always invoke scripts as `bun run <script>`: `bun build` is Bun's built-in bundler, not this project's `build` script. Run the scripts below from `apps/web/` (or from the root via `NX_LOAD_DOT_ENV_FILES=false bunx nx run @dns-markdown/web:<script>`; the root `bun run lint|type-check|test|build` cover web too).
 
 ```bash
 bun run dev              # start dev server (localhost:3000)
@@ -95,7 +95,7 @@ Read-only catalog/analysis data (pricelists, products, diffs, LLM reports) goes 
 ### UI conventions
 
 - shadcn/ui ("new-york" style) is configured in `components.json`; primitives live in `src/shared/ui`, with path aliases `@/shared/*`, `@/entities/{user,product}`, `@/features/{product-catalog,search,sort-goods,jump-to-section,llm-report,change-city}`, `@/widgets/{navbar,footer}`, plus the catch-all `@/*` for anything not yet under `src/` (notably all of `app/`, `types/`) — use these aliases, don't add new ones.
-- i18n via `next-intl`; translation strings live in `i18n/locates/{en,ru}.json`, loaded through `i18n/request.ts`. Russian (`ru`) is the primary/default locale (see README).
+- i18n via `next-intl`; translation strings live in `i18n/locates/{en,ru}.json`, loaded through `i18n/request.ts`. Russian (`ru`) is the primary/default locale.
 - Storybook stories are colocated with components (`*.stories.tsx`), both under `src/**` and route-local under `app/**`; Chromatic is wired for visual regression but only runs in CI when a PR carries the `chromatic` label.
 - Sentry (`@sentry/nextjs`) is wired via `next.config.ts` (`withSentryConfig`) and `sentry.server.config.ts`/`sentry.edge.config.ts`/`instrumentation*.ts`.
 

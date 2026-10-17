@@ -20,8 +20,7 @@ This project uses **Bun** (not npm/node) as the package manager and runtime. Run
 
 ```bash
 bun install                 # install all workspaces
-bun run dev                 # api dev server with watch mode
-bun run dev:web             # web (Next.js) dev server on :3000
+bun run dev                 # dev targets of all projects (api watch mode, web on :3000)
 bun run test                # nx run-many -t test (not cached: env files are not part of the cache key)
 bun run lint                # nx run-many -t lint
 bun run lint:fix            # eslint --fix across the repo (root config + apps/web's own config)
