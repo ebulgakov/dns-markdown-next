@@ -31,6 +31,7 @@ jobs:
           NEXT_PUBLIC_CLERK_SIGN_IN_FALLBACK_REDIRECT_URL: ${{ vars.NEXT_PUBLIC_CLERK_SIGN_IN_FALLBACK_REDIRECT_URL }}
           NEXT_PUBLIC_CLERK_SIGN_UP_FALLBACK_REDIRECT_URL: ${{ vars.NEXT_PUBLIC_CLERK_SIGN_UP_FALLBACK_REDIRECT_URL }}
           CLERK_SECRET_KEY: ${{ secrets.CLERK_SECRET_KEY }}
+          WEBHOOK_SECRET_KEY: ${{ secrets.WEBHOOK_SECRET_KEY }}
           API_URL: ${{ secrets.API_URL }}
           API_SECRET_KEY: ${{ secrets.API_SECRET_KEY }}
       - name: Install Playwright Browsers
