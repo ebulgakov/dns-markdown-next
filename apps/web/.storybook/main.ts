@@ -27,7 +27,8 @@ const config: StorybookConfig = {
       config.resolve.alias = {
         ...config.resolve.alias,
         mongoose: path.resolve(__dirname, "mock-backend-module.ts"),
-        "@clerk/nextjs/server": path.resolve(__dirname, "mock-backend-module.ts")
+        "@clerk/nextjs/server": path.resolve(__dirname, "mock-backend-module.ts"),
+        "@/shared/config": path.resolve(__dirname, "mock-env-module.ts")
       };
     }
 
