@@ -36,7 +36,7 @@ Nx runs every target with cwd = the project root. Root scripts set `NX_LOAD_DOT_
 
 ## Env files
 
-`apps/web` is the exception: Next.js loads its own env files from `apps/web/` (`.env`, see `apps/web/.env-example`) and does not use `@dns-markdown/env`. Everything below applies to the API, parser and packages.
+`apps/web` included: Next.js itself only reads `apps/web/.env*`, so `apps/web/next.config.ts` calls `loadEnv()` from `@dns-markdown/env` before Next compiles anything — server code then reads the vars from `process.env` and `NEXT_PUBLIC_*` get inlined into the client bundle. Do not put env files into `apps/web/`.
 
 Env files are shared by all workspaces and live in the **monorepo root**: `.env.<NODE_ENV>` (`.env.development`, `.env.test`, `.env.production`) is loaded first, then the common `.env` (already set vars are never overridden). Loading is done by `loadEnv()` from `@dns-markdown/env`; each app validates only its own variables with its own zod schema. In production there are no env files — Vercel injects the API's vars (the parser is not deployed). A key both apps share (`API_SECRET_KEY`, `API_SERVICE_KEY`, `UPSTASH_VECTOR_*`) lives once in the shared file; per-app differences go into the app's `package.json` scripts (e.g. the parser's `CITY` / `WRITE_STRATEGY`). Keep `CITY` out of the shared `.env` — parser stages rely on it being set only by their scripts. All keys are listed in the root `.env.example`. Never read `process.env` directly outside an app's env module or `packages/env`.
 

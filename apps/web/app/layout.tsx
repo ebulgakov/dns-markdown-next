@@ -12,6 +12,7 @@ import "./globals.css";
 import { UserProvider } from "@/entities/user";
 import { getUser as getGenericUser } from "@/entities/user";
 import { getSessionInfo } from "@/entities/user";
+import { env } from "@/shared/config";
 import { cn } from "@/shared/lib";
 import { QueryProvider, ThemeProvider } from "@/shared/providers";
 import { Footer } from "@/widgets/footer";
@@ -91,7 +92,7 @@ export default async function RootLayout({
                     hiddenSections: genericUser?.hiddenSections || [],
                     favoriteSections: genericUser?.favoriteSections || [],
                     favorites: genericUser?.favorites || [],
-                    city: genericUser?.city || process.env.DEFAULT_CITY!
+                    city: genericUser?.city || env.DEFAULT_CITY
                   }}
                 >
                   <ThemeProvider attribute="class" defaultTheme="light" enableSystem>
@@ -110,7 +111,7 @@ export default async function RootLayout({
                 </UserProvider>
               </QueryProvider>
             </body>
-            {process.env.GA_ID && <GoogleAnalytics gaId={process.env.GA_ID} />}
+            {env.GA_ID && <GoogleAnalytics gaId={env.GA_ID} />}
           </html>
         </ClerkProvider>
       </NextIntlClientProvider>

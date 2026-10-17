@@ -2,6 +2,8 @@ import { revalidateTag } from "next/cache";
 import { headers } from "next/headers";
 import { type NextRequest, NextResponse } from "next/server";
 
+import { env } from "@/shared/config";
+
 // Only catalog/analysis tags are revalidated externally (see services/get.ts);
 // user-${userId} tags are busted internally by the app itself after mutations,
 // never by this webhook.
@@ -12,7 +14,7 @@ export async function POST(request: NextRequest) {
   const authHeader = headersList.get("authorization");
   const secret = authHeader?.split(" ")[1] || "";
 
-  if (secret !== process.env.WEBHOOK_SECRET_KEY) {
+  if (secret !== env.WEBHOOK_SECRET_KEY) {
     return NextResponse.json({ message: "Invalid secret" }, { status: 401 });
   }
 

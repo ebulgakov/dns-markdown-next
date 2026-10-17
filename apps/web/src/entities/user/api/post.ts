@@ -1,5 +1,7 @@
 "use server";
 
+import { env } from "@/shared/config";
+
 import {
   getGuest,
   addToHiddenSections as addToHiddenSectionsGuest,
@@ -139,5 +141,5 @@ export const getUser = async () => {
 
 export const getPriceListCity = async (): Promise<string> => {
   const user = await getUser();
-  return user?.city || process.env.DEFAULT_CITY!;
+  return user?.city || env.DEFAULT_CITY;
 };

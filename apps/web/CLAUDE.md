@@ -50,7 +50,11 @@ CI (`.github/workflows/` at the monorepo root) runs ESLint, `tsc --noEmit` ("TSL
 
 ## Environment
 
-Copy `apps/web/.env-example` to `apps/web/.env` and fill in values (Next.js reads env files from `apps/web/`, not the monorepo root). Key variables:
+Env files live in the monorepo root, shared with the other workspaces (see root `CLAUDE.md`; all keys are in the root `.env.example`). Next.js only reads `apps/web/.env*`, so `next.config.ts` loads the root files with `loadEnv()` from `@dns-markdown/env` (`.env.<NODE_ENV>`, then `.env`). The `dev`/`start` scripts set `NODE_ENV` explicitly so the right mode file is picked; `next build` sets `production` itself. The root files also carry the API's vars — keep web-only names from colliding with them (e.g. don't add `PORT` to a shared file).
+
+Server env vars are validated with zod in `src/shared/config/env.ts` (`import { env } from "@/shared/config"`, `server-only`): read them through `env`, never `process.env`, and add every new server var to its schema. A missing/invalid var throws on the first request in dev/start; during `next build` (`NEXT_PHASE=phase-production-build`) it only warns, because CI builds run without the full runtime env. `NEXT_PUBLIC_*` vars (inlined by Next at build time) and framework vars (`NODE_ENV`, `NEXT_RUNTIME`, `CI`) stay on `process.env`. Unit tests get placeholder values and a `server-only` stub from `test/setup.ts`.
+
+Key variables:
 
 - `API_URL` / `API_SECRET_KEY` — external backend that owns pricelist/product/analysis data (called via `src/shared/api/client.ts`'s `api` — `createApiClient` from `@dns-markdown/api-client`, sending `X-Internal-API-Secret`; server-side only).
 - `CLERK_SECRET_KEY` / `NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY` / `NEXT_PUBLIC_CLERK_*_URL` — Clerk auth.

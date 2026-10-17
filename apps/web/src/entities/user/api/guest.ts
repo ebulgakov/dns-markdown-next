@@ -4,6 +4,8 @@ import { Redis } from "@upstash/redis";
 import { cookies } from "next/headers";
 import { cache } from "react";
 
+import { env } from "@/shared/config";
+
 import type { Goods } from "@dns-markdown/types/pricelist";
 import type {
   CityStatusResponse,
@@ -16,8 +18,8 @@ import type { Favorite, User } from "@dns-markdown/types/user";
 const GUEST_TTL_SECONDS = 60 * 60 * 24 * 30; // 30 days
 
 const redis = new Redis({
-  url: process.env.UPSTASH_REDIS_REST_URL,
-  token: process.env.UPSTASH_REDIS_REST_TOKEN
+  url: env.UPSTASH_REDIS_REST_URL,
+  token: env.UPSTASH_REDIS_REST_TOKEN
 });
 
 // cache() dedupes calls within one request (layout.tsx + a page both call this),
@@ -27,7 +29,7 @@ export const getGuest = cache(async (): Promise<User> => {
     _id: "0",
     userId: "0",
     email: "guest@example.com",
-    city: process.env.DEFAULT_CITY!,
+    city: env.DEFAULT_CITY,
     favorites: [],
     notifications: { updates: { enabled: false } },
     hiddenSections: [],

@@ -1,5 +1,6 @@
 import path from "node:path";
 
+import { loadEnv } from "@dns-markdown/env";
 import { withSentryConfig } from "@sentry/nextjs";
 import createNextIntlPlugin from "next-intl/plugin";
 
@@ -7,6 +8,11 @@ import type { NextConfig } from "next";
 
 // Monorepo root: dependencies are hoisted into the root node_modules (bunfig.toml linker = "hoisted")
 const monorepoRoot = path.join(__dirname, "../..");
+
+// Env files live in the monorepo root (shared by all workspaces), but Next.js only reads
+// apps/web/.env*. Load them before Next compiles anything: server code reads them from
+// process.env at runtime and NEXT_PUBLIC_* get inlined into the client bundle.
+loadEnv();
 
 const nextConfig: NextConfig = {
   reactCompiler: true,
