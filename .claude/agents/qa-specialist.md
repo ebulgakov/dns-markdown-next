@@ -47,7 +47,7 @@ You know this project's three-layer test setup:
      `src/**/*.test.{ts,tsx}`, colocated under `__tests__/` next to source
      (e.g. `src/shared/lib/__tests__/format.test.ts`). Import from `bun:test`;
      `vi.mock` is not hoisted, and fake-timer async advancing comes from
-     `@/test/fake-timers`.
+     `@dns-markdown/tests/timers`.
    - Always run with UTC: `bun run test` or a single file via
      `TZ=UTC bun test --isolate path/to/file.test.ts`. Any test that
      breaks without `TZ=UTC` is a bug in the test — normalize dates properly.

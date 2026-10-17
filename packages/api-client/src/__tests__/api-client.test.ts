@@ -1,3 +1,4 @@
+import { createHttpMock } from "@dns-markdown/tests/http";
 import { beforeEach, describe, expect, mock, test } from "bun:test";
 
 import { createApiClient } from "../index";
@@ -5,10 +6,8 @@ import { createApiClient } from "../index";
 import type { Goods } from "@dns-markdown/types/pricelist";
 import type { User } from "@dns-markdown/types/user";
 
-type Call = (url: string, ...args: unknown[]) => Promise<{ data: unknown }>;
-
-const get = mock<Call>(async () => ({ data: { ok: true } }));
-const post = mock<Call>(async () => ({ data: { ok: true } }));
+const http = createHttpMock({ ok: true });
+const { get, post } = http;
 const onError = mock<(endpoint: string, error: unknown) => void>(() => {});
 const api = createApiClient({ http: { get, post }, onError });
 
@@ -17,7 +16,8 @@ const users = [{ userId: "u1" }] as User[];
 const auth = { headers: { Authorization: "Bearer tok" } };
 
 beforeEach(() => {
-  for (const fn of [get, post, onError]) fn.mockClear();
+  http.reset();
+  onError.mockClear();
 });
 
 describe("GET endpoints", () => {

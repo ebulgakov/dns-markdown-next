@@ -1,12 +1,5 @@
-import {
-  apiGet,
-  env,
-  makeAnalysisData,
-  makePriceList,
-  postBody,
-  postedEndpoints,
-  resetMocks
-} from "@src/__tests__/mocks";
+import { makeAnalysisData, makePriceList } from "@dns-markdown/tests/fixtures";
+import { apiGet, env, postBody, postedEndpoints, resetMocks } from "@src/__tests__/setup";
 import { beforeEach, describe, expect, test } from "bun:test";
 
 import { addAnalysisDiff } from "../add-analysis-diff";

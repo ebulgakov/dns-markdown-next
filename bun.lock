@@ -49,6 +49,9 @@
         "swagger-ui-express": "^5.0.1",
         "zod": "^4.3.6",
       },
+      "devDependencies": {
+        "@dns-markdown/tests": "workspace:*",
+      },
     },
     "apps/parser": {
       "name": "@dns-markdown/parser",
@@ -63,6 +66,9 @@
         "ora": "^9.3.0",
         "resend": "^6.9.1",
         "zod": "^4.3.6",
+      },
+      "devDependencies": {
+        "@dns-markdown/tests": "workspace:*",
       },
     },
     "apps/web": {
@@ -119,7 +125,7 @@
       "devDependencies": {
         "@chromatic-com/storybook": "^4.1.3",
         "@clerk/testing": "^1.13.28",
-        "@happy-dom/global-registrator": "^21.0.3",
+        "@dns-markdown/tests": "workspace:*",
         "@playwright/test": "^1.61.1",
         "@storybook/addon-a11y": "^10.1.11",
         "@storybook/addon-docs": "^10.1.11",
@@ -160,11 +166,21 @@
         "@dns-markdown/types": "workspace:*",
         "axios": "^1.13.4",
       },
+      "devDependencies": {
+        "@dns-markdown/tests": "workspace:*",
+      },
     },
     "packages/env": {
       "name": "@dns-markdown/env",
       "dependencies": {
         "dotenv": "^17.2.3",
+      },
+    },
+    "packages/tests": {
+      "name": "@dns-markdown/tests",
+      "dependencies": {
+        "@dns-markdown/types": "workspace:*",
+        "@happy-dom/global-registrator": "^21.0.3",
       },
     },
     "packages/types": {
@@ -256,6 +272,8 @@
     "@dns-markdown/env": ["@dns-markdown/env@workspace:packages/env"],
 
     "@dns-markdown/parser": ["@dns-markdown/parser@workspace:apps/parser"],
+
+    "@dns-markdown/tests": ["@dns-markdown/tests@workspace:packages/tests"],
 
     "@dns-markdown/types": ["@dns-markdown/types@workspace:packages/types"],
 

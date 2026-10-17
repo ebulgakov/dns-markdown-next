@@ -44,5 +44,8 @@
     "start": "node dist/index.js",
     "lint": "eslint",
     "lint:fix": "eslint --fix"
+  },
+  "devDependencies": {
+    "@dns-markdown/tests": "workspace:*"
   }
 }

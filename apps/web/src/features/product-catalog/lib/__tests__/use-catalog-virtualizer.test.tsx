@@ -1,7 +1,6 @@
+import { advanceTimersByTimeAsync } from "@dns-markdown/tests/timers";
 import { renderHook } from "@testing-library/react";
 import { afterEach, beforeEach, describe, expect, it, vi } from "bun:test";
-
-import { advanceTimersByTimeAsync } from "@/test/fake-timers";
 
 import { useCatalogVirtualizer } from "../use-catalog-virtualizer";
 

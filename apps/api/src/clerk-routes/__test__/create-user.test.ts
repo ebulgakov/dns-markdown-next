@@ -1,8 +1,8 @@
+import { createExpressMocks } from "@dns-markdown/tests/express";
 import { expect, test, describe, mock, beforeEach } from "bun:test";
 
 import type { WebhookEvent } from "@clerk/backend/webhooks";
-import type { Mock } from "bun:test";
-import type { NextFunction, Request, Response } from "express";
+import type { Request } from "express";
 
 // Mock dependencies
 const save = mock(async () => {});
@@ -30,34 +30,20 @@ mock.module("@src/env", () => ({
 // Dynamic import AFTER mocks are set up
 const { default: createUserWebhookHandler } = await import("../create-user");
 
+const { req, res, next, json, send, status, reset } = createExpressMocks();
+const headerMock = mock(() => undefined as string | undefined);
+
 describe("createUserWebhookHandler", () => {
-  let req: Partial<Request>;
-  let res: Partial<Response>;
-  const next: NextFunction = mock(() => {});
-  const json = mock(() => res as Response);
-  const send = mock(() => res as Response);
-  const status = mock(() => res as Response);
-  const headerMock = mock(() => undefined as string | undefined);
-
   beforeEach(() => {
-    req = {
-      header: headerMock as unknown as Request["header"],
-      body: {}
-    };
-    res = { json, send, status };
-
+    reset({ header: headerMock as unknown as Request["header"] });
     headerMock.mockClear();
-    (next as unknown as Mock<NextFunction>).mockClear();
-    json.mockClear();
-    send.mockClear();
-    status.mockClear();
     save.mockClear();
     User.mockClear();
     verifyMock.mockClear();
   });
 
   test("should return 400 if svix headers are missing", async () => {
-    await createUserWebhookHandler(req as Request, res as Response, next);
+    await createUserWebhookHandler(req, res, next);
     expect(status).toHaveBeenCalledWith(400);
     expect(send).toHaveBeenCalledWith("Error occured -- no svix headers");
   });
@@ -73,7 +59,7 @@ describe("createUserWebhookHandler", () => {
       throw error;
     });
 
-    await createUserWebhookHandler(req as Request, res as Response, next);
+    await createUserWebhookHandler(req, res, next);
 
     expect(status).toHaveBeenCalledWith(400);
     expect(json).toHaveBeenCalledWith({
@@ -93,7 +79,7 @@ describe("createUserWebhookHandler", () => {
 
     req.body = event;
 
-    await createUserWebhookHandler(req as Request, res as Response, next);
+    await createUserWebhookHandler(req, res, next);
 
     expect(User).not.toHaveBeenCalled();
     expect(save).not.toHaveBeenCalled();
@@ -120,7 +106,7 @@ describe("createUserWebhookHandler", () => {
 
     req.body = event;
 
-    await createUserWebhookHandler(req as Request, res as Response, next);
+    await createUserWebhookHandler(req, res, next);
 
     expect(User).toHaveBeenCalledWith({
       userId: "user_123",
@@ -153,7 +139,7 @@ describe("createUserWebhookHandler", () => {
 
     req.body = event;
 
-    await createUserWebhookHandler(req as Request, res as Response, next);
+    await createUserWebhookHandler(req, res, next);
 
     expect(next).toHaveBeenCalledWith(dbError);
   });

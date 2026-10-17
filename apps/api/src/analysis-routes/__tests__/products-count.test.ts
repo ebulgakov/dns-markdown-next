@@ -1,3 +1,6 @@
+import { createExpressMocks, mockQuery } from "@dns-markdown/tests/express";
+import { makeGoods, makePriceList } from "@dns-markdown/tests/fixtures";
+import { cacheAdd, cacheGet, resetCache } from "@src/__tests__/setup";
 import { expect, test, describe, mock, beforeEach } from "bun:test";
 
 import productsCountHandler from "../products-count";
@@ -6,51 +9,23 @@ import type {
   PriceList as PriceListType,
   PriceListsArchiveCount
 } from "@dns-markdown/types/pricelist";
-import type { Mock } from "bun:test";
-import type { NextFunction, Request, Response } from "express";
 
-// Mock dependencies
-const cacheGet = mock(async (): Promise<PriceListsArchiveCount[] | null> => null);
-const cacheAdd = mock(async () => {});
-const exec = mock(async (): Promise<PriceListType[] | null> => null);
-const lean = mock(() => ({ exec }));
-const find = mock(() => ({ lean }));
+const findQuery = mockQuery<PriceListType[] | null>(null);
+const { query: find, lean, exec } = findQuery;
 
-const Pricelist = { find };
+mock.module("@src/db/models/pricelist", () => ({ Pricelist: { find } }));
 
-mock.module("@src/cache", () => ({
-  cacheGet,
-  cacheAdd
-}));
-
-mock.module("@src/db/models/pricelist", () => ({
-  Pricelist
-}));
+const { req, res, next, json, status, reset } = createExpressMocks();
 
 describe("productsCountHandler", () => {
-  let req: Partial<Request>;
-  let res: Partial<Response>;
-  const next: NextFunction = mock(() => {});
-  const json = mock(() => res as Response);
-  const send = mock(() => res as Response);
-  const status = mock(() => res as Response);
-
   beforeEach(() => {
-    req = { query: {} };
-    res = { json, send, status };
-    cacheGet.mockReset();
-    cacheAdd.mockReset();
-    find.mockClear();
-    lean.mockClear();
-    exec.mockClear();
-    (next as unknown as Mock<NextFunction>).mockClear();
-    json.mockClear();
-    send.mockClear();
-    status.mockClear();
+    reset();
+    resetCache();
+    findQuery.reset();
   });
 
   test("should return 400 if city is not provided", async () => {
-    await productsCountHandler(req as Request, res as Response, next);
+    await productsCountHandler(req, res, next);
     expect(status).toHaveBeenCalledWith(400);
     expect(json).toHaveBeenCalledWith({ errors: expect.any(String) });
   });
@@ -60,7 +35,7 @@ describe("productsCountHandler", () => {
     const mockData: PriceListsArchiveCount[] = [{ date: `${new Date()}`, count: 100 }];
     cacheGet.mockResolvedValueOnce(mockData);
 
-    await productsCountHandler(req as Request, res as Response, next);
+    await productsCountHandler(req, res, next);
 
     expect(cacheGet).toHaveBeenCalledWith("daily:analysis:products-count:TestCity");
     expect(json).toHaveBeenCalledWith(mockData);
@@ -72,55 +47,19 @@ describe("productsCountHandler", () => {
     const date1 = new Date("2023-01-01T00:00:00.000Z");
     const date2 = new Date("2023-01-02T00:00:00.000Z");
 
-    const mockPriceLists: PriceListType[] = [
-      {
+    const mockPriceLists = [
+      makePriceList({
         _id: "2",
         city: "TestCity",
         createdAt: `${date2}`,
-        positions: [
-          {
-            items: [1, 2, 3].map(() => ({
-              _id: "",
-              title: "",
-              link: "",
-              description: "",
-              reasons: [],
-              priceOld: "",
-              price: "",
-              profit: "",
-              code: "",
-              image: "",
-              available: ""
-            })),
-            _id: "",
-            title: ""
-          }
-        ]
-      },
-      {
+        positions: [{ _id: "", title: "", items: [1, 2, 3].map(() => makeGoods()) }]
+      }),
+      makePriceList({
         _id: "1",
         city: "TestCity",
         createdAt: `${date1}`,
-        positions: [
-          {
-            items: [1, 2, 3, 4].map(() => ({
-              _id: "",
-              title: "",
-              link: "",
-              description: "",
-              reasons: [],
-              priceOld: "",
-              price: "",
-              profit: "",
-              code: "",
-              image: "",
-              available: ""
-            })),
-            _id: "",
-            title: ""
-          }
-        ]
-      }
+        positions: [{ _id: "", title: "", items: [1, 2, 3, 4].map(() => makeGoods()) }]
+      })
     ];
     exec.mockResolvedValueOnce(mockPriceLists);
 
@@ -135,7 +74,7 @@ describe("productsCountHandler", () => {
       }
     ];
 
-    await productsCountHandler(req as Request, res as Response, next);
+    await productsCountHandler(req, res, next);
 
     expect(find).toHaveBeenCalledWith(
       { city: "TestCity" },
@@ -158,7 +97,7 @@ describe("productsCountHandler", () => {
     req.query = { city: "TestCity" };
     exec.mockResolvedValueOnce([]);
 
-    await productsCountHandler(req as Request, res as Response, next);
+    await productsCountHandler(req, res, next);
 
     expect(json).toHaveBeenCalledWith([]);
     expect(cacheAdd).toHaveBeenCalledWith("daily:analysis:products-count:TestCity", [], {
@@ -171,7 +110,7 @@ describe("productsCountHandler", () => {
     const error = new Error("DB error");
     exec.mockRejectedValueOnce(error);
 
-    await productsCountHandler(req as Request, res as Response, next);
+    await productsCountHandler(req, res, next);
 
     expect(next).toHaveBeenCalledWith(error);
   });

@@ -15,5 +15,8 @@
     "lint:fix": "eslint --fix",
     "type-check": "tsc --noEmit",
     "test": "bun test"
+  },
+  "devDependencies": {
+    "@dns-markdown/tests": "workspace:*"
   }
 }

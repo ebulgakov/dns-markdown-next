@@ -1,57 +1,37 @@
+import { createExpressMocks } from "@dns-markdown/tests/express";
+import { cacheAdd, cacheGet, resetCache } from "@src/__tests__/setup";
 import { expect, test, describe, mock, beforeEach } from "bun:test";
 
 import totalUniqProductsCountHandler from "../total-uniq-products-count";
 
-import type { Mock } from "bun:test";
-import type { NextFunction, Request, Response } from "express";
-
 // Mock dependencies
-const cacheGet = mock(async () => null as unknown);
-const cacheAdd = mock(async () => {});
 const aggregate = mock(async () => [] as unknown);
 
-const AnalysisData = { aggregate };
+mock.module("@src/db/models/analysis-data", () => ({ AnalysisData: { aggregate } }));
 
-mock.module("@src/cache", () => ({
-  cacheGet,
-  cacheAdd
-}));
-
-mock.module("@src/db/models/analysis-data", () => ({
-  AnalysisData
-}));
+const { req, res, next, json, send, status, reset } = createExpressMocks();
 
 describe("totalUniqProductsCountHandler", () => {
-  let req: Partial<Request>;
-  let res: Partial<Response>;
-  const next = mock(() => {}) as unknown as NextFunction;
-  const json = mock(() => res as Response);
-  const send = mock(() => res as Response);
-  const status = mock(() => res as Response);
-
   beforeEach(() => {
-    req = { query: {} };
-    res = { json, send, status };
-    cacheGet.mockReset();
-    cacheAdd.mockReset();
+    reset();
+    resetCache();
     aggregate.mockClear();
-    (next as unknown as Mock<NextFunction>).mockClear();
   });
 
   test("should return 400 if city is not provided", async () => {
-    await totalUniqProductsCountHandler(req as Request, res as Response, next);
-    expect(res.status).toHaveBeenCalledWith(400);
-    expect(res.json).toHaveBeenCalledWith({ errors: expect.any(String) });
+    await totalUniqProductsCountHandler(req, res, next);
+    expect(status).toHaveBeenCalledWith(400);
+    expect(json).toHaveBeenCalledWith({ errors: expect.any(String) });
   });
 
   test("should return cached data if it exists", async () => {
     req.query = { city: "TestCity" };
     cacheGet.mockResolvedValueOnce(123);
 
-    await totalUniqProductsCountHandler(req as Request, res as Response, next);
+    await totalUniqProductsCountHandler(req, res, next);
 
     expect(cacheGet).toHaveBeenCalledWith("daily:analysis:uniq-count:TestCity");
-    expect(res.send).toHaveBeenCalledWith(123);
+    expect(send).toHaveBeenCalledWith(123);
     expect(aggregate).not.toHaveBeenCalled();
   });
 
@@ -60,7 +40,7 @@ describe("totalUniqProductsCountHandler", () => {
     const mockData = [{ uniqueCount: 2 }];
     aggregate.mockResolvedValueOnce(mockData);
 
-    await totalUniqProductsCountHandler(req as Request, res as Response, next);
+    await totalUniqProductsCountHandler(req, res, next);
 
     expect(aggregate).toHaveBeenCalledWith([
       { $match: { city: "TestCityVal" } },
@@ -72,16 +52,16 @@ describe("totalUniqProductsCountHandler", () => {
       2,
       expect.any(Object)
     );
-    expect(res.send).toHaveBeenCalledWith(2);
+    expect(send).toHaveBeenCalledWith(2);
   });
 
   test("should return 0 if db returns an empty array", async () => {
     req.query = { city: "TestCity" };
     aggregate.mockResolvedValueOnce([]);
 
-    await totalUniqProductsCountHandler(req as Request, res as Response, next);
+    await totalUniqProductsCountHandler(req, res, next);
 
-    expect(res.send).toHaveBeenCalledWith(0);
+    expect(send).toHaveBeenCalledWith(0);
     expect(cacheAdd).toHaveBeenCalledWith("daily:analysis:uniq-count:TestCity", 0, {
       ex: 60 * 60 * 24
     });
@@ -92,7 +72,7 @@ describe("totalUniqProductsCountHandler", () => {
     const error = new Error("DB error");
     aggregate.mockRejectedValueOnce(error);
 
-    await totalUniqProductsCountHandler(req as Request, res as Response, next);
+    await totalUniqProductsCountHandler(req, res, next);
 
     expect(next).toHaveBeenCalledWith(error);
   });

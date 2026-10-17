@@ -1,12 +1,10 @@
+import { createExpressMocks } from "@dns-markdown/tests/express";
+import { cacheDelete, resetCache } from "@src/__tests__/setup";
 import { expect, test, describe, mock, beforeEach } from "bun:test";
 
 import deleteOldPriceListsHandler from "../delete-old-price-lists";
 
-import type { Mock } from "bun:test";
-import type { NextFunction, Request, Response } from "express";
-
 // Mock dependencies
-const cacheDelete = mock(async () => {});
 const findExec = mock(async (): Promise<{ _id: string }[]> => []);
 const find = mock(() => ({
   lean: () => ({ exec: findExec })
@@ -14,36 +12,24 @@ const find = mock(() => ({
 const deleteManyExec = mock(async () => ({ deletedCount: 0 }));
 const deleteMany = mock(() => ({ exec: deleteManyExec }));
 
-mock.module("@src/cache", () => ({
-  cacheDelete
-}));
-
 mock.module("@src/db/models/pricelist", () => ({
   Pricelist: { find, deleteMany }
 }));
 
-describe("deleteOldPriceListsHandler", () => {
-  let req: Partial<Request>;
-  let res: Partial<Response>;
-  const next: NextFunction = mock(() => {});
-  const json = mock(() => res as Response);
-  const status = mock(() => res as Response);
+const { req, res, next, json, status, reset } = createExpressMocks();
 
+describe("deleteOldPriceListsHandler", () => {
   beforeEach(() => {
-    req = { body: {} };
-    res = { json, status };
-    cacheDelete.mockReset();
+    reset();
+    resetCache();
     findExec.mockReset();
     find.mockClear();
     deleteManyExec.mockReset();
     deleteMany.mockClear();
-    (next as unknown as Mock<NextFunction>).mockClear();
-    json.mockClear();
-    status.mockClear();
   });
 
   test("should return 400 if city is not provided", async () => {
-    await deleteOldPriceListsHandler(req as Request, res as Response, next);
+    await deleteOldPriceListsHandler(req, res, next);
 
     expect(status).toHaveBeenCalledWith(400);
     expect(json).toHaveBeenCalledWith({ errors: expect.any(String) });
@@ -54,7 +40,7 @@ describe("deleteOldPriceListsHandler", () => {
     req.body = { city: "TestCity" };
     findExec.mockResolvedValueOnce([]);
 
-    await deleteOldPriceListsHandler(req as Request, res as Response, next);
+    await deleteOldPriceListsHandler(req, res, next);
 
     expect(find).toHaveBeenCalledWith(
       { city: "TestCity" },
@@ -71,7 +57,7 @@ describe("deleteOldPriceListsHandler", () => {
     findExec.mockResolvedValueOnce([{ _id: "id-1" }, { _id: "id-2" }]);
     deleteManyExec.mockResolvedValueOnce({ deletedCount: 2 });
 
-    await deleteOldPriceListsHandler(req as Request, res as Response, next);
+    await deleteOldPriceListsHandler(req, res, next);
 
     expect(deleteMany).toHaveBeenCalledWith({ _id: { $in: ["id-1", "id-2"] } });
     expect(cacheDelete).toHaveBeenCalledTimes(3);
@@ -87,7 +73,7 @@ describe("deleteOldPriceListsHandler", () => {
     deleteManyExec.mockResolvedValueOnce({ deletedCount: 1 });
     cacheDelete.mockRejectedValue(new Error("Redis error"));
 
-    await deleteOldPriceListsHandler(req as Request, res as Response, next);
+    await deleteOldPriceListsHandler(req, res, next);
 
     expect(json).toHaveBeenCalledWith({ deletedCount: 1 });
     expect(next).not.toHaveBeenCalled();
@@ -99,7 +85,7 @@ describe("deleteOldPriceListsHandler", () => {
     findExec.mockResolvedValueOnce([{ _id: "id-1" }]);
     deleteManyExec.mockRejectedValueOnce(error);
 
-    await deleteOldPriceListsHandler(req as Request, res as Response, next);
+    await deleteOldPriceListsHandler(req, res, next);
 
     expect(next).toHaveBeenCalledWith(error);
   });

@@ -1,53 +1,27 @@
+import { createExpressMocks, mockQuery } from "@dns-markdown/tests/express";
+import { cacheAdd, cacheGet, resetCache } from "@src/__tests__/setup";
 import { expect, test, describe, mock, beforeEach } from "bun:test";
 
 import reportsHandler from "../reports";
 
 import type { ReportsResponse } from "@dns-markdown/types/reports";
-import type { Mock } from "bun:test";
-import type { NextFunction, Request, Response } from "express";
 
-// Mock dependencies
-const cacheGet = mock(async (): Promise<ReportsResponse | null> => null);
-const cacheAdd = mock(async () => {});
-const exec = mock(async (): Promise<ReportsResponse | null> => null);
-const lean = mock(() => ({ exec }));
-const find = mock(() => ({ lean }));
+const findQuery = mockQuery<ReportsResponse | null>(null);
+const { query: find, lean, exec } = findQuery;
 
-const Reports = { find };
+mock.module("@src/db/models/reports", () => ({ Reports: { find } }));
 
-mock.module("@src/cache", () => ({
-  cacheGet,
-  cacheAdd
-}));
-
-mock.module("@src/db/models/reports", () => ({
-  Reports
-}));
+const { req, res, next, json, status, reset } = createExpressMocks();
 
 describe("reportsHandler", () => {
-  let req: Partial<Request>;
-  let res: Partial<Response>;
-  const next: NextFunction = mock(() => {});
-  const json = mock(() => res as Response);
-  const send = mock(() => res as Response);
-  const status = mock(() => res as Response);
-
   beforeEach(() => {
-    req = { query: {} };
-    res = { json, send, status };
-    cacheGet.mockReset();
-    cacheAdd.mockReset();
-    find.mockClear();
-    lean.mockClear();
-    exec.mockClear();
-    (next as unknown as Mock<NextFunction>).mockClear();
-    json.mockClear();
-    send.mockClear();
-    status.mockClear();
+    reset();
+    resetCache();
+    findQuery.reset();
   });
 
   test("should return 400 if city is not provided", async () => {
-    await reportsHandler(req as Request, res as Response, next);
+    await reportsHandler(req, res, next);
     expect(status).toHaveBeenCalledWith(400);
     expect(json).toHaveBeenCalledWith({ errors: expect.any(String) });
   });
@@ -57,7 +31,7 @@ describe("reportsHandler", () => {
     const mockReports: ReportsResponse = [];
     cacheGet.mockResolvedValueOnce(mockReports);
 
-    await reportsHandler(req as Request, res as Response, next);
+    await reportsHandler(req, res, next);
 
     expect(cacheGet).toHaveBeenCalledWith("daily:analysis:reports:TestCity");
     expect(json).toHaveBeenCalledWith(mockReports);
@@ -76,7 +50,7 @@ describe("reportsHandler", () => {
     ];
     exec.mockResolvedValueOnce(mockReports);
 
-    await reportsHandler(req as Request, res as Response, next);
+    await reportsHandler(req, res, next);
 
     expect(find).toHaveBeenCalledWith(
       { city: "TestCity" },
@@ -96,7 +70,7 @@ describe("reportsHandler", () => {
     const error = new Error("DB error");
     exec.mockRejectedValueOnce(error);
 
-    await reportsHandler(req as Request, res as Response, next);
+    await reportsHandler(req, res, next);
 
     expect(next).toHaveBeenCalledWith(error);
   });

@@ -1,3 +1,6 @@
+import { createExpressMocks, mockQuery } from "@dns-markdown/tests/express";
+import { makeAnalysisData, makeAnalysisDiff } from "@dns-markdown/tests/fixtures";
+import { cacheAdd, cacheGet, resetCache } from "@src/__tests__/setup";
 import { expect, test, describe, mock, beforeEach } from "bun:test";
 
 import allAnalysisDiffsHandler from "../all-diffs";
@@ -6,51 +9,23 @@ import type {
   AnalysisDiff as AnalysisDiffType,
   AnalysisDiffReport
 } from "@dns-markdown/types/analysis-diff";
-import type { Mock } from "bun:test";
-import type { NextFunction, Request, Response } from "express";
 
-// Mock dependencies
-const cacheGet = mock(async (): Promise<AnalysisDiffReport[] | null> => null);
-const cacheAdd = mock(async () => {});
-const exec = mock(async (): Promise<AnalysisDiffType[] | null> => null);
-const lean = mock(() => ({ exec }));
-const find = mock(() => ({ lean }));
+const findQuery = mockQuery<AnalysisDiffType[] | null>(null);
+const { query: find, lean, exec } = findQuery;
 
-const AnalysisDiff = { find };
+mock.module("@src/db/models/analysis-diff", () => ({ AnalysisDiff: { find } }));
 
-mock.module("@src/cache", () => ({
-  cacheGet,
-  cacheAdd
-}));
-
-mock.module("@src/db/models/analysis-diff", () => ({
-  AnalysisDiff
-}));
+const { req, res, next, json, status, reset } = createExpressMocks();
 
 describe("allAnalysisDiffsHandler", () => {
-  let req: Partial<Request>;
-  let res: Partial<Response>;
-  const next: NextFunction = mock(() => {});
-  const json = mock(() => res as Response);
-  const send = mock(() => res as Response);
-  const status = mock(() => res as Response);
-
   beforeEach(() => {
-    req = { query: {} };
-    res = { json, send, status };
-    cacheGet.mockReset();
-    cacheAdd.mockReset();
-    find.mockClear();
-    lean.mockClear();
-    exec.mockClear();
-    (next as unknown as Mock<NextFunction>).mockClear();
-    json.mockClear();
-    send.mockClear();
-    status.mockClear();
+    reset();
+    resetCache();
+    findQuery.reset();
   });
 
   test("should return 400 if city is not provided", async () => {
-    await allAnalysisDiffsHandler(req as Request, res as Response, next);
+    await allAnalysisDiffsHandler(req, res, next);
     expect(status).toHaveBeenCalledWith(400);
     expect(json).toHaveBeenCalledWith({ errors: expect.any(String) });
   });
@@ -69,7 +44,7 @@ describe("allAnalysisDiffsHandler", () => {
     ];
     cacheGet.mockResolvedValueOnce(mockReport);
 
-    await allAnalysisDiffsHandler(req as Request, res as Response, next);
+    await allAnalysisDiffsHandler(req, res, next);
 
     expect(cacheGet).toHaveBeenCalledWith("daily:analysis:all:TestCity");
     expect(json).toHaveBeenCalledWith(mockReport);
@@ -79,67 +54,15 @@ describe("allAnalysisDiffsHandler", () => {
   test("should fetch from db, transform it, cache it, and return it", async () => {
     req.query = { city: "TestCity" };
     const date = `${new Date()}`;
-    const mockDiffs: AnalysisDiffType[] = [
-      {
+    const item = makeAnalysisData();
+    const mockDiffs = [
+      makeAnalysisDiff({
         city: "TestCity",
         dateAdded: date,
-        newItems: [1, 2].map(() => ({
-          _id: "",
-          title: "",
-          link: "",
-          description: "",
-          reasons: [],
-          priceOld: "",
-          price: "",
-          profit: "",
-          code: "",
-          image: "",
-          available: "",
-          city: "",
-          category: "",
-          dateAdded: ""
-        })),
-        removedItems: [1].map(() => ({
-          _id: "",
-          title: "",
-          link: "",
-          description: "",
-          reasons: [],
-          priceOld: "",
-          price: "",
-          profit: "",
-          code: "",
-          image: "",
-          available: "",
-          city: "",
-          category: "",
-          dateAdded: ""
-        })),
-        changesPrice: [1, 2, 3].map(() => ({
-          diff: {
-            priceOld: "",
-            price: "",
-            profit: ""
-          },
-          item: {
-            _id: "",
-            title: "",
-            link: "",
-            description: "",
-            reasons: [],
-            priceOld: "",
-            price: "",
-            profit: "",
-            code: "",
-            image: "",
-            available: "",
-            city: "",
-            category: "",
-            dateAdded: ""
-          }
-        })),
-        changesProfit: []
-      }
+        newItems: [item, item],
+        removedItems: [item],
+        changesPrice: [1, 2, 3].map(() => ({ diff: { priceOld: "", price: "", profit: "" }, item }))
+      })
     ];
     exec.mockResolvedValueOnce(mockDiffs);
 
@@ -154,7 +77,7 @@ describe("allAnalysisDiffsHandler", () => {
       }
     ];
 
-    await allAnalysisDiffsHandler(req as Request, res as Response, next);
+    await allAnalysisDiffsHandler(req, res, next);
 
     expect(find).toHaveBeenCalledWith(
       { city: "TestCity" },
@@ -173,7 +96,7 @@ describe("allAnalysisDiffsHandler", () => {
     req.query = { city: "TestCity" };
     exec.mockResolvedValueOnce([]);
 
-    await allAnalysisDiffsHandler(req as Request, res as Response, next);
+    await allAnalysisDiffsHandler(req, res, next);
 
     expect(json).toHaveBeenCalledWith([]);
     expect(cacheAdd).toHaveBeenCalledWith("daily:analysis:all:TestCity", [], {
@@ -186,7 +109,7 @@ describe("allAnalysisDiffsHandler", () => {
     const error = new Error("DB error");
     exec.mockRejectedValueOnce(error);
 
-    await allAnalysisDiffsHandler(req as Request, res as Response, next);
+    await allAnalysisDiffsHandler(req, res, next);
 
     expect(next).toHaveBeenCalledWith(error);
   });

@@ -1,3 +1,6 @@
+import { createExpressMocks, mockQuery } from "@dns-markdown/tests/express";
+import { makeAnalysisData } from "@dns-markdown/tests/fixtures";
+import { cacheAdd, cacheGet, resetCache } from "@src/__tests__/setup";
 import { expect, test, describe, mock, beforeEach } from "bun:test";
 
 import productByLinkHandler from "../product-by-link";
@@ -5,77 +8,33 @@ import productByLinkHandler from "../product-by-link";
 import type { AnalysisData as AnalysisDataType } from "@dns-markdown/types/analysis-data";
 import type { Goods } from "@dns-markdown/types/pricelist";
 import type { ProductPayload } from "@dns-markdown/types/product";
-import type { Mock } from "bun:test";
-import type { NextFunction, Request, Response } from "express";
 
 // Mock dependencies
-const cacheGet = mock(async (): Promise<ProductPayload | null> => null);
-const cacheAdd = mock(async () => {});
-const exec = mock(async (): Promise<AnalysisDataType[]> => []);
-const lean = mock(() => ({ exec }));
-const sort = mock(() => ({ lean }));
-const find = mock(() => ({ sort }));
+const findQuery = mockQuery<AnalysisDataType[]>([]);
+const { query: find, sort, exec } = findQuery;
 const getLastPriceListFlat = mock(async (): Promise<Goods[]> => []);
 
-const AnalysisData = { find };
-
-mock.module("@src/cache", () => ({
-  cacheGet,
-  cacheAdd
-}));
-
-mock.module("@src/db/models/analysis-data", () => ({
-  AnalysisData
-}));
+mock.module("@src/db/models/analysis-data", () => ({ AnalysisData: { find } }));
 
 mock.module("@src/pricelist-routes/helpers/get-last-price-list", () => ({
   getLastPriceListFlat
 }));
 
-const makeEntry = (overrides: Partial<AnalysisDataType> = {}): AnalysisDataType => ({
-  _id: "id-1",
-  title: "Product",
-  link: "https://example.com/product",
-  description: "",
-  reasons: [],
-  priceOld: "1000",
-  price: "800",
-  profit: "200",
-  code: "code-1",
-  image: "",
-  available: "1",
-  city: "TestCity",
-  category: "Category",
-  dateAdded: "2024-01-01T00:00:00.000Z",
-  ...overrides
-});
+const makeEntry = (overrides: Partial<AnalysisDataType> = {}) =>
+  makeAnalysisData({ link: "https://example.com/product", city: "TestCity", ...overrides });
+
+const { req, res, next, json, send, status, reset } = createExpressMocks();
 
 describe("productByLinkHandler", () => {
-  let req: Partial<Request>;
-  let res: Partial<Response>;
-  const next: NextFunction = mock(() => {});
-  const json = mock(() => res as Response);
-  const send = mock(() => res as Response);
-  const status = mock(() => res as Response);
-
   beforeEach(() => {
-    req = { query: {} };
-    res = { json, send, status };
-    cacheGet.mockReset();
-    cacheAdd.mockReset();
+    reset();
+    resetCache();
+    findQuery.reset();
     getLastPriceListFlat.mockReset();
-    find.mockClear();
-    sort.mockClear();
-    lean.mockClear();
-    exec.mockClear();
-    (next as unknown as Mock<NextFunction>).mockClear();
-    json.mockClear();
-    send.mockClear();
-    status.mockClear();
   });
 
   test("should return 400 if link is not provided", async () => {
-    await productByLinkHandler(req as Request, res as Response, next);
+    await productByLinkHandler(req, res, next);
     expect(status).toHaveBeenCalledWith(400);
     expect(json).toHaveBeenCalledWith({ errors: expect.any(String) });
   });
@@ -89,7 +48,7 @@ describe("productByLinkHandler", () => {
     } as ProductPayload;
     cacheGet.mockResolvedValueOnce(mockPayload);
 
-    await productByLinkHandler(req as Request, res as Response, next);
+    await productByLinkHandler(req, res, next);
 
     expect(cacheGet).toHaveBeenCalledWith("daily:products:link:https://example.com/product");
     expect(json).toHaveBeenCalledWith(mockPayload);
@@ -100,7 +59,7 @@ describe("productByLinkHandler", () => {
     req.query = { link: "https://example.com/product" };
     exec.mockResolvedValueOnce([]);
 
-    await productByLinkHandler(req as Request, res as Response, next);
+    await productByLinkHandler(req, res, next);
 
     expect(status).toHaveBeenCalledWith(404);
     expect(send).toHaveBeenCalledWith("Product not found");
@@ -111,7 +70,7 @@ describe("productByLinkHandler", () => {
     exec.mockResolvedValueOnce([makeEntry()]);
     getLastPriceListFlat.mockResolvedValueOnce([]);
 
-    await productByLinkHandler(req as Request, res as Response, next);
+    await productByLinkHandler(req, res, next);
 
     expect(find).toHaveBeenCalledWith({ link: "https://example.com/product" });
     expect(sort).toHaveBeenCalledWith({ dateAdded: 1 });
@@ -124,7 +83,7 @@ describe("productByLinkHandler", () => {
     exec.mockResolvedValueOnce([firstEntry, lastEntry]);
     getLastPriceListFlat.mockResolvedValueOnce([{ link: "https://example.com/product" } as Goods]);
 
-    await productByLinkHandler(req as Request, res as Response, next);
+    await productByLinkHandler(req, res, next);
 
     expect(getLastPriceListFlat).toHaveBeenCalledWith("TestCity");
 
@@ -165,7 +124,7 @@ describe("productByLinkHandler", () => {
     exec.mockResolvedValueOnce([makeEntry()]);
     getLastPriceListFlat.mockResolvedValueOnce([]);
 
-    await productByLinkHandler(req as Request, res as Response, next);
+    await productByLinkHandler(req, res, next);
 
     expect(json).toHaveBeenCalledWith(
       expect.objectContaining({ status: expect.objectContaining({ deleted: true }) })
@@ -177,7 +136,7 @@ describe("productByLinkHandler", () => {
     const error = new Error("DB error");
     exec.mockRejectedValueOnce(error);
 
-    await productByLinkHandler(req as Request, res as Response, next);
+    await productByLinkHandler(req, res, next);
 
     expect(next).toHaveBeenCalledWith(error);
   });
