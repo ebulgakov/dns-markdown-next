@@ -1,4 +1,4 @@
-import { dbConnect } from "@dns-markdown/db/database";
+import { dbConnect } from "@src/db/database";
 import { env } from "@src/env";
 
 import type { NextFunction, Request, Response } from "express";

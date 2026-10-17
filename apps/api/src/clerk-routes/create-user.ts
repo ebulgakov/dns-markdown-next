@@ -1,4 +1,4 @@
-import { User } from "@dns-markdown/db/models/user";
+import { User } from "@src/db/models/user";
 import { env } from "@src/env";
 import { Webhook } from "svix";
 

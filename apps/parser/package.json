@@ -25,7 +25,6 @@
   },
   "dependencies": {
     "@dns-markdown/api-client": "workspace:*",
-    "@dns-markdown/db": "workspace:*",
     "@dns-markdown/env": "workspace:*",
     "@dns-markdown/types": "workspace:*",
     "@upstash/vector": "^1.2.2",

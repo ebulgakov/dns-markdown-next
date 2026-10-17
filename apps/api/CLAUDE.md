@@ -39,14 +39,19 @@ Mounting order and auth layering happens in `src/server.ts`:
 - `/api/*` — double-gated: `clerkMiddleware()` (Clerk session) then `authPublicMiddleware` (requires `X-Internal-API-Secret` header matching `API_SECRET_KEY`). Mounted under this: `pricelist`, `products`, `analysis`, `llm`, `user`.
 - `/clerk/*` — Clerk webhooks (signature-verified via `svix`, not the two middlewares above). Note `/clerk/create-user` needs `express.raw()` body parsing (mounted _before_ the global `express.json()` — order matters) so the webhook signature can be verified against the raw body.
 - `/service/*` — internal/background-job routes, gated by `authServiceMiddleware` (`Authorization: Bearer <API_SERVICE_KEY>`), used for cross-service writes (inserting price lists, analysis data/diffs, notification fan-out, cache invalidation) rather than public reads.
-- `ensureDbConnectionMiddleware` (`src/middleware/db-connection-middleware.ts`) runs globally before routes and lazily opens the Mongoose connection via `dbConnect(env.DATABASE_URL)` from `@dns-markdown/db/database`.
+- `ensureDbConnectionMiddleware` (`src/middleware/db-connection-middleware.ts`) runs globally before routes and lazily opens the Mongoose connection via `dbConnect(env.DATABASE_URL)` from `@src/db/database`.
 - A final Express error-handling middleware returns `{ error: "Internal Server Error" }`, and additionally `details` when `isDev()`. Route handlers should catch and call `next(error)` rather than handling errors themselves.
 
 Full endpoint-by-endpoint request/response contracts are documented in `API.md` (in Russian) — check it before changing route behavior, and update it when adding/changing endpoints.
 
 ### Data layer
 
-Models, schemas and payload types come from `@dns-markdown/db` (see `packages/db/CLAUDE.md`), imported by subpath: `@dns-markdown/db/models/pricelist`, `import type ... from "@dns-markdown/types/pricelist"`. `src/types/*` keeps only API-local ambient declarations. Tests mock models by the package subpath, e.g. `mock.module("@dns-markdown/db/models/pricelist", ...)` — mocking any other specifier will not intercept the import.
+Mongoose code lives in `src/db/`: models in `src/db/models/*`, schemas in `src/db/schemas/*`, `dbConnect(uri)` / `dbDisconnect()` in `src/db/database.ts`. Import them via the alias (`@src/db/models/pricelist`); payload types come from `@dns-markdown/types/*` (`import type ... from "@dns-markdown/types/pricelist"`). `src/types/*` keeps only API-local ambient declarations. Tests mock models by the same alias specifier, e.g. `mock.module("@src/db/models/pricelist", ...)` — mocking any other specifier will not intercept the import.
+
+- **No env access inside `src/db`.** Callers pass config in (`dbConnect(env.DATABASE_URL)`), so the layer works the same under Vercel, local runs and tests.
+- Inside `src/db` use relative imports (`../schemas/goods`).
+- Each model is backed by a schema in its own file so schemas can be composed (the `pricelist`, `user` and `analysis-data` schemas embed the `goods` schema). Models use the `mongoose.models.X || mongoose.model(...)` guard to survive hot reloads and serverless re-imports.
+- `dbConnect` caches the connection on `global.mongoose` (declared in `src/db/database.ts`), so repeated invocations (e.g. serverless cold starts) reuse it.
 
 ### Cache
 

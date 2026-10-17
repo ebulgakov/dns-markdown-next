@@ -1,6 +1,6 @@
-import { Pricelist } from "@dns-markdown/db/models/pricelist";
 import { cityQuerySchema } from "@src/analysis-routes/helpers/schemas";
 import { cacheAdd, cacheGet } from "@src/cache";
+import { Pricelist } from "@src/db/models/pricelist";
 import { z } from "zod";
 
 import type {

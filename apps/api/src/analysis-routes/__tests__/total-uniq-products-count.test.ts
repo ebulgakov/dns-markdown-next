@@ -17,7 +17,7 @@ mock.module("@src/cache", () => ({
   cacheAdd
 }));
 
-mock.module("@dns-markdown/db/models/analysis-data", () => ({
+mock.module("@src/db/models/analysis-data", () => ({
   AnalysisData
 }));
 

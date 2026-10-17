@@ -1,4 +1,4 @@
-import { AnalysisDiff } from "@dns-markdown/db/models/analysis-diff";
+import { AnalysisDiff } from "@src/db/models/analysis-diff";
 import { insertAnalysisDiffBodySchema } from "@src/service-routes/helpers/schemas";
 import { z } from "zod";
 

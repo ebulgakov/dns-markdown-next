@@ -26,7 +26,6 @@
       "dependencies": {
         "@clerk/backend": "^2.29.7",
         "@clerk/express": "^1.7.67",
-        "@dns-markdown/db": "workspace:*",
         "@dns-markdown/env": "workspace:*",
         "@dns-markdown/types": "workspace:*",
         "@opentelemetry/api": "^1.9.0",
@@ -55,7 +54,6 @@
       "name": "@dns-markdown/parser",
       "dependencies": {
         "@dns-markdown/api-client": "workspace:*",
-        "@dns-markdown/db": "workspace:*",
         "@dns-markdown/env": "workspace:*",
         "@dns-markdown/types": "workspace:*",
         "@upstash/vector": "^1.2.2",
@@ -163,13 +161,6 @@
         "axios": "^1.13.4",
       },
     },
-    "packages/db": {
-      "name": "@dns-markdown/db",
-      "dependencies": {
-        "@dns-markdown/types": "workspace:*",
-        "mongoose": "^9.1.5",
-      },
-    },
     "packages/env": {
       "name": "@dns-markdown/env",
       "dependencies": {
@@ -261,8 +252,6 @@
     "@dns-markdown/api": ["@dns-markdown/api@workspace:apps/api"],
 
     "@dns-markdown/api-client": ["@dns-markdown/api-client@workspace:packages/api-client"],
-
-    "@dns-markdown/db": ["@dns-markdown/db@workspace:packages/db"],
 
     "@dns-markdown/env": ["@dns-markdown/env@workspace:packages/env"],
 

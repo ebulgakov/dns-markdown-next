@@ -1,4 +1,4 @@
-import { AnalysisData } from "@dns-markdown/db/models/analysis-data";
+import { AnalysisData } from "@src/db/models/analysis-data";
 import { citySchema } from "@src/service-routes/helpers/schemas";
 import { z } from "zod";
 

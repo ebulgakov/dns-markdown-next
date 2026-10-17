@@ -6,7 +6,6 @@
   "dependencies": {
     "@clerk/backend": "^2.29.7",
     "@clerk/express": "^1.7.67",
-    "@dns-markdown/db": "workspace:*",
     "@dns-markdown/env": "workspace:*",
     "@dns-markdown/types": "workspace:*",
     "@opentelemetry/api": "^1.9.0",

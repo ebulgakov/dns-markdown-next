@@ -1,6 +1,6 @@
-import { AnalysisDiff } from "@dns-markdown/db/models/analysis-diff";
 import { cityQuerySchema } from "@src/analysis-routes/helpers/schemas";
 import { cacheAdd, cacheGet } from "@src/cache";
+import { AnalysisDiff } from "@src/db/models/analysis-diff";
 import { z } from "zod";
 
 import type { AnalysisDiff as AnalysisDiffType } from "@dns-markdown/types/analysis-diff";

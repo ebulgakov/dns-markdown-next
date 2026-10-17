@@ -1,6 +1,6 @@
-import { AnalysisData } from "@dns-markdown/db/models/analysis-data";
 import { cityQuerySchema } from "@src/analysis-routes/helpers/schemas";
 import { cacheAdd, cacheGet } from "@src/cache";
+import { AnalysisData } from "@src/db/models/analysis-data";
 import { z } from "zod";
 
 import type { NextFunction, Request, Response } from "express";
