@@ -15,6 +15,7 @@ Typed HTTP client for every `apps/api` endpoint. Used by `apps/web` (server side
 ## Rules
 
 - **Must run in React Native**: no `process.env`, no Next.js, no Node-only APIs (`node:*`). Config is passed in by the caller, same as `packages/db`.
+- `package.json` keeps `main` alongside `exports`: Metro (Expo) may not resolve package `exports`, so `main` is the fallback entry. Keep both pointing at `./src/index.ts`.
 - Endpoint path, HTTP method and params mirror the routers in `apps/api/src/*-routes/index.ts` — check them, don't infer the method from a method name.
 - Call shape is relied upon by consumer tests: `http.get(path, { params })` and `http.post(path, body)`; only user calls pass a third config argument.
 - Adding an endpoint: add the method to the matching `src/endpoints/<group>.ts` and a case to `src/__tests__/api-client.test.ts`. Tests inject `{ http }` mocks; never use `mock.module` (a root `bun test` runs every workspace in one process).
