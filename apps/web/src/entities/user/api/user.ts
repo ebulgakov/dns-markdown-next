@@ -6,8 +6,7 @@ import { cache } from "react";
 
 import { api } from "@/shared/api";
 
-import type { Goods } from "@/entities/product";
-import type { User, UserNotifications } from "@/entities/user";
+import type { Goods } from "@dns-markdown/types/pricelist";
 import type {
   CityStatusResponse,
   FavoritesResponse,
@@ -15,14 +14,7 @@ import type {
   SectionsResponse,
   UserNotificationsResponse
 } from "@dns-markdown/types/responses";
-
-export type {
-  CityStatusResponse,
-  FavoritesResponse,
-  FavoritesStatusResponse,
-  SectionsResponse,
-  UserNotificationsResponse
-} from "@dns-markdown/types/responses";
+import type { User, UserNotifications } from "@dns-markdown/types/user";
 
 // Just for performance optimization. Avoid calling auth() multiple times in the same request.
 export const getSessionInfo = cache(async () => {

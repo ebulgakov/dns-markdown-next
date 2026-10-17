@@ -1,4 +1,4 @@
-import type { Favorite } from "../../model/favorite";
+import type { Favorite } from "@dns-markdown/types/user";
 
 export const mockFavorites: Favorite[] = [
   {

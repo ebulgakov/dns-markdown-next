@@ -14,7 +14,6 @@ export {
   getUser,
   getPriceListCity
 } from "./api/post";
-export type { SectionsResponse } from "./api/post";
 
 // getSessionInfo/getRealUser are the two documented direct-access exceptions
 // to the guest/user branching in ./api/post (see CLAUDE.md): a handful of
@@ -24,4 +23,3 @@ export type { SectionsResponse } from "./api/post";
 export { getSessionInfo, getUser as getRealUser } from "./api/user";
 
 export { UserProvider, UserContext } from "./model/user-context";
-export type { User, Favorite, FavoriteStatus, UserSections, UserNotifications } from "./model/user";

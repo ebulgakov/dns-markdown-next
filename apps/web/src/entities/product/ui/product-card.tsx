@@ -11,9 +11,9 @@ import { Button } from "@/shared/ui/button";
 
 import { ProductCardDiff } from "./product-card-diff";
 
-import type { FavoriteStatus } from "../model/favorite";
-import type { Goods as GoodsType } from "../model/pricelist";
-import type { Diff } from "@/types/analysis-diff";
+import type { Diff } from "@dns-markdown/types/analysis-diff";
+import type { Goods as GoodsType } from "@dns-markdown/types/pricelist";
+import type { FavoriteStatus } from "@dns-markdown/types/user";
 
 type PriceListGoodsProps = {
   item: GoodsType;

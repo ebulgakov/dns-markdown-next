@@ -6,8 +6,8 @@ import {
 } from "@/entities/product";
 import { getPriceListCity } from "@/entities/user";
 
-import type { Goods } from "@/entities/product";
 import type { CustomDate } from "@/types/common";
+import type { Goods } from "@dns-markdown/types/pricelist";
 
 export async function getOffersData() {
   let catalogDate: CustomDate | undefined;

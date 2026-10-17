@@ -1,4 +1,4 @@
-import type { Goods } from "@/entities/product";
+import type { Goods } from "@dns-markdown/types/pricelist";
 
 export type VisualizationGoods = Goods & {
   type: "goods";

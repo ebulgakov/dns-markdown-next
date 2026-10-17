@@ -6,7 +6,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/shared/ui/tabs";
 
 import styles from "./analytics-reports.module.css";
 
-import type { ReportsResponse } from "@/types/reports";
+import type { ReportsResponse } from "@dns-markdown/types/reports";
 
 type AnalyticsReportsProps = {
   reports: ReportsResponse;

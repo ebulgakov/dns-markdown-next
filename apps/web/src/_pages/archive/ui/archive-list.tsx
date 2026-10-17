@@ -4,7 +4,7 @@ import Link from "next/link";
 
 import { formatDate, sendGAEvent } from "@/shared/lib";
 
-import type { PriceListDate } from "@/entities/product";
+import type { PriceListDate } from "@dns-markdown/types/pricelist";
 
 type ArchiveListProps = {
   archiveCollection: PriceListDate[];

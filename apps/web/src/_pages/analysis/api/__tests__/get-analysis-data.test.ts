@@ -2,9 +2,9 @@ import { describe, it, expect, vi, afterEach } from "bun:test";
 
 import { getAnalysisData } from "../get-analysis-data";
 
-import type { PriceListsArchiveCount } from "@/entities/product";
-import type { AnalysisDiffReport } from "@/types/analysis-diff";
-import type { ReportsResponse } from "@/types/reports";
+import type { AnalysisDiffReport } from "@dns-markdown/types/analysis-diff";
+import type { PriceListsArchiveCount } from "@dns-markdown/types/pricelist";
+import type { ReportsResponse } from "@dns-markdown/types/reports";
 
 // bun:test does not hoist vi.mock, so the factories can close over these mocks.
 const mockedGetPriceListCity = vi.fn();

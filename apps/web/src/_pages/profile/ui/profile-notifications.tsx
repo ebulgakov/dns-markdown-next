@@ -8,7 +8,7 @@ import { CheckboxWithLabel } from "@/shared/ui/control-with-label";
 import { Input } from "@/shared/ui/input";
 import { Title } from "@/shared/ui/title";
 
-import type { UserNotifications } from "@/entities/user";
+import type { UserNotifications } from "@dns-markdown/types/user";
 
 type ProfileNotificationsProps = {
   notifications: UserNotifications;

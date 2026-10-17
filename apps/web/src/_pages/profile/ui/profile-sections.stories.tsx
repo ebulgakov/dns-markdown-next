@@ -1,6 +1,6 @@
 import { ProfileSections } from "./profile-sections";
 
-import type { UserNotifications, UserSections } from "@/entities/user";
+import type { UserNotifications, UserSections } from "@dns-markdown/types/user";
 import type { Meta, StoryObj } from "@storybook/react";
 
 const mockNotifications: UserNotifications = {

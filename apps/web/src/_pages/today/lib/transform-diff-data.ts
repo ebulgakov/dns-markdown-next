@@ -1,5 +1,7 @@
-import { PriceList } from "@/entities/product";
-import { AnalysisDiff, DiffsCollection as DiffsType } from "@/types/analysis-diff";
+import { DiffsCollection as DiffsType } from "@/types/analysis-diff";
+
+import type { AnalysisDiff } from "@dns-markdown/types/analysis-diff";
+import type { PriceList } from "@dns-markdown/types/pricelist";
 
 const transformDiffData = (diff: AnalysisDiff, city: string) => {
   const digestList: PriceList = {

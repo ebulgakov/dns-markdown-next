@@ -6,7 +6,7 @@ import {
   VisualizationSectionTitle
 } from "@/types/visualization";
 
-import type { PriceList } from "@/entities/product";
+import type { PriceList } from "@dns-markdown/types/pricelist";
 
 export const getFlatPriceList = (priceList: PriceList) => {
   return priceList.positions.flatMap(position => position.items);

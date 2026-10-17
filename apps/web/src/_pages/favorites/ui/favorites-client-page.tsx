@@ -4,10 +4,11 @@ import { startTransition, useOptimistic, useState } from "react";
 
 import { ProductCard } from "@/entities/product";
 import { postToggleFavoriteShownBought } from "@/entities/user";
-import { Favorite } from "@/entities/user";
 import { CheckboxWithLabel } from "@/shared/ui/control-with-label";
 import { ErrorAlert } from "@/shared/ui/error-alert";
 import { PageTitle } from "@/shared/ui/page-title";
+
+import type { Favorite } from "@dns-markdown/types/user";
 
 type FavoritesPageClientProps = {
   favorites: Favorite[];

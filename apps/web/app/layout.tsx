@@ -12,12 +12,12 @@ import "./globals.css";
 import { UserProvider } from "@/entities/user";
 import { getUser as getGenericUser } from "@/entities/user";
 import { getSessionInfo } from "@/entities/user";
-import { User } from "@/entities/user";
 import { cn } from "@/shared/lib";
 import { QueryProvider, ThemeProvider } from "@/shared/providers";
 import { Footer } from "@/widgets/footer";
 import { Navbar } from "@/widgets/navbar";
 
+import type { User } from "@dns-markdown/types/user";
 import type { Metadata } from "next";
 
 const robotoSans = Roboto({

@@ -25,8 +25,8 @@ import {
   getSessionInfo
 } from "./user";
 
-import type { UserNotifications } from "../model/user";
-import type { Goods } from "@/entities/product";
+import type { Goods } from "@dns-markdown/types/pricelist";
+import type { UserNotifications } from "@dns-markdown/types/user";
 
 export const postUpdateUserNotifications = async (notifications: UserNotifications) => {
   const { userId } = await getSessionInfo();
@@ -141,5 +141,3 @@ export const getPriceListCity = async (): Promise<string> => {
   const user = await getUser();
   return user?.city || process.env.DEFAULT_CITY!;
 };
-
-export type { SectionsResponse } from "./user";

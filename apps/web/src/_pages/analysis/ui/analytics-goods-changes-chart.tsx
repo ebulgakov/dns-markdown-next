@@ -4,9 +4,15 @@ import { Bar, BarChart, CartesianGrid, XAxis } from "recharts";
 
 import { formatDateShort } from "@/shared/lib";
 import { Card, CardContent } from "@/shared/ui/card";
-import { ChartContainer, ChartLegend, ChartLegendContent, ChartTooltip, ChartTooltipContent } from "@/shared/ui/chart";
+import {
+  ChartContainer,
+  ChartLegend,
+  ChartLegendContent,
+  ChartTooltip,
+  ChartTooltipContent
+} from "@/shared/ui/chart";
 
-import type { AnalysisDiffReport as AnalysisDiffReportType } from "@/types/analysis-diff";
+import type { AnalysisDiffReport as AnalysisDiffReportType } from "@dns-markdown/types/analysis-diff";
 
 type AnalyticsGoodsChartProps = {
   chartData: AnalysisDiffReportType[];

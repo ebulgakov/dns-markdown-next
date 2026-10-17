@@ -6,7 +6,7 @@ import { startTransition, useContext, useOptimistic, useState } from "react";
 import { UserContext } from "@/entities/user";
 import { sendGAEvent } from "@/shared/lib";
 
-import type { Goods as GoodsType } from "@/entities/product";
+import type { Goods as GoodsType } from "@dns-markdown/types/pricelist";
 
 type PriceListFavoriteToggleProps = {
   goods: GoodsType;

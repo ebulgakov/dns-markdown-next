@@ -6,9 +6,9 @@ import {
 } from "@/entities/product";
 import { getPriceListCity } from "@/entities/user";
 
-import type { PriceListsArchiveCount } from "@/entities/product";
-import type { AnalysisDiffReport as AnalysisDiffReportType } from "@/types/analysis-diff";
-import type { ReportsResponse } from "@/types/reports";
+import type { AnalysisDiffReport as AnalysisDiffReportType } from "@dns-markdown/types/analysis-diff";
+import type { PriceListsArchiveCount } from "@dns-markdown/types/pricelist";
+import type { ReportsResponse } from "@dns-markdown/types/reports";
 
 export async function getAnalysisData() {
   const city = await getPriceListCity();

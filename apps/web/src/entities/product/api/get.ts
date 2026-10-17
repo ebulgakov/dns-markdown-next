@@ -4,10 +4,15 @@ import { unstable_cache as cacheToken } from "next/cache";
 
 import { api } from "@/shared/api";
 
-import type { Goods, PriceList, PriceListDate, PriceListsArchiveCount } from "../model/pricelist";
-import type { ProductPayload } from "../model/product";
-import type { AnalysisDiff, AnalysisDiffReport } from "@/types/analysis-diff";
-import type { ReportsResponse } from "@/types/reports";
+import type { AnalysisDiff, AnalysisDiffReport } from "@dns-markdown/types/analysis-diff";
+import type {
+  Goods,
+  PriceList,
+  PriceListDate,
+  PriceListsArchiveCount
+} from "@dns-markdown/types/pricelist";
+import type { ProductPayload } from "@dns-markdown/types/product";
+import type { ReportsResponse } from "@dns-markdown/types/reports";
 import type { LLMResponse } from "@dns-markdown/types/responses";
 
 const getCachedPriceList = cacheToken(

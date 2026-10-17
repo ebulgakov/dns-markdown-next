@@ -12,7 +12,7 @@ import { Title } from "@/shared/ui/title";
 import { ProfileNotifications } from "./profile-notifications";
 import { ProfileUpdateSections } from "./profile-update-sections";
 
-import type { UserNotifications, UserSections } from "@/entities/user";
+import type { UserNotifications, UserSections } from "@dns-markdown/types/user";
 
 type ProfileSectionsProps = {
   notifications: UserNotifications;
