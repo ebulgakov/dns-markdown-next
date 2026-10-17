@@ -12,24 +12,41 @@ https://dns.ebulgakov.com/
 
 Это неофициальный сайт, связанный с компанией DNS. Он помогает просматривать уценённые товары, представленные на сайте DNS.
 
-Сейчас сервис показывает товары из Самары. Вы можете добавлять товары в избранное, чтобы отслеживать обновления, такие как изменения цен или наличие товара в магазинах.
+Сейчас сервис показывает товары из Самары и Москвы (город переключается в шапке сайта). Вы можете добавлять товары в избранное, чтобы отслеживать обновления, такие как изменения цен или наличие товара в магазинах.
 
 <img width="2574" height="2342" alt="image" src="https://github.com/user-attachments/assets/a6922841-1aa0-4801-9577-50f47bc80b34" />
 
 ## Воркспейсы
 
-| Путь                  | Пакет                      | Описание                                          | Документация                    |
-| --------------------- | -------------------------- | ------------------------------------------------- | ------------------------------- |
-| `apps/web`            | `@dns-markdown/web`        | Сайт на Next.js (App Router), деплоится на Vercel | [README](apps/web/README.md)    |
-| `apps/api`            | `@dns-markdown/api`        | Express API, деплоится на Vercel                  | [README](apps/api/README.md)    |
-| `apps/parser`         | `@dns-markdown/parser`     | Скрапер/ETL уценки DNS, отправляет данные в API   | [README](apps/parser/README.md) |
-| `packages/env`        | `@dns-markdown/env`        | Общая загрузка env-файлов и проверки `NODE_ENV`   |                                 |
-| `packages/types`      | `@dns-markdown/types`      | Общие типы payload и ответов API                  |                                 |
-| `packages/api-client` | `@dns-markdown/api-client` | Типизированный клиент ко всем эндпоинтам API      |                                 |
+| Путь                  | Пакет                      | Описание                                                                      | Документация                                                        |
+| --------------------- | -------------------------- | ----------------------------------------------------------------------------- | ------------------------------------------------------------------- |
+| `apps/web`            | `@dns-markdown/web`        | Сайт на Next.js (App Router), деплоится на Vercel                             | [README](apps/web/README.md), [CLAUDE.md](apps/web/CLAUDE.md)       |
+| `apps/api`            | `@dns-markdown/api`        | Express API (MongoDB/Mongoose), деплоится на Vercel                           | [README](apps/api/README.md), [CLAUDE.md](apps/api/CLAUDE.md)       |
+| `apps/parser`         | `@dns-markdown/parser`     | Скрапер/ETL уценки DNS, отправляет данные в API, запускается локально         | [README](apps/parser/README.md), [CLAUDE.md](apps/parser/CLAUDE.md) |
+| `packages/env`        | `@dns-markdown/env`        | Общая загрузка env-файлов и проверки `NODE_ENV`/платформы                     | [CLAUDE.md](packages/env/CLAUDE.md)                                 |
+| `packages/types`      | `@dns-markdown/types`      | Общие типы payload и ответов API                                              | [CLAUDE.md](packages/types/CLAUDE.md)                               |
+| `packages/api-client` | `@dns-markdown/api-client` | Типизированный axios-клиент ко всем эндпоинтам API                            | [CLAUDE.md](packages/api-client/CLAUDE.md)                          |
+| `packages/tests`      | `@dns-markdown/tests`      | Общие тестовые утилиты: фикстуры, HTTP/Express/Mongoose-дублёры, DOM, таймеры | [CLAUDE.md](packages/tests/CLAUDE.md)                               |
 
 ## Инструменты
 
 Воркспейсы [Bun](https://bun.sh) (`apps/*`, `packages/*`) с единым `bun.lock`, оркестрация через [Nx](https://nx.dev) в package-based режиме: таргеты Nx — это скрипты `package.json` каждого воркспейса, правила кеширования лежат в `nx.json`.
+
+- Bun — менеджер пакетов, рантайм и тест-раннер; версия закреплена в `packageManager` корневого `package.json`.
+- Node (нужен для `next`, `storybook`, `eslint`) — версия в [`.nvmrc`](.nvmrc).
+- Pre-commit хуки — husky + lint-staged.
+
+## Начало работы
+
+```bash
+git clone --recurse-submodules git@github.com:ebulgakov/dns-markdown-next.git
+# или в уже склонированном репозитории:
+git submodule update --init   # приватный сабмодуль со скриптами скрапера (нужен только парсеру)
+
+bun install
+cp .env.example .env          # заполнить нужные переменные
+bun run dev
+```
 
 ## Команды
 
@@ -37,7 +54,7 @@ https://dns.ebulgakov.com/
 
 ```bash
 bun install            # установить зависимости всех воркспейсов
-bun run dev            # dev-таргеты всех проектов (api, web на :3000)
+bun run dev            # dev-таргеты всех проектов (api в watch-режиме, web на :3000)
 bun run test           # тесты всех проектов
 bun run lint           # линт всех проектов
 bun run lint:fix       # линт с --fix
@@ -57,16 +74,21 @@ bunx nx graph                                                # граф прое
 
 ## Переменные окружения
 
-API, парсер и пакеты используют общие env-файлы в корне репозитория: сначала загружается `.env.<NODE_ENV>`, затем `.env` (см. `.env.example`). `apps/web` использует собственный `apps/web/.env` (см. `apps/web/.env-example`).
+Все воркспейсы, включая `apps/web`, используют общие env-файлы в корне репозитория: сначала загружается `.env.<NODE_ENV>` (`.env.development`, `.env.test`, `.env.production`), затем `.env`; уже выставленные переменные не перезаписываются. Все ключи перечислены в [`.env.example`](.env.example). Next.js сам читает только `apps/web/.env*`, поэтому `apps/web/next.config.ts` загружает корневые файлы через `loadEnv()` из `@dns-markdown/env` — не кладите env-файлы в `apps/web/`. В продакшене переменные задаёт Vercel.
+
+## CI
+
+GitHub Actions (`.github/workflows/`) на push/PR в `main`: ESLint, `tsc --noEmit`, тесты всех воркспейсов, актуальность `openapi.json` API, Playwright и dependency-cruiser для web. Chromatic запускается только для PR с меткой `chromatic`.
 
 ## Используемые технологии
 
-- Bun, Nx, TypeScript
-- Next.js 16, React, Tailwind CSS, shadcn/ui, next-intl
-- Express, Swagger
-- MongoDB, Redis (Upstash)
+- Bun, Nx, TypeScript, Zod
+- Next.js 16, React 19, Tailwind CSS, shadcn/ui, next-intl, TanStack Query, Zustand
+- Express 5, Swagger
+- MongoDB (Mongoose), Redis (Upstash)
 - Clerk Auth
 - Upstash Vector DB
 - OpenAI API
+- cheerio, Resend (парсер)
 - Storybook, Chromatic, Playwright, Bun test
-- Sentry
+- Sentry, OpenTelemetry
