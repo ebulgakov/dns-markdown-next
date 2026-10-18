@@ -2,7 +2,9 @@
 import { GlobalRegistrator } from "@happy-dom/global-registrator";
 import { jest, vi } from "bun:test";
 
-GlobalRegistrator.register();
+// A real origin (instead of about:blank) so relative requests like axios.get("/api/...") resolve
+// and MSW handlers with relative paths match them.
+GlobalRegistrator.register({ url: "http://localhost:3000" });
 
 // Bun bug: useRealTimers() leaves a `clock` property on setTimeout, which
 // Testing Library reads as "fake timers are active" and then calls

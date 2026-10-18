@@ -16,8 +16,12 @@ const config: StorybookConfig = {
     "@storybook/addon-vitest",
     "@storybook/addon-a11y",
     "@storybook/addon-themes",
-    "@storybook/addon-docs"
+    "@storybook/addon-docs",
+    "msw-storybook-addon"
   ],
+  // `public` is Next's own static dir; `.storybook/public` holds the MSW worker
+  // (mockServiceWorker.js) so it is not deployed with the app.
+  staticDirs: ["../public", "./public"],
   framework: "@storybook/nextjs-vite",
   async viteFinal(config) {
     const __filename = fileURLToPath(import.meta.url);
