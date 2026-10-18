@@ -2,6 +2,8 @@ import { dirname } from "node:path";
 import { fileURLToPath } from "node:url";
 import path from "path";
 
+import { mswWorkerPlugin } from "./msw-worker-plugin";
+
 import type { StorybookConfig } from "@storybook/nextjs-vite";
 
 const config: StorybookConfig = {
@@ -19,9 +21,6 @@ const config: StorybookConfig = {
     "@storybook/addon-docs",
     "msw-storybook-addon"
   ],
-  // `public` is Next's own static dir; `.storybook/public` holds the MSW worker
-  // (mockServiceWorker.js) so it is not deployed with the app.
-  staticDirs: ["../public", "./public"],
   framework: "@storybook/nextjs-vite",
   async viteFinal(config) {
     const __filename = fileURLToPath(import.meta.url);
@@ -35,6 +34,8 @@ const config: StorybookConfig = {
         "@/shared/config": path.resolve(__dirname, "mock-env-module.ts")
       };
     }
+
+    config.plugins = [...(config.plugins ?? []), mswWorkerPlugin()];
 
     return config;
   }
