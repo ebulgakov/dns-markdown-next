@@ -1,12 +1,16 @@
+import { loadEnv } from "@dns-markdown/env";
 import { defineConfig, devices } from "@playwright/test";
 
 /**
- * Read environment variables from file.
- * https://github.com/motdotla/dotenv
+ * E2E runs on the root `.env.test` (+ `.env`), loaded by `loadEnv` from @dns-markdown/env.
+ * Without this the runner gets no env files at all (`clerkSetup` only looks for `.env.local`/`.env`
+ * in apps/web) and `next start` falls back to `.env.production`. The workers and the web server
+ * inherit both NODE_ENV and the loaded vars. On CI there are no env files: vars come from the workflow.
+ * `.mts` on purpose: Playwright compiles a `.ts` config to CommonJS, which breaks `import.meta`
+ * in @dns-markdown/env.
  */
-// import dotenv from 'dotenv';
-// import path from 'path';
-// dotenv.config({ path: path.resolve(__dirname, '.env') });
+if (!process.env.NODE_ENV) Object.assign(process.env, { NODE_ENV: "test" });
+loadEnv();
 
 /**
  * See https://playwright.dev/docs/test-configuration.

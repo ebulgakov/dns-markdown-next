@@ -47,13 +47,13 @@ Unit tests are colocated under `__tests__/` in `src/`; `test/setup.ts` is preloa
 
 ## E2E tests
 
-Playwright tests live in `playwright/` (config in `playwright.config.ts`). They build and start the app and run against `http://localhost:3000`:
+Playwright tests live in `playwright/` (config in `playwright.config.mts`). They build and start the app and run against `http://localhost:3000`:
 
 ```bash
 npx playwright test --workers=1
 ```
 
-They require Clerk test credentials and Upstash Redis env vars (see `.github/workflows/playwright.yml` in the repo root).
+They require Clerk test credentials (incl. the test user's `E2E_CLERK_USER_USERNAME` / `E2E_CLERK_USER_PASSWORD`) and Upstash Redis env vars (see `.github/workflows/playwright.yml` in the repo root). Locally they come from the root `.env.test` (+ `.env`), loaded by `playwright.config.mts`; the started web server inherits them.
 
 Run the full suite with `--workers=1` (CI already forces one worker). Every signed-in test logs in the same Clerk test user (`playwright/helpers/auth-user.ts`), and the favorites tests mutate that user's favorites: in parallel these collide and the signed-in tests time out on `page.goto` / `waitForLoadState("networkidle")`. A single spec file usually passes with the default worker count, the whole suite does not.
 

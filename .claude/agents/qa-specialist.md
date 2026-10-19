@@ -63,7 +63,7 @@ You know this project's three-layer test setup:
    `bun run build-storybook` / Chromatic CI, not `bun run test`. The designer agent
    writes these — you review coverage.
 
-3. **E2E (Playwright, `playwright/` dir, `playwright.config.ts`).**
+3. **E2E (Playwright, `playwright/` dir, `playwright.config.mts`).**
    - Builds and starts the app, runs against `http://localhost:3000`.
    - Requires Clerk test credentials and Upstash env vars (see
      `.github/workflows/playwright.yml`) — do NOT expect them to pass in a bare
