@@ -47,13 +47,16 @@ Unit tests are colocated under `__tests__/` in `src/`; `test/setup.ts` is preloa
 
 ## E2E tests
 
-Playwright tests live in `playwright/` (config in `playwright.config.mts`). They build and start the app and run against `http://localhost:3000`:
+Playwright tests live in `playwright/` (config in `playwright.config.ts`). Locally run them against a dev server in test mode:
 
 ```bash
-npx playwright test --workers=1
+bun run dev:test                    # terminal 1: Next dev server with NODE_ENV=test (root .env.test + .env)
+npx playwright test --workers=1     # terminal 2: reuses the server on http://localhost:3000
 ```
 
-They require Clerk test credentials (incl. the test user's `E2E_CLERK_USER_USERNAME` / `E2E_CLERK_USER_PASSWORD`) and Upstash Redis env vars (see `.github/workflows/playwright.yml` in the repo root). Locally they come from the root `.env.test` (+ `.env`), loaded by `playwright.config.mts`; the started web server inherits them.
+If nothing listens on :3000, Playwright starts the app itself with `npm run start` (needs a prior `bun run build`); that is what CI does (`.github/workflows/playwright.yml` in the repo root), with all vars coming from the workflow.
+
+The test runner needs Clerk keys and the test user's `E2E_CLERK_USER_USERNAME` / `E2E_CLERK_USER_PASSWORD`. Locally put them into `apps/web/.env.local` (copy `apps/web/.env.local.example`; the file is gitignored): `clerkSetup()` from `@clerk/testing` loads `.env.local`/`.env` from `apps/web`. Next skips `.env.local` when `NODE_ENV=test`, so the dev server still uses the root `.env.test`.
 
 Run the full suite with `--workers=1` (CI already forces one worker). Every signed-in test logs in the same Clerk test user (`playwright/helpers/auth-user.ts`), and the favorites tests mutate that user's favorites: in parallel these collide and the signed-in tests time out on `page.goto` / `waitForLoadState("networkidle")`. A single spec file usually passes with the default worker count, the whole suite does not.
 

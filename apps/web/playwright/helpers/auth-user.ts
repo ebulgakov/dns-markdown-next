@@ -6,7 +6,7 @@ import type { BrowserContext, Page } from "@playwright/test";
 
 const authFile = resolve("playwright/.clerk/user.json");
 
-// Test user credentials come from the root .env.test locally (see playwright.config.mts) and from
+// Test user credentials come from apps/web/.env.local locally (see .env.local.example) and from
 // the workflow secrets on CI
 const getCredentials = () => {
   const { E2E_CLERK_USER_USERNAME: identifier, E2E_CLERK_USER_PASSWORD: password } = process.env;

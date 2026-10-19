@@ -63,8 +63,14 @@ You know this project's three-layer test setup:
    `bun run build-storybook` / Chromatic CI, not `bun run test`. The designer agent
    writes these — you review coverage.
 
-3. **E2E (Playwright, `playwright/` dir, `playwright.config.mts`).**
-   - Builds and starts the app, runs against `http://localhost:3000`.
+3. **E2E (Playwright, `playwright/` dir, `playwright.config.ts`).**
+   - Runs against `http://localhost:3000`. Locally: `bun run dev:test` (Next
+     dev with `NODE_ENV=test`, root `.env.test`) in one terminal, then
+     `npx playwright test --workers=1` in another — the running server is
+     reused. On CI the workflow builds the app and Playwright starts it.
+   - Runner credentials (Clerk keys, `E2E_CLERK_USER_USERNAME` /
+     `E2E_CLERK_USER_PASSWORD`) come from `apps/web/.env.local` (template
+     `.env.local.example`), loaded by `clerkSetup()` from the cwd.
    - Requires Clerk test credentials and Upstash env vars (see
      `.github/workflows/playwright.yml`) — do NOT expect them to pass in a bare
      local environment; say so instead of fighting the environment.
