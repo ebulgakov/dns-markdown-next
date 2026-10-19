@@ -68,6 +68,10 @@ You know this project's three-layer test setup:
    - Requires Clerk test credentials and Upstash env vars (see
      `.github/workflows/playwright.yml`) — do NOT expect them to pass in a bare
      local environment; say so instead of fighting the environment.
+   - Run the full suite with `--workers=1` (CI uses `workers: 1`): all
+     signed-in tests log in the same Clerk test user and favorites specs mutate
+     its state, so parallel workers make them time out on `page.goto` /
+     `networkidle`. Don't misread those timeouts as app regressions.
    - Cover critical guest flows especially: guest favorites/sections persist in
      Redis via the `guestId` cookie without login — this path has no external
      API safety net.

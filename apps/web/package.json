@@ -4,8 +4,9 @@
   "private": true,
   "scripts": {
     "dev": "NODE_ENV=development bun --bun next dev",
+    "dev:test": "NODE_ENV=test bun --bun next dev",
     "build": "bun --bun next build",
-    "start": "NODE_ENV=production bun --bun next start",
+    "start": "bun --bun next start",
     "lint": "eslint",
     "lint:fix": "eslint --fix",
     "type-check": "tsc --noEmit",
