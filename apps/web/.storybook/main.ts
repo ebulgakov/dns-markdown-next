@@ -2,6 +2,8 @@ import { dirname } from "node:path";
 import { fileURLToPath } from "node:url";
 import path from "path";
 
+import { mswWorkerPlugin } from "./msw-worker-plugin";
+
 import type { StorybookConfig } from "@storybook/nextjs-vite";
 
 const config: StorybookConfig = {
@@ -16,7 +18,8 @@ const config: StorybookConfig = {
     "@storybook/addon-vitest",
     "@storybook/addon-a11y",
     "@storybook/addon-themes",
-    "@storybook/addon-docs"
+    "@storybook/addon-docs",
+    "msw-storybook-addon"
   ],
   framework: "@storybook/nextjs-vite",
   async viteFinal(config) {
@@ -31,6 +34,8 @@ const config: StorybookConfig = {
         "@/shared/config": path.resolve(__dirname, "mock-env-module.ts")
       };
     }
+
+    config.plugins = [...(config.plugins ?? []), mswWorkerPlugin()];
 
     return config;
   }

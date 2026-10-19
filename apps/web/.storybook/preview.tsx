@@ -1,10 +1,22 @@
 import { ClerkProvider } from "@clerk/nextjs";
+import { webApiHandlers } from "@dns-markdown/tests/msw";
 import { withThemeByClassName } from "@storybook/addon-themes";
+import { setupWorker } from "msw/browser";
+import { mswLoader } from "msw-storybook-addon/csf3";
 
 import type { Preview } from "@storybook/nextjs-vite";
 import "../app/globals.css";
 
 const preview: Preview = {
+  // MSW mocks the app's own `/api/*` routes for client components; `webApiHandlers` are the
+  // defaults, a story overrides them with `parameters.msw`.
+  loaders: [
+    mswLoader(async () => {
+      const worker = setupWorker(...webApiHandlers);
+      await worker.start({ onUnhandledRequest: "bypass", quiet: true });
+      return worker;
+    })
+  ],
   parameters: {
     controls: {
       matchers: {
