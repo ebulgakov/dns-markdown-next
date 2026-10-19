@@ -1,16 +1,12 @@
-import { loadEnv } from "@dns-markdown/env";
 import { defineConfig, devices } from "@playwright/test";
 
 /**
- * E2E runs on the root `.env.test` (+ `.env`), loaded by `loadEnv` from @dns-markdown/env.
- * Without this the runner gets no env files at all (`clerkSetup` only looks for `.env.local`/`.env`
- * in apps/web) and `next start` falls back to `.env.production`. The workers and the web server
- * inherit both NODE_ENV and the loaded vars. On CI there are no env files: vars come from the workflow.
- * `.mts` on purpose: Playwright compiles a `.ts` config to CommonJS, which breaks `import.meta`
- * in @dns-markdown/env.
+ * Read environment variables from file.
+ * https://github.com/motdotla/dotenv
  */
-if (!process.env.NODE_ENV) Object.assign(process.env, { NODE_ENV: "test" });
-loadEnv();
+// import dotenv from 'dotenv';
+// import path from 'path';
+// dotenv.config({ path: path.resolve(__dirname, '.env') });
 
 /**
  * See https://playwright.dev/docs/test-configuration.
@@ -23,9 +19,7 @@ export default defineConfig({
   forbidOnly: !!process.env.CI,
   /* Retry on CI only */
   retries: process.env.CI ? 2 : 0,
-  /* Opt out of parallel tests on CI. Locally run the full suite with --workers=1 too: all
-   * signed-in tests log in the same Clerk test user and the favorites specs mutate its state,
-   * so parallel workers make them time out. */
+  /* Opt out of parallel tests on CI. */
   workers: process.env.CI ? 1 : undefined,
   /* Reporter to use. See https://playwright.dev/docs/test-reporters */
   reporter: "html",
