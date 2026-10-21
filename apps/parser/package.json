@@ -19,23 +19,33 @@
     "parse": "bun run downloader && bun run add:list && bun run add:analysis-data && bun run add:analysis-diff && bun run cache:clear",
     "parse:samara": "CITY=samara NODE_ENV=production bun run parse && bun run check:favorites && bun run add:vector-db",
     "parse:moscow": "CITY=moscow  NODE_ENV=production bun run parse",
+    "parser": "bun run src/init.ts",
     "delete:old-price-lists": "CITY=samara bun src/delete-old-price-lists",
     "lint": "eslint",
-    "lint:fix": "eslint --fix"
+    "lint:fix": "eslint --fix",
+    "typecheck": "bun check"
   },
   "dependencies": {
     "@dns-markdown/api-client": "workspace:*",
+    "@dns-markdown/dns-markdown-parser": "git@github.com:ebulgakov/dns-markdown-parser.git#8578da6809c4a816215ef0bd71ad25cfc662734f",
     "@dns-markdown/env": "workspace:*",
     "@dns-markdown/types": "workspace:*",
     "@upstash/vector": "^1.2.2",
     "axios": "^1.13.4",
     "cheerio": "^1.1.2",
+    "inquirer": "^14.2.4",
     "mongodb": "^7.0.0",
     "ora": "^9.3.0",
+    "prompts": "^2.4.2",
     "resend": "^6.9.1",
     "zod": "^4.3.6"
   },
   "devDependencies": {
-    "@dns-markdown/tests": "workspace:*"
+    "@dns-markdown/tests": "workspace:*",
+    "@types/bun": "latest"
+  },
+  "module": "index.ts",
+  "peerDependencies": {
+    "typescript": "^7"
   }
 }
