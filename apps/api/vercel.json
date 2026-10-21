@@ -1,6 +1,6 @@
 {
   "$schema": "https://openapi.vercel.sh/vercel.json",
-  "installCommand": "bun install",
+  "installCommand": "bun install --filter @dns-markdown/api",
   "buildCommand": "bun run build",
   "outputDirectory": "dist",
   "ignoreCommand": "npx nx-ignore @dns-markdown/api"
