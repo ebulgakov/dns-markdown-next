@@ -2,11 +2,6 @@
 
 Scraper/ETL for DNS markdown ("уценка") listings of [dns-markdown](../../README.md). It downloads catalog pages, parses them with cheerio and pushes the results over HTTP to the API (`apps/api`) through [`@dns-markdown/api-client`](../../packages/api-client/CLAUDE.md). The parser never opens a database connection. Runs locally only (not deployed).
 
-## Preparation
-
-- The scraper scripts live in the private `dns-markdown-parser` git submodule at `src/dns-markdown-parser` (needs access to `git@github.com:ebulgakov/dns-markdown-parser.git`). Fetch it after cloning: `git submodule update --init`.
-- `src/dns-markdown-parser/request.sh` is a saved DNS curl request (cookies, CSRF token) that the downloader reads. It is gitignored and refreshed by hand when it expires.
-
 ## Commands
 
 Run inside `apps/parser` (cwd matters: runtime paths are relative to it), or from the root via `NX_LOAD_DOT_ENV_FILES=false bunx nx run @dns-markdown/parser:<script>`:

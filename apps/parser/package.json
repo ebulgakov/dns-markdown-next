@@ -5,7 +5,7 @@
   "scripts": {
     "type-check": "tsc --noEmit",
     "test": "bun test",
-    "downloader": "bash src/dns-markdown-parser/dns_shop_downloader.sh && bun run src/dns-markdown-parser/crawler.ts && bash src/dns-markdown-parser/dns_shop_downloader_prices.sh",
+    "downloader": "bun run src/downloader.ts",
     "add:list": "bun src/add-price-list",
     "add:analysis-report": "bun src/add-report",
     "add:analysis-data:full": "WRITE_STRATEGY=replace bun src/add-analysis-data",
