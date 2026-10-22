@@ -3,9 +3,7 @@ declare module "*.svg" {
   export = path;
 }
 
-declare module "*.css" {}
-
-declare module "*.module.css" {
-  const classes: { readonly [key: string]: string };
-  export = classes;
+declare module "*.css" {
+  const classes: Record<string, string>;
+  export default classes;
 }
