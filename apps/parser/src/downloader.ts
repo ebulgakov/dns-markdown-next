@@ -14,14 +14,14 @@ async function runWizard() {
       ]
     },
     {
-      type: "input",
-      name: "hash",
-      message: "Введите hash:"
-    },
-    {
       type: "editor",
       name: "request",
       message: "Введите многострочный запрос (сохраните и закройте редактор, когда закончите):"
+    },
+    {
+      type: "input",
+      name: "hash",
+      message: "Введите hash:"
     }
   ]);
 
