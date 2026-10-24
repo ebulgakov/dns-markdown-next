@@ -49,12 +49,19 @@ bunx eas-cli submit --profile production
 
 ## .env
 
-Unlike the other workspaces, the app does not use the shared root `.env*` files: Expo reads `EXPO_PUBLIC_*` vars only from `apps/mobile/.env*` and inlines them into the JS bundle — never put a secret behind that prefix.
+Unlike the other workspaces, the app does not use the shared root `.env*` files: Expo reads env vars only from `apps/mobile/.env*`. Start from the template:
 
 ```bash
-# apps/mobile/.env
-EXPO_PUBLIC_CLERK_PUBLISHABLE_KEY=pk_...
+cp apps/mobile/.env.example apps/mobile/.env
 ```
+
+| Variable                            | Purpose                                                        |
+| ----------------------------------- | -------------------------------------------------------------- |
+| `EXPO_PUBLIC_CLERK_PUBLISHABLE_KEY` | Clerk publishable key (`pk_...`) for `@clerk/expo`             |
+| `EXPO_PUBLIC_API_URL`               | Base URL of the API (`apps/api`), for the planned data layer   |
+| `EXPO_UNSTABLE_MCP_SERVER`          | `1` enables the Expo MCP server (`expo-mcp`) for local tooling |
+
+Only `EXPO_PUBLIC_*` vars reach app code: Expo inlines them into the JS bundle shipped to devices, so they are public — never put a secret (e.g. `API_SECRET_KEY`) behind that prefix or into this file. Restart Metro (`bun run start`) after changing them.
 
 ## Technologies
 

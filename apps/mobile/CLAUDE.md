@@ -61,7 +61,7 @@ Files under `src/` and `app/` use kebab-case — no uppercase letters — for ev
 
 No API client exists yet. Target shape once one is built:
 
-- `API_URL` / `API_SECRET_KEY` env vars, called directly from the RN client (no BFF/server layer) via `@dns-markdown/api-client` (RN-compatible typed client in `packages/api-client`) instantiated in `shared/api`, authenticated with a Clerk bearer token per request.
+- `EXPO_PUBLIC_API_URL` env var (see `.env.example`; no `API_SECRET_KEY` — everything in the bundle is public), called directly from the RN client (no BFF/server layer) via `@dns-markdown/api-client` (RN-compatible typed client in `packages/api-client`) instantiated in `shared/api`, authenticated with a Clerk bearer token per request.
 - No Upstash Redis / guest-vs-user branching — open decision, not solved yet; don't build it speculatively.
 
 # Testing
