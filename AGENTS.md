@@ -21,16 +21,25 @@ Yes: "Bug in auth middleware. Fix:"
 
 ## Subagents
 
-The specialists below own `apps/web` (Next.js frontend); paths in their descriptions are relative to `apps/web/`. API/parser/packages work goes to the owning workspace's `CLAUDE.md` guidance directly.
+The first table's specialists own `apps/web` (Next.js frontend; paths in their descriptions are relative to `apps/web/`), the `mobile-*` ones own `apps/mobile` (Expo app; paths relative to `apps/mobile/`). `team-lead` and `product-manager` cover both apps. API/parser/packages work goes to the owning workspace's `CLAUDE.md` guidance directly.
 
 `team-lead` entry point for any non-trivial multi-area feature request — decomposes work, routes to specialists below. For scoped single-area changes, invoke the owning specialist directly.
 
 | Agent                 | File                                      | Description                                                                                                                                                                                                                                          |
 | --------------------- | ----------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| team-lead             | `.claude/agents/team-lead.md`             | Reviews plans/completed work before merging, resolves disagreements between agents, decides ownership of cross-cutting changes, verifies CI-readiness (lint, type-check, tests). Invoke proactively at end of multi-file changes.                    |
+| team-lead             | `.claude/agents/team-lead.md`             | Web + mobile. Reviews plans/completed work before merging, resolves disagreements between agents, decides ownership of cross-cutting changes, verifies CI-readiness (lint, type-check, tests). Invoke proactively at end of multi-file changes.      |
 | product-manager       | `.claude/agents/product-manager.md`       | Use FIRST for any new feature/behavior change — turns vague request into verifiable acceptance criteria before planning/implementation. Also checks results against those criteria at the end. Never writes code.                                    |
 | data-layer-specialist | `.claude/agents/data-layer-specialist.md` | Anything touching `src/entities/{user,product}/api/` (post.ts, get.ts, user.ts, guest.ts, client.ts), Clerk auth/sessions, `proxy.ts` middleware, Upstash Redis guest storage, `unstable_cache`/`revalidateTag`/revalidate webhook, `types/user.ts`. |
 | nextjs-specialist     | `.claude/agents/nextjs-specialist.md`     | App Router work: routes/route groups, page/layout/loading/error files, `app/api/*/route.ts` handlers, server vs client component decisions, metadata/SEO, streaming/Suspense, `next.config.ts`, Sentry wiring.                                       |
 | react-specialist      | `.claude/agents/react-specialist.md`      | Client-side React: feature components (excluding shadcn `ui/` primitives), zustand stores, custom hooks, TanStack Query usage, user-context consumption, forms, interactive behavior.                                                                |
 | designer              | `.claude/agents/designer.md`              | Visual/design-system work: shadcn/ui primitives, Tailwind/dark theme, Storybook stories + interaction tests, Chromatic visual regression, i18n string wording in `i18n/locates/{ru,en}.json`.                                                        |
 | qa-specialist         | `.claude/agents/qa-specialist.md`         | Test strategist (required test list from plan + acceptance criteria before code exists) and test engineer (writes/fixes tests, debugs Bun test/Playwright CI). Use proactively after changes to data layer or API routes.                            |
+
+Mobile (`apps/mobile`, Expo):
+
+| Agent                     | File                                          | Description                                                                                                                                                            |
+| ------------------------- | --------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| mobile-design-system      | `.claude/agents/mobile-design-system.md`      | Theme tokens (`src/theme/colors.ts`, `src/global.css`, `tailwind.config.js` — kept in sync), fonts, dark/light, shared UI primitives in `src/shared/ui/`.              |
+| mobile-expo-router-native | `.claude/agents/mobile-expo-router-native.md` | expo-router routes/layouts under `src/app/`, `app.json`/`eas.json`, prebuild, splash/status bar, deep links, any dependency with native code.                          |
+| mobile-rn-feature         | `.claude/agents/mobile-rn-feature.md`         | FSD slices in `src/features/*`, zustand stores, `src/lib/`, Clerk auth flows and provider, `src/shared/notifications/`.                                                |
+| mobile-qa                 | `.claude/agents/mobile-qa.md`                 | Jest (`jest-expo`) + `@testing-library/react-native` tests, colocated `__tests__/`, AAA structure, Expo native-module mocking. Use proactively after testable changes. |
