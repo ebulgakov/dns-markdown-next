@@ -14,7 +14,7 @@ https://dns.ebulgakov.com/
 
 Сейчас сервис показывает товары из Самары и Москвы (город переключается в шапке сайта). Вы можете добавлять товары в избранное, чтобы отслеживать обновления, такие как изменения цен или наличие товара в магазинах.
 
-<img width="2574" height="2342" alt="image" src="https://github.com/user-attachments/assets/a6922841-1aa0-4801-9577-50f47bc80b34" />
+<img width="1920" height="1758" alt="image" src="https://github.com/user-attachments/assets/de7ff969-c516-4031-8604-f21029b86fdb" />
 
 ## Воркспейсы
 
