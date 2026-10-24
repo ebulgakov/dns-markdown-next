@@ -1,0 +1,57 @@
+{
+  "enabledPlugins": {
+    "expo@claude-plugins-official": true
+  },
+  "hooks": {
+    "PreToolUse": [
+      {
+        "matcher": "EnterWorktree",
+        "hooks": [
+          {
+            "timeout": 600,
+            "type": "command",
+            "command": "\"$CLAUDE_PROJECT_DIR\"/.claude/hooks/block-worktree.sh"
+          }
+        ]
+      },
+      {
+        "matcher": "ExitPlanMode",
+        "hooks": [
+          {
+            "timeout": 600,
+            "type": "command",
+            "command": "\"$CLAUDE_PROJECT_DIR\"/.claude/hooks/branch-on-plan-exit.sh"
+          }
+        ]
+      }
+    ],
+    "UserPromptSubmit": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "timeout": 600,
+            "command": "codegraph prompt-hook"
+          }
+        ]
+      }
+    ]
+  },
+  "worktree": {
+    "bgIsolation": "none"
+  },
+  "permissions": {
+    "allow": ["mcp__codegraph__*"],
+    "deny": [
+      "Read(**/.env)",
+      "Read(**/.env.*)",
+
+      "Read(**/*.pem)",
+      "Read(**/id_rsa*)",
+
+      "Bash(cat *.env*)",
+      "Bash(printenv*)",
+      "Bash(env)"
+    ]
+  }
+}
