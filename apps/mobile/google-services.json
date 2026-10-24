@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "802756461465",
+    "project_id": "dns-markdown-app",
+    "storage_bucket": "dns-markdown-app.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:802756461465:android:5f8e748c4d3d7ceed70908",
+        "android_client_info": {
+          "package_name": "com.ebulgakov.dnsmarkdownapp"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCBDjvgst90X3Zrw2SrMKLCzgS3rbnGX50"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

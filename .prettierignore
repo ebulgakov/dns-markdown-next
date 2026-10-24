@@ -1,0 +1,2 @@
+# Vendored agent skills (tracked by skills-lock.json hashes) — keep byte-identical to upstream
+.claude/skills/

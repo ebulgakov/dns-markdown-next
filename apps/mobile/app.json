@@ -1,0 +1,69 @@
+{
+  "expo": {
+    "name": "DNS Markdown",
+    "slug": "dns-markdown-app",
+    "version": "1.0.0",
+    "orientation": "portrait",
+    "icon": "./assets/icons/icon.png",
+    "scheme": "dnsmarkdownapp",
+    "userInterfaceStyle": "automatic",
+    "ios": {
+      "icon": "./assets/icons/icon.png",
+      "bundleIdentifier": "com.ebulgakov.dnsmarkdownapp"
+    },
+    "android": {
+      "package": "com.ebulgakov.dnsmarkdownapp",
+      "googleServicesFile": "./google-services.json",
+      "adaptiveIcon": {
+        "foregroundImage": "./assets/icons/adaptive-icon.png",
+        "backgroundColor": "#3981f6",
+        "monochromeImage": "./assets/icons/adaptive-icon-monochrome.png"
+      },
+      "notification": {
+        "icon": "./assets/icons/notification-icon.png",
+        "color": "#3981f6"
+      },
+      "predictiveBackGestureEnabled": false
+    },
+    "plugins": [
+      "expo-router",
+      [
+        "expo-splash-screen",
+        {
+          "image": "./assets/icons/splash-icon.png",
+          "imageWidth": 200,
+          "resizeMode": "contain",
+          "backgroundColor": "#3981f6"
+        }
+      ],
+      "expo-status-bar",
+      [
+        "expo-notifications",
+        {
+          "icon": "./assets/icons/notification-icon.png",
+          "color": "#3981f6"
+        }
+      ],
+      "expo-font",
+      [
+        "@clerk/expo",
+        {
+          "appleSignIn": true
+        }
+      ],
+      "expo-secure-store",
+      "expo-image"
+    ],
+    "experiments": {
+      "typedRoutes": true,
+      "reactCompiler": true
+    },
+    "extra": {
+      "router": {},
+      "eas": {
+        "projectId": "142ba1ae-c0ca-432c-b518-9ec4c56e295c"
+      }
+    },
+    "owner": "ebulgakov"
+  }
+}

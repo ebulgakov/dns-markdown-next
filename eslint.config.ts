@@ -4,7 +4,15 @@ import tseslint from "typescript-eslint";
 
 const eslintConfig = defineConfig([
   // apps/web is a Next.js app with its own eslint.config.mjs (Next, FSD boundaries, storybook rules)
-  globalIgnores(["**/coverage/**", "**/node_modules/**", "**/dist/**", ".nx/**", "apps/web/**"]),
+  // apps/mobile is an Expo app with its own eslint.config.js (eslint-config-expo, run via `expo lint`)
+  globalIgnores([
+    "**/coverage/**",
+    "**/node_modules/**",
+    "**/dist/**",
+    ".nx/**",
+    "apps/web/**",
+    "apps/mobile/**"
+  ]),
   ...tseslint.configs.recommended,
   {
     files: ["**/*.ts"],

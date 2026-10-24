@@ -1,4 +1,7 @@
 {
+  "enabledPlugins": {
+    "expo@claude-plugins-official": true
+  },
   "hooks": {
     "PreToolUse": [
       {
@@ -20,13 +23,13 @@
         ]
       }
     ],
-    "PostToolUse": [
+    "Stop": [
       {
-        "matcher": "Write|Edit",
         "hooks": [
           {
             "type": "command",
-            "command": "bun run lint",
+            "command": "\"$CLAUDE_PROJECT_DIR\"/.claude/hooks/lint-on-stop.sh",
+            "timeout": 300,
             "statusMessage": "Running Linter..."
           }
         ]
