@@ -1,56 +1,67 @@
-# Welcome to your Expo app 👋
+# @dns-markdown/mobile
 
-This is an [Expo](https://expo.dev) project created with [`create-expo-app`](https://www.npmjs.com/package/create-expo-app).
+iOS/Android app of [dns-markdown](../../README.md), built with Expo SDK 57 (React Native, expo-router, NativeWind). Tabs: home, catalog (with markdown detail screen), today, analysis, favorites, profile (Clerk sign-in/sign-up). Built and distributed with EAS, not deployed to Vercel.
 
-## Get started
+The app runs in its own **dev client**, not in Expo Go: native modules (Clerk, notifications, glass effect, …) need a native build.
 
-1. Install dependencies
+## Setup
 
-   ```bash
-   npm install
-   ```
-
-2. Start the app
-
-   ```bash
-   npx expo start
-   ```
-
-In the output, you'll find options to open the app in a
-
-- [development build](https://docs.expo.dev/develop/development-builds/introduction/)
-- [Android emulator](https://docs.expo.dev/workflow/android-studio-emulator/)
-- [iOS simulator](https://docs.expo.dev/workflow/ios-simulator/)
-- [Expo Go](https://expo.dev/go), a limited sandbox for trying out app development with Expo
-
-You can start developing by editing the files inside the **app** directory. This project uses [file-based routing](https://docs.expo.dev/router/introduction).
-
-## Get a fresh project
-
-When you're ready, run:
+Dependencies are installed from the monorepo root (single `bun.lock`):
 
 ```bash
-npm run reset-project
+bun install
 ```
 
-This command will move the starter code to the **app-example** directory and create a blank **app** directory where you can start developing.
+Native toolchain: Xcode (iOS simulator / device) and/or Android Studio (Android emulator / device).
 
-### Other setup steps
+## Commands
 
-- To set up ESLint for linting, run `npx expo lint`, or follow our guide on ["Using ESLint and Prettier"](https://docs.expo.dev/guides/using-eslint/)
-- If you'd like to set up unit testing, follow our guide on ["Unit Testing with Jest"](https://docs.expo.dev/develop/unit-testing/)
-- Learn more about the TypeScript setup in this template in our guide on ["Using TypeScript"](https://docs.expo.dev/guides/typescript/)
+Run inside `apps/mobile`, or from the root via `bunx nx run @dns-markdown/mobile:<script>`:
 
-## Learn more
+```bash
+bun run ios                 # build + install the dev client on iOS (expo run:ios), starts Metro
+bun run android             # same for Android
+bun run start               # start Metro for an already installed dev client
+bun run prebuild:ios        # regenerate ios/ (expo prebuild --clean) after app.json/native changes
+bun run prebuild:android    # regenerate android/
+```
 
-To learn more about developing your project with Expo, look at the following resources:
+`ios/` and `android/` are generated (Continuous Native Generation) and gitignored — change native config through `app.json` / config plugins, never by hand. Adding a dependency with native code needs a dev client rebuild, not just a Metro restart. Install dependencies with `npx expo install <pkg>` so versions match the SDK.
 
-- [Expo documentation](https://docs.expo.dev/): Learn fundamentals, or go into advanced topics with our [guides](https://docs.expo.dev/guides).
-- [Learn Expo tutorial](https://docs.expo.dev/tutorial/introduction/): Follow a step-by-step tutorial where you'll create a project that runs on Android, iOS, and the web.
+Checks (root `bun run lint|type-check|test` include this app):
 
-## Join the community
+```bash
+bun run test          # Jest (jest-expo + @testing-library/react-native), not bun test
+bun run lint          # expo lint (own eslint.config.js; the root ESLint config ignores apps/mobile)
+bun run lint:fix
+bun run type-check    # tsc --noEmit
+```
 
-Join our community of developers creating universal apps.
+## Builds (EAS)
 
-- [Expo on GitHub](https://github.com/expo/expo): View our open source platform and contribute.
-- [Discord community](https://chat.expo.dev): Chat with Expo users and ask questions.
+Profiles in `eas.json`: `development` (dev client, internal), `preview` (internal), `production` (store, auto-incremented build number; app version is managed remotely).
+
+```bash
+bunx eas-cli build --profile development --platform ios
+bunx eas-cli build --profile production --platform all
+bunx eas-cli submit --profile production
+```
+
+## .env
+
+Unlike the other workspaces, the app does not use the shared root `.env*` files: Expo reads `EXPO_PUBLIC_*` vars only from `apps/mobile/.env*` and inlines them into the JS bundle — never put a secret behind that prefix.
+
+```bash
+# apps/mobile/.env
+EXPO_PUBLIC_CLERK_PUBLISHABLE_KEY=pk_...
+```
+
+## Technologies
+
+- Expo SDK 57, React Native 0.86 (New Architecture), React 19, React Compiler
+- expo-router (typed routes), NativeWind / Tailwind CSS, `@expo/ui`
+- Clerk (`@clerk/expo`), expo-notifications, Zustand
+- Jest (`jest-expo`), `@testing-library/react-native`
+- EAS Build / Submit
+
+Architecture, conventions and agent ownership: [CLAUDE.md](CLAUDE.md).

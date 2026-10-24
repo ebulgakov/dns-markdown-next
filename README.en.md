@@ -23,7 +23,7 @@ For now the service shows products from Samara and Moscow (the city is switched 
 | `apps/web`            | `@dns-markdown/web`        | Next.js (App Router) site, deployed to Vercel                               | [README](apps/web/README.md), [CLAUDE.md](apps/web/CLAUDE.md)       |
 | `apps/api`            | `@dns-markdown/api`        | Express API (MongoDB/Mongoose), deployed to Vercel                          | [README](apps/api/README.md), [CLAUDE.md](apps/api/CLAUDE.md)       |
 | `apps/parser`         | `@dns-markdown/parser`     | DNS markdown scraper/ETL, pushes data to the API, runs locally              | [README](apps/parser/README.md), [CLAUDE.md](apps/parser/CLAUDE.md) |
-| `apps/mobile`         | `@dns-markdown/mobile`     | Expo (React Native, expo-router) app for iOS and Android, built with EAS    | [CLAUDE.md](apps/mobile/CLAUDE.md)                                  |
+| `apps/mobile`         | `@dns-markdown/mobile`     | Expo (React Native, expo-router) app for iOS and Android, built with EAS    | [README](apps/mobile/README.md), [CLAUDE.md](apps/mobile/CLAUDE.md) |
 | `packages/env`        | `@dns-markdown/env`        | Shared env-file loading and `NODE_ENV`/platform checks                      | [CLAUDE.md](packages/env/CLAUDE.md)                                 |
 | `packages/types`      | `@dns-markdown/types`      | Shared API payload and response types                                       | [CLAUDE.md](packages/types/CLAUDE.md)                               |
 | `packages/api-client` | `@dns-markdown/api-client` | Typed axios client for every API endpoint                                   | [CLAUDE.md](packages/api-client/CLAUDE.md)                          |
