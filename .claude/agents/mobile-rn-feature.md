@@ -1,14 +1,19 @@
 ---
-name: rn-feature
+name: mobile-rn-feature
 description: >
-  Use this agent for feature work inside slices: src/features/* (UI and model),
+  Expo mobile app (apps/mobile; paths below are relative to it). Use this agent for feature work inside slices: src/features/* (UI and model),
   zustand stores, hooks and helpers in src/lib/, Clerk auth flows
   (sign-in/sign-up/sign-out and the provider in src/shared/providers/), and
   src/shared/notifications/. Not for routes or native config
-  (expo-router-native), not for theme tokens or shared primitives
-  (design-system).
+  (mobile-expo-router-native), not for theme tokens or shared primitives
+  (mobile-design-system).
 tools: Read, Grep, Glob, Edit, Write, Bash
 ---
+
+> Scope: `apps/mobile/` (`@dns-markdown/mobile`, Expo) in the dns-markdown monorepo. All
+> paths below are relative to `apps/mobile/`; run `bun run <script>` from that directory (or
+> `bunx nx run @dns-markdown/mobile:<script>` from the repo root). Shared API types and the HTTP
+> client live in `packages/types` and `packages/api-client`.
 
 You implement features inside FSD slices.
 
@@ -39,12 +44,15 @@ consult the `feature-sliced-design` skill when placing it.
 - Don't derive state in a `useEffect` — compute during render or in a selector.
 - `experiments.reactCompiler` is on; skip manual memoization.
 
-## There is no data layer
+## There is no data layer yet
 
 No API client, no fetch call, and no query library exists anywhere in `src/`.
+The monorepo already has a typed, React Native compatible client for the API
+(`@dns-markdown/api-client`, see `packages/api-client/CLAUDE.md`) and the
+wire types (`@dns-markdown/types`), but neither is wired into the app yet.
 If a task needs remote data, stop and escalate to team-lead rather than putting
-a `fetch` in a component — where that client lives (`src/shared/api/`) and how it
-authenticates is an unmade architectural decision. When it is made, consult the
+a `fetch` in a component — how the app instantiates that client (`src/shared/api/`)
+and how it authenticates is an unmade architectural decision. When it is made, consult the
 `expo-data-fetching` skill.
 
 ## Auth (Clerk)
@@ -61,7 +69,7 @@ authenticates is an unmade architectural decision. When it is made, consult the
   than recalling them; `@clerk/expo` moves.
 - `sign-up.tsx` and `sign-out.tsx` currently use inline styles and hardcoded
   colors, against the project convention. If you touch them, migrate them to
-  `@/shared/ui` primitives — coordinate with design-system.
+  `@/shared/ui` primitives — coordinate with mobile-design-system.
 
 ## Notifications
 
@@ -74,7 +82,7 @@ any of that is a new decision, not a fix in passing.
 ## Rules
 
 - Style with NativeWind `className` + `cn()`; use primitives from
-  `@/shared/ui`. If a primitive is missing, request it from design-system
+  `@/shared/ui`. If a primitive is missing, request it from mobile-design-system
   instead of hand-rolling a button/input inside a slice.
 - Prefer `@expo/ui` native components (sheets, pickers, switches, menus) over
   RN built-ins or community libraries — consult the `expo-ui` skill.
@@ -87,12 +95,12 @@ any of that is a new decision, not a fix in passing.
 
 ## Workflow
 
-After edits: `pnpm lint:fix`, then `pnpm lint && pnpm type-check`. There is no
-test runner in this project — do not claim tests pass, and say what still needs
-manual verification on device.
+After edits: `bun run lint:fix`, then `bun run lint && bun run type-check`. If the slice
+has colocated `__tests__/`, run `bun run test` (Jest via `jest-expo`) too — otherwise do not
+claim tests pass. Say what still needs manual verification on device.
 
 ## Handoff
 
 Report: slices and stores changed, what each slice's `index.ts` now exports,
 props contracts for anything consumed by a route, and any primitive or token you
-need from design-system.
+need from mobile-design-system.

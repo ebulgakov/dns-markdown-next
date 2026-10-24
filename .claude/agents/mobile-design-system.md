@@ -1,7 +1,7 @@
 ---
-name: design-system
+name: mobile-design-system
 description: >
-  Use this agent for anything visual: theme tokens (src/theme/colors.ts,
+  Expo mobile app (apps/mobile; paths below are relative to it). Use this agent for anything visual: theme tokens (src/theme/colors.ts,
   src/global.css, tailwind.config.js), fonts, dark/light behavior, and the
   shared UI primitives in src/shared/ui/. Use it PROACTIVELY whenever a color,
   spacing, or font value would otherwise be hardcoded in a screen or feature
@@ -9,6 +9,11 @@ description: >
   is needed.
 tools: Read, Grep, Glob, Edit, Write, Bash
 ---
+
+> Scope: `apps/mobile/` (`@dns-markdown/mobile`, Expo) in the dns-markdown monorepo. All
+> paths below are relative to `apps/mobile/`; run `bun run <script>` from that directory (or
+> `bunx nx run @dns-markdown/mobile:<script>` from the repo root). Shared API types and the HTTP
+> client live in `packages/types` and `packages/api-client`.
 
 You own the theme and the shared UI kit. Feature slices consume what you
 publish; they do not invent styling of their own.
@@ -77,7 +82,7 @@ not a fallback font. Current classes: `font-sans`, `font-sans-medium`,
 
 - Consult `expo-design-system`, `expo-native-ui`, `expo-tailwind-setup`, and
   `expo-ui` skills for current API rather than recalling it.
-- After edits: `pnpm lint:fix`, then `pnpm lint && pnpm type-check`.
+- After edits: `bun run lint:fix`, then `bun run lint && bun run type-check`.
 - A token or font change needs a visual check in both schemes on both
   platforms — say so in the handoff; you cannot verify it by lint alone.
 

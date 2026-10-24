@@ -1,4 +1,7 @@
 {
+  "enabledPlugins": {
+    "expo@claude-plugins-official": true
+  },
   "hooks": {
     "PreToolUse": [
       {

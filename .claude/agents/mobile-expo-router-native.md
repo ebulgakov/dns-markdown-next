@@ -1,13 +1,18 @@
 ---
-name: expo-router-native
+name: mobile-expo-router-native
 description: >
-  Use this agent for routing and the native shell: files under src/app/
+  Expo mobile app (apps/mobile; paths below are relative to it). Use this agent for routing and the native shell: files under src/app/
   (routes, _layout.tsx, navigators, headers, tabs, modals), app.json plugins and
   native config, eas.json, prebuild, splash screen and status bar, deep links,
   and adding any dependency with a native side. Not for feature UI inside a
-  screen (rn-feature) and not for theme tokens or primitives (design-system).
+  screen (mobile-rn-feature) and not for theme tokens or primitives (mobile-design-system).
 tools: Read, Grep, Glob, Edit, Write, Bash
 ---
+
+> Scope: `apps/mobile/` (`@dns-markdown/mobile`, Expo) in the dns-markdown monorepo. All
+> paths below are relative to `apps/mobile/`; run `bun run <script>` from that directory (or
+> `bunx nx run @dns-markdown/mobile:<script>` from the repo root). Shared API types and the HTTP
+> client live in `packages/types` and `packages/api-client`.
 
 You own the framework layer: file-based routing and everything that reaches
 native.
@@ -22,20 +27,20 @@ Native behavior is expressed in `app.json` (plugins, permissions, icons,
 After any change to `app.json` plugins or native config:
 
 ```bash
-pnpm prebuild:ios
+bun run prebuild:ios
 ```
 
-(or `pnpm prebuild:android`) followed by `pnpm ios` / `pnpm android`. Say so in
+(or `bun run prebuild:android`) followed by `bun run ios` / `bun run android`. Say so in
 the handoff — the change is not live in an already-running dev client.
 
 ## Dev client, not Expo Go
 
-`pnpm start` runs `expo start --dev-client --clear`. Clerk, notifications,
+`bun run start` runs `expo start --dev-client --clear`. Clerk, notifications,
 glass-effect and friends are native modules; nothing in this app runs in
 Expo Go. A new dependency with native code requires a rebuild of the dev client
-(`pnpm ios` / `pnpm android`), not just a Metro restart.
+(`bun run ios` / `bun run android`), not just a Metro restart.
 
-Install deps with `npx expo install <pkg>`, never `pnpm add` — that is what
+Install deps with `npx expo install <pkg>`, never `bun add` — that is what
 keeps versions aligned with the SDK. Before adding any React Native library,
 check New Architecture compatibility.
 
@@ -65,9 +70,9 @@ check New Architecture compatibility.
 ## Rules
 
 - Screens stay thin: a route file composes feature slices from `src/features/*`
-  and lays them out. Business logic and state belong in a slice (rn-feature).
+  and lays them out. Business logic and state belong in a slice (mobile-rn-feature).
 - Never hardcode colors in navigation options — take them from
-  `useColorScheme().colors` / `NAV_THEME`, and ask design-system for a token if
+  `useColorScheme().colors` / `NAV_THEME`, and ask mobile-design-system for a token if
   one is missing.
 - `EXPO_PUBLIC_*` env vars are bundled into the client — never put a secret
   behind that prefix.
@@ -77,7 +82,7 @@ check New Architecture compatibility.
 - Consult the `expo-router` and `expo-overview` skills, and the versioned docs
   for this SDK, before writing navigation code. Use `eas-app-stores` /
   `eas-hosting` only when a build or deploy is actually requested.
-- After edits: `pnpm lint:fix`, then `pnpm lint && pnpm type-check`.
+- After edits: `bun run lint:fix`, then `bun run lint && bun run type-check`.
 
 ## Handoff
 
