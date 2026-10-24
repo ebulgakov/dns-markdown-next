@@ -1,9 +1,10 @@
 "use client";
 
+import { View } from "react-native";
+
 import { Button, TextField, Text } from "@/shared/ui";
 
 import { useSearchStore } from "../model/search-store";
-import { View } from "react-native";
 
 function Search() {
   const onChange = useSearchStore(state => state.updateSearchTerm);

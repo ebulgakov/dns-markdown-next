@@ -1,16 +1,16 @@
 import AntDesign from "@expo/vector-icons/AntDesign";
 import * as Haptics from "expo-haptics";
+import { LinearGradient } from "expo-linear-gradient";
 import { Link } from "expo-router";
 import { StyleSheet, View, TouchableOpacity } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
+import { Search } from "@/features/search";
 import {
   registerForPushNotificationsAsync,
   scheduleTestNotificationAsync
 } from "@/shared/notifications";
 import { Text } from "@/shared/ui/text";
-import { LinearGradient } from "expo-linear-gradient";
-import { Search } from "@/features/search";
 
 export default function HomeScreen() {
   const onToggleButton = () => {

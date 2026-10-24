@@ -46,6 +46,13 @@ module.exports = defineConfig([
     }
   },
   {
+    // Tests load modules with require() after jest.resetModules()/jest.doMock()
+    files: ["**/__tests__/**"],
+    rules: {
+      "@typescript-eslint/no-require-imports": "off"
+    }
+  },
+  {
     ignores: ["dist/*"]
   }
 ]);

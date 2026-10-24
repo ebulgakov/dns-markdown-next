@@ -39,7 +39,8 @@ describe("registerForPushNotificationsAsync", () => {
     });
 
     return {
-      registerForPushNotificationsAsync: require("../register-for-push-notifications-async").registerForPushNotificationsAsync,
+      registerForPushNotificationsAsync: require("../register-for-push-notifications-async")
+        .registerForPushNotificationsAsync,
       Notifications: require("expo-notifications")
     };
   };
@@ -49,9 +50,10 @@ describe("registerForPushNotificationsAsync", () => {
   });
 
   it("sets the default Android notification channel before registering", async () => {
-    const { registerForPushNotificationsAsync, Notifications } = loadRegisterForPushNotificationsAsync({
-      os: "android"
-    });
+    const { registerForPushNotificationsAsync, Notifications } =
+      loadRegisterForPushNotificationsAsync({
+        os: "android"
+      });
 
     Notifications.getPermissionsAsync.mockResolvedValue({ status: "granted" });
     Notifications.getExpoPushTokenAsync.mockResolvedValue({ data: "ExponentPushToken[android]" });
@@ -65,13 +67,16 @@ describe("registerForPushNotificationsAsync", () => {
       showBadge: false
     });
     expect(result).toBe("granted");
-    expect(Notifications.getExpoPushTokenAsync).toHaveBeenCalledWith({ projectId: "test-project-id" });
+    expect(Notifications.getExpoPushTokenAsync).toHaveBeenCalledWith({
+      projectId: "test-project-id"
+    });
   });
 
   it("returns null when running on a simulator", async () => {
-    const { registerForPushNotificationsAsync, Notifications } = loadRegisterForPushNotificationsAsync({
-      isDevice: false
-    });
+    const { registerForPushNotificationsAsync, Notifications } =
+      loadRegisterForPushNotificationsAsync({
+        isDevice: false
+      });
 
     await expect(registerForPushNotificationsAsync()).resolves.toBeNull();
     expect(Notifications.getPermissionsAsync).not.toHaveBeenCalled();
@@ -79,7 +84,8 @@ describe("registerForPushNotificationsAsync", () => {
   });
 
   it("returns the denied status when permission is not granted", async () => {
-    const { registerForPushNotificationsAsync, Notifications } = loadRegisterForPushNotificationsAsync();
+    const { registerForPushNotificationsAsync, Notifications } =
+      loadRegisterForPushNotificationsAsync();
 
     Notifications.getPermissionsAsync.mockResolvedValue({ status: "denied" });
     Notifications.requestPermissionsAsync.mockResolvedValue({ status: "denied" });
@@ -90,7 +96,8 @@ describe("registerForPushNotificationsAsync", () => {
   });
 
   it("logs the Expo push token and returns granted status", async () => {
-    const { registerForPushNotificationsAsync, Notifications } = loadRegisterForPushNotificationsAsync();
+    const { registerForPushNotificationsAsync, Notifications } =
+      loadRegisterForPushNotificationsAsync();
     const logSpy = jest.spyOn(console, "log").mockImplementation(() => undefined);
 
     Notifications.getPermissionsAsync.mockResolvedValue({ status: "granted" });
@@ -99,7 +106,9 @@ describe("registerForPushNotificationsAsync", () => {
     await expect(registerForPushNotificationsAsync()).resolves.toBe("granted");
 
     expect(logSpy).toHaveBeenCalledWith("Expo push token:", "ExponentPushToken[ios]");
-    expect(Notifications.getExpoPushTokenAsync).toHaveBeenCalledWith({ projectId: "test-project-id" });
+    expect(Notifications.getExpoPushTokenAsync).toHaveBeenCalledWith({
+      projectId: "test-project-id"
+    });
 
     logSpy.mockRestore();
   });
